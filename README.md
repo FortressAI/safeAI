@@ -228,3 +228,222 @@ For support or further information, please contact FortressAI at [support@fortre
 
 ---
 
+
+## User Guide
+
+### Overview
+The **safeAI plugin** integrates advanced natural language processing (NLP) capabilities with your Neo4j database. Powered by a Large Language Model (LLM), it allows you to transform natural language queries into raw Cypher queries, execute these queries on your graph, and even interpret the results—all from within the Neo4j Browser or an interactive CLI.
+
+### System Design and Architecture
+The plugin is composed of several key components:
+
+- **Custom Procedures:** Several Neo4j procedures (e.g., `nl.query` and `nl.queryAndExecute`) are registered through the `META-INF/services/org.neo4j.procedure.Procedure` file. These procedures enable you to either translate natural language commands into Cypher queries or generate and execute them directly.
+
+- **LLM Integration:** An integrated LLM (via the OpenAI API) converts natural language input into Cypher. To use this feature, you must have the `OPENAI_API_KEY` environment variable set with a valid API key.
+
+- **Interactive Shell:** The plugin includes an interactive shell provided by the `KGConversationalAgent` class. This shell guides you through generating queries, executing them, and reviewing the outputs.
+
+- **Security and Tokens:**
+  - A simple token-based mechanism is used to restrict access to internal knowledge graphs (e.g., the `InternalKGService` uses the token "AUTHORIZED").
+  - The OpenAI API key is critical for LLM functionality and must be securely stored in the `OPENAI_API_KEY` environment variable.
+  - Role management is differentiated between administrators (who configure system settings and tokens) and end users (who execute queries).
+
+### Available Queries and Procedures (End User Queries)
+Once the plugin is installed and your Neo4j server is configured, you can use the following procedures from the Neo4j Browser:
+
+1. **Generate Cypher Query from Natural Language**
+   - **Procedure:** `nl.query`
+   - **Example:**
+     ```cypher
+     CALL nl.query("Describe the current schema")
+     YIELD generatedQuery
+     RETURN generatedQuery;
+     ```
+   - **Description:** This procedure converts a natural language prompt into a raw Cypher query without executing it.
+
+2. **Generate and Execute Natural Language Query**
+   - **Procedure:** `nl.queryAndExecute`
+   - **Example:**
+     ```cypher
+     CALL nl.queryAndExecute("Get all puzzles solved by AI")
+     YIELD result
+     RETURN result;
+     ```
+   - **Description:** This procedure generates a Cypher query from your natural language request and then executes the query, returning the actual results.
+
+3. **Additional Procedures:**
+   Other domain-specific procedures exist (e.g., licensing, governance, usage tracking). Refer to the `META-INF/services/org.neo4j.procedure.Procedure` file for the complete list.
+
+### How It Works from an End User's Perspective
+1. **Query Generation:** For example, when you run:
+   ```cypher
+   CALL nl.query("Describe the current schema")
+   YIELD generatedQuery
+   RETURN generatedQuery;
+   ```
+   Your natural language prompt is sent to the LLM, which returns a raw Cypher query, giving you a preview before execution.
+
+2. **Query Execution:** Using the `nl.queryAndExecute` procedure, the plugin automatically executes the generated Cypher query against your Neo4j database and returns the results.
+
+3. **Result Interpretation:** The interactive shell provided by `KGConversationalAgent` can also interpret raw query results into plain language explanations to help you understand the output.
+
+### Roles and Access
+- **Administrators:** Responsible for configuring the system, managing security tokens, and ensuring the proper setup of API keys and database connections.
+
+- **End Users:** Use the system via the Neo4j Browser or interactive CLI to generate, execute, and review natural language queries.
+
+### Getting Started
+- **Prerequisites:**
+  - Set the `OPENAI_API_KEY` environment variable with a valid API key.
+  - Ensure your Neo4j server is running and accessible.
+
+- **Installation:**
+  - Deploy the safeAI plugin JAR into your Neo4j plugins folder.
+  - Update your `neo4j.conf` to allow custom procedures and configure necessary options (e.g., CORS, iframe settings).
+  - Restart your Neo4j server and verify that the procedures are available.
+
+- **Usage:**
+  - Open the Neo4j Browser and run the example queries provided above.
+  - Optionally, use the interactive CLI via `KGConversationalAgent` for a guided experience.
+
+
+## Domain KG Examples
+
+The safeAI plugin supports several domain-specific Knowledge Graphs (KGs) that empower users to explore a wide range of queries. Below are example queries for each domain, demonstrating how to generate and execute queries using the natural language procedures. These examples illustrate how the plugin functions as a new paradigm for SafeAI, integrating fully functioning KGs with LLM backup.
+
+### ARC Puzzle KG
+- **Resource File:** ARC_Puzzle_Agent_Definitions.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("Retrieve ARC puzzle training examples")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Show all ARC puzzle definitions and training examples")
+    YIELD result
+    RETURN result;
+    ```
+
+### Ethics KG
+- **Resource Files:** Ethics_KG.json, Foundational_Ethical_KG_Definitions.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("List all ethical guidelines from the Ethics KG")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Fetch detailed ethical standards and guidelines")
+    YIELD result
+    RETURN result;
+    ```
+
+### CyberSecurity KG
+- **Resource File:** CyberSecurity_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("Show me cybersecurity best practices")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Get detailed cybersecurity policies and procedures")
+    YIELD result
+    RETURN result;
+    ```
+
+### Combinatorics KG
+- **Resource File:** Combinatorics_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("What are the key combinatorial challenges?")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("List all combinatorial puzzles and problems")
+    YIELD result
+    RETURN result;
+    ```
+
+### Geometry KG
+- **Resource File:** Geometry_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("Retrieve geometry puzzle definitions")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Show geometric puzzles and their properties")
+    YIELD result
+    RETURN result;
+    ```
+
+### Number Theory KG
+- **Resource File:** NumberTheory_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("List number theory challenges")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Fetch number theory puzzles and examples")
+    YIELD result
+    RETURN result;
+    ```
+
+### Advanced Math Proof KG
+- **Resource File:** AdvancedMathProof_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("Retrieve advanced mathematical proof challenges")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("Show advanced math proofs and derivations")
+    YIELD result
+    RETURN result;
+    ```
+
+### Math KG
+- **Resource File:** Math_KG.json
+- **Example Queries:**
+  - **Generate Query:**
+    ```cypher
+    CALL nl.query("Get general math puzzles and examples")
+    YIELD generatedQuery
+    RETURN generatedQuery;
+    ```
+  - **Generate and Execute:**
+    ```cypher
+    CALL nl.queryAndExecute("List general mathematical problems and solutions")
+    YIELD result
+    RETURN result;
+    ```
+
+### Integration Across Domains
+The safeAI plugin supports an iterative and integrated workflow:
+- **Step 1:** Use `nl.query` to generate a raw Cypher query from a natural language prompt, allowing you to review the translation.
+- **Step 2:** Use `nl.queryAndExecute` to run the generated query directly against your Neo4j database.
+- **Step 3:** Use the interactive shell (`KGConversationalAgent`) for continuous query refinement and plain language interpretation of results.
+
+This approach provides a fully functioning environment where domain-specific KGs and LLM-powered query generation combine to form a powerful tool for exploring and managing your data in a natural and intuitive manner.
+
