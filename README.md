@@ -447,3 +447,87 @@ The safeAI plugin supports an iterative and integrated workflow:
 
 This approach provides a fully functioning environment where domain-specific KGs and LLM-powered query generation combine to form a powerful tool for exploring and managing your data in a natural and intuitive manner.
 
+
+## ARC KG Workflow Deep Dive
+
+The ARC Knowledge Graph (KG) is a central component of the safeAI plugin, designed to manage ARC puzzles. The ARC KG stores detailed puzzle definitions including:
+
+- A unique puzzle hash
+- Training examples (each with an input grid and, where available, an expected output grid)
+- Test examples (typically with only the input grid)
+- Final solution text when available
+- The chain-of-thought reasoning behind the solution
+- Additional metadata such as debate updates
+
+This structure supports a full lifecycle in solving ARC puzzles:
+
+### 1. Training Phase
+
+**Goal:** Utilize ARC training examples to fine-tune your model and agentic behavior for puzzle solving.
+
+**Process:**
+- The plugin extracts training examples from the ARC KG resource file (e.g., `ARC_Puzzle_Agent_Definitions.json`).
+- Users can generate queries to retrieve these examples and use the data for model tuning.
+
+**Example Queries:**
+
+*Generate-only (Preview training examples):*
+```cypher
+CALL nl.query("Retrieve ARC puzzle training examples for model tuning")
+YIELD generatedQuery
+RETURN generatedQuery;
+```
+
+*Generate and Execute (Fetch training examples):*
+```cypher
+CALL nl.queryAndExecute("Retrieve ARC puzzle training examples for model tuning")
+YIELD result
+RETURN result;
+```
+
+### 2. Evaluation Phase
+
+**Goal:** Assess the system’s performance on unseen ARC puzzles using the test examples from the KG.
+
+**Process:**
+- Test examples (with only the input grid) are extracted from the ARC KG.
+- Evaluation queries retrieve test examples along with generated responses and chain-of-thought reasoning, enabling you to compare outputs against expected behavior.
+
+**Example Query:**
+```cypher
+CALL nl.queryAndExecute("Retrieve ARC puzzle test examples for evaluation")
+YIELD result
+RETURN result;
+```
+
+### 3. Final Exam & Answer Export
+
+**Goal:** Export the final ARC puzzle answers in the format required by arcprice.org.
+
+**Process:**
+- A dedicated query extracts the final solutions (typically the `solution_text` fields) along with any supporting explanation.
+- The exported output is formatted as per external specifications, ready for submission.
+
+**Example Query:**
+```cypher
+CALL nl.queryAndExecute("Export final ARC puzzle answers in the required format for arcprice.org")
+YIELD result
+RETURN result;
+```
+
+### Security, Tokens, and Access
+
+- **Tokens & API Key:** Your interactions rely on the `OPENAI_API_KEY` (stored as an environment variable) for LLM-powered query generation. Sensitive operations (like accessing internal KG definitions) are protected by token-based mechanisms (e.g., the token "AUTHORIZED").
+
+- **Roles:** Administrators manage system configurations and token setups, while end users execute queries via the Neo4j Browser or interactive shell.
+
+### Putting It All Together
+
+The safeAI plugin enables a seamless, multi-phase workflow:
+
+1. **Training:** Retrieve ARC puzzle training examples to fine-tune your model.
+2. **Evaluation:** Run evaluation queries against unseen ARC puzzles to validate system performance.
+3. **Final Exam:** Export final answers, including detailed reasoning, ready for external submission (e.g., to arcprice.org).
+
+This comprehensive workflow allows users to experiment with and refine ARC puzzle solving using integrated, agentic KGs backed by state-of-the-art LLM support.
+
