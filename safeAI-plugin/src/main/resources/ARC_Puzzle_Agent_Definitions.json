@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Rotate90Agent",
+        "description": "Rotates the grid 90° clockwise using numpy.rot90 with k=3.",
+        "code": "def generate_candidate(input_grid):\n    import numpy as np\n    arr = np.array(input_grid)\n    rotated = np.rot90(arr, k=3)\n    return rotated.tolist()"
+    },
+    {
+        "name": "Rotate180Agent",
+        "description": "Rotates the grid 180° using numpy.rot90 with k=2.",
+        "code": "def generate_candidate(input_grid):\n    import numpy as np\n    arr = np.array(input_grid)\n    rotated = np.rot90(arr, k=2)\n    return rotated.tolist()"
+    },
+    {
+        "name": "Rotate270Agent",
+        "description": "Rotates the grid 270° clockwise using numpy.rot90 with k=1.",
+        "code": "def generate_candidate(input_grid):\n    import numpy as np\n    arr = np.array(input_grid)\n    rotated = np.rot90(arr, k=1)\n    return rotated.tolist()"
+    },
+    {
+        "name": "ReflectHorizontalAgent",
+        "description": "Flips the grid horizontally using numpy.fliplr.",
+        "code": "def generate_candidate(input_grid):\n    import numpy as np\n    arr = np.array(input_grid)\n    reflected = np.fliplr(arr)\n    return reflected.tolist()"
+    },
+    {
+        "name": "ReflectVerticalAgent",
+        "description": "Flips the grid vertically using numpy.flipud.",
+        "code": "def generate_candidate(input_grid):\n    import numpy as np\n    arr = np.array(input_grid)\n    reflected = np.flipud(arr)\n    return reflected.tolist()"
+    }
+    
+    /* Additional agent definitions for: Reflections across diagonals, translations, scaling, mirroring, color transformations, fill/gap agents, pattern/subgrid agents, overlay/partition agents, composite agents, dynamic composite agent, edge processing, and connected component agents should be similarly added. */
+]

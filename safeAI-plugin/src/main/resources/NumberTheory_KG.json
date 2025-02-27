@@ -1,0 +1,17 @@
+{
+  "NumberTheory_KG": {
+    "description": "This KG provides number-theoretic reasoning including prime testing, GCD, LCM, and advanced operations for IMO-level challenges.",
+    "agents": [
+      {
+        "name": "PrimeTestAgent",
+        "description": "Tests if a given number is prime.",
+        "groovyScript": "class PrimeTestAgent { def generateCandidate(n) { for(int i = 2; i < n; i++) { if(n % i == 0) return false; } return true; } }"
+      }
+    ],
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-02-27TXX:XX:XXZ",
+      "description": "Provides core number theory operations."
+    }
+  }
+}

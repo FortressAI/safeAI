@@ -1,0 +1,17 @@
+{
+  "Geometry_KG": {
+    "description": "This KG provides reasoning for geometric problems by parsing queries for shapes and properties and mapping them to formal representations.",
+    "agents": [
+      {
+        "name": "AreaCalculatorAgent",
+        "description": "Calculates the area of a rectangle given its width and height.",
+        "groovyScript": "class AreaCalculatorAgent { def generateCandidate(dimensions) { return dimensions.width * dimensions.height } }"
+      }
+    ],
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-02-27TXX:XX:XXZ",
+      "description": "Processes geometric queries and validates shape properties."
+    }
+  }
+}
