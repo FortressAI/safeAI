@@ -14,6 +14,21 @@ if [ -z "$JAR" ]; then
 fi
 cp "$JAR" neo4j-plugins/
 
+# Deploy a local blockchain for testing using Ganache-cli
+
+echo "Deploying local blockchain..."
+
+# Remove any existing blockchain container named ganache
+docker rm -f ganache 2>/dev/null
+
+# Run Ganache-CLI container on port 8545
+docker run -d --name ganache -p8545:8545 trufflesuite/ganache-cli
+
+# Wait a few seconds for the blockchain to start
+sleep 5
+
+echo "Local blockchain deployed successfully at http://localhost:8545"
+
 # Remove any existing container named neo4j-test
 docker rm -f neo4j-test 2>/dev/null
 
