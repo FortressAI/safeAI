@@ -531,3 +531,111 @@ The safeAI plugin enables a seamless, multi-phase workflow:
 
 This comprehensive workflow allows users to experiment with and refine ARC puzzle solving using integrated, agentic KGs backed by state-of-the-art LLM support.
 
+
+## Complete User Guide
+
+### Overview
+The safeAI plugin offers a transformative approach to interacting with your Neo4j-based Knowledge Graphs. It seamlessly integrates advanced natural language processing (NLP) powered by a state-of-the-art LLM to translate natural language queries into Cypher commands. This guide provides detailed workflows and examples across three core domains: ARC puzzles, Math, and Ethics, while emphasizing security, role-based access, and microtransaction management.
+
+### Getting Started
+- **Installation:** Place the safeAI plugin JAR in your Neo4j plugins folder, update your 'neo4j.conf' to allow custom procedures, and restart your Neo4j server.
+- **Environment Setup:** Ensure the environment variable `OPENAI_API_KEY` is set with a valid API key. Additional keys (e.g., for blockchain integration) should be stored securely in an encrypted configuration.
+- **User Roles:** The system supports multiple roles—end users, domain experts, and administrators—with guidance provided via the internal KG. Only authorized users (using a token like "AUTHORIZED") can perform sensitive operations.
+
+### Domain Examples
+
+#### ARC Domain
+The ARC Knowledge Graph (KG) is designed to handle complex ARC puzzles. It is segmented into three phases:
+
+1. **Training Phase:** Retrieve training examples that include both input and output grids to fine-tune your system.
+   - *Generate Query Example:*
+     ```cypher
+     CALL nl.query("Retrieve ARC puzzle training examples for model tuning")
+     YIELD generatedQuery
+     RETURN generatedQuery;
+     ```
+   - *Generate and Execute Example:*
+     ```cypher
+     CALL nl.queryAndExecute("Retrieve ARC puzzle training examples for model tuning")
+     YIELD result
+     RETURN result;
+     ```
+
+2. **Evaluation Phase:** Test performance on unseen puzzles by retrieving test examples (input grids without expected outputs) and comparing the generated chain-of-thought responses.
+   - *Example Query:*
+     ```cypher
+     CALL nl.queryAndExecute("Retrieve ARC puzzle test examples for evaluation")
+     YIELD result
+     RETURN result;
+     ```
+
+3. **Final Exam Phase:** Export final solutions and detailed reasoning (chain-of-thought) in the format required by external platforms like arcprice.org.
+   - *Example Query:*
+     ```cypher
+     CALL nl.queryAndExecute("Export final ARC puzzle answers in the required format for arcprice.org")
+     YIELD result
+     RETURN result;
+     ```
+
+#### Math Domain
+The Combined Math KG consolidates various math topics under a unified "Maths" node. It supports:
+
+1. **Training Phase:** Incorporate basic arithmetic and algebraic examples into your system.
+   - *Example:*
+     ```cypher
+     CALL nl.queryAndExecute("Retrieve training examples for addition and subtraction")
+     YIELD result
+     RETURN result;
+     ```
+
+2. **Evaluation Phase:** Validate performance with test examples (e.g., multiplication, division).
+   - *Example:*
+     ```cypher
+     CALL nl.queryAndExecute("Retrieve test examples for multiplication and division")
+     YIELD result
+     RETURN result;
+     ```
+
+3. **Final Exam Phase:** Present rigorous proofs (e.g., the Fundamental Theorem of Algebra) along with detailed chain-of-thought explanations.
+   - *Example:*
+     ```cypher
+     CALL nl.queryAndExecute("Export final math proof and reasoning")
+     YIELD result
+     RETURN result;
+     ```
+
+#### Ethics Domain
+The Ethics KG provides guidelines, principles, and ethical frameworks:
+
+- Explore training material on ethical theories and guidelines.
+   - *Example Query (Generate):*
+     ```cypher
+     CALL nl.query("List all ethical guidelines from the Ethics KG")
+     YIELD generatedQuery
+     RETURN generatedQuery;
+     ```
+- Retrieve detailed policies and standards for governance purposes.
+   - *Example Query (Execute):*
+     ```cypher
+     CALL nl.queryAndExecute("Fetch detailed ethical standards and guidelines")
+     YIELD result
+     RETURN result;
+     ```
+
+### Security and Microtransactions
+- **Authentication & Tokens:**
+  - Sensitive operations require token-based access (e.g., using "AUTHORIZED").
+  - User roles and secure wallet addresses are managed via the Internal KG.
+
+- **Wallet & Blockchain Integration:**
+  - Users have associated wallet addresses. The system supports dynamic microtransaction pricing via smart contract data included in the Internal KG.
+
+- **Encryption & Quantum-Readiness:**
+  - Use AES-256 for encrypting sensitive information. Future upgrades will incorporate post-quantum algorithms for public-key tasks and digital signatures.
+
+### Interactive Shell and Continuous Learning
+- The **KGConversationalAgent** interactive CLI allows for iterative query refinement. Users can generate, execute, and refine queries, interpreting results in plain language.
+
+### Conclusion
+The safeAI plugin provides a robust, agentic approach to managing and querying complex Knowledge Graphs. Whether you're solving ARC puzzles, exploring mathematical challenges, or delving into ethical frameworks, the platform integrates advanced NLP, secure data handling, and dynamic blockchain contracts to offer a complete end-to-end solution for SafeAI.
+
