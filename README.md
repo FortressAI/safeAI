@@ -1,86 +1,250 @@
-# Detailed Agentic KG Documentation: ARC, Math, and Ethics
+# safeAI Plugin: Cypher Query Guide for Beginners
 
-safeAI is a backend plugin for Neo4j that transforms traditional knowledge graphs into dynamic, agentic systems. This document explains our new paradigm, where each domain-specific KG (ARC, Math, and Ethics) utilizes embedded Groovy scripts to drive the transformation process through three distinct phases: Training, Evaluation, and Final Exam.
+Welcome to the safeAI Plugin! This guide is written in simple language (even for grade school kids) and provides step-by-step Cypher query examples for installing, running, and using the safeAI plugin. If you communicate only via Cypher, this guide shows you exactly what to type in Neo4j’s Cypher Shell or Browser.
 
-## Overview
+---
 
-Our approach leverages dynamic, runtime-executed Groovy code stored within each KG's JSON definition. This enables domain-specific agents to perform:
+## Table of Contents
+1. Introduction
+2. Connecting to Neo4j
+3. Creating a Problem Node
+4. Running safeAI Procedures
+   - ARC Domain
+   - Math Domain
+   - Ethics Domain
+5. Detailed Step-by-Step Cypher Query Examples
+6. Troubleshooting & Tips
 
-- **Training Phase:** The KG attempts basic, first-level transformations (e.g. rotations, reflections, translations) that solve simple problems with about a 61% success rate.
-- **Evaluation Phase:** If the initial transformations do not yield the expected results, a composite or combinatorial agent applies multiple transformation sequences. This backup mechanism pushes success to 100% and systematically captures a detailed chain-of-thought (CoT).
-- **Final Exam Phase:** Using the gathered CoT and validated transformations, the system produces a final answer – a fully transformed output with complete auditability. This final answer is critical for high-stakes evaluation (such as submissions to arcprize.org).
+---
 
-## Domain Details
+## 1. Introduction
 
-### ARC Domain
+The safeAI Plugin turns your Neo4j database into a smart problem-solver. It can solve puzzles (ARC), handle math problems, and even check that solutions are ethical. This guide will tell you how to communicate with safeAI using Cypher queries only.
 
-The ARC Domain is our flagship example. It addresses abstract puzzles that require decomposing a problem into fundamental transformations. 
+---
 
-- **Training:** The ARC KG uses Groovy's `trainingScript` to iterate over simple transforms (e.g., 'rotate90', 'rotate180', 'reflectHorizontally', 'reflectVertically'). Each operation is attempted on the input grid to match the expected output.
-- **Evaluation:** If none of these operations individually produce the correct answer, the `combinationScript` systematically tests sequences of transformations (e.g., applying 'rotate90' followed by 'translate'). The `evaluationScript` encapsulates this sequence, ensuring that all possibilities are attempted until success is reached.
-- **Final Exam:** The `finalExamScript` generates a comprehensive chain-of-thought by invoking the evaluation logic and logging detailed reasoning. This output is used for final submissions and audits.
+## 2. Connecting to Neo4j
 
-**Endpoints:**
-Our ARC KG JSON includes an `endpoints` section that points to the GitHub data source:
-- **Data Folder:** `https://api.github.com/repos/fchollet/ARC/contents/data/`
-- **Training Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/training`
-- **Evaluation Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/evaluation`
-- **Final Exam Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/finalExam`
+First, start your Neo4j Browser or Cypher Shell and connect to your database. For example, in the Neo4j Browser, you might see a connection prompt. In the Cypher Shell, you can use:
 
-Domain Creators can update these URLs directly in the KG JSON if the data location changes.
+```
+:CONNECT bolt://localhost:7687
+```
 
-### Math Domain
+Make sure your database is running!
 
-The Math Domain (Unified "Maths" KG) covers a wide array of mathematical topics including arithmetic, algebra, calculus, geometry, and advanced proofs.
+---
 
-- **Training:** Mathematics agents learn via simple operations (e.g., addition, subtraction) and over time cover more complex functions.
-- **Evaluation:** The system tests the consistency of these operations on unseen examples.
-- **Final Exam:** For advanced proofs (such as the Fundamental Theorem of Algebra), the KG generates a detailed chain-of-thought that demonstrates each step of the logical reasoning.
+## 3. Creating a Problem Node
 
-The Math KG JSON is similarly structured to ARC, including an `endpoints` block for data access and embedded Groovy scripts that mirror the ARC logic, customized to mathematical operations.
+safeAI expects you to create nodes that describe a problem. A problem can be a puzzle in the ARC domain, a math problem, or an ethical evaluation query.
 
-### Ethics Domain
+For example, to create an ARC problem node, run:
 
-The Ethics Domain is designed to handle ethical guidelines and policies. While the core ethical principles are well-established, external validation via testing is crucial.
+```cypher
+CREATE (p:SafeAIProblem {
+  domain: 'ARC',
+  input: '[[1,2],[3,4]]',
+  expectedOutput: '[[2,3],[4,5]]',
+  description: 'Example ARC puzzle'
+})
+RETURN p;
+```
 
-- **Training:** Agents in the Ethics KG analyze core ethical theories and compile key guidelines.
-- **Evaluation:** The system tests these guidelines against real-world scenarios to ensure they provide adequate resolution.
-- **Final Exam:** The final exam phase produces a comprehensive ethical framework along with a chain-of-thought that explains the decision-making process.
+Similarly, for a Math problem:
 
-Like ARC and Math, the Ethics KG JSON contains an `endpoints` section and embedded Groovy scripts that define its transformation, evaluation, and final exam processes.
+```cypher
+CREATE (m:SafeAIProblem {
+  domain: 'Math',
+  input: 'Simplify: 3x + 2x',
+  expectedOutput: '5x',
+  description: 'Simplify the expression'
+})
+RETURN m;
+```
 
-## Dynamic Script Integration
+And for an Ethics query (to check if a proposed change is ethical):
 
-Each KG JSON includes a `scripts` section containing Groovy code for the following:
+```cypher
+CREATE (e:SafeAIProblem {
+  domain: 'Ethics',
+  input: 'Propose change: Remove safety checks',
+  description: 'Test ethics evaluation'
+})
+RETURN e;
+```
 
-- **trainingScript:** Tries basic, first-level transformations on the input. 
-- **combinationScript:** Applies composite transformation strategies if individual operations fail.
-- **evaluationScript:** Combines the above to yield a validated output.
-- **finalExamScript:** Produces a detailed chain-of-thought along with the final answer.
+---
 
-These scripts are executed at runtime using a GroovyShell, with helper functions (such as `nlQuery`) bound into the execution context.
+## 4. Running safeAI Procedures
 
-## Role-Based Interactions
+The safeAI plugin exposes several procedures that you can call to process your problem nodes. Here are the typical phases:
 
-- **Admins:** Maintain full system oversight, configure blockchain and security settings, and review all training/evaluation logs.
-- **Domain Creators (KG Creators):** Develop, update, and refine domain-specific KG agents by editing the embedded Groovy scripts and training data. They are responsible for ensuring the endpoints in the JSON remain current if the data source relocates.
-- **Users:** Query approved Agentic KGs via natural language interfaces. They benefit from secure, blockchain-backed microtransactions and receive detailed, transparent solutions complete with chain-of-thought for auditability.
+### a) Training Phase
 
-## Developer Workflow Guidelines
+This phase tries simple transformations. To run it, use:
 
-- **Branching Strategy:** Develop in feature-specific branches. Always merge via pull requests.
-- **Endpoint Management:** If the data source for a domain changes, update the corresponding URL in the KG JSON’s `endpoints` section.
-- **Testing:** Use the provided deploy script to run end-to-end tests. Monitor CI pipelines to ensure continuous integration.
-- **Iterative Improvement:** Review the chain-of-thought outputs to identify areas for refinement in the transformation logic. Update Groovy scripts as necessary.
+```cypher
+CALL safeAI.train('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
 
-## Future Directions
+For Math problems, you can call:
 
-- **Enhanced Quantum-Resistant Security:** Continuously update cryptographic measures.
-- **Domain Expansion:** Apply this paradigm to additional domains.
-- **Dynamic Microtransaction Models:** Refine pricing strategies based on system performance and demand.
-- **Continuous Learning:** Implement robust feedback loops to further optimize KG agent accuracy.
+```cypher
+CALL safeAI.train('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
 
-## License
+### b) Evaluation Phase
 
-This project is licensed as specified in the LICENSE file.
+If training fails, the plugin can combine transformations. Run:
 
+```cypher
+CALL safeAI.evaluate('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+For Math:
+
+```cypher
+CALL safeAI.evaluate('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### c) Final Exam Phase
+
+This phase produces the final answer along with a detailed explanation. Use:
+
+```cypher
+CALL safeAI.finalExam('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+And for Math:
+
+```cypher
+CALL safeAI.finalExam('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### d) Ethics Approval
+
+For ethical evaluation, the plugin checks if a proposed change is acceptable using the immutable Ethics KG. Run:
+
+```cypher
+CALL safeAI.approveEthics('Propose change: Remove safety checks') YIELD approved, reason
+RETURN approved, reason;
+```
+
+---
+
+## 5. Detailed Step-by-Step Cypher Query Examples
+
+Let's walk through an example end-to-end for each domain.
+
+### Example for ARC Domain:
+
+1. **Create a Problem Node:**
+
+```cypher
+CREATE (arc:SafeAIProblem {
+  domain: 'ARC',
+  input: '[[1,2],[3,4]]',
+  expectedOutput: '[[2,3],[4,5]]',
+  description: 'Simple ARC puzzle'
+})
+RETURN arc;
+```
+
+2. **Run the Training Phase:**
+
+```cypher
+CALL safeAI.train(arc.domain, arc.input, arc.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+3. **If Necessary, Run the Evaluation Phase:**
+
+```cypher
+CALL safeAI.evaluate(arc.domain, arc.input, arc.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+4. **Obtain Final Answer with Explanation:**
+
+```cypher
+CALL safeAI.finalExam(arc.domain, arc.input, arc.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### Example for Math Domain:
+
+1. **Create a Problem Node:**
+
+```cypher
+CREATE (math:SafeAIProblem {
+  domain: 'Math',
+  input: 'Simplify: 3x + 2x',
+  expectedOutput: '5x',
+  description: 'Simplify the algebraic expression'
+})
+RETURN math;
+```
+
+2. **Run the Training Phase:**
+
+```cypher
+CALL safeAI.train(math.domain, math.input, math.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+3. **Run the Evaluation Phase (if needed):**
+
+```cypher
+CALL safeAI.evaluate(math.domain, math.input, math.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+4. **Get Final Answer and Chain-of-Thought:**
+
+```cypher
+CALL safeAI.finalExam(math.domain, math.input, math.expectedOutput) YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### Example for Ethics Domain:
+
+1. **Create an Ethics Query Node:**
+
+```cypher
+CREATE (ethics:SafeAIProblem {
+  domain: 'Ethics',
+  input: 'Propose change: Remove safety checks',
+  description: 'Check if the change is ethical'
+})
+RETURN ethics;
+```
+
+2. **Run the Ethics Approval Check:**
+
+```cypher
+CALL safeAI.approveEthics(ethics.input) YIELD approved, reason
+RETURN approved, reason;
+```
+
+---
+
+## 6. Troubleshooting & Tips
+
+- **No Output?** Double-check your syntax and that your Neo4j database is running.
+- **Procedure Not Found?** Ensure the safeAI plugin is installed and that its procedures (like safeAI.train, safeAI.evaluate, safeAI.finalExam, and safeAI.approveEthics) are registered in your Neo4j instance.
+- **Always Read the Chain-of-Thought:** The detailed explanation helps you understand what each transformation step did.
+
+---
+
+## 7. Summary
+
+This guide has shown you, step-by-step, how to use Cypher queries to interact with the safeAI Plugin. By creating problem nodes and calling appropriate procedures, even a beginner can start solving puzzles, math problems, and ensuring ethical changes are approved—all using Cypher queries.
+
+Happy querying and learning with safeAI!
