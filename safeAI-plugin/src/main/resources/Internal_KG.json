@@ -10,6 +10,12 @@
         "role": "end_user",
         "wallet_address": "0xUserWalletAddress",
         "creation_date": "2025-01-01T00:00:00Z",
+  "contract": {
+    "pricePerQuery": "0.0001 tokens",
+    "minFee": "0.001 tokens",
+    "usageQuota": "1000 queries per month",
+    "smartContractTemplate": "function getCost(uint queryCount) public pure returns (uint) { return queryCount * 100; }"
+  },
         "notes": "Standard access. Wallet keys are stored securely off-chain."
       },
       {

@@ -412,3 +412,33 @@ This ensures that every query to your KG is billed according to the rules you se
 - **For End Users:** Check the query output; it should include a "cost" field that confirms billing as per the contract rules.
 
 \n<!-- Temporary update for validation -->
+
+## 16. Creating New KG JSON Configuration with Helper Scripts
+
+When you want to build a new Knowledge Graph (KG) for a new domain, you don't have to start from scratch. The safeAI system provides a helper script that automatically creates a compliant JSON configuration for your new KG. This helper script is included in the Internal KG and works like a magic template builder!
+
+### Steps to Use the Helper Script:
+
+1. **Enter Your OpenAI API Key:**
+   - Open the file `Internal_KG.json` located in `safeAI-plugin/src/main/resources/`.
+   - Find the field "openai_api_key" and replace "your_openai_api_key_here" with your actual OpenAI API key.
+
+2. **Run the Helper Script:**
+   - The helper script, named "jsonBuilderScript", is part of the "helperScripts" section in the Internal KG.
+   - This script accepts parameters such as:
+     - **domain:** The name of your new domain.
+     - **description:** A brief description of your KG.
+     - **endpoints:** URLs for training, evaluation, and final exam data.
+     - **trainingExamples, evaluationExamples, finalExamExamples:** Example data for each phase.
+     - **scripts:** Groovy scripts that define each phase of processing.
+     - **transformationAgents:** A list of agents to handle domain-specific transformations.
+     - **contract:** Contract information (like pricing and usage rules), similar to the defaults.
+   - Running the script generates a nicely formatted JSON file that you can save as your new KG configuration.
+
+3. **Validate and Deploy Your New KG:**
+   - Review the generated JSON file to ensure it meets your needs.
+   - Save the file in the directory `safeAI-plugin/src/main/resources/`.
+   - Restart safeAI and run test queries to verify that your new KG is working properly.
+
+Using this helper script hides the complexity of manually writing JSON configurations and allows even beginners to quickly create a well-formed KG configuration for any new domain.
+
