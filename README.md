@@ -366,3 +366,49 @@ These terms are enforced via a blockchain-based smart contract that the safeAI p
 
 This workflow ensures that even new creators can build their own Agentic KG and set up contracts, working from the final goal backwards to the detailed steps required.
 
+
+## 15. Managing Contracts and Executing KG Solutions
+
+Each Agentic Knowledge Graph (KG) in safeAI includes its own contract configuration. This contract information defines the pricing, usage limits, and rules under which queries are processed for that domain. It works together with a blockchain-based smart contract system to bill and verify each solution.
+
+### 15.1 Admin Configuration
+
+- **Global Defaults:** The system administrator configures default contract settings in a central configuration file (usually in Internal_KG.json). This includes parameters such as:
+  - **Price Per Query:** For example, 0.0001 tokens per query.
+  - **Minimum Fee:** For example, 0.001 tokens.
+  - **Usage Quota:** For example, 1000 queries per month.
+  - **Smart Contract Template:** A Solidity snippet that calculates cost based on the number of queries.
+
+- **Domain-Specific Overrides:** Admins can override these global defaults for a specific KG by including a contract section in that KG's JSON file.
+
+### 15.2 Domain Creator Setup
+
+When you build or customize a KG, you can add a "contract" section directly into your KG's JSON file. For example:
+
+```json
+"contract": {
+  "pricePerQuery": "0.0001 tokens",
+  "minFee": "0.001 tokens",
+  "usageQuota": "1000 queries per month",
+  "smartContractTemplate": "function getCost(uint queryCount) public pure returns (uint) { return queryCount * 100; }"
+}
+```
+
+This ensures that every query to your KG is billed according to the rules you set.
+
+### 15.3 User Execution of Contracts
+
+- When an end user runs a query (using procedures such as `safeAI.finalExam`), safeAI retrieves the contract details for the corresponding KG.
+- The plugin then uses the smart contract template to calculate the cost of the query, processes a blockchain microtransaction, and returns the cost along with the result and detailed chain-of-thought.
+
+### 15.4 Testing and Verification
+
+- **For Admins:** Use Cypher queries to view contract settings for a KG:
+  ```cypher
+  CALL safeAI.getContractDetails('Math') YIELD contract
+  RETURN contract;
+  ```
+- **For Domain Creators:** Test your customized KG by submitting queries and verifying that the cost calculation matches the contract.
+- **For End Users:** Check the query output; it should include a "cost" field that confirms billing as per the contract rules.
+
+\n<!-- Temporary update for validation -->
