@@ -363,3 +363,49 @@ Ganache CLI is a command-line version of Ganache that lets you run a personal Et
    Once you are comfortable with the CLI and understand how the workspace works, be aware that a graphical UI is also available. The UI provides an easy-to-use visual interface to monitor transactions, accounts, and blocks. It’s a great way to see what's happening on your blockchain in real time without using command-line tools.
 
 This appendix is here for those who wish to dive deeper into the underlying technology. For most users, simply following the main guide with the friendly Cypher procedures is all you need. Enjoy exploring the world of safeAI and blockchain!
+### Extended Deep Dive: Creating the Micro Economics Agentic KG
+
+In this extended deep dive, we explore how you can use safeAI together with a local Ethereum blockchain (via Ganache CLI) to create a brand-new Micro Economics Agentic Knowledge Graph (KG). This specialized KG is designed to analyze market dynamics, calculate equilibria, and offer detailed economic insights—all while operating under the strict ethical guidelines set by the immutable Ethics Domain.
+
+**Key Concepts and Best Practices:**
+
+1. **Smart Contract Billing Insights:**
+   - safeAI uses smart contracts to automatically bill each query. Using Ganache, you can simulate real Ethereum transactions and verify that every query is billed correctly in your test environment.
+
+2. **Setting Up Your Testing Environment:**
+   - Start Ganache CLI on a designated port (e.g., 7545 or 8545) with parameters that mimic realistic conditions (such as a block time of 10 seconds).
+   - Running Ganache in detached mode allows you to automate your testing workflow and cleanly stop the instance when tests conclude.
+
+3. **Creating the Micro Economics KG:**
+   - Utilize the friendly Cypher procedure **safeAI.createDomain** to establish your new domain without dealing with internal configuration files. For example:
+   ```cypher
+   CALL safeAI.createDomain(
+     'Microeconomics',
+     'This domain provides economic analysis including market equilibrium, supply-demand dynamics, and consumer behavior insights.',
+     ['Calculate equilibrium for: Demand = 100 - 2P, Supply = 20 + 3P'],
+     ['Analyze step-by-step market forces impacting equilibrium.'],
+     ['Return final equilibrium price and quantity with a full chain-of-thought explanation.'],
+     '0.0001 tokens, 0.001 tokens, 1000 queries'
+   ) YIELD domain, status;
+   RETURN domain, status;
+   ```
+   - This procedure abstracts all the complex configurations so that you only need to provide intuitive inputs.
+
+4. **Testing and Verification:**
+   - Execute your queries across the three phases (training, evaluation, final exam) to ensure that every step in the problem-solving process is functioning as expected.
+   - Review the detailed chain-of-thought outputs to understand the reasoning behind every decision made by the KG.
+
+5. **Ensuring Ethical and Agentic Operation:**
+   - The Ethics Domain is immutable and serves as the moral backbone for safeAI. All newly created domains, including your Micro Economics KG, must adhere to these strict ethical standards.
+   - This ensures that every solution is not only effective but also fair and accountable.
+
+6. **Iterative Refinement:**
+   - Continuously test, analyze, and refine your queries. Adjust transformation strategies as needed and use your local blockchain to simulate actual transaction conditions.
+   - This iterative process helps improve the performance and accuracy of your Micro Economics KG.
+
+7. **Transitioning to the Ganache UI:**
+   - Once you’re comfortable with the command-line operations and the test environment, explore the Ganache graphical UI. The UI provides a visual overview of accounts, transactions, and blocks, making it easier to monitor and understand your Ethereum workspace.
+
+**Conclusion:**
+By following these best practices, you can establish a robust Micro Economics Agentic KG using safeAI. This approach provides deep economic insights while ensuring strict ethical compliance and seamless smart contract billing. It’s a win-win: you gain sophisticated analytical capabilities and full control over your testing environment, all through simple, user-friendly Cypher commands.
+
