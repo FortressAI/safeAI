@@ -1,172 +1,86 @@
-# safeAI - Agentic Knowledge Graph Plugin
+# Detailed Agentic KG Documentation: ARC, Math, and Ethics
 
-safeAI is a powerful plugin that transforms your Neo4j instance by integrating and managing Agentic Knowledge Graphs (KGs). Unlike standalone applications or UIs, safeAI focuses exclusively on backend functionality—developing, managing, and optimizing KGs via advanced natural language processing (NLP) and agent-based querying. UIs are not our business; we provide the core engine for domain experts and administrators to harness and refine agentic KGs.
-
-## Table of Contents
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Installation and Setup](#installation-and-setup)
-- [Deploying the Plugin](#deploying-the-plugin)
-- [Knowledge Graph Domains](#knowledge-graph-domains)
-  - [ARC Domain](#arc-domain)
-  - [Math Domain](#math-domain)
-  - [Ethics Domain](#ethics-domain)
-  - [Internal KG](#internal-kg)
-- [Role-Based Interactions](#role-based-interactions)
-- [Developer Workflow Guidelines](#developer-workflow-guidelines)
-- [Future Directions](#future-directions)
-- [License](#license)
+safeAI is a backend plugin for Neo4j that transforms traditional knowledge graphs into dynamic, agentic systems. This document explains our new paradigm, where each domain-specific KG (ARC, Math, and Ethics) utilizes embedded Groovy scripts to drive the transformation process through three distinct phases: Training, Evaluation, and Final Exam.
 
 ## Overview
 
-The safeAI plugin provides a backend solution for managing Agentic Knowledge Graphs within Neo4j. It is designed for integration into existing systems, providing advanced query capabilities and continuous learning without the overhead of developing and maintaining a separate user interface.
+Our approach leverages dynamic, runtime-executed Groovy code stored within each KG's JSON definition. This enables domain-specific agents to perform:
 
-Key benefits include:
-- **Agent-Based Querying:** Deploy specialized agents to generate, refine, and execute queries against domain-specific KGs.
-- **Dynamic Security:** Secure blockchain-based microtransactions with quantum-resistant cryptographic protocols.
-- **Focused on Core Functionality:** We build and maintain the engine for KG management—UI development is not our focus.
+- **Training Phase:** The KG attempts basic, first-level transformations (e.g. rotations, reflections, translations) that solve simple problems with about a 61% success rate.
+- **Evaluation Phase:** If the initial transformations do not yield the expected results, a composite or combinatorial agent applies multiple transformation sequences. This backup mechanism pushes success to 100% and systematically captures a detailed chain-of-thought (CoT).
+- **Final Exam Phase:** Using the gathered CoT and validated transformations, the system produces a final answer – a fully transformed output with complete auditability. This final answer is critical for high-stakes evaluation (such as submissions to arcprize.org).
 
-## Key Features
-
-- **Agent-Based Querying:** Tailored agents that enhance querying and reasoning for multiple KG domains.
-- **Secure Blockchain Integration:** Leverages smart contracts for dynamic microtransactions and licensing, with a focus on quantum-resilient cryptography.
-- **Diverse Domain Coverage:** Supports ARC puzzles, a consolidated Math KG, Ethics, and an Internal KG for administrative purposes. Each domain follows structured training, evaluation, and final evaluation workflows.
-- **Continuous Learning:** Detailed chain-of-thought outputs facilitate iterative improvement and self-optimization of KG agents.
-
-## Installation and Setup
-
-1. **Prerequisites:**
-   - Java (JDK 11 or higher)
-   - Maven
-   - Docker (for deploying Neo4j and blockchain environments)
-
-2. **Build the Plugin:**
-   ```bash
-   mvn clean package
-   ```
-
-3. **Configuration:**
-   - Set necessary environment variables (e.g., `OPENAI_API_KEY`).
-   - Securely manage private keys and blockchain settings as described in the Internal KG documentation.
-
-## Deploying the Plugin
-
-Deploy the plugin using the provided `deploy_neo4j.sh` script which:
-- Builds the safeAI plugin using Maven.
-- Deploys a local blockchain with Ganache-CLI on port 8545 (for testing smart contracts and microtransactions).
-- Launches a Neo4j Docker container with the safeAI plugin pre-loaded.
-
-To deploy:
-```bash
-./deploy_neo4j.sh
-```
-
-## Knowledge Graph Domains
+## Domain Details
 
 ### ARC Domain
 
-Designed for tackling complex ARC puzzles, the ARC KG supports:
+The ARC Domain is our flagship example. It addresses abstract puzzles that require decomposing a problem into fundamental transformations. 
 
-- **Training:** Learn from input-output grid examples.
-- **Evaluation:** Validate system performance with unseen puzzles.
-- **Final Exam:** Export comprehensive solutions with detailed chain-of-thought reasoning.
+- **Training:** The ARC KG uses Groovy's `trainingScript` to iterate over simple transforms (e.g., 'rotate90', 'rotate180', 'reflectHorizontally', 'reflectVertically'). Each operation is attempted on the input grid to match the expected output.
+- **Evaluation:** If none of these operations individually produce the correct answer, the `combinationScript` systematically tests sequences of transformations (e.g., applying 'rotate90' followed by 'translate'). The `evaluationScript` encapsulates this sequence, ensuring that all possibilities are attempted until success is reached.
+- **Final Exam:** The `finalExamScript` generates a comprehensive chain-of-thought by invoking the evaluation logic and logging detailed reasoning. This output is used for final submissions and audits.
 
-*Example Query:*
-```cypher
-CALL nl.queryAndExecute("Fetch ARC training examples")
-YIELD result
-RETURN result;
-```
+**Endpoints:**
+Our ARC KG JSON includes an `endpoints` section that points to the GitHub data source:
+- **Data Folder:** `https://api.github.com/repos/fchollet/ARC/contents/data/`
+- **Training Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/training`
+- **Evaluation Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/evaluation`
+- **Final Exam Data:** `https://api.github.com/repos/fchollet/ARC/contents/data/finalExam`
+
+Domain Creators can update these URLs directly in the KG JSON if the data location changes.
 
 ### Math Domain
 
-The consolidated "Maths" KG integrates various mathematical topics—arithmetic, algebra, calculus, geometry, and advanced proofs. It supports:
+The Math Domain (Unified "Maths" KG) covers a wide array of mathematical topics including arithmetic, algebra, calculus, geometry, and advanced proofs.
 
-- **Training:** Examples covering basic operations and algebraic transformations.
-- **Evaluation:** Test queries validating arithmetic and logical consistency.
-- **Final Exam:** Rigorous proofs (e.g., the Fundamental Theorem of Algebra) with detailed reasoning.
+- **Training:** Mathematics agents learn via simple operations (e.g., addition, subtraction) and over time cover more complex functions.
+- **Evaluation:** The system tests the consistency of these operations on unseen examples.
+- **Final Exam:** For advanced proofs (such as the Fundamental Theorem of Algebra), the KG generates a detailed chain-of-thought that demonstrates each step of the logical reasoning.
 
-*Example Query:*
-```cypher
-CALL nl.queryAndExecute("Retrieve training examples for math operations")
-YIELD result
-RETURN result;
-```
+The Math KG JSON is similarly structured to ARC, including an `endpoints` block for data access and embedded Groovy scripts that mirror the ARC logic, customized to mathematical operations.
 
 ### Ethics Domain
 
-The Ethics KG provides guidelines, principles, and policy standards:
+The Ethics Domain is designed to handle ethical guidelines and policies. While the core ethical principles are well-established, external validation via testing is crucial.
 
-- **Training:** Access ethical theories and foundational guidelines.
-- **Evaluation:** Fetch detailed policies and governance standards.
+- **Training:** Agents in the Ethics KG analyze core ethical theories and compile key guidelines.
+- **Evaluation:** The system tests these guidelines against real-world scenarios to ensure they provide adequate resolution.
+- **Final Exam:** The final exam phase produces a comprehensive ethical framework along with a chain-of-thought that explains the decision-making process.
 
-*Example Query:*
-```cypher
-CALL nl.query("List ethical guidelines")
-YIELD generatedQuery
-RETURN generatedQuery;
-```
+Like ARC and Math, the Ethics KG JSON contains an `endpoints` section and embedded Groovy scripts that define its transformation, evaluation, and final exam processes.
 
-### Internal KG
+## Dynamic Script Integration
 
-This KG holds administrative data including:
+Each KG JSON includes a `scripts` section containing Groovy code for the following:
 
-- **User Role Metadata:** Information on Admins, Domain Creators, and Users with secure wallet addresses and access tokens.
-- **Security Policies:** Best practices for key management and blockchain integration.
-- **Microtransaction Configurations:** Dynamic pricing models, contract details, and related parameters.
+- **trainingScript:** Tries basic, first-level transformations on the input. 
+- **combinationScript:** Applies composite transformation strategies if individual operations fail.
+- **evaluationScript:** Combines the above to yield a validated output.
+- **finalExamScript:** Produces a detailed chain-of-thought along with the final answer.
+
+These scripts are executed at runtime using a GroovyShell, with helper functions (such as `nlQuery`) bound into the execution context.
 
 ## Role-Based Interactions
 
-- **Admin:**
-  - Full control over system functionalities and all KGs.
-  - Manages blockchain contracts, secure key policies, and global configurations.
-  - Reviews and approves changes from Domain Creators.
-  - Accesses training, evaluation, and final exam data across all domains.
-
-- **Domain Creators (KG Creators):**
-  - Develop, update, and validate domain-specific KG agents (e.g., for ARC puzzles, Math operations, Ethics).
-  - Curate training data, define test scenarios, and design final exam assessments.
-  - Validate KG performance and accuracy before releasing them to Users.
-
-- **Users:**
-  - Query approved, agentic KGs via natural language procedures.
-  - Pay for access through secure blockchain-backed microtransactions.
-  - Benefit from detailed, explainable chain-of-thought outputs from training and testing phases.
+- **Admins:** Maintain full system oversight, configure blockchain and security settings, and review all training/evaluation logs.
+- **Domain Creators (KG Creators):** Develop, update, and refine domain-specific KG agents by editing the embedded Groovy scripts and training data. They are responsible for ensuring the endpoints in the JSON remain current if the data source relocates.
+- **Users:** Query approved Agentic KGs via natural language interfaces. They benefit from secure, blockchain-backed microtransactions and receive detailed, transparent solutions complete with chain-of-thought for auditability.
 
 ## Developer Workflow Guidelines
 
-- **Branching Strategy:**
-  - Develop in feature-specific branches (never on main).
-  - Merge updated branches on the remote and delete them post-merge.
-
-- **Pruning Remote References:**
-  - Run `git fetch --prune` regularly to remove stale remote-tracking branches.
-
-- **Pull Requests:**
-  - Always open a PR for feature updates to ensure code review and testing.
-
-- **Testing and Continuous Improvement:**
-  - Utilize the deploy script to verify end-to-end functionality.
-  - Leverage the KGConversationalAgent for iterative query refinement and learning.
+- **Branching Strategy:** Develop in feature-specific branches. Always merge via pull requests.
+- **Endpoint Management:** If the data source for a domain changes, update the corresponding URL in the KG JSON’s `endpoints` section.
+- **Testing:** Use the provided deploy script to run end-to-end tests. Monitor CI pipelines to ensure continuous integration.
+- **Iterative Improvement:** Review the chain-of-thought outputs to identify areas for refinement in the transformation logic. Update Groovy scripts as necessary.
 
 ## Future Directions
 
-- **Enhanced Quantum-Resistant Security:**
-  - Continually update cryptographic modules to integrate quantum-resistant digital signatures and key exchanges.
-
-- **Domain Expansion:**
-  - Add new Knowledge Graphs for emerging domains while maintaining a uniform training-evaluation-final exam structure.
-
-- **AI-Driven Optimization:**
-  - Improve NLP accuracy and agent-based reasoning to optimize query generation and system responses.
-
-- **Dynamic Microtransaction Models:**
-  - Develop real-time pricing mechanisms that adjust based on system load and demand.
-
-- **Continuous Learning:**
-  - Implement feedback loops to enable the system to evolve using live performance metrics and user data.
+- **Enhanced Quantum-Resistant Security:** Continuously update cryptographic measures.
+- **Domain Expansion:** Apply this paradigm to additional domains.
+- **Dynamic Microtransaction Models:** Refine pricing strategies based on system performance and demand.
+- **Continuous Learning:** Implement robust feedback loops to further optimize KG agent accuracy.
 
 ## License
 
-This project is licensed under the terms specified in the LICENSE file.
-\nUPDATED_AT: Fri Feb 28 13:32:10 UTC 2025
+This project is licensed as specified in the LICENSE file.
+
