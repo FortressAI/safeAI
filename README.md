@@ -169,3 +169,4 @@ This KG holds administrative data including:
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
+\nUPDATED_AT: Fri Feb 28 13:32:10 UTC 2025
