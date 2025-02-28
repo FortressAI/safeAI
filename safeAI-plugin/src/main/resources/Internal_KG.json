@@ -1,5 +1,9 @@
 {
   "InternalKG": {
+  "ethicsApproval": {
+    "enabled": true,
+    "approvalScript": "def approve(change, context) { def ethicalOutcome = nlQuery('Evaluate ethics: ' + change); if(ethicalOutcome.contains('Approved')) { return true } else { return false } }"
+  },
     "users": [
       {
         "user_id": "user1",

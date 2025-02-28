@@ -42,10 +42,16 @@
       "expectedOutput": "{ x=6, y=4 }",
       "description": "Simultaneous linear equations."
     }
+,
+    {
+      "input": "Prove that sqrt(2) is irrational",
+      "expectedOutput": "Proof by contradiction establishing the irrationality of sqrt(2)",
+      "description": "Advanced proof demonstrating the irrationality of sqrt(2) using contradiction."
+    }
   ],
   "scripts": {
     "trainingScript": "def process(input, expectedOutput, context) {\n    def transformations = ['simplify', 'combineLikeTerms', 'differentiate']\n    for (transformation in transformations) {\n        def candidate = nlQuery('Apply ' + transformation + ' on input: ' + input)\n        if(candidate == expectedOutput) {\n            println 'Transformation ' + transformation + ' succeeded.'\n            return candidate\n        }\n    }\n    println 'No single transformation succeeded.'\n    return null\n}",
-    "combinationScript": "def process(input, expectedOutput, context) {\n    def combinations = [\n         ['simplify', 'differentiate'],\n         ['combineLikeTerms', 'factor'],\n         ['simplify', 'solveEquations']\n    ]\n    for (combo in combinations) {\n         def candidate = input\n         combo.each { transformation ->\n             candidate = nlQuery('Apply ' + transformation + ' on candidate: ' + candidate)\n         }\n         if(candidate == expectedOutput) {\n             println 'Combination ' + combo + ' succeeded.'\n             return candidate\n         }\n    }\n    println 'Combination strategy failed.'\n    return null\n}",
+    "combinationScript": "def process(input, expectedOutput, context) {\n    def combinations = [\n         ['simplify', 'differentiate'],\n         ['combineLikeTerms', 'factor'],\n         ['simplify', 'solveEquations'],\n         ['advancedProof', 'matrices'],\n         ['algebra', 'calculus', 'geometry']\n    ]\n    for (combo in combinations) {\n         def candidate = input\n         combo.each { transformation ->\n             candidate = nlQuery('Apply ' + transformation + ' on candidate: ' + candidate)\n         }\n         if(candidate == expectedOutput) {\n             println 'Combination ' + combo + ' succeeded.'\n             return candidate\n         }\n    }\n    println 'Combination strategy failed.'\n    return null\n}",
     "evaluationScript": "def process(input, expectedOutput, context) {\n    def result = trainingScript.process(input, expectedOutput, context)\n    if(result == null) {\n         result = combinationScript.process(input, expectedOutput, context)\n    }\n    return result\n}",
     "finalExamScript": "def process(input, expectedOutput, context) {\n    def chainOfThought = nlQuery('Generate detailed chain-of-thought for math problem: ' + input)\n    def finalAnswer = evaluationScript.process(input, expectedOutput, context)\n    if(finalAnswer == null) {\n         chainOfThought += '\nNo valid transformation found.'\n    } else {\n         chainOfThought += '\nFinal answer: ' + finalAnswer\n    }\n    return [result: finalAnswer, chain_of_thought: chainOfThought]\n}"
   },
