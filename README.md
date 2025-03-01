@@ -68,6 +68,14 @@ The safeAI Plugin integrates AI reasoning with graph technology and blockchain. 
 ## 4. Setting Up a Local Blockchain and Integrating It
 
 safeAI uses a blockchain to enforce secure billing via microtransactions. For local testing, you can use Ganache:
+### Starting the Containers
+
+To start the containers, use the following command:
+
+```bash
+docker compose up -d
+```
+
 1. **Install Ganache:** Download Ganache Desktop or use Ganache CLI.
 2. **Start the Blockchain:** For example, with Docker:
    ```bash
