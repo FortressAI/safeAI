@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  ganache:
+    image: trufflesuite/ganache-cli
+    container_name: ganache
+    ports:
+      - "8545:8545"
+    networks:
+      - backend
+
+  neo4j-test:
+    image: neo4j:latest
+    container_name: neo4j-test
+    # Expose ports for Neo4j Browser (7474) and Bolt (7687)
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    # Mount local directories for data and plugins
+    volumes:
+      - "./neo4j-data:/data"
+      - "./neo4j-plugins:/var/lib/neo4j/plugins"
+    # Match the environment variables set in your script
+    environment:
+      - NEO4J_dbms_security_procedures_unrestricted=safeai.*
+      - NEO4J_dbms_security_procedures_allowlist=safeai.*
+      - NEO4JLABS_PLUGINS=["apoc"]
+      - NEO4J_dbms_connector_bolt_listen__address=0.0.0.0:7687
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
