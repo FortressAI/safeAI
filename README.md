@@ -485,7 +485,7 @@ As part of the production deployment, you will launch your very own safeAI coin.
 Following these steps, you can transform your safeAI system from a local testing setup into a full-scale production service on AWS. With the safeAI KG running as a serverless container and a dedicated blockchain side chain handling smart contract billing (and your own safeAI coin), you ensure a robust, scalable, and cost-effective solution. This production model provides both advanced capabilities and seamless integration, making it a win-win for all users.
 
 
-## Appendix B: From DevTest to Production – Moving safeAI to the Big Cloud
+
 
 Welcome to Appendix B! This part is written in simple, easy-to-understand language so that even a grade-school student can learn how to move safeAI from working on your own computer to running in the real world (on AWS, which is like a giant computer in the cloud!).
 
@@ -572,3 +572,42 @@ By following these steps, you can take safeAI from a local test project to a ful
 Remember: This guide is designed in simple language so anyone, even a school kid, can understand how to deploy and scale safeAI.
 
 APPENDIX-B-UPDATE
+
+## Appendix C: Wallets, Microtransactions, and Agentic KG Billing
+
+This section explains how safeAI handles wallets and microtransactions so that every query is billed automatically and fairly:
+
+### 1. System-Wide Wallet Configuration
+- The administrator configures a system-wide wallet which acts as the central account for receiving microtransaction fees.
+- Example Cypher command:
+  ```cypher
+  CALL safeAI.configureSystemWallet({
+    walletAddress: '0xADMIN_WALLET_ADDRESS',
+    privateKey: 'admin-private-key',
+    name: 'AdminWallet'
+  });
+  ```
+
+### 2. Wallet Setup for Each Agentic KG
+- Every internal Agentic KG automatically deploys its own microtransaction contract associated with the wallet of the user creating the domain.
+- For example, when running:
+  ```cypher
+  CALL safeAI.createDomain(
+    'Microeconomics',
+    'Economic analysis with wallet integration.',
+    ['Calculate equilibrium for: Demand = 100 - 2P, Supply = 20 + 3P'],
+    ['Step-by-step analysis of market dynamics.'],
+    ['Return final equilibrium with detailed explanation.'],
+    '0.0001 tokens, 0.001 tokens, 1000 queries'
+  ) YIELD domain, status;
+  RETURN domain, status;
+  ```
+  The system records the executing user’s wallet and routes billing to the system-wide admin wallet.
+
+### 3. Microtransaction Billing and Lubrication Fees
+- Designed for extremely small payments, each microtransaction includes a minimal fee along with a lubrication fee to ensure smooth processing.
+- In a DevTest setup, this can be simulated using Ganache, while in production, the smart contract automatically deducts the fee.
+
+### 4. End-to-End Integration
+- Every interaction via Cypher commands automatically triggers billing across all phases (training, evaluation, final exam).
+- Internal Agentic KG contracts are verified to forward fees to the admin wallet, ensuring transparency, fairness, and adherence to our patent-pending AI paradigm.
