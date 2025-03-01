@@ -1,533 +1,574 @@
-# SafeAI Plugin 
+# safeAI Plugin: The Ultimate Extended Guide
 
-## Overview
-The SafeAI Plugin is a decentralized Neo4j plugin designed to secure, manage, and monetize knowledge graphs (KGs) using blockchain technology. It features robust digital signatures, immutable blockchain-based audit trails, dynamic token-based licensing, decentralized governance, and an integrated natural language interface for both technical and non-technical users.
+Welcome to the ultimate extended guide for the safeAI Plugin! This guide is designed for beginners, school-age kids, and anyone who isn’t a developer. Our goal is to teach you everything about safeAI—from installing the plugin and setting up a local blockchain to using its built-in domains (ARC, Math, Ethics) and creating new domains via simple Cypher procedures. We hide all the complex details behind user-friendly commands so that you only interact with safeAI through simple Cypher queries.
 
-## Key Features
-- Security & Integrity: All updates are digitally signed with cryptographic hashes stored on a blockchain sidechain.
-- Dynamic Licensing: Token costs and revenue sharing are calculated in real time.
-- Decentralized Governance: Domain experts vote on KG updates through custom procedures.
-- Adaptive Learning: Transformation agents dynamically improve KG updates.
-- Secure Administration: Configuration includes ARC folder paths and secure API key setup.
-- User-Friendly Interface: A ConversationalAgent translates natural language into Cypher queries.
-
-## Architecture Overview
-The project is divided into these core modules:
-- **Crypto Module:** Implements digital signing (DigitalSignatureUtil) and quantum-upgradeable mechanisms.
-- **Aggregation & Blockchain Modules:** Compute hashes and interact with the blockchain via BlockchainConnector and SmartContractHandler.
-- **Licensing Module:** Manages dynamic token pricing and revenue sharing.
-- **Governance Module:** Provides decentralized voting (GovernanceProcedures, VoteManager).
-- **Learning Module:** Handles ARC KG installation/updates with LearningKGManager, PuzzleSolver, and ConversationalAgent.
-- **Administration Module:** Provides procedures (e.g., safeai.configureApiKeys) for secure API key configuration.
-
-
-## Developer Documentation
-- Source code is organized under `src/main/java/com/safeai/neo4jplugin/`.
-- To run tests:
-
-   mvn test
-
-Ensure that Maven dependencies are resolved and the JDK is configured for Java 11 or higher.
-
-## Administrator & End-User Documentation
-- **Administrators**:  
-  • Set secure API keys using environment variables.  
-  • Adjust `config/plugin-config.properties` for ARC folders and blockchain endpoints.  
-  • Deploy using the Docker instructions provided above and update the neo4j.conf if not using Docker.
-- **End Users**:  
-  • Access the Neo4j Browser (http://localhost:7474) to run custom Cypher queries leveraging SafeAI procedures.  
-  • Use the ConversationalAgent to translate plain language queries into Cypher.
-
-For further support, please contact [support@fortressai.com](mailto:support@fortressai.com).
-
-# SafeAI Plugin
-
-## Overview
-
-SafeAI Plugin is a decentralized Neo4j plugin that secures, manages, and monetizes knowledge graphs (KGs) using blockchain technology. It integrates robust digital signatures, immutable blockchain-based audit trails, dynamic token-based licensing, and decentralized governance. A foundational Ethics Node is at the core of the system, enabling self-validation of KGs by comparing candidate solutions against ethical and moral standards. This plugin is designed not only to solve abstract puzzles (such as ARC puzzles) but also to serve as a safeguard for AI in high-risk domains by providing transparent, human-readable, and auditable KGs.
-
-## System Goals
-
-- **Security & Integrity:**  
-  Every update is digitally signed and hashed, with the hash stored on a blockchain sidechain for tamper‑proof auditability.
-  
-- **Dynamic Token-Based Licensing:**  
-  Token costs are dynamically computed based on real‑time usage and transformation parameters. Smart contracts handle licensing transactions, ensuring low fees for learning modules and scalable revenue sharing.
-  
-- **Decentralized Governance:**  
-  Domain experts use a distributed voting mechanism to manage and update KGs, ensuring that control remains transparent and human‑centric.
-  
-- **Foundational Ethics & Self-Validation:**  
-  A central Ethics Node validates candidate solutions against ethical standards. The system automatically approves trivial cases and flags high-risk scenarios for further review.
-  
-- **Adaptive Learning & Transformation:**  
-  A suite of over 20 transformation agents—plus dynamic combination agents and an LLM backup—continually refines the system through training on puzzles from both evaluation and training datasets.
-  
-- **Enhanced User Interaction:**  
-  Users can interact with the system via standard Cypher queries augmented by custom procedures, as well as through a natural language interface that translates plain-language questions into Cypher queries.
-
-## Architecture Overview
-
-### Core Modules
-
-- **MainPlugin:**  
-  The entry point that registers custom procedures via Neo4j’s META-INF/services mechanism.
-
-- **Crypto Module:**  
-  Provides digital signing (DigitalSignatureUtil) and an abstraction layer (QuantumUpgradeable) for future quantum-resistant upgrades.
-
-- **Aggregation Module:**  
-  Aggregates transactions (TransactionAggregator) and computes cryptographic hashes (HashCalculator) to create immutable records.
-
-- **Blockchain Module:**  
-  Manages blockchain connectivity (BlockchainConnector) and smart contract interactions (SmartContractHandler).
-
-- **Licensing Module:**  
-  Dynamically calculates token costs (TokenPricingEngine) and revenue sharing (RevenueSharingManager), with procedures exposed via LicensingProcedures.
-
-- **Usage Module:**  
-  Tracks usage (UsageTracker) and generates detailed reports (UsageReporting).
-
-- **Governance Module:**  
-  Facilitates decentralized voting through GovernanceProcedures and VoteManager.
-
-- **Authentication Module:**  
-  Provides user authentication (AuthenticationService) and blockchain wallet integration (WalletIntegration).
-
-### Learning Module
-
-- **LearningKGManager:**  
-  Initializes and installs the ARC KG and a foundational Ethics KG. It integrates security, blockchain synchronization, and smart contract deployment for licensing.
-
-- **PuzzleSolver:**  
-  Processes abstract puzzles (language games) using transformation agents. It logs transformation outcomes and helps train the system.
-
-- **ConversationalAgent:**  
-  Offers a natural language interface for querying the KG. It leverages an integrated LLM backup to translate plain language into Cypher queries and provide human-readable results.
-
-### Dynamic Agent Generation
-
-- **Adaptive Transformation Agents:**  
-  The system tracks agent performance and automatically generates new transformation agents (or combination strategies) stored in the KG. This enables continuous learning and improvement.
-  
-- **Executable Code Storage:**  
-  Code snippets (representing transformation logic or ethical reasoning) are stored in the KG and dynamically instantiated at runtime.
-
-## User Interaction & Enhanced Querying
-
-### Standard Cypher and Custom Procedures
-
-Users can still run standard Cypher queries via the Neo4j Browser, but the SafeAI Plugin extends Neo4j's functionality by:
-- Providing custom procedures (e.g., for licensing, governance, and ethical validation).
-- Allowing queries that return detailed information about transformation performance, token pricing, and audit trails.
-
-### Natural Language Interface
-
-The **ConversationalAgent** offers an intuitive way for users to interact with the KG without writing Cypher manually:
-- Users type queries in plain language (e.g., "What is the current token cost for the learning KG?" or "Show me the latest ethical validation report").
-- The agent translates these into Cypher queries using the integrated LLM backup, executes them, and returns comprehensive, human‑readable responses.
-  
-### Blockchain-Backed Audit Trail
-
-Every transaction—whether a transformation, licensing event, or governance vote—is cryptographically hashed and stored on a blockchain sidechain:
-- This ensures that all data is immutable and fully auditable.
-- Third parties can verify the integrity of the KG by comparing on-chain hashes with the KG data.
-
-### Self-Validation Through the Ethics Node
-
-The foundational Ethics Node:
-- Aggregates ethical principles, moral dilemmas, and logical fallacies.
-- Validates candidate solutions generated by transformation agents.
-- Automatically approves solutions with minimal ethical impact while flagging those with significant moral implications for further review.
-
-## Workflow
-
-1. **Initialization:**
-   - The plugin initializes by creating the foundational Ethics Node and loading core ethical standards.
-   - The LearningKGManager installs the ARC KG (or equivalent) from designated sources.
-   - Smart contracts for licensing are deployed with minimal fees to facilitate low-cost learning.
-
-2. **Puzzle Ingestion & Processing:**
-   - The system reads puzzles from both training and evaluation directories.
-   - The PuzzleSolver processes these puzzles using a suite of transformation agents.
-   - Candidate solutions are validated against the Ethics Node.
-   - A dynamic combination agent may merge outputs to optimize accuracy, with LLM backup providing fallback solutions.
-
-3. **User Interaction:**
-   - Domain experts and learners interact with the KG via enhanced Cypher queries and natural language through the ConversationalAgent.
-   - Users can retrieve audit trails, check licensing data, and view governance outcomes, all of which are stored on the blockchain.
-
-4. **Continuous Learning & Governance:**
-   - Performance data is continuously logged, and new agents may be generated based on training outcomes.
-   - Decentralized governance allows domain experts to vote on updates, ensuring the system remains aligned with human-centric ethical standards.
-
-## Setup & Deployment
-
-### Prerequisites
-- Java JDK 11+
-- Maven 3.8+
-- Neo4j Desktop or Enterprise (for Neo4j Browser)
-- Docker & Docker Compose
-- Git
-
-### Quick Start
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/FortressAI/safeAI-plugin.git
-   cd safeAI-plugin
-   ```
-
-2. **Run the Setup Script:**
-   ```bash
-   chmod +x create_project.sh
-   ./create_project.sh
-   ```
-
-3. **Build the Project:**
-   ```bash
-   mvn clean package
-   ```
-
-4. **Deploy to Neo4j:**
-   - Copy `target/safeai-plugin-1.0.0.jar` to your Neo4j `plugins/` directory.
-   - Update `neo4j.conf`:
-     ```ini
-     dbms.security.procedures.unrestricted=com.safeai.neo4jplugin.*
-     dbms.security.procedures.allowlist=com.safeai.neo4jplugin.*
-     ```
-   - Restart Neo4j.
-
-5. **Configure Environment:**
-   - Edit `config/plugin-config.properties` with your blockchain endpoint, licensing parameters, ARC KG URL, etc.
-
-6. **Run Tests:**
-   ```bash
-   mvn test
-   ```
-
-### CI/CD & Production Deployment
-
-- **Docker & Kubernetes:**  
-  Use the Dockerfile in the `CI` directory and Kubernetes manifests in `CI/k8s/` for containerized deployment.
-- **CI/CD Pipeline:**  
-  The CI/CD pipeline configuration (`CI/ci-cd-pipeline.yml`) automates build, test, and deployment processes.
-
-## Future Directions
-
-- **Dynamic Agent Generation:**  
-  Future versions will allow domain experts to dynamically submit and update transformation code stored in the KG.
-- **Multi-Domain Expansion:**  
-  The framework is designed to support multiple domains by extending the foundational Ethics Node.
-- **Quantum-Resistant Upgrades:**  
-  The modular cryptographic design allows seamless transitions to quantum-resistant algorithms.
-
-## Contact
-
-For support or further information, please contact FortressAI at [support@fortressai.com](mailto:support@fortressai.com).
+This guide is much longer than usual so you can get an in-depth understanding of the whole system. Read through each section to discover what it means to work with an agentic Knowledge Graph (KG) and how safeAI ensures ethical, transparent problem-solving.
 
 ---
 
+## Table of Contents
+1. Introduction
+2. What is safeAI?
+3. Installing the safeAI Plugin
+4. Setting Up a Local Blockchain and Integrating It
+5. Running safeAI and Connecting via Cypher
+6. In-Depth Exploration of Our Default Domains
+   - 6.1 ARC Domain – Abstract Puzzles
+   - 6.2 Math Domain – Solving Math Problems
+   - 6.3 Ethics Domain – Ensuring Fairness (Immutable)
+7. How safeAI Works: The Three Phases Explained in Detail
+8. Understanding Agentic Knowledge Graphs (KGs)
+9. Managing Contracts & Billing via Smart Contracts
+10. Customization: Global Defaults and Creating New Domains
+   - 10.1 Creating New Domains the Easy Way with Cypher
+11. Detailed Example Queries for Every Internal KG
+12. Advanced Topics: Chain-of-Thought and System Integration
+13. FAQ and Troubleshooting
+14. Summary and Next Steps
 
-## User Guide
+---
 
-### Overview
-The **safeAI plugin** integrates advanced natural language processing (NLP) capabilities with your Neo4j database. Powered by a Large Language Model (LLM), it allows you to transform natural language queries into raw Cypher queries, execute these queries on your graph, and even interpret the results—all from within the Neo4j Browser or an interactive CLI.
+## 1. Introduction
 
-### System Design and Architecture
-The plugin is composed of several key components:
+Imagine having a super-smart helper that can solve puzzles, answer math questions, and even ensure that every solution is fair. That is what safeAI does. This guide will take you on a journey from the very basics—installing safeAI—to the advanced concepts of agentic Knowledge Graphs (KGs). No technical jargon, just simple, friendly Cypher commands that work like magic.
 
-- **Custom Procedures:** Several Neo4j procedures (e.g., `nl.query` and `nl.queryAndExecute`) are registered through the `META-INF/services/org.neo4j.procedure.Procedure` file. These procedures enable you to either translate natural language commands into Cypher queries or generate and execute them directly.
+## 2. What is safeAI?
 
-- **LLM Integration:** An integrated LLM (via the OpenAI API) converts natural language input into Cypher. To use this feature, you must have the `OPENAI_API_KEY` environment variable set with a valid API key.
+safeAI turns your Neo4j database into a powerful, interactive assistant using Agentic Knowledge Graphs. An agentic KG is like a mini intelligent brain: it observes, thinks, and then explains its solution step-by-step. safeAI comes with several pre-built domains:
 
-- **Interactive Shell:** The plugin includes an interactive shell provided by the `KGConversationalAgent` class. This shell guides you through generating queries, executing them, and reviewing the outputs.
+- **ARC Domain:** Specializes in solving abstract puzzles with creative moves.
+- **Math Domain:** Handles a variety of math problems using unified techniques.
+- **Ethics Domain:** Ensures that every solution is ethical by enforcing immutable moral rules. (Note: This domain cannot be edited, and all other domains operate in accordance with its ethical standards.)
 
-- **Security and Tokens:**
-  - A simple token-based mechanism is used to restrict access to internal knowledge graphs (e.g., the `InternalKGService` uses the token "AUTHORIZED").
-  - The OpenAI API key is critical for LLM functionality and must be securely stored in the `OPENAI_API_KEY` environment variable.
-  - Role management is differentiated between administrators (who configure system settings and tokens) and end users (who execute queries).
+## 3. Installing the safeAI Plugin
 
-### Available Queries and Procedures (End User Queries)
-Once the plugin is installed and your Neo4j server is configured, you can use the following procedures from the Neo4j Browser:
+### Requirements:
+- A running **Neo4j database** (install [Neo4j Desktop](https://neo4j.com/download/) or use a local instance).
+- **Git** to clone the repository.
+- The **Java Runtime Environment (JRE)** to run the plugin.
 
-1. **Generate Cypher Query from Natural Language**
-   - **Procedure:** `nl.query`
-   - **Example:**
-     ```cypher
-     CALL nl.query("Describe the current schema")
-     YIELD generatedQuery
-     RETURN generatedQuery;
-     ```
-   - **Description:** This procedure converts a natural language prompt into a raw Cypher query without executing it.
-
-2. **Generate and Execute Natural Language Query**
-   - **Procedure:** `nl.queryAndExecute`
-   - **Example:**
-     ```cypher
-     CALL nl.queryAndExecute("Get all puzzles solved by AI")
-     YIELD result
-     RETURN result;
-     ```
-   - **Description:** This procedure generates a Cypher query from your natural language request and then executes the query, returning the actual results.
-
-3. **Additional Procedures:**
-   Other domain-specific procedures exist (e.g., licensing, governance, usage tracking). Refer to the `META-INF/services/org.neo4j.procedure.Procedure` file for the complete list.
-
-### How It Works from an End User's Perspective
-1. **Query Generation:** For example, when you run:
-   ```cypher
-   CALL nl.query("Describe the current schema")
-   YIELD generatedQuery
-   RETURN generatedQuery;
+### Steps:
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/FortressAI/safeAI.git
    ```
-   Your natural language prompt is sent to the LLM, which returns a raw Cypher query, giving you a preview before execution.
+2. **Navigate to the Directory:**
+   ```bash
+   cd safeAI
+   ```
+3. **Review the Setup:**
+   The configuration files are pre-loaded in the system so that you don’t need to edit them manually.
+4. **Install Dependencies:**
+   Follow any additional instructions provided if a build tool like Maven or Gradle is used.
 
-2. **Query Execution:** Using the `nl.queryAndExecute` procedure, the plugin automatically executes the generated Cypher query against your Neo4j database and returns the results.
+## 4. Setting Up a Local Blockchain and Integrating It
 
-3. **Result Interpretation:** The interactive shell provided by `KGConversationalAgent` can also interpret raw query results into plain language explanations to help you understand the output.
+A blockchain is like a digital, unchangeable notebook that securely records all transactions. safeAI uses a local blockchain (set up with Ganache) to enforce billing and ensure correct usage through smart contracts.
 
-### Roles and Access
-- **Administrators:** Responsible for configuring the system, managing security tokens, and ensuring the proper setup of API keys and database connections.
+### Detailed Steps:
+1. **Download & Install Ganache:**
+   - Visit [Ganache’s website](https://www.trufflesuite.com/ganache) and download Ganache Desktop.
+   - Install the application using the on-screen instructions.
+2. **Start Your Local Blockchain:**
+   - Launch Ganache; it will automatically start a blockchain on port 7545, showing test accounts, transactions, and block numbers.
+3. **Deploy a Dummy Smart Contract:**
+   - Open [Remix IDE](https://remix.ethereum.org/), create a simple Solidity contract (for example, a contract that defines query costs), and deploy it to your local blockchain (use “Injected Web3” to connect to Ganache).
+   - Record the contract address.
+4. **Configure safeAI:**
+   - The system is pre-configured to use blockchain billing. If needed, an administrator can update the settings silently.
+5. **Test the Setup:**
+   - Run a test Cypher query (e.g., `safeAI.processWithBilling`) to ensure that a transaction is recorded in Ganache.
 
-- **End Users:** Use the system via the Neo4j Browser or interactive CLI to generate, execute, and review natural language queries.
+## 5. Running safeAI and Connecting via Cypher
 
-### Getting Started
-- **Prerequisites:**
-  - Set the `OPENAI_API_KEY` environment variable with a valid API key.
-  - Ensure your Neo4j server is running and accessible.
+To start safeAI:
 
-- **Installation:**
-  - Deploy the safeAI plugin JAR into your Neo4j plugins folder.
-  - Update your `neo4j.conf` to allow custom procedures and configure necessary options (e.g., CORS, iframe settings).
-  - Restart your Neo4j server and verify that the procedures are available.
-
-- **Usage:**
-  - Open the Neo4j Browser and run the example queries provided above.
-  - Optionally, use the interactive CLI via `KGConversationalAgent` for a guided experience.
-
-
-## Domain KG Examples
-
-The safeAI plugin supports several domain-specific Knowledge Graphs (KGs) that empower users to explore a wide range of queries. Below are example queries for each domain, demonstrating how to generate and execute queries using the natural language procedures. These examples illustrate how the plugin functions as a new paradigm for SafeAI, integrating fully functioning KGs with LLM backup.
-
-### ARC Puzzle KG
-- **Resource File:** ARC_Puzzle_Agent_Definitions.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("Retrieve ARC puzzle training examples")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Show all ARC puzzle definitions and training examples")
-    YIELD result
-    RETURN result;
-    ```
-
-### Ethics KG
-- **Resource Files:** Ethics_KG.json, Foundational_Ethical_KG_Definitions.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("List all ethical guidelines from the Ethics KG")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Fetch detailed ethical standards and guidelines")
-    YIELD result
-    RETURN result;
-    ```
-
-### CyberSecurity KG
-- **Resource File:** CyberSecurity_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("Show me cybersecurity best practices")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Get detailed cybersecurity policies and procedures")
-    YIELD result
-    RETURN result;
-    ```
-
-### Combinatorics KG
-- **Resource File:** Combinatorics_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("What are the key combinatorial challenges?")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("List all combinatorial puzzles and problems")
-    YIELD result
-    RETURN result;
-    ```
-
-### Geometry KG
-- **Resource File:** Geometry_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("Retrieve geometry puzzle definitions")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Show geometric puzzles and their properties")
-    YIELD result
-    RETURN result;
-    ```
-
-### Number Theory KG
-- **Resource File:** NumberTheory_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("List number theory challenges")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Fetch number theory puzzles and examples")
-    YIELD result
-    RETURN result;
-    ```
-
-### Advanced Math Proof KG
-- **Resource File:** AdvancedMathProof_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("Retrieve advanced mathematical proof challenges")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("Show advanced math proofs and derivations")
-    YIELD result
-    RETURN result;
-    ```
-
-### Math KG
-- **Resource File:** Math_KG.json
-- **Example Queries:**
-  - **Generate Query:**
-    ```cypher
-    CALL nl.query("Get general math puzzles and examples")
-    YIELD generatedQuery
-    RETURN generatedQuery;
-    ```
-  - **Generate and Execute:**
-    ```cypher
-    CALL nl.queryAndExecute("List general mathematical problems and solutions")
-    YIELD result
-    RETURN result;
-    ```
-
-### Integration Across Domains
-The safeAI plugin supports an iterative and integrated workflow:
-- **Step 1:** Use `nl.query` to generate a raw Cypher query from a natural language prompt, allowing you to review the translation.
-- **Step 2:** Use `nl.queryAndExecute` to run the generated query directly against your Neo4j database.
-- **Step 3:** Use the interactive shell (`KGConversationalAgent`) for continuous query refinement and plain language interpretation of results.
-
-This approach provides a fully functioning environment where domain-specific KGs and LLM-powered query generation combine to form a powerful tool for exploring and managing your data in a natural and intuitive manner.
-
-
-## ARC KG Workflow Deep Dive
-
-The ARC Knowledge Graph (KG) is a central component of the safeAI plugin, designed to manage ARC puzzles. The ARC KG stores detailed puzzle definitions including:
-
-- A unique puzzle hash
-- Training examples (each with an input grid and, where available, an expected output grid)
-- Test examples (typically with only the input grid)
-- Final solution text when available
-- The chain-of-thought reasoning behind the solution
-- Additional metadata such as debate updates
-
-This structure supports a full lifecycle in solving ARC puzzles:
-
-### 1. Training Phase
-
-**Goal:** Utilize ARC training examples to fine-tune your model and agentic behavior for puzzle solving.
-
-**Process:**
-- The plugin extracts training examples from the ARC KG resource file (e.g., `ARC_Puzzle_Agent_Definitions.json`).
-- Users can generate queries to retrieve these examples and use the data for model tuning.
-
-**Example Queries:**
-
-*Generate-only (Preview training examples):*
-```cypher
-CALL nl.query("Retrieve ARC puzzle training examples for model tuning")
-YIELD generatedQuery
-RETURN generatedQuery;
+```bash
+java -jar safeAI-plugin.jar --port 53815 --allow-iframe --cors --host 0.0.0.0
 ```
 
-*Generate and Execute (Fetch training examples):*
+Then, in the Neo4j Browser or Cypher Shell, connect using:
+
 ```cypher
-CALL nl.queryAndExecute("Retrieve ARC puzzle training examples for model tuning")
-YIELD result
-RETURN result;
+:CONNECT bolt://localhost:7687
 ```
 
-### 2. Evaluation Phase
+## 6. In-Depth Exploration of Our Default Domains
 
-**Goal:** Assess the system’s performance on unseen ARC puzzles using the test examples from the KG.
+### 6.1 ARC Domain – Abstract Puzzles
 
-**Process:**
-- Test examples (with only the input grid) are extracted from the ARC KG.
-- Evaluation queries retrieve test examples along with generated responses and chain-of-thought reasoning, enabling you to compare outputs against expected behavior.
+The ARC Domain is designed for creative puzzles. It uses various moves such as rotation, flipping, and rearrangement to solve complex patterns.
 
-**Example Query:**
+**Example Cypher Queries:**
 ```cypher
-CALL nl.queryAndExecute("Retrieve ARC puzzle test examples for evaluation")
-YIELD result
-RETURN result;
+// Create an ARC puzzle node
+CREATE (p:SafeAIProblem {
+  domain: 'ARC',
+  input: '[[1,2],[3,4]]',
+  expectedOutput: '[[2,3],[4,5]]',
+  description: 'A simple puzzle requiring innovative moves.'
+})
+RETURN p;
+
+// Run the training phase for ARC
+CALL safeAI.train('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
 ```
 
-### 3. Final Exam & Answer Export
+### 6.2 Math Domain – Solving Math Problems
 
-**Goal:** Export the final ARC puzzle answers in the format required by arcprice.org.
+The Math Domain unifies various concepts—from basic algebra to complex proofs—allowing safeAI to solve a wide range of math problems.
 
-**Process:**
-- A dedicated query extracts the final solutions (typically the `solution_text` fields) along with any supporting explanation.
-- The exported output is formatted as per external specifications, ready for submission.
-
-**Example Query:**
+**Example Cypher Queries:**
 ```cypher
-CALL nl.queryAndExecute("Export final ARC puzzle answers in the required format for arcprice.org")
-YIELD result
-RETURN result;
+// Create a math problem node
+CREATE (m:SafeAIProblem {
+  domain: 'Math',
+  input: 'Simplify: 3x + 2x',
+  expectedOutput: '5x',
+  description: 'Basic algebraic simplification.'
+})
+RETURN m;
+
+// Run the evaluation phase for Math
+CALL safeAI.evaluate('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
 ```
 
-### Security, Tokens, and Access
+### 6.3 Ethics Domain – Ensuring Fairness (Immutable)
 
-- **Tokens & API Key:** Your interactions rely on the `OPENAI_API_KEY` (stored as an environment variable) for LLM-powered query generation. Sensitive operations (like accessing internal KG definitions) are protected by token-based mechanisms (e.g., the token "AUTHORIZED").
+The Ethics Domain is the moral backbone of safeAI. It uses immutable ethical rules inspired by classical wisdom (Aristotle, Socrates, Wittgenstein) to make sure that all solutions are fair and safe. **This domain cannot be edited.** All other domains must abide by its rulings.
 
-- **Roles:** Administrators manage system configurations and token setups, while end users execute queries via the Neo4j Browser or interactive shell.
+**Example Cypher Queries:**
+```cypher
+// Create an ethics evaluation node
+CREATE (e:SafeAIProblem {
+  domain: 'Ethics',
+  input: 'Propose change: Remove safety measures',
+  description: 'Evaluate the ethical implications of removing safety measures.'
+})
+RETURN e;
 
-### Putting It All Together
+// Run the ethics approval check
+CALL safeAI.approveEthics('Propose change: Remove safety measures') YIELD approved, reason
+RETURN approved, reason;
+```
 
-The safeAI plugin enables a seamless, multi-phase workflow:
+## 7. How safeAI Works: The Three Phases Explained
 
-1. **Training:** Retrieve ARC puzzle training examples to fine-tune your model.
-2. **Evaluation:** Run evaluation queries against unseen ARC puzzles to validate system performance.
-3. **Final Exam:** Export final answers, including detailed reasoning, ready for external submission (e.g., to arcprice.org).
+Every problem is processed through three sequential phases:
 
-This comprehensive workflow allows users to experiment with and refine ARC puzzle solving using integrated, agentic KGs backed by state-of-the-art LLM support.
+1. **Training Phase:**
+   The system applies simple, direct transformations to see if a quick solution exists.
+   ```cypher
+   CALL safeAI.train('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+   RETURN result, chain_of_thought;
+   ```
 
+2. **Evaluation Phase:**
+   If the training phase does not yield a solution, safeAI combines different transformation strategies to refine the answer.
+   ```cypher
+   CALL safeAI.evaluate('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+   RETURN result, chain_of_thought;
+   ```
+
+3. **Final Exam Phase:**
+   The final answer is produced along with a detailed chain-of-thought that explains every step taken.
+   ```cypher
+   CALL safeAI.finalExam('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+   RETURN result, chain_of_thought;
+   ```
+
+## 8. Understanding Agentic Knowledge Graphs (KGs)
+
+An **agentic KG** is a self-directed, smart system that not only stores information but actively reasons to solve problems. It is described as 'agentic' because:
+
+- **Autonomy:** The KG independently processes inputs and chooses the best transformation strategy.
+- **Transparency:** Each solution comes with a chain-of-thought, detailing the reasoning process.
+- **Adaptability:** It can improve over time with each query, learning from previous problems.
+- **Ethical Governance:** The immutable Ethics Domain ensures all actions are fair and compliant.
+
+**Example to View Chain-of-Thought:**
+```cypher
+CALL safeAI.finalExam('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD chain_of_thought
+RETURN chain_of_thought;
+```
+
+## 9. Managing Contracts & Billing via Smart Contracts
+
+Each domain operates with its own billing structure, which is enforced automatically via smart contracts on a blockchain. The billing details include:
+
+- **Price Per Query:** e.g., 0.0001 tokens
+- **Minimum Fee:** e.g., 0.001 tokens
+- **Usage Quota:** e.g., 1000 queries per month
+
+Administrators set the global defaults, and every domain adheres to these rules. Billing is fully automated and can be verified with a simple query:
+
+```cypher
+CALL safeAI.getContractDetails('Math') YIELD contract
+RETURN contract;
+```
+
+## 10. Creating New Domains the Easy Way (Using Cypher Only)
+
+You don’t need to know any complicated internal details to create a new domain. With safeAI, you can create a new domain using a friendly Cypher procedure called **safeAI.createDomain**. This procedure hides all the complexity and does the setup automatically.
+
+### How It Works:
+Simply provide:
+- **Domain Name:** (e.g., "Microeconomics")
+- **Description:** A short explanation of what the domain covers.
+- **Examples:** Sample queries for training, evaluation, and final answer phases.
+- **Billing Settings:** Your desired pricing and usage rules (for instance, "0.0001 tokens per query, 0.001 tokens minimum, 1000 queries per month").
+
+### Example:
+```cypher
+CALL safeAI.createDomain(
+  'Microeconomics',
+  'This domain answers questions about market equilibrium and basic microeconomics topics.',
+  ['Calculate equilibrium for: Demand = 100 - 2P, Supply = 20 + 3P'],
+  ['Step-by-step analysis of market factors.'],
+  ['Final answer with a full explanation of market equilibrium.'],
+  '0.0001 tokens, 0.001 tokens, 1000 queries'
+) YIELD domain, status;
+RETURN domain, status;
+```
+
+After running this command, your new domain is set up and ready for use with standard procedures such as **safeAI.train**, **safeAI.evaluate**, and **safeAI.finalExam**. No technical configuration files are exposed to you.
+
+## 11. Detailed Example Queries for All Internal KGs
+
+Below are some extended queries demonstrating the capabilities of each domain:
+
+### ARC Domain Queries:
+```cypher
+// Create and process an ARC problem node
+CREATE (p:SafeAIProblem {
+  domain: 'ARC',
+  input: '[[1,2],[3,4]]',
+  expectedOutput: '[[2,3],[4,5]]',
+  description: 'Puzzle requiring creative moves'
+})
+RETURN p;
+
+CALL safeAI.train('ARC', '[[1,2],[3,4]]', '[[2,3],[4,5]]') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### Math Domain Queries:
+```cypher
+// Create and process a Math problem node
+CREATE (m:SafeAIProblem {
+  domain: 'Math',
+  input: 'Simplify: 3x + 2x',
+  expectedOutput: '5x',
+  description: 'Basic algebraic simplification'
+})
+RETURN m;
+
+CALL safeAI.evaluate('Math', 'Simplify: 3x + 2x', '5x') YIELD result, chain_of_thought
+RETURN result, chain_of_thought;
+```
+
+### Ethics Domain Queries:
+```cypher
+// Create an ethics evaluation node
+CREATE (e:SafeAIProblem {
+  domain: 'Ethics',
+  input: 'Propose change: Remove safety measures',
+  description: 'Evaluate ethical implications'
+})
+RETURN e;
+
+CALL safeAI.approveEthics('Propose change: Remove safety measures') YIELD approved, reason
+RETURN approved, reason;
+```
+
+## 12. Advanced Topics: Chain-of-Thought and System Integration
+
+- **Chain-of-Thought Analysis:**
+  Every procedure returns a detailed explanation of each step taken to solve the problem. Use this to understand the decision-making process of the KG.
+  ```cypher
+  CALL safeAI.finalExam('Math', 'Simplify: 3x + 2x', '5x') YIELD chain_of_thought
+  RETURN chain_of_thought;
+  ```
+- **System Integration:** Ensure consistent operations by having all domains adhere to the immutable standards enforced by the Ethics Domain. This guarantees that every new domain behaves transparently and ethically.
+
+## 13. FAQ and Troubleshooting
+
+**Q: What should I do if there is no output?**
+A: Verify that Neo4j, safeAI, and your local blockchain (if used) are running and that you are connected properly.
+
+**Q: Can I modify the Ethics Domain?**
+A: No. The Ethics Domain is immutable and serves as a moral reference for all others. Any attempt to change it will be blocked to ensure fairness.
+
+**Q: How are detailed explanations provided?**
+A: Every query returns a chain-of-thought that lists all the steps taken to arrive at the solution. This transparency makes the system trustworthy.
+
+**Q: How does billing work?
+A: Billing is managed automatically via smart contracts. Each query incurs a cost based on predefined rules, and you can check billing details using a simple procedure.
+
+## 14. Summary and Next Steps
+
+This extended ultimate guide has shown you everything you need to know about safeAI:
+
+- How to install safeAI and configure its environment.
+- How to set up and integrate a local blockchain for automatic billing.
+- Detailed insights into the ARC, Math, and Ethics domains, with extended examples and Cypher queries.
+- What it means to work with an agentic Knowledge Graph that thinks and explains its reasoning.
+- How to create new domains easily using a friendly Cypher procedure, with no exposure to complex configurations.
+
+Now, explore safeAI by running more queries, creating new domains, and delving deep into the chain-of-thought explanations to understand how each problem is solved. Enjoy your journey into intelligent problem-solving!
+
+---
+
+*Remember: The Ethics Domain is unchangeable, ensuring that every solution remains fair and ethical. All other domains must follow its guidance to maintain integrity across the system.*
+
+---
+
+## Appendix A: Using Ganache CLI and Creating an Ethereum Workspace
+
+For those who want to explore further, here’s a simple guide on how to use Ganache CLI to create your own Ethereum workspace. This section is an extra resource for curious learners who want to see behind the scenes, even though you don’t need to use these details for basic safeAI operations.
+
+### What is Ganache CLI?
+Ganache CLI is a command-line version of Ganache that lets you run a personal Ethereum blockchain on your computer. It works like a digital notebook where all transactions are recorded safely and automatically.
+
+### How to Install Ganache CLI:
+1. **Install Node.js:** Before using Ganache CLI, you need Node.js. Download it from [nodejs.org](https://nodejs.org/).
+2. **Install Ganache CLI:** Open your terminal and run:
+   ```bash
+   npm install -g ganache-cli
+   ```
+   This command installs Ganache CLI globally so you can use it from any terminal window.
+
+### How to Create an Ethereum Workspace Using Ganache CLI:
+1. **Start Ganache CLI:**
+   Open your terminal and run:
+   ```bash
+   ganache-cli -p 7545
+   ```
+   This starts a local Ethereum blockchain on port 7545. You will see a list of test accounts with balances and a log of transactions.
+
+2. **Interact with Your Workspace:**
+   You can now use CLI commands or tools that connect to the blockchain at `http://localhost:7545`. All transactions, like those for billing in safeAI, will be recorded here.
+
+### Advanced Usage and the UI:
+- **Ganache CLI Options:**
+   Ganache CLI supports many options (like setting a specific block time, account balances, etc.). For example:
+   ```bash
+   ganache-cli -p 7545 -a 10 -e 1000
+   ```
+   This command starts the blockchain with 10 accounts and an initial balance of 1000 ETH each.
+
+- **Using the Ganache UI:**
+   Once you are comfortable with the CLI and understand how the workspace works, be aware that a graphical UI is also available. The UI provides an easy-to-use visual interface to monitor transactions, accounts, and blocks. It’s a great way to see what's happening on your blockchain in real time without using command-line tools.
+
+This appendix is here for those who wish to dive deeper into the underlying technology. For most users, simply following the main guide with the friendly Cypher procedures is all you need. Enjoy exploring the world of safeAI and blockchain!
+### Extended Deep Dive: Creating the Micro Economics Agentic KG
+
+In this extended deep dive, we explore how you can use safeAI together with a local Ethereum blockchain (via Ganache CLI) to create a brand-new Micro Economics Agentic Knowledge Graph (KG). This specialized KG is designed to analyze market dynamics, calculate equilibria, and offer detailed economic insights—all while operating under the strict ethical guidelines set by the immutable Ethics Domain.
+
+**Key Concepts and Best Practices:**
+
+1. **Smart Contract Billing Insights:**
+   - safeAI uses smart contracts to automatically bill each query. Using Ganache, you can simulate real Ethereum transactions and verify that every query is billed correctly in your test environment.
+
+2. **Setting Up Your Testing Environment:**
+   - Start Ganache CLI on a designated port (e.g., 7545 or 8545) with parameters that mimic realistic conditions (such as a block time of 10 seconds).
+   - Running Ganache in detached mode allows you to automate your testing workflow and cleanly stop the instance when tests conclude.
+
+3. **Creating the Micro Economics KG:**
+   - Utilize the friendly Cypher procedure **safeAI.createDomain** to establish your new domain without dealing with internal configuration files. For example:
+   ```cypher
+   CALL safeAI.createDomain(
+     'Microeconomics',
+     'This domain provides economic analysis including market equilibrium, supply-demand dynamics, and consumer behavior insights.',
+     ['Calculate equilibrium for: Demand = 100 - 2P, Supply = 20 + 3P'],
+     ['Analyze step-by-step market forces impacting equilibrium.'],
+     ['Return final equilibrium price and quantity with a full chain-of-thought explanation.'],
+     '0.0001 tokens, 0.001 tokens, 1000 queries'
+   ) YIELD domain, status;
+   RETURN domain, status;
+   ```
+   - This procedure abstracts all the complex configurations so that you only need to provide intuitive inputs.
+
+4. **Testing and Verification:**
+   - Execute your queries across the three phases (training, evaluation, final exam) to ensure that every step in the problem-solving process is functioning as expected.
+   - Review the detailed chain-of-thought outputs to understand the reasoning behind every decision made by the KG.
+
+5. **Ensuring Ethical and Agentic Operation:**
+   - The Ethics Domain is immutable and serves as the moral backbone for safeAI. All newly created domains, including your Micro Economics KG, must adhere to these strict ethical standards.
+   - This ensures that every solution is not only effective but also fair and accountable.
+
+6. **Iterative Refinement:**
+   - Continuously test, analyze, and refine your queries. Adjust transformation strategies as needed and use your local blockchain to simulate actual transaction conditions.
+   - This iterative process helps improve the performance and accuracy of your Micro Economics KG.
+
+7. **Transitioning to the Ganache UI:**
+   - Once you’re comfortable with the command-line operations and the test environment, explore the Ganache graphical UI. The UI provides a visual overview of accounts, transactions, and blocks, making it easier to monitor and understand your Ethereum workspace.
+
+**Conclusion:**
+By following these best practices, you can establish a robust Micro Economics Agentic KG using safeAI. This approach provides deep economic insights while ensuring strict ethical compliance and seamless smart contract billing. It’s a win-win: you gain sophisticated analytical capabilities and full control over your testing environment, all through simple, user-friendly Cypher commands.
+
+
+## Appendix B: From DevTest to Production – Deploying safeAI KG and Blockchain on AWS
+
+In this appendix, we provide a comprehensive case study on transitioning your safeAI system from a local DevTest environment to a robust production deployment on AWS. This guide is designed for non-developers and explains how to deploy both the safeAI Knowledge Graph (KG) and the dedicated blockchain side chain, as well as how to launch your very own safeAI coin.
+
+### 1. Overview
+
+- **DevTest Environment:** In this stage, safeAI runs locally using Neo4j and Ganache CLI for blockchain simulation and smart contract billing. This setup enables you to test and refine your queries using friendly Cypher commands.
+- **Production Environment on AWS:** In production, your safeAI KG is deployed as a serverless container on AWS (using services such as AWS Fargate/ECS) while your blockchain is deployed as a dedicated side chain. This side chain is isolated and incurs no fees from external blockchains, ensuring cost-effective and secure transactions.
+
+### 2. Deploying the safeAI KG (Neo4j) as a Serverless Container
+
+**a. Containerizing the KG:**
+- Create a Docker image from your safeAI Neo4j instance using a Dockerfile based on the official Neo4j image and include all necessary safeAI configurations.
+- Test your Docker image locally to ensure that your KG starts and runs correctly.
+
+**b. Pushing to AWS and Deployment:**
+- **Amazon ECR:** Push your Docker image to the Amazon Elastic Container Registry (ECR) so that it can be easily accessed during deployment.
+  ```bash
+  docker build -t safeai-neo4j .
+  docker tag safeai-neo4j:latest <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-neo4j:latest
+  aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com
+  docker push <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-neo4j:latest
+  ```
+- **AWS Fargate/ECS:** Use AWS Fargate with Amazon ECS to run your Docker container in a serverless environment. Define a task definition using your ECR image, configure auto-scaling, load balancing, and network settings (using VPC and security groups).
+
+### 3. Deploying the Blockchain as a Dedicated Side Chain on AWS
+
+**a. Containerizing the Blockchain Node:**
+- Build a Docker image for your blockchain node (this could be a modified version of Ganache or another blockchain node) with configurations that ensure no fees are imposed by external blockchains.
+
+**b. Pushing and Deploying:**
+- **Push to Amazon ECR:**
+  ```bash
+  docker build -t safeai-blockchain .
+  docker tag safeai-blockchain:latest <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-blockchain:latest
+  docker push <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-blockchain:latest
+  ```
+- **Deploy on AWS Fargate:** Similar to the KG, create a task definition and service in ECS, ensuring that the blockchain container is isolated within its own security group.
+
+### 4. Creating Your Own safeAI Coin
+
+As part of the production deployment, you will launch your very own safeAI coin. This coin is used for smart contract billing within safeAI.
+
+**Steps:**
+- **Smart Contract Development:** Develop a Solidity smart contract that defines the safeAI coin, including issuance, transfer rules, and billing calculations.
+- **Testing:** Thoroughly test the contract in your DevTest environment using Ganache CLI.
+- **Deployment:** Deploy the coin contract on your AWS blockchain side chain.
+- **Integration:** Integrate the coin into safeAI’s billing procedures so that every query is automatically charged in safeAI coins.
+
+### 5. End-to-End Workflow: From DevTest to Production
+
+1. **Development (DevTest):**
+   - Run safeAI locally with Neo4j and Ganache CLI.
+   - Test your queries (e.g., creating a Micro Economics KG) and simulate smart contract billing.
+
+2. **Containerization:**
+   - Build Docker images for both your safeAI KG and blockchain node.
+
+3. **Push to AWS:**
+   - Push the images to Amazon ECR.
+
+4. **Deploy on AWS Fargate/ECS:**
+   - Create new ECS clusters and services for your KG and blockchain side chain, configuring auto-scaling, load balancing, and secure networking.
+
+5. **Launch Your safeAI Coin:**
+   - Deploy the coin smart contract, then integrate it with the billing processes in safeAI.
+
+6. **Production Testing and Rollout:**
+   - Monitor the production deployment using AWS CloudWatch and other monitoring tools to ensure stability, performance, and security. Perform final tests before going live.
+
+### 6. Conclusion
+
+Following these steps, you can transform your safeAI system from a local testing setup into a full-scale production service on AWS. With the safeAI KG running as a serverless container and a dedicated blockchain side chain handling smart contract billing (and your own safeAI coin), you ensure a robust, scalable, and cost-effective solution. This production model provides both advanced capabilities and seamless integration, making it a win-win for all users.
+
+
+
+
+Welcome to Appendix B! This part is written in simple, easy-to-understand language so that even a grade-school student can learn how to move safeAI from working on your own computer to running in the real world (on AWS, which is like a giant computer in the cloud!).
+
+### 1. Overview
+Imagine that you built a cool project on your laptop while testing with fun tools like Ganache CLI. Now, you want everyone to use your project. In this section, we explain, step by step, how to take safeAI from a local testing setup (called DevTest) to a production environment on AWS. This will include:
+- Putting our safeAI Knowledge Graph (KG) into a special package called a container.
+- Setting up a dedicated blockchain (a side chain) that is only used by safeAI with no extra fees from anywhere else.
+- Creating our very own safeAI coin (a kind of digital token) that is used for billing and transactions.
+
+### 2. Deploying the safeAI KG as a Serverless Container on AWS
+
+**Step-by-Step Instructions:**
+1. **Containerizing the KG:**
+   - We use a tool called Docker to make a package (a container) that has everything safeAI needs to run. This package uses the official Neo4j image (Neo4j is the database powering safeAI) with our safeAI settings.
+   - Test this container on your local machine to make sure it works just like it did on your laptop.
+
+2. **Pushing the Container to AWS:**
+   - Next, we send our container to Amazon ECR (Elastic Container Registry). Think of ECR as a giant locker in the cloud that stores your containers.
+   - The commands look like this (replace the placeholders with your own information):
+   ```bash
+   docker build -t safeai-neo4j .
+   docker tag safeai-neo4j:latest <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-neo4j:latest
+   aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com
+   docker push <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-neo4j:latest
+   ```
+
+3. **Deploying with AWS Fargate/ECS:**
+   - Use AWS Fargate with Amazon ECS to run your container without needing to manage any servers yourself. You will define a task that uses your container, and AWS will run it for you.
+   - Set up auto-scaling and load balancing so that your project can handle many users at once.
+
+### 3. Deploying the Blockchain as a Dedicated Side Chain on AWS
+
+**Step-by-Step Instructions:**
+1. **Containerizing the Blockchain Node:**
+   - Just like the safeAI KG, you create a Docker container for your blockchain node. This node is set up so that it doesn’t charge extra fees from other blockchains—it is only for safeAI.
+
+2. **Pushing and Deploying the Blockchain Container:**
+   - Push the blockchain container to Amazon ECR:
+   ```bash
+   docker build -t safeai-blockchain .
+   docker tag safeai-blockchain:latest <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-blockchain:latest
+   docker push <your_aws_account_id>.dkr.ecr.<region>.amazonaws.com/safeai-blockchain:latest
+   ```
+   - Deploy it on AWS Fargate, making sure it runs in its own secure space (security group).
+
+### 4. Creating Your Own safeAI Coin
+
+Now, it’s time to make your own digital token—the safeAI coin. This coin is used for all billing and transactions inside safeAI.
+
+**Simple Steps:**
+1. **Write a Smart Contract:**
+   - Develop a simple Solidity smart contract that tells how the coin works (how many coins there are, how they can be transferred, etc.).
+
+2. **Test Your Coin:**
+   - Use Ganache CLI in your DevTest environment to test your smart contract and make sure everything works well.
+
+3. **Deploy Your Coin on AWS:**
+   - Once the tests are complete, deploy the coin on your AWS blockchain side chain. This coin will now be used by safeAI for all billing processes.
+
+### 5. End-to-End Workflow: Taking safeAI to the Real World
+
+Follow these steps to move from testing on your computer to running safeAI for everyone:
+1. **Development (DevTest):**
+   - Run safeAI locally using Neo4j and Ganache CLI. Test your queries and even create a Micro Economics KG using simple Cypher commands.
+2. **Containerization:**
+   - Build Docker images for both the safeAI KG and your blockchain node.
+3. **Push to AWS:**
+   - Send your images to Amazon ECR.
+4. **Deploy on AWS Fargate/ECS:**
+   - Create ECS tasks and services for your containers. Set up scaling and security so that your deployment is safe and can handle many users.
+5. **Launch Your safeAI Coin:**
+   - Deploy and integrate your coin smart contract so that every transaction is billed correctly with your new token.
+6. **Production Testing and Rollout:**
+   - Use AWS monitoring tools (like CloudWatch) to keep an eye on your deployment, ensuring it runs smoothly before you offer it to the public.
+
+### 6. Public Offerings and Future Growth
+
+After your safeAI system is running in production, you’re ready for public offerings of your token. This means you can offer your safeAI coin to the world, and people can use it to pay for queries in a secure, cost-effective way. This entire process supports a patent-pending AI paradigm, creating a totally new way for smart AI systems to work with blockchain technology.
+
+### 7. Conclusion
+
+By following these steps, you can take safeAI from a local test project to a full-scale production service on AWS. Your safeAI KG will run as a serverless container, and your blockchain side chain will power secure, fee-free transactions using your very own safeAI coin. This setup not only makes safeAI highly scalable and cost-effective but also lays the groundwork for future public token offerings in our new, patent-pending AI paradigm.
+
+Remember: This guide is designed in simple language so anyone, even a school kid, can understand how to deploy and scale safeAI.
+
+APPENDIX-B-UPDATE
