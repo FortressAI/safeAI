@@ -8,7 +8,7 @@ import java.util.Map;
 public class UsageReporting {
     public static String generateReport() {
         StringBuilder report = new StringBuilder("Usage Report:\n");
-        for (Map.Entry<String, Integer> entry : UsageTracker.usageCounts.entrySet()) {
+        for (Map.Entry<String, Integer> entry : UsageTracker.getUsageCounts().entrySet()) {
             report.append("Node ID: ").append(entry.getKey())
                   .append(" - Access Count: ").append(entry.getValue()).append("\n");
         }

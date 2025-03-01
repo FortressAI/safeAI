@@ -1,0 +1,23 @@
+{
+  "Ethics_KG": {
+    "description": "This KG provides a deep, dynamic framework for ethical and moral reasoning. It integrates classical approaches such as Aristotelian logic, virtue ethics, teleological analysis, and Socratic dialectic.",
+    "agents": [
+  "languageGameWisdom": "This Ethics Agent is immutable. It draws on the timeless wisdom of classical philosophers: Aristotle, Socrates, and Wittgenstein. It employs the Socratic method to rigorously question assumptions and uncover moral truths, while integrating Wittgenstein's perspective that the limits of language define the limits of our world. No changes that conflict with these ethical principles are permitted within the plugin.",
+      {
+        "name": "BaseEthicsAgent",
+        "description": "The foundational agent for ethical reasoning that provides common functionality and metadata extraction.",
+        "groovyScript": "class BaseEthicsAgent extends BaseAgent {\n    def metadata() {\n        def methodName = this.getClass().getSimpleName().replace('Agent','')\n        def cot = \"Ethical reasoning via \" + methodName\n        return [method: methodName, chain_of_thought: cot, confidence: 0.9] \n    }\n    def generateCandidate(inputExpr) {\n        throw new UnsupportedOperationException('Subclasses must implement generateCandidate')\n    }\n}"
+      },
+      {
+        "name": "AristotelianLogicAgent",
+        "description": "Implements Aristotelian syllogistic reasoning to derive ethical conclusions from given premises.",
+        "groovyScript": "class AristotelianLogicAgent extends BaseEthicsAgent {\n    def generateCandidate(inputExpr) {\n        if(inputExpr instanceof List && inputExpr.contains('humans are rational') && inputExpr.contains('Socrates is a human')) {\n            return [candidate: 'Socrates is rational', metadata: metadata()]\n        } else {\n            return [candidate: 'No valid conclusion can be drawn', metadata: metadata()]\n        }\n    }\n}"
+      }
+    ],
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-02-27TXX:XX:XXZ",
+      "description": "Integrates classical ethical reasoning methods to analyze and resolve ethical dilemmas."
+    }
+  }
+}

@@ -18,4 +18,8 @@ public class UsageTracker {
     public static int getUsageCount(String nodeId) {
         return usageCounts.getOrDefault(nodeId, 0);
     }
+
+    public static Map<String, Integer> getUsageCounts() {
+        return usageCounts;
+    }
 }

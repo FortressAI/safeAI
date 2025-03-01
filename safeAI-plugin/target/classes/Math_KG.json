@@ -1,0 +1,67 @@
+{
+  "domain": "Math",
+  "description": "Unified Math Knowledge Graph (Math KG) that consolidates multiple mathematical domains including arithmetic, algebra, calculus, geometry, number theory, combinatorics, matrices, and advanced proofs. This KG uses an agentic approach with transformation strategies similar to the ARC KG to solve math problems. The system attempts single, sequential, and combinatorial transformations through training, evaluation, and final exam phases to generate a mathematically rigorous solution along with a detailed chain-of-thought.",
+  "endpoints": {
+    "data_folder": "https://example.com/math_data",
+    "training": "https://example.com/math_data/training",
+    "evaluation": "https://example.com/math_data/evaluation",
+    "finalExam": "https://example.com/math_data/finalExam"
+  },
+  "trainingExamples": [
+    {
+      "input": "Solve: 2+2",
+      "expectedOutput": "4",
+      "description": "Basic arithmetic addition."
+    },
+    {
+      "input": "Simplify: 3x + 2x",
+      "expectedOutput": "5x",
+      "description": "Combine like terms in algebra."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Solve quadratic equation: x^2 - 5x + 6 = 0",
+      "expectedOutput": "[2,3]",
+      "description": "Find roots of a quadratic equation."
+    },
+    {
+      "input": "Differentiate: sin(x)",
+      "expectedOutput": "cos(x)",
+      "description": "Basic calculus differentiation."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Prove that the sum of angles in a triangle is 180 degrees",
+      "expectedOutput": "Proof using Euclidean geometry principles",
+      "description": "Geometric proof of triangle angle sum."
+    },
+    {
+      "input": "Solve system of equations: { x+y=10, x-y=2 }",
+      "expectedOutput": "{ x=6, y=4 }",
+      "description": "Simultaneous linear equations."
+    }
+,
+    {
+      "input": "Prove that sqrt(2) is irrational",
+      "expectedOutput": "Proof by contradiction establishing the irrationality of sqrt(2)",
+      "description": "Advanced proof demonstrating the irrationality of sqrt(2) using contradiction."
+    }
+  ],
+  "scripts": {
+    "trainingScript": "def process(input, expectedOutput, context) {\n    def transformations = ['simplify', 'combineLikeTerms', 'differentiate']\n    for (transformation in transformations) {\n        def candidate = nlQuery('Apply ' + transformation + ' on input: ' + input)\n        if(candidate == expectedOutput) {\n            println 'Transformation ' + transformation + ' succeeded.'\n            return candidate\n        }\n    }\n    println 'No single transformation succeeded.'\n    return null\n}",
+    "combinationScript": "def process(input, expectedOutput, context) {\n    def combinations = [\n         ['simplify', 'differentiate'],\n         ['combineLikeTerms', 'factor'],\n         ['simplify', 'solveEquations'],\n         ['advancedProof', 'matrices'],\n         ['algebra', 'calculus', 'geometry']\n    ]\n    for (combo in combinations) {\n         def candidate = input\n         combo.each { transformation ->\n             candidate = nlQuery('Apply ' + transformation + ' on candidate: ' + candidate)\n         }\n         if(candidate == expectedOutput) {\n             println 'Combination ' + combo + ' succeeded.'\n             return candidate\n         }\n    }\n    println 'Combination strategy failed.'\n    return null\n}",
+    "evaluationScript": "def process(input, expectedOutput, context) {\n    def result = trainingScript.process(input, expectedOutput, context)\n    if(result == null) {\n         result = combinationScript.process(input, expectedOutput, context)\n    }\n    return result\n}",
+    "finalExamScript": "def process(input, expectedOutput, context) {\n    def chainOfThought = nlQuery('Generate detailed chain-of-thought for math problem: ' + input)\n    def finalAnswer = evaluationScript.process(input, expectedOutput, context)\n    if(finalAnswer == null) {\n         chainOfThought += '\nNo valid transformation found.'\n    } else {\n         chainOfThought += '\nFinal answer: ' + finalAnswer\n    }\n    return [result: finalAnswer, chain_of_thought: chainOfThought]\n}"
+  },
+  "transformationAgents": {
+    "algebra": "Agent for algebraic manipulation, combining like terms, solving for variables.",
+    "calculus": "Agent for differentiation, integration, and limit calculation.",
+    "geometry": "Agent for geometric proofs and spatial reasoning tasks.",
+    "numberTheory": "Agent for prime factorization, modular arithmetic, and divisibility tests.",
+    "matrices": "Agent for matrix operations including multiplication, inversion, and determinant calculation.",
+    "combinatorics": "Agent for counting, permutations, and probability calculations.",
+    "advancedProof": "Agent for constructing rigorous proofs, including those in advanced mathematics."
+  }
+}

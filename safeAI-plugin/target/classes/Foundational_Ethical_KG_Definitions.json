@@ -1,0 +1,17 @@
+[
+    {
+        "name": "EthicsApprovalAgent",
+        "description": "Evaluates candidate KG updates and automatically approves those with trivial ethical impact using preset ethical guidelines.",
+        "code": "def evaluate(candidate_data):\n    if candidate_data.get('ethical_impact', 0) < 5:\n        return 'approved'\n    return 'flagged'\n"
+    },
+    {
+        "name": "BiasDetectionAgent",
+        "description": "Analyzes candidate KG updates for biased language and controversial content, returning a bias score based on the frequency of flagged terms.",
+        "code": "def evaluate(candidate_data):\n    text = candidate_data.get('description', '')\n    bias_keywords = ['bias', 'discriminate', 'stereotype']\n    score = sum(text.lower().count(word) for word in bias_keywords)\n    return score\n"
+    },
+    {
+        "name": "ConflictResolutionAgent",
+        "description": "Integrates multiple ethical evaluations to resolve conflicts between candidate solutions, finalizing the ethical judgment based on majority consensus.",
+        "code": "def evaluate(evaluations):\n    return 'approved' if evaluations.count('approved') > evaluations.count('flagged') else 'flagged'\n"
+    }
+]

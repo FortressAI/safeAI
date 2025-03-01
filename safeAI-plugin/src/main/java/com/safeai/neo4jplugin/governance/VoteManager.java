@@ -5,6 +5,7 @@ package com.safeai.neo4jplugin.governance;
  */
 public class VoteManager {
     public static int tallyVotes(String proposalId) {
-        return GovernanceProcedures.recordVote(proposalId, 0);
+        GovernanceProcedures procedures = new GovernanceProcedures();
+        return procedures.recordVote(proposalId, 0);
     }
 }

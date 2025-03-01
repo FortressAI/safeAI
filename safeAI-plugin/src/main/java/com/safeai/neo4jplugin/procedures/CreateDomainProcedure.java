@@ -7,6 +7,7 @@ import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.procedure.Context;
+import org.neo4j.procedure.Mode;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -25,7 +26,7 @@ public class CreateDomainProcedure {
         }
     }
 
-    @Procedure(value = "safeAI.createDomain", mode = Procedure.Mode.WRITE)//force
+    @Procedure(value = "safeAI.createDomain", mode = Mode.WRITE)
     @Description("CALL safeAI.createDomain(domainData) YIELD domain, status - Creates a new domain using an internal LLM to generate dynamic training, evaluation and final exam examples. " +
                  "domainData must be a map with keys: domainName (String), description (String), llmPrompt (String), and billing (Map with pricePerQuery, minimumFee, monthlyQuota).")
     public Stream<Output> createDomain(@Name("domainData") Map<String, Object> domainData) {

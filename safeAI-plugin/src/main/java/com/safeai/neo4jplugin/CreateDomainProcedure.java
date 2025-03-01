@@ -5,6 +5,7 @@ import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.procedure.Context;
+import org.neo4j.procedure.Mode;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -23,7 +24,7 @@ public class CreateDomainProcedure {
         }
     }
 
-    @Procedure(value = "safeAI.createDomain", mode = Procedure.Mode.WRITE)
+    @Procedure(value = "safeAI.createDomain", mode = Mode.WRITE)
     @Description("CALL safeAI.createDomain(domain, description, trainingExamples, evaluationExamples, finalExamExamples, billingSettings) YIELD domain, status - creates a new domain using built-in procedures without exposing internal details.")
     public Stream<Output> createDomain(
             @Name("domain") String domain,

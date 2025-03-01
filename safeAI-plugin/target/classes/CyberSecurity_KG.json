@@ -1,0 +1,22 @@
+{
+  "CyberSecurity_KG": {
+    "description": "This Cyber Security KG provides a comprehensive, dynamic framework for monitoring, detecting, and responding to cyber threats. It integrates modules for threat intelligence, intrusion detection, vulnerability scanning, risk assessment, incident response, digital forensics, and compliance verification.",
+    "agents": [
+      {
+        "name": "BaseCyberSecurityAgent",
+        "description": "The foundational agent for cybersecurity operations, providing common functionalities and metadata extraction.",
+        "groovyScript": "class BaseCyberSecurityAgent {\n    def metadata() {\n        def methodName = this.getClass().getSimpleName().replace('Agent','')\n        return [method: methodName, chain_of_thought: \"Cybersecurity reasoning\", confidence: 0.9]\n    }\n    def generateCandidate(inputExpr) {\n        throw new UnsupportedOperationException('Subclasses must implement generateCandidate')\n    }\n}"
+      },
+      {
+        "name": "ThreatIntelligenceAgent",
+        "description": "Monitors and classifies threat intelligence feeds to detect emerging cyber threats.",
+        "groovyScript": "class ThreatIntelligenceAgent extends BaseCyberSecurityAgent {\n    def generateCandidate(inputExpr) {\n        if(inputExpr.toLowerCase().contains('malware')) {\n            return [candidate: 'High alert: Malware threat detected', metadata: metadata()]\n        } else {\n            return [candidate: 'No significant threat detected', metadata: metadata()]\n        }\n    }\n}"
+      }
+    ],
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-02-27TXX:XX:XXZ",
+      "description": "Provides modules for monitoring cyber threats, intrusion detection, risk assessment, incident response, and forensics."
+    }
+  }
+}

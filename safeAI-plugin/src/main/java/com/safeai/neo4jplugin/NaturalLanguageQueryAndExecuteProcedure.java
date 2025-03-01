@@ -3,7 +3,9 @@ package com.safeai.neo4jplugin;
 import org.neo4j.procedure.*;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Transaction;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -21,11 +23,25 @@ public class NaturalLanguageQueryAndExecuteProcedure {
 
         String cypherQuery = generated.solution_text;
 
-        // Execute the generated query using the injected GraphDatabaseService.
-        Result result = db.execute(cypherQuery);
-
-        // Map the result records to MapResult objects for returning.
-        return result.stream().map(record -> new MapResult(record.asMap()));
+        // Execute the generated query using a transaction
+        try (Transaction tx = db.beginTx()) {
+            Result result = tx.execute(cypherQuery);
+            
+            // Convert Result to Stream of MapResult objects
+            // Create a list to hold our results (since the Result will be closed when the transaction ends)
+            java.util.List<MapResult> resultList = new java.util.ArrayList<>();
+            
+            while (result.hasNext()) {
+                Map<String, Object> row = result.next();
+                resultList.add(new MapResult(row));
+            }
+            
+            // Commit the transaction
+            tx.commit();
+            
+            // Return the stream from our collected results
+            return resultList.stream();
+        }
     }
 
     public static class MapResult {

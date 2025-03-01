@@ -11,8 +11,9 @@ public class GovernanceModuleTest {
     @Test
     public void testGovernanceVoting() {
         String proposalId = "proposal123";
-        int initialVotes = GovernanceProcedures.initiateVote(proposalId);
-        int updatedVotes = GovernanceProcedures.recordVote(proposalId, 1);
+        GovernanceProcedures governance = new GovernanceProcedures();
+        int initialVotes = governance.initiateVote(proposalId);
+        int updatedVotes = governance.recordVote(proposalId, 1);
         assertEquals(initialVotes + 1, updatedVotes);
     }
 }
