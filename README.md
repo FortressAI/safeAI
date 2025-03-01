@@ -29,31 +29,25 @@ This guide is much longer than usual so you can get an in-depth understanding of
 ---
 
 ## 1. Introduction
+For the publicly available ARC Challenge, every problem is processed through three sequential phases:
 
-Imagine having a super-smart helper that can solve puzzles, answer math questions, and even ensure that every solution is fair. That is what safeAI does. This guide will take you on a journey from the very basics—installing safeAI—to the advanced concepts of agentic Knowledge Graphs (KGs). No technical jargon, just simple, friendly Cypher commands that work like magic.
+**Training Phase:**  
+The system applies direct transformations using the ARC training URL and returns the final score for the training phase.  
+Example:
 
-## 2. What is safeAI?
 
-safeAI turns your Neo4j database into a powerful, interactive assistant using Agentic Knowledge Graphs. An agentic KG is like a mini intelligent brain: it observes, thinks, and then explains its solution step-by-step. safeAI comes with several pre-built domains:
+**Evaluation Phase:**  
+If the training phase does not yield a satisfactory result, safeAI employs multiple transformation strategies using the ARC evaluation URL to refine the answer, returning the final score of this phase.  
+Example:
 
-- **ARC Domain:** Specializes in solving abstract puzzles with creative moves.
-- **Math Domain:** Handles a variety of math problems using unified techniques.
-- **Ethics Domain:** Ensures that every solution is ethical by enforcing immutable moral rules. (Note: This domain cannot be edited, and all other domains operate in accordance with its ethical standards.)
 
-## 3. Installing the safeAI Plugin
+**Final Exam Phase:**  
+The system processes the ARC final exam URL and returns the final solution in the JSON format required by arcprize.org.  
+Example:
 
-### Requirements:
-- A running **Neo4j database** (install [Neo4j Desktop](https://neo4j.com/download/) or use a local instance).
-- **Git** to clone the repository.
-- The **Java Runtime Environment (JRE)** to run the plugin.
 
-### Steps:
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/FortressAI/safeAI.git
-   ```
-2. **Navigate to the Directory:**
-   ```bash
+Additionally, the underlying ARC Agentic KG is implemented in Groovy for dynamic puzzle evaluation. For example:
+
    cd safeAI
    ```
 3. **Review the Setup:**
