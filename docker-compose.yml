@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  ganache:
+    image: trufflesuite/ganache-cli:latest
+    container_name: ganache
+    command: ["--miner.blockTime", "2"]
+    ports:
+      - "8545:8545"
+    volumes:
+      - ganache_data:/data
+
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j-test
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./neo4j-data:/data
+      - ./neo4j-plugins:/var/lib/neo4j/plugins
+    environment:
+      - NEO4J_dbms_security_procedures_unrestricted=safeai.*
+      - NEO4J_dbms_security_procedures_allowlist=safeai.*
+      - NEO4JLABS_PLUGINS=["apoc"]
+      - NEO4J_dbms_connector_bolt_listen__address=0.0.0.0:7687
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  ganache_data:
+  
