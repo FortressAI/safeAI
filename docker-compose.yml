@@ -31,3 +31,4 @@ networks:
 
 volumes:
   ganache_data:
+  
