@@ -23,4 +23,4 @@
     "evaluationScript": "def process(input, expectedOutput, context) {\n    def result = trainingScript.process(input, expectedOutput, context)\n    if(result == null) {\n         result = combinationScript.process(input, expectedOutput, context)\n    }\n    return result\n}",
     "finalExamScript": "def process(input, expectedOutput, context) {\n    def chainOfThought = nlQuery(\"Generate detailed chain-of-thought for input: \" + input + \" expecting: \" + expectedOutput)\n    def finalAnswer = evaluationScript.process(input, expectedOutput, context)\n    if(finalAnswer == null) {\n         chainOfThought += \"\nWarning: No valid transformation found.\"\n    } else {\n         chainOfThought += \"\nFinal answer verified: \" + finalAnswer\n    }\n    return [result: finalAnswer, chainOfThought: chainOfThought]\n}"
   }
-}
+} 
