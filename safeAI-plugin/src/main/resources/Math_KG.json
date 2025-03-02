@@ -41,8 +41,7 @@
       "input": "Solve system of equations: { x+y=10, x-y=2 }",
       "expectedOutput": "{ x=6, y=4 }",
       "description": "Simultaneous linear equations."
-    }
-,
+    },
     {
       "input": "Prove that sqrt(2) is irrational",
       "expectedOutput": "Proof by contradiction establishing the irrationality of sqrt(2)",
