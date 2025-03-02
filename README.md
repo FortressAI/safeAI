@@ -322,3 +322,138 @@ Explains how billing is handled:
 ---
 
 Thank you for exploring safeAI—the only AI plugin that reasons transparently and learns adaptively through language games. Enjoy your journey into intelligent problem-solving!
+
+## 14. Appendices
+
+### Appendix A: Using Ganache CLI and Creating an Ethereum Workspace
+
+This appendix provides detailed instructions to set up Ganache CLI for local blockchain testing and to create an Ethereum workspace for safeAI.
+
+1. **Installing Ganache CLI:**
+   - Ensure you have Node.js installed.
+   - Install Ganache CLI globally with:
+     ```bash
+     npm install -g ganache-cli
+     ```
+
+2. **Running Ganache CLI:**
+   - Start Ganache CLI on the default port 8545 using:
+     ```bash
+     ganache-cli -p 8545 -d
+     ```
+   - The `-d` flag enables deterministic behavior by using a fixed seed.
+
+3. **Verifying the Blockchain:**
+   - Check the blockchain status with a curl command:
+     ```bash
+     curl -X POST --data '{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}' http://localhost:8545
+     ```
+   - You should receive a JSON response with the current block number.
+
+4. **Creating an Ethereum Workspace:**
+   - Use Ethereum development tools such as Truffle or Remix.
+   - For Truffle:
+     - Install Truffle globally:
+       ```bash
+       npm install -g truffle
+       ```
+     - Initialize a new project:
+       ```bash
+       mkdir my-dapp && cd my-dapp
+       truffle init
+       ```
+   - Configure the `truffle-config.js` file to connect to Ganache on `http://localhost:8545`.
+
+### Appendix B: From DevTest to Production – Deploying safeAI KG and Blockchain on AWS
+
+For production deployments, follow these instructions to containerize safeAI and deploy it alongside your blockchain infrastructure using AWS.
+
+1. **Containerizing safeAI:**
+   - Create a Dockerfile extending the official Neo4j image:
+     ```dockerfile
+     FROM neo4j:latest
+     COPY neo4j-plugins/ /var/lib/neo4j/plugins/
+     ```
+   - Build your custom image:
+     ```bash
+     docker build -t safeai-neo4j:1.0 .
+     ```
+
+2. **Pushing Images to AWS ECR:**
+   - Create an ECR repository and authenticate with AWS CLI:
+     ```bash
+     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
+     ```
+   - Tag and push your Docker image:
+     ```bash
+     docker tag safeai-neo4j:1.0 <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/safeai-neo4j:1.0
+     docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/safeai-neo4j:1.0
+     ```
+
+3. **Deploying with AWS ECS/Fargate:**
+   - Create a Task Definition with two containers: one for safeAI (Neo4j) and one for your blockchain (Ganache or other).
+   - Use Fargate for serverless deployments and define the networking settings with an awsvpc mode.
+   - Configure auto-scaling policies based on CPU or memory usage.
+
+4. **Monitoring and Logging:**
+   - Integrate with CloudWatch for logs and metrics.
+   - Ensure proper security group configurations to allow access only from trusted networks.
+
+### Appendix C: Wallets, Microtransactions, and Agentic KG Billing
+
+This appendix outlines how safeAI manages billing and transactions via smart contracts and microtransactions.
+
+1. **System-Wide Wallet Setup:**
+   - Configure a central wallet for processing transactions. Example:
+     ```cypher
+     CALL safeAI.configureSystemWallet({
+       walletAddress: '0xADMIN_WALLET_ADDRESS',
+       privateKey: 'admin-private-key',
+       name: 'AdminWallet'
+     });
+     ```
+
+2. **Agentic KG Billing Mechanism:**
+   - New domains and queries automatically record billing information.
+   - Each query (training, evaluation, and final exam) triggers a microtransaction.
+
+3. **Smart Contract Integration:**
+   - A simplified smart contract handles billing:
+     ```solidity
+     pragma solidity ^0.8.0;
+      
+     contract SafeAIBilling {
+         address public owner;
+         uint public feeWei;
+         mapping(address => uint) public balances;
+      
+         constructor(uint _feeWei) {
+             owner = msg.sender;
+             feeWei = _feeWei;
+         }
+      
+         function deposit() external payable {
+             balances[msg.sender] += msg.value;
+         }
+      
+         function chargeForQuery(address user) external returns(bool) {
+             require(msg.sender == owner, "Only safeAI can charge");
+             require(balances[user] >= feeWei, "Insufficient balance");
+             balances[user] -= feeWei;
+             payable(owner).transfer(feeWei);
+             return true;
+         }
+     }
+     ```
+
+4. **Verification and Troubleshooting:**
+   - Verify billing details by querying the KG:
+     ```cypher
+     CALL safeAI.getContractDetails('Math') YIELD contract
+     RETURN contract;
+     ```
+   - Ensure that all transactions are logged and that users are charged correctly.
+   - Check for any discrepancies in the transaction logs and smart contract events.
+
+*Remember: The Ethics Domain remains immutable, ensuring fairness in all processes. The Agentic KG continuously learns and enhances its reasoning through language games, guaranteeing transparency and adaptability in every query.*
+
