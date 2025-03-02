@@ -1,21 +1,21 @@
 {
   "InternalKG": {
-  "ethicsApproval": {
-    "enabled": true,
-    "approvalScript": "def approve(change, context) { def ethicalOutcome = nlQuery('Evaluate ethics: ' + change); if(ethicalOutcome.contains('Approved')) { return true } else { return false } }"
-  },
+    "ethicsApproval": {
+      "enabled": true,
+      "approvalScript": "def approve(change, context) { \n    try { \n        // Generate an explanation using the internal LLM (or similar service)\n        def ethicalOutcome = nlQuery('Evaluate ethics for change: ' + change + ' with context: ' + context);\n        println 'Ethical evaluation output: ' + ethicalOutcome;\n        // Check if the outcome contains an explicit approval flag\n        if(ethicalOutcome != null && ethicalOutcome.toLowerCase().contains('approved')) { \n            println 'Change approved.';\n            return true; \n        } else { \n            println 'Change not approved.';\n            return false; \n        } \n    } catch(Exception e) { \n        println 'Error during ethical approval: ' + e.getMessage(); \n        // In case of error, default to not approved for safety\n        return false; \n    } \n}"
+    },
     "users": [
       {
         "user_id": "user1",
         "role": "end_user",
         "wallet_address": "0xUserWalletAddress",
         "creation_date": "2025-01-01T00:00:00Z",
-  "contract": {
-    "pricePerQuery": "0.0001 tokens",
-    "minFee": "0.001 tokens",
-    "usageQuota": "1000 queries per month",
-    "smartContractTemplate": "function getCost(uint queryCount) public pure returns (uint) { return queryCount * 100; }"
-  },
+        "contract": {
+          "pricePerQuery": "0.0001 tokens",
+          "minFee": "0.001 tokens",
+          "usageQuota": "1000 queries per month",
+          "smartContractTemplate": "function getCost(uint queryCount) public pure returns (uint) { return queryCount * 100; }"
+        },
         "notes": "Standard access. Wallet keys are stored securely off-chain."
       },
       {
@@ -34,9 +34,9 @@
       }
     ],
     "policies": {
-      "access_token_policy": "Use token 'AUTHORIZED' for internal access.",
-      "key_security": "Sensitive keys are stored in an encrypted config file separate from the KG.",
-      "post_quantum": "All public-key crypto is planned for quantum-resistant algorithms in the future."
+      "access_token_policy": "Use token 'AUTHORIZED' for internal access. Tokens must be rotated quarterly.",
+      "key_security": "Sensitive keys are stored in an encrypted configuration file separate from the KG. Only admin users have decryption rights.",
+      "post_quantum": "All public-key cryptography is planned for quantum-resistant algorithms in upcoming updates."
     },
     "microtransactions": {
       "contract_address": "0xABCDEF123456789",
@@ -47,9 +47,9 @@
       }
     },
     "instructions": {
-      "end_user": "To become an end user, simply register with your wallet details. Your access is secured via token-based authentication.",
-      "domain_expert": "To become a domain expert, you must apply with relevant credentials. An admin will validate and assign you expert status.",
-      "admin": "Administrators are assigned manually. They have full access to validate changes, manage tokens, and update blockchain contracts."
+      "end_user": "Register with your wallet details to gain access. Your access is secured via token-based authentication.",
+      "domain_expert": "Apply with relevant credentials. An admin will review and assign expert status, granting additional permissions.",
+      "admin": "Admins are manually assigned. They have full rights to validate changes, manage tokens, and update blockchain contracts."
     }
   }
 }
