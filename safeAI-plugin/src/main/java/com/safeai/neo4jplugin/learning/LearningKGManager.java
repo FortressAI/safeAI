@@ -29,14 +29,27 @@ public class LearningKGManager {
      */
     public boolean installARCkg(String url) {
         try {
-            logger.info("Skipping download of ARC KG from: " + url + " as external JSON file is no longer used.");
-            JSONObject arcKG = new JSONObject();
-            // Initialize ARC KG in Neo4j using GraphRAG
-            graphRag.initializeARCkg(arcKG);
-            // Deploy licensing smart contract for learning (using example binary)
+            logger.info("Loading all Agentic KGs from local resources.");
+            ClassLoader classLoader = getClass().getClassLoader();
+            File resourcesDirectory = new File(classLoader.getResource("").getFile());
+            File[] jsonFiles = resourcesDirectory.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("_KG.json");
+                }
+            });
+            if (jsonFiles != null && jsonFiles.length > 0) {
+                for (File jsonFile : jsonFiles) {
+                    logger.info("Loading KG from file: " + jsonFile.getName());
+                    String content = new String(java.nio.file.Files.readAllBytes(jsonFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+                    JSONObject kgData = new JSONObject(content);
+                    graphRag.initializeARCkg(kgData);
+                }
+            } else {
+                logger.warning("No KG JSON files found in local resources.");
+            }
             String contractAddress = SmartContractHandler.deployContract("contractBinaryExample");
             logger.info("Deployed learning smart contract at: " + contractAddress);
-            // Record usage event for Learning KG initialization
             UsageTracker.recordUsage("LearningKG");
             return true;
         } catch (Exception e) {
