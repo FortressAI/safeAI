@@ -29,14 +29,8 @@ public class LearningKGManager {
      */
     public boolean installARCkg(String url) {
         try {
-            logger.info("Downloading ARC KG from: " + url);
-            String jsonStr = Request.Get(url)
-                    .connectTimeout(10000)
-                    .socketTimeout(10000)
-                    .execute()
-                    .returnContent()
-                    .asString(StandardCharsets.UTF_8);
-            JSONObject arcKG = new JSONObject(jsonStr);
+            logger.info("Skipping download of ARC KG from: " + url + " as external JSON file is no longer used.");
+            JSONObject arcKG = new JSONObject();
             // Initialize ARC KG in Neo4j using GraphRAG
             graphRag.initializeARCkg(arcKG);
             // Deploy licensing smart contract for learning (using example binary)
