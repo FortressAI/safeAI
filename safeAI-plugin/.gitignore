@@ -3,6 +3,10 @@
 *.lst
 *.txt
 *.xml
+*.db
+*.db.*
+*.id
+safeAI-plugin/neo4j-data/databases/*.*
 
 
 

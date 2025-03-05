@@ -29,6 +29,7 @@ docker run -d --name neo4j-test \
   -e NEO4J_dbms_security_procedures_allowlist=safeai.* \
   -e NEO4JLABS_PLUGINS='["apoc"]' \
   -e NEO4J_dbms_connector_bolt_listen__address=0.0.0.0:7687 \
+  -e NEO4J_AUTH=neo4j/testpassword \
   neo4j:latest
 
 echo "Neo4j container deployed successfully. Access Neo4j Browser at http://localhost:7474"
