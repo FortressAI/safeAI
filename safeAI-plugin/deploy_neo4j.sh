@@ -15,38 +15,6 @@ fi
 echo "Copying $JAR to neo4j-plugins/"
 cp "$JAR" neo4j-plugins/
 
-# Create docker-compose.yml file
-cat > docker-compose.yml << 'EOL'
-version: "3.8"
-
-services:
-  neo4j:
-    image: neo4j:2025.01
-    container_name: neo4j-safeai
-    ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      - NEO4J_AUTH=neo4j/testpassword
-      - NEO4J_apoc_export_file_enabled=true
-      - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_apoc_import_file_use__neo4j__config=true
-      - NEO4J_PLUGINS=["apoc"]
-      - NEO4J_dbms_security_procedures_unrestricted=com.safeai.neo4jplugin.*,apoc.*
-      - NEO4J_dbms_security_procedures_allowlist=com.safeai.neo4jplugin.*,apoc.*
-    volumes:
-      - neo4j_data:/data
-      - neo4j_logs:/logs
-      - neo4j_import:/var/lib/neo4j/import
-      - ./neo4j-plugins:/plugins
-    restart: on-failure
-
-volumes:
-  neo4j_data:
-  neo4j_logs:
-  neo4j_import:
-EOL
-
 # Stop any existing containers and remove volumes
 docker-compose down -v
 
@@ -79,14 +47,18 @@ echo "Checking if plugin is loaded..."
 docker exec neo4j-safeai ls -la /plugins
 
 echo "Checking available procedures..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL dbms.procedures() YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
 
 echo "Checking available functions..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL dbms.functions() YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
 
 echo "Testing governance functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.initiateVote('test-proposal') AS result;"
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;"
+
+echo "Checking all procedures and functions..."
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES YIELD name, signature, description RETURN name, signature, description ORDER BY name;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name, signature, description RETURN name, signature, description ORDER BY name;"
 
 echo "Done! Your plugin should now be available in Neo4j."
 echo "Access Neo4j Browser at http://localhost:7474 with username 'neo4j' and password 'testpassword'"

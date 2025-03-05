@@ -9,9 +9,10 @@
     <version>1.0.0</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <neo4j.version>4.4.0</neo4j.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+        <neo4j.version>5.9.0</neo4j.version>
         <log4j.version>2.17.1</log4j.version>
         <bouncycastle.version>1.68</bouncycastle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,9 +27,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-kernel</artifactId>
+            <version>${neo4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-procedure-api</artifactId>
+            <version>${neo4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.neo4j.driver</groupId>
             <artifactId>neo4j-java-driver</artifactId>
-            <version>4.4.0</version>
+            <version>5.9.0</version>
             <scope>provided</scope>
         </dependency>
         
@@ -37,22 +50,24 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+            <scope>provided</scope>
         </dependency>
         
         <!-- SLF4J API only - implementation provided by Neo4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.36</version>
             <scope>provided</scope>
         </dependency>
         
-        <!-- BouncyCastle compatible with Java 11 -->
+        <!-- BouncyCastle compatible with Java 17 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
@@ -116,12 +131,37 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <release>11</release>
+                    <source>17</source>
+                    <target>17</target>
+                    <release>17</release>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>17</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -134,13 +174,22 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Neo4jName>SafeAI Plugin</Neo4jName>
-                                        <Neo4jVersion>${neo4j.version}</Neo4jVersion>
+                                        <Neo4j-Name>SafeAI Plugin</Neo4j-Name>
+                                        <Neo4j-Version>${neo4j.version}</Neo4j-Version>
+                                        <Implementation-Title>SafeAI Plugin</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <Implementation-Vendor>SafeAI</Implementation-Vendor>
                                     </manifestEntries>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                    <resource>.SF</resource>
+                                    <resource>.DSA</resource>
+                                    <resource>.RSA</resource>
                                 </transformer>
                             </transformers>
                             <filters>
@@ -152,11 +201,6 @@
                                         <exclude>META-INF/*.RSA</exclude>
                                         <exclude>META-INF/services/org.slf4j.spi.SLF4JServiceProvider</exclude>
                                         <exclude>org/slf4j/impl/**</exclude>
-                                        <exclude>META-INF/versions/15/**</exclude>
-                                        <exclude>META-INF/versions/16/**</exclude>
-                                        <exclude>META-INF/versions/17/**</exclude>
-                                        <exclude>META-INF/versions/18/**</exclude>
-                                        <exclude>META-INF/versions/19/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -168,6 +212,28 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/META-INF</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
