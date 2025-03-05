@@ -6,8 +6,9 @@
 *.db
 *.db.*
 *.id
-safeAI-plugin/neo4j-data/databases/*.*
+safeAI-plugin/neo4j-data/databases/
 
+databases*/
 
 
 # Log file
