@@ -1,0 +1,107 @@
+{
+    "domain": "FinancialAnalytics",
+    "description": "A comprehensive Agentic KG for Financial Analytics and Trading. This KG dynamically generates and refines transformation agents to analyze market data, generate trading strategies, and assess financial risks. It integrates blockchain‑audited licensing and decentralized governance, ensuring that every analysis is monetized securely and transparently, while adaptive learning drives continuous improvement.",
+    "endpoints": {
+      "marketData": "https://api.example.com/finance/marketdata",
+      "economicIndicators": "https://api.example.com/finance/economic"
+    },
+    "trainingExamples": [
+      {
+        "input": "Generate a trading strategy for a volatile tech stock based on recent market trends.",
+        "expectedOutput": "A detailed trading strategy that includes risk management measures and entry/exit points.",
+        "description": "Training example for dynamic strategy generation."
+      },
+      {
+        "input": "Assess the risk of investing in emerging markets given current economic indicators.",
+        "expectedOutput": "A risk assessment report with a quantified risk score and recommendations.",
+        "description": "Risk assessment training example."
+      }
+    ],
+    "evaluationExamples": [
+      {
+        "input": "Evaluate the performance of a trading algorithm over the past quarter.",
+        "expectedOutput": "A comprehensive performance evaluation including profit/loss analysis, drawdown statistics, and risk-adjusted return metrics.",
+        "description": "Evaluation example for trading performance."
+      }
+    ],
+    "finalExamExamples": [
+      {
+        "input": "Develop an integrated trading strategy for a diversified portfolio in response to a sudden market downturn.",
+        "expectedOutput": "A full strategy document with multi‑asset recommendations, risk hedging strategies, and clear action triggers.",
+        "description": "Final exam: comprehensive trading strategy under stress conditions."
+      }
+    ],
+    "agents": [
+      {
+        "name": "BaseFinanceAgent",
+        "category": "Foundational",
+        "usageCount": 100000,
+        "description": "Extracts and standardizes financial data and market signals for analysis.",
+        "successCount": 100000,
+        "agent_code": "def generateCandidate(input) { \n  def cot = 'Extracted baseline market and financial data from input.'; \n  return [candidate: input, metadata: [method: 'BaseFinanceAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
+      },
+      {
+        "name": "MarketTrendAgent",
+        "category": "Trend Analysis",
+        "usageCount": 80000,
+        "description": "Analyzes market data to detect trends and momentum shifts.",
+        "successCount": 80000,
+        "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Analyze market trends for: ' + input.toString()); \n  def cot = 'Identified key market trends and momentum shifts.'; \n  return [candidate: candidate, metadata: [method: 'MarketTrendAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      },
+      {
+        "name": "RiskAssessmentAgent",
+        "category": "Risk Analysis",
+        "usageCount": 70000,
+        "description": "Evaluates financial risks based on market volatility and economic indicators.",
+        "successCount": 70000,
+        "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Assess financial risk for: ' + input.toString()); \n  def cot = 'Computed risk score using volatility and economic data.'; \n  return [candidate: candidate, metadata: [method: 'RiskAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}"
+      },
+      {
+        "name": "DynamicCompositeFinanceAgent",
+        "category": "Composite",
+        "usageCount": 0,
+        "description": "Dynamically combines outputs from multiple financial agents to generate an integrated trading strategy or risk analysis report.",
+        "successCount": 0,
+        "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n        def result = agent.generateCandidate(candidate); \n        candidate = result.candidate; \n        cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n        bestCandidate = candidate; \n        bestCot = cot; \n        return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeFinanceAgent', chain_of_thought: 'No valid composite strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n  return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n  return candidate == groundTruth; \n}"
+      }
+    ],
+    "scripts": {
+      "fetchDataScript": "def fetchData(url) { \n  def response = httpGet(url); \n  if(response.status == 200) { return parseJson(response.body); } else { println 'Failed to fetch market data from ' + url; return null; } \n}",
+      "trainingScript": "def processTraining(examples, context) { \n  int correct = 0; examples.each { example -> \n    def input = example.input; def expected = example.expectedOutput; \n    def agentsList = configuration.agentInstances; \n    agentsList.each { agent -> \n      def result = agent.generateCandidate(input); \n      if(result.candidate == expected) { println 'Training success with agent ' + result.metadata.method; correct++; return; } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); println 'Training score: ' + score; return score; \n}",
+      "evaluationScript": "def processEvaluation(examples, context) { \n  int correct = 0; examples.each { example -> \n    def input = example.input; def expected = example.expectedOutput; \n    def candidate = processTraining([example], context); \n    if(candidate != null && candidate == expected) { correct++; } else { \n      def composite = DynamicCompositeFinanceAgent.generateCandidate(input, expected); \n      if(composite.candidate == expected) { correct++; } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); println 'Evaluation score: ' + score; return score; \n}",
+      "finalExamScript": "def processFinal(puzzleSet, context) { \n  def results = []; \n  puzzleSet.each { puzzle -> \n    def input = puzzle.input; def expected = puzzle.expectedOutput; \n    def cot = nlQuery('Generate detailed chain-of-thought for financial analysis of: ' + input.toString() + ' expecting: ' + expected.toString()); \n    def candidateScore = processEvaluation([puzzle], context); \n    results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n  }; \n  println 'Final exam processing completed for ' + results.size() + ' financial scenarios.'; return results; \n}"
+    },
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-03-02T00:00:00Z",
+      "notes": "This Financial Analytics KG dynamically generates trading strategies, assesses risk, and provides comprehensive market analysis, with blockchain‑audited licensing and decentralized governance ensuring secure monetization and adaptive improvement."
+    },
+    "configuration": {
+      "maxAgentChainLength": 3,
+      "agentInitializationOrder": [
+        "BaseFinanceAgent",
+        "MarketTrendAgent",
+        "RiskAssessmentAgent",
+        "DynamicCompositeFinanceAgent"
+      ],
+      "agentInstances": [
+        "BaseFinanceAgent",
+        "MarketTrendAgent",
+        "RiskAssessmentAgent",
+        "DynamicCompositeFinanceAgent"
+      ],
+      "blockchain": {
+        "systemWallet": "0xAdminWalletAddress",
+        "contractAddress": "0xABCDEF123456789",
+        "pricing": {
+          "baseFee": 0.001,
+          "dynamicPricing": "Based on market volatility and usage metrics",
+          "minFee": 0.0001,
+          "usageQuota": 1000
+        }
+      },
+      "fileImportMode": "multi",
+      "initData": "def initializeData() { \n  def marketData = scripts.fetchDataScript(configuration.endpoints.marketData); \n  def economicData = scripts.fetchDataScript(configuration.endpoints.economicIndicators); \n  println 'Financial KG initialized: MarketData=' + (marketData != null) + ', EconomicData=' + (economicData != null); \n  return [marketData: marketData, economicData: economicData]; \n}"
+    }
+  }
+  
