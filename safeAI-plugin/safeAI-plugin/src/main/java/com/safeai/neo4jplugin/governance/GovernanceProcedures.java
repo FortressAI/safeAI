@@ -12,14 +12,14 @@ import java.util.Map;
 public class GovernanceProcedures {
     private static Map<String, Long> proposalVotes = new HashMap<>();
 
-    @UserFunction(name = "safeai.governance.initiateVote")
+    @UserFunction
     @Description("Initiates a vote for a proposal and returns the initial vote count.")
     public long initiateVote(@Name("proposalId") String proposalId) {
         proposalVotes.put(proposalId, 0L);
         return 0L;
     }
 
-    @UserFunction(name = "safeai.governance.recordVote")
+    @UserFunction
     @Description("Records a vote for a proposal and returns the updated vote count.")
     public long recordVote(@Name("proposalId") String proposalId, @Name("vote") long vote) {
         long currentVotes = proposalVotes.getOrDefault(proposalId, 0L);

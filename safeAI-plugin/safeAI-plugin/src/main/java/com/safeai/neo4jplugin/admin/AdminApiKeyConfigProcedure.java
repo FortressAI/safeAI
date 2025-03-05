@@ -1,10 +1,9 @@
 package com.safeai.neo4jplugin.admin;
 
-import java.util.stream.Stream;
-
 import org.neo4j.procedure.Description;
-import org.neo4j.procedure.Mode;
 import org.neo4j.procedure.Procedure;
+import org.neo4j.procedure.Mode;
+import java.util.stream.Stream;
 
 public class AdminApiKeyConfigProcedure {
     public static class Result {
