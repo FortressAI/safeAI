@@ -1,13 +1,17 @@
 package com.safeai.neo4jplugin;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
-import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -29,7 +33,7 @@ public class KGConversationalAgent {
     private final Driver driver;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final Logger logger = Logger.getLogger(KGConversationalAgent.class.getName());
+    private static final Logger logger = Logger.getLogger(KGConversationalAgent.class.getName());
 
     public KGConversationalAgent(String modelGenerate, String modelInterpret) {
         this.openaiApiKey = System.getenv("OPENAI_API_KEY");
@@ -123,7 +127,7 @@ public class KGConversationalAgent {
             }
             logger.info("Generated Cypher query from prompt.");
             return rawResponse;
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             logger.log(Level.SEVERE, "Error generating Cypher query: " + e.getMessage(), e);
             return "";
         }
@@ -243,23 +247,23 @@ public class KGConversationalAgent {
         System.out.println("Enter natural language queries about the KG, or type 'status' to check solution counts.");
         System.out.println("Type 'quit' or 'exit' to close the session.\n");
         assertSchema();
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.print("Your Query: ");
-            String userInput = scanner.nextLine().trim();
-            if (userInput.equalsIgnoreCase("quit") || userInput.equalsIgnoreCase("exit")) {
-                break;
-            } else if (userInput.equalsIgnoreCase("status")) {
-                checkStatus();
-            } else {
-                String interpretation = processQuery(userInput);
-                System.out.println("\nResponse from KG interpretation:");
-                System.out.println(interpretation);
+        try (Scanner scanner = new Scanner(System.in);
+             Driver driver = GraphDatabase.driver(neo4jUri, AuthTokens.basic(neo4jUser, neo4jPassword))) {
+            while (true) {
+                System.out.print("Your Query: ");
+                String userInput = scanner.nextLine().trim();
+                if (userInput.equalsIgnoreCase("quit") || userInput.equalsIgnoreCase("exit")) {
+                    break;
+                } else if (userInput.equalsIgnoreCase("status")) {
+                    checkStatus();
+                } else {
+                    String interpretation = processQuery(userInput);
+                    System.out.println("\nResponse from KG interpretation:");
+                    System.out.println(interpretation);
+                }
+                System.out.println("\n" + "=".repeat(50) + "\n");
             }
-            System.out.println("\n" + "=".repeat(50) + "\n");
         }
-        scanner.close();
-        driver.close();
         System.out.println("Goodbye!");
     }
 

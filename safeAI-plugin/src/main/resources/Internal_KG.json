@@ -2,7 +2,7 @@
   "InternalKG": {
     "ethicsApproval": {
       "enabled": true,
-      "approvalScript": "def approve(change, context) { \n    try { \n        // Generate an explanation using the internal LLM (or similar service)\n        def ethicalOutcome = nlQuery('Evaluate ethics for change: ' + change + ' with context: ' + context);\n        println 'Ethical evaluation output: ' + ethicalOutcome;\n        // Check if the outcome contains an explicit approval flag\n        if(ethicalOutcome != null && ethicalOutcome.toLowerCase().contains('approved')) { \n            println 'Change approved.';\n            return true; \n        } else { \n            println 'Change not approved.';\n            return false; \n        } \n    } catch(Exception e) { \n        println 'Error during ethical approval: ' + e.getMessage(); \n        // In case of error, default to not approved for safety\n        return false; \n    } \n}"
+      "approvalScript": "def approve(change, context) { \n    try { \n        // Use internal LLM or validation service to evaluate the change\n        def ethicalOutcome = nlQuery('Evaluate ethics for change: ' + change + ' with context: ' + context);\n        println 'Ethical evaluation output: ' + ethicalOutcome;\n        // Check if the outcome includes an explicit approval keyword\n        if (ethicalOutcome != null && ethicalOutcome.toLowerCase().contains('approved')) { \n            println 'Change approved.';\n            return true; \n        } else { \n            println 'Change not approved.';\n            return false; \n        } \n    } catch(Exception e) { \n        println 'Error during ethical approval: ' + e.getMessage(); \n        return false; \n    } \n}"
     },
     "users": [
       {
@@ -49,7 +49,7 @@
     "instructions": {
       "end_user": "Register with your wallet details to gain access. Your access is secured via token-based authentication.",
       "domain_expert": "Apply with relevant credentials. An admin will review and assign expert status, granting additional permissions.",
-      "admin": "Admins are manually assigned. They have full rights to validate changes, manage tokens, and update blockchain contracts."
+      "admin": "Admins have full rights to validate changes, manage tokens, and update blockchain contracts. They are responsible for maintaining internal KG integrity."
     }
   }
 }

@@ -1,13 +1,16 @@
 package com.safeai.neo4jplugin;
 
-import org.neo4j.procedure.*;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import org.neo4j.procedure.Context;
+import org.neo4j.procedure.Description;
+import org.neo4j.procedure.Mode;
+import org.neo4j.procedure.Name;
+import org.neo4j.procedure.Procedure;
 
 public class NaturalLanguageQueryAndExecuteProcedure {
 
