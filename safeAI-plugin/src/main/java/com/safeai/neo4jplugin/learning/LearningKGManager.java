@@ -29,24 +29,25 @@ public class LearningKGManager {
      */
     public boolean installARCkg(String url) {
         try {
-            logger.info("Loading all Agentic KGs from local resources.");
-            ClassLoader classLoader = getClass().getClassLoader();
-            File resourcesDirectory = new File(classLoader.getResource("").getFile());
-            File[] jsonFiles = resourcesDirectory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.endsWith("_KG.json");
-                }
-            });
-            if (jsonFiles != null && jsonFiles.length > 0) {
-                for (File jsonFile : jsonFiles) {
-                    logger.info("Loading KG from file: " + jsonFile.getName());
-                    String content = new String(java.nio.file.Files.readAllBytes(jsonFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
-                    JSONObject kgData = new JSONObject(content);
-                    graphRag.initializeARCkg(kgData);
+            logger.info("Loading all Agentic KGs from local resources using Reflections.");
+            org.reflections.Reflections reflections = new org.reflections.Reflections(new org.reflections.util.ConfigurationBuilder()
+                    .setUrls(org.reflections.util.ClasspathHelper.forPackage(""))
+                    .setScanners(new org.reflections.scanners.ResourcesScanner()));
+            java.util.Set<String> resourceNames = reflections.getResources(java.util.regex.Pattern.compile(".*_KG\\.json"));
+            if (resourceNames != null && !resourceNames.isEmpty()) {
+                for (String resourceName : resourceNames) {
+                    logger.info("Loading KG from resource: " + resourceName);
+                    java.io.InputStream is = getClass().getResourceAsStream("/" + resourceName);
+                    if (is != null) {
+                        String content = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                        org.json.JSONObject kgData = new org.json.JSONObject(content);
+                        graphRag.initializeARCkg(kgData);
+                    } else {
+                        logger.warning("Resource " + resourceName + " not found as stream.");
+                    }
                 }
             } else {
-                logger.warning("No KG JSON files found in local resources.");
+                logger.warning("No KG JSON files found in local resources using Reflections.");
             }
             String contractAddress = SmartContractHandler.deployContract("contractBinaryExample");
             logger.info("Deployed learning smart contract at: " + contractAddress);
