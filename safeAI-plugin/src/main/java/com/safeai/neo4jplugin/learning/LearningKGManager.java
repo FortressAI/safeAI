@@ -1,14 +1,10 @@
 package com.safeai.neo4jplugin.learning;
 
-import com.safeai.neo4jplugin.blockchain.BlockchainConnector;
+import java.util.logging.Logger;
+
 import com.safeai.neo4jplugin.blockchain.SmartContractHandler;
 import com.safeai.neo4jplugin.graph_rag.GraphRAG;
 import com.safeai.neo4jplugin.usage.UsageTracker;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.entity.ContentType;
-import org.json.JSONObject;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Logger;
 
 /**
  * LearningKGManager handles downloading and initializing the ARC KG for learning.
@@ -49,7 +45,10 @@ public class LearningKGManager {
             } else {
                 logger.warning("No KG JSON files found in local resources using Reflections.");
             }
-            String contractAddress = SmartContractHandler.deployContract("contractBinaryExample");
+            
+            // Fix: Use the static method deployContractStatic instead of the instance method deployContract
+            String contractAddress = SmartContractHandler.deployContractStatic("contractBinaryExample");
+            
             logger.info("Deployed learning smart contract at: " + contractAddress);
             UsageTracker.recordUsage("LearningKG");
             return true;
