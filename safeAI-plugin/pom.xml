@@ -1,131 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <!-- Project Coordinates -->
-  <groupId>com.safeai</groupId>
-  <artifactId>safeai-plugin</artifactId>
-  <version>1.0.0</version>
-  <packaging>jar</packaging>
+    <groupId>com.safeai</groupId>
+    <artifactId>safeai-plugin</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
-  <name>SafeAI Plugin for Decentralized Knowledge Graph Ecosystem</name>
-  <description>
-    A Neo4j plugin that integrates secure digital signatures, blockchain-based audit trails,
-    dynamic token-based licensing, and decentralized governance into a human-readable knowledge graph ecosystem.
-    It includes a foundational ethics module for self-validation and supports dynamic agent generation for diverse domains.
-  </description>
+    <name>SafeAI Plugin for Decentralized Knowledge Graph Ecosystem</name>
+    <description>
+        A Neo4j plugin that integrates secure digital signatures, blockchain-based audit trails,
+        dynamic token-based licensing, and decentralized governance into a human-readable knowledge graph ecosystem.
+        It includes a foundational ethics module for self-validation and supports dynamic agent generation for diverse domains.
+    </description>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <neo4j.version>4.4.0</neo4j.version>
-    <web3j.version>4.8.7</web3j.version>
-    <junit.version>5.7.1</junit.version>
-    <log4j2.version>2.14.1</log4j2.version>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <neo4j.version>4.4.0</neo4j.version>
+        <web3j.version>4.8.7</web3j.version>
+        <junit.version>5.7.1</junit.version>
+        <log4j2.version>2.14.1</log4j2.version>
+        <reflections.version>0.10.2</reflections.version>    </properties>
 
-  <dependencies>
-    <!-- Neo4j Procedure API for custom procedures -->
-    <dependency>
-      <groupId>org.neo4j</groupId>
-      <artifactId>neo4j-procedure-api</artifactId>
-      <version>${neo4j.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- Neo4j Core (provided by the Neo4j runtime) -->
-    <dependency>
-      <groupId>org.neo4j</groupId>
-      <artifactId>neo4j</artifactId>
-      <version>${neo4j.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- Web3j for blockchain interactions -->
-    <dependency>
-      <groupId>org.web3j</groupId>
-      <artifactId>core</artifactId>
-      <version>${web3j.version}</version>
-    </dependency>
-    <!-- Logging (Log4j2) -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j2.version}</version>
-    </dependency>
-    <!-- JUnit for testing -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- Neo4j Java Driver -->
-  <dependency>
-    <groupId>org.neo4j.driver</groupId>
-    <artifactId>neo4j-java-driver</artifactId>
-    <version>4.4.0</version>
-  </dependency>
-  <!-- JSON Library -->
-  <dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20210307</version>
-  </dependency>
-  <!-- Apache HTTP Client Fluent API -->
-  <dependency>
-    <groupId>org.apache.httpcomponents</groupId>
-    <artifactId>fluent-hc</artifactId>
-    <version>4.5.13</version>
-  </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-procedure-api</artifactId>
+            <version>${neo4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>${neo4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>${web3j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>4.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <!-- Maven Compiler Plugin -->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-        </configuration>
-      </plugin>
-      <!-- Maven Shade Plugin for creating an executable JAR -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.safeai.neo4jplugin.MainPlugin</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.safeai.neo4jplugin.MainPlugin</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
