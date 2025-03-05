@@ -2,27 +2,16 @@ version: "3.8"
 
 services:
   neo4j:
-    image: neo4j:2025.01
+    image: neo4j:5.9
     container_name: neo4j-safeai
     ports:
       - "7474:7474"
       - "7687:7687"
     environment:
       - NEO4J_AUTH=neo4j/testpassword
-      - NEO4J_apoc_export_file_enabled=true
-      - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_apoc_import_file_use__neo4j__config=true
-      - NEO4J_PLUGINS=["apoc"]
-      - NEO4J_dbms_security_procedures_unrestricted=com.safeai.neo4jplugin.*,apoc.*
-      - NEO4J_dbms_security_procedures_allowlist=com.safeai.neo4jplugin.*,apoc.*
+      - NEO4J_dbms_security_procedures_unrestricted=*
+      - NEO4J_server_config_strict__validation_enabled=false
+      - NEO4J_dbms_directories_plugins=/plugins
     volumes:
-      - neo4j_data:/data
-      - neo4j_logs:/logs
-      - neo4j_import:/var/lib/neo4j/import
       - ./neo4j-plugins:/plugins
     restart: on-failure
-
-volumes:
-  neo4j_data:
-  neo4j_logs:
-  neo4j_import:
