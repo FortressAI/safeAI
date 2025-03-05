@@ -1,16 +1,17 @@
 package com.safeai.neo4jplugin.procedures;
 
-import com.safeai.neo4jplugin.utilities.DomainConfigurationManager;
-import com.safeai.neo4jplugin.utilities.LLMService;
-import org.neo4j.procedure.Description;
-import org.neo4j.procedure.Name;
-import org.neo4j.procedure.Procedure;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.procedure.Context;
-import org.neo4j.procedure.Mode;
-
 import java.util.Map;
 import java.util.stream.Stream;
+
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.procedure.Context;
+import org.neo4j.procedure.Description;
+import org.neo4j.procedure.Mode;
+import org.neo4j.procedure.Name;
+import org.neo4j.procedure.Procedure;
+
+import com.safeai.neo4jplugin.utilities.DomainConfigurationManager;
+import com.safeai.neo4jplugin.utilities.LLMService;
 
 public class CreateDomainProcedure {
     @Context
@@ -70,7 +71,6 @@ public class CreateDomainProcedure {
                 trainingExamples,
                 evaluationExamples,
                 finalExamExample,
-                agentDefinitions,
                 billing);
 
         if (success) {

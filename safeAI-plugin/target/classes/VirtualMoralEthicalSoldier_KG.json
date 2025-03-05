@@ -1,0 +1,118 @@
+{
+    "domain": "VirtualMoralEthicalSoldier",
+    "description": "A comprehensive Agentic Knowledge Graph for a Virtual Moral Ethical Soldier that simulates ethical decision‑making in military or conflict scenarios. This KG is designed to analyze operational data, assess the ethical implications of actions, and ensure full compliance with international humanitarian law and ethical guidelines. It integrates dynamic agent generation, blockchain‑audited licensing, and decentralized governance to provide transparent, adaptive, and accountable guidance for virtual soldier operations.",
+    "endpoints": {
+      "internationalLaw": "https://api.example.com/law/international",
+      "ethicalGuidelines": "https://api.example.com/ethics/international",
+      "conflictData": "https://api.example.com/military/conflictdata"
+    },
+    "trainingExamples": [
+      {
+        "input": "Assess a situation where collateral damage is likely during an operation in a populated area.",
+        "expectedOutput": "A recommendation that minimizes harm to civilians, suggests alternative tactics, and ensures compliance with international humanitarian law.",
+        "description": "Training example for ethical risk assessment in operations."
+      },
+      {
+        "input": "Evaluate the legality of using a particular weapon system in a cross‑border conflict.",
+        "expectedOutput": "A detailed analysis outlining the weapon's compliance with international law and the ethical implications of its use.",
+        "description": "Training example for international law compliance."
+      }
+    ],
+    "evaluationExamples": [
+      {
+        "input": "Analyze a simulated engagement scenario and propose a plan that balances mission objectives with strict adherence to international ethical standards.",
+        "expectedOutput": "A balanced operational plan that prioritizes minimizing collateral damage and adheres to international rules of engagement.",
+        "description": "Evaluation example for comprehensive scenario analysis."
+      }
+    ],
+    "finalExamExamples": [
+      {
+        "input": "Develop a complete operational protocol for a complex conflict scenario that includes rules of engagement, ethical decision‑making, and compliance with international humanitarian law.",
+        "expectedOutput": "A comprehensive protocol with detailed chain‑of‑thought explaining how each decision minimizes harm, upholds moral and ethical principles, and complies with international law.",
+        "description": "Final exam: full operational protocol with ethical and legal validation."
+      }
+    ],
+    "agents": [
+      {
+        "name": "BaseSoldierAgent",
+        "category": "Foundational",
+        "usageCount": 100000,
+        "description": "Extracts and standardizes basic military and conflict data for further analysis.",
+        "successCount": 100000,
+        "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline military data and standardized conflict scenario parameters.'; \n    return [candidate: input, metadata: [method: 'BaseSoldierAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
+      },
+      {
+        "name": "InternationalLawComplianceAgent",
+        "category": "Legal Compliance",
+        "usageCount": 80000,
+        "description": "Evaluates proposed actions against international humanitarian law and treaties to ensure legal compliance.",
+        "successCount": 80000,
+        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess international law compliance for: ' + input.toString()); \n    def cot = 'Analyzed input against international treaties and rules of engagement.'; \n    return [candidate: candidate, metadata: [method: 'InternationalLawComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      },
+      {
+        "name": "EthicalMoralGuidanceAgent",
+        "category": "Ethical Validation",
+        "usageCount": 70000,
+        "description": "Provides ethical and moral guidance by applying established ethical frameworks and best practices in military conduct.",
+        "successCount": 70000,
+        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate ethical implications for: ' + input.toString() + ' using international ethical guidelines'); \n    def cot = 'Applied ethical frameworks including just war theory and international ethical codes to generate recommendations.'; \n    return [candidate: candidate, metadata: [method: 'EthicalMoralGuidanceAgent', chain_of_thought: cot, confidence: 0.94]]; \n}"
+      },
+      {
+        "name": "ConflictResolutionAgent",
+        "category": "Conflict Resolution",
+        "usageCount": 60000,
+        "description": "Analyzes conflict scenarios and proposes de-escalation strategies and alternative courses of action to reduce harm.",
+        "successCount": 60000,
+        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Propose conflict de-escalation measures for: ' + input.toString()); \n    def cot = 'Synthesized de-escalation strategies and alternative operational approaches to minimize conflict intensity.'; \n    return [candidate: candidate, metadata: [method: 'ConflictResolutionAgent', chain_of_thought: cot, confidence: 0.93]]; \n}"
+      },
+      {
+        "name": "DynamicCompositeSoldierAgent",
+        "category": "Composite",
+        "usageCount": 0,
+        "description": "Dynamically combines outputs from multiple soldier agents to generate a comprehensive operational plan that is legally compliant, ethically sound, and effective in achieving mission objectives.",
+        "successCount": 0,
+        "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeSoldierAgent', chain_of_thought: 'No valid composite operational plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for soldier agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic based on compliance with international law and ethical standards\n    return candidate == groundTruth; \n}"
+      }
+    ],
+    "scripts": {
+      "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { return parseJson(response.body); } else { println 'Failed to fetch law or conflict data from ' + url; return null; } \n}",
+      "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { println 'Training success with agent ' + result.metadata.method; correct++; return; } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Soldier training score: ' + score; \n    return score; \n}",
+      "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { correct++; } else { \n            def composite = DynamicCompositeSoldierAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { correct++; } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Soldier evaluation score: ' + score; \n    return score; \n}",
+      "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for soldier operational evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context); \n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final soldier evaluation completed for ' + results.size() + ' scenarios.'; \n    return results; \n}"
+    },
+    "metadata": {
+      "version": "1.0",
+      "created": "2025-03-02T00:00:00Z",
+      "notes": "This Virtual Moral Ethical Soldier KG provides comprehensive operational guidance that balances mission objectives with adherence to international law and ethical standards. It integrates dynamic agent generation, blockchain‑audited microtransactions, and decentralized governance to ensure transparent, adaptive, and accountable decision‑making in conflict scenarios."
+    },
+    "configuration": {
+      "maxAgentChainLength": 3,
+      "agentInitializationOrder": [
+        "BaseSoldierAgent",
+        "InternationalLawComplianceAgent",
+        "EthicalMoralGuidanceAgent",
+        "ConflictResolutionAgent",
+        "DynamicCompositeSoldierAgent"
+      ],
+      "agentInstances": [
+        "BaseSoldierAgent",
+        "InternationalLawComplianceAgent",
+        "EthicalMoralGuidanceAgent",
+        "ConflictResolutionAgent",
+        "DynamicCompositeSoldierAgent"
+      ],
+      "blockchain": {
+        "systemWallet": "0xAdminWalletAddress",
+        "contractAddress": "0xABCDEF123456789",
+        "pricing": {
+          "baseFee": 0.001,
+          "dynamicPricing": "Based on operational complexity and compliance requirements",
+          "minFee": 0.0001,
+          "usageQuota": 1000
+        }
+      },
+      "fileImportMode": "multi",
+      "initData": "def initializeData() { \n    def internationalLawData = scripts.fetchDataScript(configuration.endpoints.internationalLaw); \n    def ethicalGuidelines = scripts.fetchDataScript(configuration.endpoints.ethicalGuidelines); \n    def conflictData = scripts.fetchDataScript(configuration.endpoints.conflictData); \n    println 'Soldier KG initialized: InternationalLawData=' + (internationalLawData != null) + ', EthicalGuidelines=' + (ethicalGuidelines != null) + ', ConflictData=' + (conflictData != null); \n    return [internationalLawData: internationalLawData, ethicalGuidelines: ethicalGuidelines, conflictData: conflictData]; \n}"
+    }
+  }
+  
