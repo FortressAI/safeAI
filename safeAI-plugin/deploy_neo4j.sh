@@ -79,7 +79,7 @@ docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES 
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name, signature, description RETURN name, signature, description ORDER BY name;"
 
 # Call the install procedure from the debug class to initialize plugin-specific data
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.loadKGs() YIELD output RETURN output;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.loadKGFiles() YIELD output RETURN output;"
 echo "Debug install Agentic KGs."
 
 
