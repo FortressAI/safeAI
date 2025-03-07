@@ -19,6 +19,14 @@ public class DynamicAgentCreator {
             Object result = shell.evaluate(script);
             return result;
         } else if (agentDef.has("llmLogic")) {
+        } else if (agentDef.has("agent_code")) {
+            String script = agentDef.getString("agent_code");
+            Binding binding = new Binding();
+            binding.setVariable("graphRAG", graphRAG);
+            GroovyShell shell = new GroovyShell(binding);
+            Object result = shell.evaluate(script);
+            return result;
+
             return new Object() {
                 public Object generate_candidate(java.util.List<java.util.List<Integer>> puzzleGrid) {
                     return agentDef.getString("llmLogic");
