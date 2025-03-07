@@ -488,24 +488,42 @@ This appendix outlines how safeAI manages billing and transactions via smart con
 
 This section details how to run the complete installation process which verifies and configures the required components for the SafeAI Plugin, including the LLM client, blockchain connectivity via Ganache, and Groovy agent integration.
 
-### 1. Setting Up the OpenAI API Key
+### 1. Secure Global Configuration for API and Wallet
 
-Ensure that your system has the OpenAI API key available to the plugin. You can do this by setting the environment variable:
+Before starting Neo4j, ensure that your system's environment contains the secure credentials required by the plugin. These include the OpenAI API key and the Admin Wallet key. The plugin's configuration file references these keys securely, so they are never hardcoded or exposed in logs.
 
-- For Unix-based systems (Linux/macOS):
+**OpenAI API Key:**
+- On Unix-based systems (Linux/macOS):
   ```
   export OPENAI_API_KEY=your_openai_api_key
   ```
-- For Windows Command Prompt:
+- On Windows Command Prompt:
   ```
   set OPENAI_API_KEY=your_openai_api_key
   ```
+Alternatively, pass it as a JVM system property:
+  ```
+  -DOPENAI_API_KEY=your_openai_api_key
+  ```
 
-Alternatively, you can pass the API key as a JVM system property when starting your application:
+**Admin Wallet Key:**
+- On Unix-based systems (Linux/macOS):
+  ```
+  export ADMIN_WALLET_KEY=your_admin_wallet_key
+  ```
+- On Windows Command Prompt:
+  ```
+  set ADMIN_WALLET_KEY=your_admin_wallet_key
+  ```
+Alternatively, pass it as a JVM system property:
+  ```
+  -DADMIN_WALLET_KEY=your_admin_wallet_key
+  ```
 
-```
--DOPENAI_API_KEY=your_openai_api_key
-```
+Ensure your plugin-config.properties file includes these entries:
+  openai.api.key=${OPENAI_API_KEY}
+  admin.wallet.key=${ADMIN_WALLET_KEY}
+
 
 ### 2. Setting Up Ganache (Local Blockchain)
 
