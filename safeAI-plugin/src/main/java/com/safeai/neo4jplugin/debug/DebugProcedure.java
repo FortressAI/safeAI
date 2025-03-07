@@ -208,7 +208,7 @@ public Stream<StringResult> hello(@Name("name") String name) {
           agentDef.put("description", "Test dynamic Groovy agent integration independently");
           String groovyScript = "import com.safeai.neo4jplugin.graph_rag.GraphRAG\n" +
               "class GroovyAgent {\n" +
-              "  def generate_candidate(puzzleGrid) {\n" +
+              "  public List generate_candidate(List puzzleGrid) {\n" +
               "    def rotated = []\n" +
               "    for (int c = 0; c < puzzleGrid[0].size(); c++) {\n" +
               "      def newRow = []\n" +
@@ -229,7 +229,8 @@ public Stream<StringResult> hello(@Name("name") String name) {
               java.util.Arrays.asList(4, 5, 6),
               java.util.Arrays.asList(7, 8, 9)
           );
-          java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
+          java.lang.reflect.Method method = agentInstance.getClass().getDeclaredMethod("generate_candidate", java.util.List.class);
+          method.setAccessible(true);
           Object candidate = method.invoke(agentInstance, puzzleGrid);
           results.add(new StringResult("Groovy Integration Test Output: " + candidate.toString()));
       } catch (Exception e) {
@@ -255,7 +256,8 @@ public Stream<StringResult> hello(@Name("name") String name) {
               java.util.Arrays.asList(4, 5, 6),
               java.util.Arrays.asList(7, 8, 9)
           );
-          java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
+          java.lang.reflect.Method method = agentInstance.getClass().getDeclaredMethod("generate_candidate", java.util.List.class);
+          method.setAccessible(true);
           Object candidate = method.invoke(agentInstance, puzzleGrid);
           results.add(new StringResult("LLM Integration Test Output: " + candidate.toString()));
       } catch(Exception e) {
@@ -303,7 +305,7 @@ public Stream<StringResult> hello(@Name("name") String name) {
                 agentDef.put("description", "Test dynamic Groovy agent integration independently");
                 String groovyScript = "import com.safeai.neo4jplugin.graph_rag.GraphRAG\n" +
                     "class GroovyAgent {\n" +
-                    "  def generate_candidate(puzzleGrid) {\n" +
+                    "  public List generate_candidate(List puzzleGrid) {\n" +
                     "    def rotated = []\n" +
                     "    for (int c = 0; c < puzzleGrid[0].size(); c++) {\n" +
                     "      def newRow = []\n" +
@@ -324,8 +326,9 @@ public Stream<StringResult> hello(@Name("name") String name) {
                     java.util.Arrays.asList(4, 5, 6),
                     java.util.Arrays.asList(7, 8, 9)
                 );
-                java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
-                Object candidate = method.invoke(agentInstance, puzzleGrid);
+                java.lang.reflect.Method method = agentInstance.getClass().getDeclaredMethod("generate_candidate", java.util.List.class);
+                method.setAccessible(true);
+          Object candidate = method.invoke(agentInstance, puzzleGrid);
                 results.add(new StringResult("Groovy Integration Test Output: " + candidate.toString()));
             } catch(Exception e) {
                 results.add(new StringResult("Groovy Integration Test Error: " + e.getMessage()));
