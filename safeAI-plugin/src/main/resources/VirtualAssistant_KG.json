@@ -1,6 +1,6 @@
 {
   "domain": "VirtualAssistant",
-  "description": "An Agentic Knowledge Graph for a Virtual Assistant that guides users on the functionalities, installed Agentic KGs, and billing procedures within the safeAI ecosystem. This KG dynamically generates comprehensive answers, interactive guides, and FAQs to educate and assist users. It leverages advanced agent generation, blockchain‑audited microtransactions, and decentralized governance to ensure transparent and adaptive support.",
+  "description": "An Agentic Knowledge Graph for a Virtual Assistant that guides users on the functionalities, installed Agentic KGs, and billing procedures within the safeAI ecosystem. This KG dynamically generates comprehensive answers, interactive guides, and FAQs to educate and assist users. It leverages advanced agent generation, blockchain\u2011audited microtransactions, and decentralized governance to ensure transparent and adaptive support.",
   "endpoints": {
     "kgOverview": "https://api.example.com/assistant/kgoverview",
     "billingInfo": "https://api.example.com/assistant/billing",
@@ -9,7 +9,7 @@
   "trainingExamples": [
     {
       "input": "What are Agentic KGs?",
-      "expectedOutput": "Agentic KGs are knowledge graphs that integrate dynamic, executable agent code with continuous adaptive learning, blockchain‑audited licensing, and decentralized governance to provide transparent and self‑evolving decision‑support systems.",
+      "expectedOutput": "Agentic KGs are knowledge graphs that integrate dynamic, executable agent code with continuous adaptive learning, blockchain\u2011audited licensing, and decentralized governance to provide transparent and self\u2011evolving decision\u2011support systems.",
       "description": "Training example for defining Agentic KGs."
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "input": "How does the billing work?",
-      "expectedOutput": "Billing is managed via blockchain‑audited dynamic token‑based licensing. Each interaction triggers smart contract‑based microtransactions based on usage, complexity, and predefined pricing, ensuring transparent revenue sharing among creators.",
+      "expectedOutput": "Billing is managed via blockchain\u2011audited dynamic token\u2011based licensing. Each interaction triggers smart contract\u2011based microtransactions based on usage, complexity, and predefined pricing, ensuring transparent revenue sharing among creators.",
       "description": "Training example for explaining billing."
     }
   ],
@@ -33,7 +33,7 @@
   "finalExamExamples": [
     {
       "input": "Provide a detailed guide on Agentic KGs, including how to access system details, billing information, and operational procedures.",
-      "expectedOutput": "A comprehensive guide that explains what Agentic KGs are, lists the installed domains, details the blockchain‑audited billing system, and outlines how users can interact with and manage the system through decentralized governance.",
+      "expectedOutput": "A comprehensive guide that explains what Agentic KGs are, lists the installed domains, details the blockchain\u2011audited billing system, and outlines how users can interact with and manage the system through decentralized governance.",
       "description": "Final exam: full assistant guide."
     }
   ],
@@ -50,7 +50,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "KGOverviewAgent",
@@ -64,13 +65,14 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "BillingInfoAgent",
       "category": "Financial",
       "usageCount": 70000,
-      "description": "Explains the billing mechanism, including token‑based licensing and revenue sharing via blockchain‑audited smart contracts.",
+      "description": "Explains the billing mechanism, including token\u2011based licensing and revenue sharing via blockchain\u2011audited smart contracts.",
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Explain the dynamic token-based licensing and billing process.'); \n    def cot = 'Outlined the blockchain-audited billing system with smart contract interactions.'; \n    return [candidate: candidate, metadata: [method: 'BillingInfoAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
@@ -78,7 +80,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "FAQAgent",
@@ -92,7 +95,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeAssistantAgent",
@@ -106,7 +110,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "domain": "VirtualMoralEthicalSoldier",
-  "description": "A comprehensive Agentic Knowledge Graph for a Virtual Moral Ethical Soldier that simulates ethical decision‑making in military or conflict scenarios. This KG is designed to analyze operational data, assess the ethical implications of actions, and ensure full compliance with international humanitarian law and ethical guidelines. It integrates dynamic agent generation, blockchain‑audited licensing, and decentralized governance to provide transparent, adaptive, and accountable guidance for virtual soldier operations.",
+  "description": "A comprehensive Agentic Knowledge Graph for a Virtual Moral Ethical Soldier that simulates ethical decision\u2011making in military or conflict scenarios. This KG is designed to analyze operational data, assess the ethical implications of actions, and ensure full compliance with international humanitarian law and ethical guidelines. It integrates dynamic agent generation, blockchain\u2011audited licensing, and decentralized governance to provide transparent, adaptive, and accountable guidance for virtual soldier operations.",
   "endpoints": {
     "internationalLaw": "https://api.example.com/law/international",
     "ethicalGuidelines": "https://api.example.com/ethics/international",
@@ -13,7 +13,7 @@
       "description": "Training example for ethical risk assessment in operations."
     },
     {
-      "input": "Evaluate the legality of using a particular weapon system in a cross‑border conflict.",
+      "input": "Evaluate the legality of using a particular weapon system in a cross\u2011border conflict.",
       "expectedOutput": "A detailed analysis outlining the weapon's compliance with international law and the ethical implications of its use.",
       "description": "Training example for international law compliance."
     }
@@ -27,8 +27,8 @@
   ],
   "finalExamExamples": [
     {
-      "input": "Develop a complete operational protocol for a complex conflict scenario that includes rules of engagement, ethical decision‑making, and compliance with international humanitarian law.",
-      "expectedOutput": "A comprehensive protocol with detailed chain‑of‑thought explaining how each decision minimizes harm, upholds moral and ethical principles, and complies with international law.",
+      "input": "Develop a complete operational protocol for a complex conflict scenario that includes rules of engagement, ethical decision\u2011making, and compliance with international humanitarian law.",
+      "expectedOutput": "A comprehensive protocol with detailed chain\u2011of\u2011thought explaining how each decision minimizes harm, upholds moral and ethical principles, and complies with international law.",
       "description": "Final exam: full operational protocol with ethical and legal validation."
     }
   ],
@@ -45,7 +45,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "InternationalLawComplianceAgent",
@@ -59,7 +60,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "EthicalMoralGuidanceAgent",
@@ -73,7 +75,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "ConflictResolutionAgent",
@@ -87,7 +90,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeSoldierAgent",
@@ -101,7 +105,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -113,7 +118,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Virtual Moral Ethical Soldier KG provides comprehensive operational guidance that balances mission objectives with adherence to international law and ethical standards. It integrates dynamic agent generation, blockchain‑audited microtransactions, and decentralized governance to ensure transparent, adaptive, and accountable decision‑making in conflict scenarios."
+    "notes": "This Virtual Moral Ethical Soldier KG provides comprehensive operational guidance that balances mission objectives with adherence to international law and ethical standards. It integrates dynamic agent generation, blockchain\u2011audited microtransactions, and decentralized governance to ensure transparent, adaptive, and accountable decision\u2011making in conflict scenarios."
   },
   "configuration": {
     "maxAgentChainLength": 3,

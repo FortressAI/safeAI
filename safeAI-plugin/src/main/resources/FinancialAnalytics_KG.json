@@ -1,6 +1,6 @@
 {
   "domain": "FinancialAnalytics",
-  "description": "A comprehensive Agentic KG for Financial Analytics and Trading. This KG dynamically generates and refines transformation agents to analyze market data, generate trading strategies, and assess financial risks. It integrates blockchain‑audited licensing and decentralized governance, ensuring that every analysis is monetized securely and transparently, while adaptive learning drives continuous improvement.",
+  "description": "A comprehensive Agentic KG for Financial Analytics and Trading. This KG dynamically generates and refines transformation agents to analyze market data, generate trading strategies, and assess financial risks. It integrates blockchain\u2011audited licensing and decentralized governance, ensuring that every analysis is monetized securely and transparently, while adaptive learning drives continuous improvement.",
   "endpoints": {
     "marketData": "https://api.example.com/finance/marketdata",
     "economicIndicators": "https://api.example.com/finance/economic"
@@ -27,7 +27,7 @@
   "finalExamExamples": [
     {
       "input": "Develop an integrated trading strategy for a diversified portfolio in response to a sudden market downturn.",
-      "expectedOutput": "A full strategy document with multi‑asset recommendations, risk hedging strategies, and clear action triggers.",
+      "expectedOutput": "A full strategy document with multi\u2011asset recommendations, risk hedging strategies, and clear action triggers.",
       "description": "Final exam: comprehensive trading strategy under stress conditions."
     }
   ],
@@ -44,7 +44,8 @@
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 100000,
-      "agent_code": "def generateCandidate(input) { \n  def cot = 'Extracted baseline market and financial data from input.'; \n  return [candidate: input, metadata: [method: 'BaseFinanceAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Extracted baseline market and financial data from input.'; \n  return [candidate: input, metadata: [method: 'BaseFinanceAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
+      "agent_type": "Script"
     },
     {
       "name": "MarketTrendAgent",
@@ -58,7 +59,8 @@
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 80000,
-      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Analyze market trends for: ' + input.toString()); \n  def cot = 'Identified key market trends and momentum shifts.'; \n  return [candidate: candidate, metadata: [method: 'MarketTrendAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Analyze market trends for: ' + input.toString()); \n  def cot = 'Identified key market trends and momentum shifts.'; \n  return [candidate: candidate, metadata: [method: 'MarketTrendAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "agent_type": "LLM"
     },
     {
       "name": "RiskAssessmentAgent",
@@ -72,7 +74,8 @@
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 70000,
-      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Assess financial risk for: ' + input.toString()); \n  def cot = 'Computed risk score using volatility and economic data.'; \n  return [candidate: candidate, metadata: [method: 'RiskAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Assess financial risk for: ' + input.toString()); \n  def cot = 'Computed risk score using volatility and economic data.'; \n  return [candidate: candidate, metadata: [method: 'RiskAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeFinanceAgent",
@@ -86,7 +89,8 @@
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 0,
-      "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n        def result = agent.generateCandidate(candidate); \n        candidate = result.candidate; \n        cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n        bestCandidate = candidate; \n        bestCot = cot; \n        return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeFinanceAgent', chain_of_thought: 'No valid composite strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n  return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n  return candidate == groundTruth; \n}"
+      "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n        def result = agent.generateCandidate(candidate); \n        candidate = result.candidate; \n        cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n        bestCandidate = candidate; \n        bestCot = cot; \n        return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeFinanceAgent', chain_of_thought: 'No valid composite strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n  return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n  return candidate == groundTruth; \n}",
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -98,7 +102,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Financial Analytics KG dynamically generates trading strategies, assesses risk, and provides comprehensive market analysis, with blockchain‑audited licensing and decentralized governance ensuring secure monetization and adaptive improvement."
+    "notes": "This Financial Analytics KG dynamically generates trading strategies, assesses risk, and provides comprehensive market analysis, with blockchain\u2011audited licensing and decentralized governance ensuring secure monetization and adaptive improvement."
   },
   "configuration": {
     "maxAgentChainLength": 3,

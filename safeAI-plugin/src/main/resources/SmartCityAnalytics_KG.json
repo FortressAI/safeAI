@@ -1,6 +1,6 @@
 {
   "domain": "SmartCityAnalytics",
-  "description": "An Agentic KG for IoT and Smart City Analytics that aggregates data from urban sensors, traffic systems, and public infrastructure to optimize city planning, traffic management, and resource allocation. This KG dynamically generates agents to process real‑time data, identify patterns, and suggest operational improvements, while blockchain‑audited microtransactions and decentralized governance ensure transparency and continuous system evolution.",
+  "description": "An Agentic KG for IoT and Smart City Analytics that aggregates data from urban sensors, traffic systems, and public infrastructure to optimize city planning, traffic management, and resource allocation. This KG dynamically generates agents to process real\u2011time data, identify patterns, and suggest operational improvements, while blockchain\u2011audited microtransactions and decentralized governance ensure transparency and continuous system evolution.",
   "endpoints": {
     "urbanSensors": "https://api.example.com/smartcity/sensors",
     "trafficData": "https://api.example.com/smartcity/traffic"
@@ -44,13 +44,14 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "TrafficAnalysisAgent",
       "category": "Traffic Management",
       "usageCount": 80000,
-      "description": "Analyzes real‑time traffic data to identify congestion patterns and optimize signal timings.",
+      "description": "Analyzes real\u2011time traffic data to identify congestion patterns and optimize signal timings.",
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze traffic for: ' + input.toString()); \n    def cot = 'Identified traffic patterns and suggested signal optimization.'; \n    return [candidate: candidate, metadata: [method: 'TrafficAnalysisAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "EnergyUsageAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeCityAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -98,7 +102,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Smart City KG dynamically processes IoT sensor data and traffic information to optimize urban planning and resource allocation. Blockchain‑audited licensing and decentralized governance ensure transparency, secure monetization, and adaptive improvement."
+    "notes": "This Smart City KG dynamically processes IoT sensor data and traffic information to optimize urban planning and resource allocation. Blockchain\u2011audited licensing and decentralized governance ensure transparency, secure monetization, and adaptive improvement."
   },
   "configuration": {
     "maxAgentChainLength": 3,
