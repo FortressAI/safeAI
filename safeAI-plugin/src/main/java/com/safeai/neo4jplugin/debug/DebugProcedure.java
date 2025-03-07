@@ -18,6 +18,9 @@ import java.io.BufferedReader;
  import org.neo4j.procedure.Mode;
  import org.neo4j.procedure.Name;
  import org.neo4j.procedure.Procedure;
+import com.safeai.neo4jplugin.graph_rag.GraphRAG;
+import com.safeai.neo4jplugin.DynamicAgentCreator;
+
 public class DebugProcedure { @Context public GraphDatabaseService db;
 
 public static class StringResult {
@@ -193,4 +196,71 @@ public Stream<StringResult> hello(@Name("name") String name) {
     System.out.println("Debug procedure called with: " + name);
     return Stream.of(new StringResult("Hello, " + name + "!"));
 }
-}
+
+  @Procedure(name = "safeai.debug.testGroovyIntegration", mode = Mode.READ)
+  @Description("Tests dynamic Groovy agent integration independently after loadKG. Creates a Groovy agent and calls generate_candidate")
+  public Stream<StringResult> testGroovyIntegration() {
+      List<StringResult> results = new ArrayList<>();
+      try {
+          GraphRAG dummyGraph = new GraphRAG("dummy", "dummy", "dummy");
+          JSONObject agentDef = new JSONObject();
+          agentDef.put("name", "GroovyAgentTest");
+          agentDef.put("description", "Test dynamic Groovy agent integration independently");
+          String groovyScript = "import com.safeai.neo4jplugin.graph_rag.GraphRAG\n" +
+              "class GroovyAgent {\n" +
+              "  def generate_candidate(puzzleGrid) {\n" +
+              "    def rotated = []\n" +
+              "    for (int c = 0; c < puzzleGrid[0].size(); c++) {\n" +
+              "      def newRow = []\n" +
+              "      for (int r = puzzleGrid.size()-1; r >= 0; r--) {\n" +
+              "        newRow.add(puzzleGrid[r][c])\n" +
+              "      }\n" +
+              "      rotated.add(newRow)\n" +
+              "    }\n" +
+              "    return rotated\n" +
+              "  }\n" +
+              "}\n" +
+              "return new GroovyAgent()";
+          agentDef.put("groovyScript", groovyScript);
+          agentDef.put("blockchainIntegration", false);
+          Object agentInstance = DynamicAgentCreator.createAgent(agentDef, dummyGraph);
+          java.util.List<java.util.List<Integer>> puzzleGrid = java.util.Arrays.asList(
+              java.util.Arrays.asList(1, 2, 3),
+              java.util.Arrays.asList(4, 5, 6),
+              java.util.Arrays.asList(7, 8, 9)
+          );
+          java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
+          Object candidate = method.invoke(agentInstance, puzzleGrid);
+          results.add(new StringResult("Groovy Integration Test Output: " + candidate.toString()));
+      } catch (Exception e) {
+          results.add(new StringResult("Groovy Integration Test Error: " + e.getMessage()));
+      }
+      return results.stream();
+  }
+
+  @Procedure(name = "safeai.debug.testLLMIntegration", mode = Mode.READ)
+  @Description("Tests dynamic LLM agent integration independently after loadKG. Creates an LLM agent and calls generate_candidate")
+  public Stream<StringResult> testLLMIntegration() {
+      List<StringResult> results = new ArrayList<>();
+      try {
+          GraphRAG dummyGraph = new GraphRAG("dummy", "dummy", "dummy");
+          JSONObject agentDef = new JSONObject();
+          agentDef.put("name", "LLMAgentTest");
+          agentDef.put("description", "Test dynamic LLM agent integration independently");
+          agentDef.put("llmLogic", "Simulated LLM response for testLLM");
+          agentDef.put("blockchainIntegration", false);
+          Object agentInstance = DynamicAgentCreator.createAgent(agentDef, dummyGraph);
+          java.util.List<java.util.List<Integer>> puzzleGrid = java.util.Arrays.asList(
+              java.util.Arrays.asList(1, 2, 3),
+              java.util.Arrays.asList(4, 5, 6),
+              java.util.Arrays.asList(7, 8, 9)
+          );
+          java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
+          Object candidate = method.invoke(agentInstance, puzzleGrid);
+          results.add(new StringResult("LLM Integration Test Output: " + candidate.toString()));
+      } catch(Exception e) {
+          results.add(new StringResult("LLM Integration Test Error: " + e.getMessage()));
+      }
+      return results.stream();
+  }
+
