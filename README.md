@@ -483,3 +483,70 @@ This appendix outlines how safeAI manages billing and transactions via smart con
 
 *Remember: The Ethics Domain remains immutable, ensuring fairness in all processes. The Agentic KG continuously learns and enhances its reasoning through language games, guaranteeing transparency and adaptability in every query.*
 
+
+## Integration Setup and Testing
+
+This section details how to run the complete installation process which verifies and configures the required components for the SafeAI Plugin, including the LLM client, blockchain connectivity via Ganache, and Groovy agent integration.
+
+### 1. Setting Up the OpenAI API Key
+
+Ensure that your system has the OpenAI API key available to the plugin. You can do this by setting the environment variable:
+
+- For Unix-based systems (Linux/macOS):
+  ```
+  export OPENAI_API_KEY=your_openai_api_key
+  ```
+- For Windows Command Prompt:
+  ```
+  set OPENAI_API_KEY=your_openai_api_key
+  ```
+
+Alternatively, you can pass the API key as a JVM system property when starting your application:
+
+```
+-DOPENAI_API_KEY=your_openai_api_key
+```
+
+### 2. Setting Up Ganache (Local Blockchain)
+
+For local blockchain testing, we recommend using Ganache.
+
+- Install Ganache CLI globally (if not already installed):
+  ```
+  npm install -g ganache-cli
+  ```
+
+- Start Ganache with network options to allow connections from any host:
+  ```
+  ganache-cli -h 0.0.0.0 -p 8545
+  ```
+
+- Update the blockchain endpoint in the plugin configuration file (safeAI-plugin/config/plugin-config.properties) as needed:
+  ```
+  blockchain.endpoint=http://localhost:8545
+  ```
+
+### 3. Running the Installation Procedure via Cypher
+
+Once your API key is set and Ganache is running, you can perform a full integration test by running the following Cypher command in the Neo4j Browser or via cypher-shell:
+
+```cypher
+CALL safeai.debug.installAll() YIELD value;
+```
+
+This procedure will:
+- Check and configure the OpenAI API key (using a default if not set).
+- Test the LLM client by simulating an LLM query.
+- Initialize the blockchain connection (ensure Ganache is running).
+- Verify Groovy agent integration.
+
+### 4. Verifying the Results
+
+Review the output messages returned by the procedure to ensure that all integrations are functioning as expected. You should see messages indicating:
+- The status of the OPENAI_API_KEY setup.
+- The output of the LLM integration test.
+- The blockchain connection status.
+- The Groovy integration test output.
+
+These steps consolidate the setup process, so you do not have to run separate tests manually.
+
