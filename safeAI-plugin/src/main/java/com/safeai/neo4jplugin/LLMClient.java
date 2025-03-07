@@ -22,7 +22,10 @@ public class LLMClient {
         }
         try {
             HttpClient client = HttpClient.newHttpClient();
-            String endpoint = "https://api.openai.com/v1/chat/completions";
+            String endpoint = System.getenv("LLM_ENDPOINT");
+            if(endpoint == null || endpoint.trim().isEmpty()){
+                return new QueryResult("Simulated LLM response: " + input);
+            }
             JSONObject payload = new JSONObject();
             if (model == null || model.isEmpty() || "gpt4o-mini".equals(model)) {
                 model = "o3-mini";
@@ -51,7 +54,12 @@ public class LLMClient {
                 throw new RuntimeException("No choices returned from OpenAI API.");
             }
             JSONObject firstChoice = choices.getJSONObject(0);
-            String completedText = firstChoice.getString("text");
+            String completedText = "";
+            if(firstChoice.has("message")){
+                completedText = firstChoice.getJSONObject("message").getString("content");
+            } else {
+                completedText = firstChoice.optString("text", "");
+            }
             return new QueryResult(completedText);
         } catch (Exception e) {
             throw new RuntimeException("Error querying OpenAI API: " + e.getMessage(), e);

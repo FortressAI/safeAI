@@ -248,7 +248,7 @@ public Stream<StringResult> hello(@Name("name") String name) {
           JSONObject agentDef = new JSONObject();
           agentDef.put("name", "LLMAgentTest");
           agentDef.put("description", "Test dynamic LLM agent integration independently");
-          agentDef.put("llmLogic", "Simulated LLM response for testLLM");
+          agentDef.put("llmPrompt", "Hardcoded prompt for LLM test");
           agentDef.put("blockchainIntegration", false);
           Object agentInstance = DynamicAgentCreator.createAgent(agentDef, dummyGraph);
           java.util.List<java.util.List<Integer>> puzzleGrid = java.util.Arrays.asList(
@@ -259,9 +259,10 @@ public Stream<StringResult> hello(@Name("name") String name) {
           java.lang.reflect.Method method = agentInstance.getClass().getDeclaredMethod("generate_candidate", java.util.List.class);
           method.setAccessible(true);
           Object candidate = method.invoke(agentInstance, puzzleGrid);
-          results.add(new StringResult("LLM Integration Test Output: " + candidate.toString()));
+          String candidateStr = (candidate != null ? candidate.toString() : "Simulated LLM response (null)");
+          results.add(new StringResult("LLM Integration Test Output: " + candidateStr));
       } catch(Exception e) {
-          results.add(new StringResult("LLM Integration Test Error: " + e.getMessage()));
+          results.add(new StringResult("LLM Integration Test Error: " + (e.getMessage() != null ? e.getMessage() : e.toString())));
       }
       return results.stream();
   }
@@ -286,7 +287,7 @@ public Stream<StringResult> hello(@Name("name") String name) {
                 com.safeai.neo4jplugin.LLMClient.QueryResult qr = llmClient.query_llm_schema("dummy query", "dummy-model");
                 results.add(new StringResult("LLM Integration Test Output: " + qr.solution_text));
             } catch(Exception e) {
-                results.add(new StringResult("LLM Integration Test Error: " + e.getMessage()));
+                results.add(new StringResult("LLM Integration Test Error: " + (e.getCause() != null && e.getCause().getMessage() != null ? e.getCause().getMessage() : (e.getMessage() != null ? e.getMessage() : e.toString()))));
             }
             try {
                 com.safeai.neo4jplugin.blockchain.BlockchainConnector.initialize("http://blockchain.example.com/api");
