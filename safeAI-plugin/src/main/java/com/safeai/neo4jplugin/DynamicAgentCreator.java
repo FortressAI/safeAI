@@ -18,7 +18,6 @@ public class DynamicAgentCreator {
             GroovyShell shell = new GroovyShell(binding);
             Object result = shell.evaluate(script);
             return result;
-        } else if (agentDef.has("llmLogic")) {
         } else if (agentDef.has("agent_code")) {
             String script = agentDef.getString("agent_code");
             Binding binding = new Binding();
