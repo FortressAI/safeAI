@@ -1,6 +1,6 @@
 {
   "domain": "EnergyManagement",
-  "description": "An Agentic KG for Energy Management and Smart Grids that analyzes energy consumption data, optimizes grid performance, and integrates renewable energy sources. This KG uses dynamic agent generation to forecast demand, detect anomalies, and optimize energy distribution while ensuring secure, blockchain‑audited licensing and decentralized governance.",
+  "description": "An Agentic KG for Energy Management and Smart Grids that analyzes energy consumption data, optimizes grid performance, and integrates renewable energy sources. This KG uses dynamic agent generation to forecast demand, detect anomalies, and optimize energy distribution while ensuring secure, blockchain\u2011audited licensing and decentralized governance.",
   "endpoints": {
     "energyConsumption": "https://api.example.com/energy/consumption",
     "renewableIntegration": "https://api.example.com/energy/renewables"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "DemandForecastAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "AnomalyDetectionAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "GridOptimizationAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeEnergyAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Energy Management KG optimizes smart grid performance and energy distribution by dynamically forecasting demand, detecting anomalies, and generating integrated management plans. Blockchain‑audited licensing and decentralized governance ensure secure monetization and continual adaptation."
+    "notes": "This Energy Management KG optimizes smart grid performance and energy distribution by dynamically forecasting demand, detecting anomalies, and generating integrated management plans. Blockchain\u2011audited licensing and decentralized governance ensure secure monetization and continual adaptation."
   },
   "configuration": {
     "maxAgentChainLength": 3,

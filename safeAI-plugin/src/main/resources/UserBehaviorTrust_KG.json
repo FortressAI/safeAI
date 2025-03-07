@@ -1,6 +1,6 @@
 {
   "domain": "UserBehaviorTrust",
-  "description": "An Agentic Knowledge Graph for monitoring, analyzing, and enhancing user behavior and trust. This KG dynamically processes user interaction data, sentiment analysis, and trust metrics to adjust system responses in real time. It leverages blockchain‑audited microtransactions and decentralized governance to ensure transparent, adaptive, and user‑centered decision‑support.",
+  "description": "An Agentic Knowledge Graph for monitoring, analyzing, and enhancing user behavior and trust. This KG dynamically processes user interaction data, sentiment analysis, and trust metrics to adjust system responses in real time. It leverages blockchain\u2011audited microtransactions and decentralized governance to ensure transparent, adaptive, and user\u2011centered decision\u2011support.",
   "endpoints": {
     "userMetrics": "https://api.example.com/user/metrics",
     "feedbackData": "https://api.example.com/user/feedback"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "TrustAnalysisAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "SentimentAnalysisAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeTrustAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -98,7 +102,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This User Behavior and Trust KG dynamically evaluates user interaction data, sentiment, and trust metrics. It employs adaptive agent generation to monitor and enhance user experience and trust, while blockchain‑audited microtransactions and decentralized governance ensure transparent monetization and continuous improvement."
+    "notes": "This User Behavior and Trust KG dynamically evaluates user interaction data, sentiment, and trust metrics. It employs adaptive agent generation to monitor and enhance user experience and trust, while blockchain\u2011audited microtransactions and decentralized governance ensure transparent monetization and continuous improvement."
   },
   "configuration": {
     "maxAgentChainLength": 3,

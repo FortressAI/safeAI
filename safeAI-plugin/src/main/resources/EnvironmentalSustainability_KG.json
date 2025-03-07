@@ -1,6 +1,6 @@
 {
   "domain": "EnvironmentalSustainability",
-  "description": "An Agentic KG for Environmental Impact and Sustainability, designed to analyze climate data, monitor pollution metrics, and generate actionable sustainability insights. This KG leverages dynamic agent generation to process environmental data, evaluate sustainability practices, and propose mitigation strategies. Blockchain‑audited microtransactions and decentralized governance ensure transparent revenue sharing and continual refinement.",
+  "description": "An Agentic KG for Environmental Impact and Sustainability, designed to analyze climate data, monitor pollution metrics, and generate actionable sustainability insights. This KG leverages dynamic agent generation to process environmental data, evaluate sustainability practices, and propose mitigation strategies. Blockchain\u2011audited microtransactions and decentralized governance ensure transparent revenue sharing and continual refinement.",
   "endpoints": {
     "climateData": "https://api.example.com/environment/climate",
     "pollutionData": "https://api.example.com/environment/pollution"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ClimateTrendAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "PollutionAnalysisAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "SustainabilityRecommendationAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeEnvAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Environmental Impact KG generates integrated sustainability strategies by analyzing climate and pollution data. Blockchain‑audited licensing and decentralized governance ensure transparent monetization and adaptive improvement."
+    "notes": "This Environmental Impact KG generates integrated sustainability strategies by analyzing climate and pollution data. Blockchain\u2011audited licensing and decentralized governance ensure transparent monetization and adaptive improvement."
   },
   "configuration": {
     "maxAgentChainLength": 3,

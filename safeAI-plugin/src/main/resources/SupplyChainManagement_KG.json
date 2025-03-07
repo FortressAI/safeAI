@@ -1,6 +1,6 @@
 {
   "domain": "SupplyChainManagement",
-  "description": "An Agentic KG for Supply Chain Management and Logistics, designed to optimize supply chain operations through dynamic risk assessment, route optimization, and real‑time monitoring. This KG leverages advanced agent generation to simulate disruptions, suggest contingency plans, and optimize logistics, all while ensuring blockchain‑audited transparency and decentralized governance.",
+  "description": "An Agentic KG for Supply Chain Management and Logistics, designed to optimize supply chain operations through dynamic risk assessment, route optimization, and real\u2011time monitoring. This KG leverages advanced agent generation to simulate disruptions, suggest contingency plans, and optimize logistics, all while ensuring blockchain\u2011audited transparency and decentralized governance.",
   "endpoints": {
     "logisticsData": "https://api.example.com/supplychain/logistics",
     "disruptionReports": "https://api.example.com/supplychain/disruptions"
@@ -20,7 +20,7 @@
   "evaluationExamples": [
     {
       "input": "Evaluate the impact of increased transportation costs on overall supply chain efficiency.",
-      "expectedOutput": "A comprehensive analysis with cost–benefit recommendations.",
+      "expectedOutput": "A comprehensive analysis with cost\u2013benefit recommendations.",
       "description": "Evaluation example for cost analysis."
     }
   ],
@@ -44,13 +44,14 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "RouteOptimizationAgent",
       "category": "Optimization",
       "usageCount": 80000,
-      "description": "Optimizes delivery routes based on real‑time traffic, distance, and cost parameters.",
+      "description": "Optimizes delivery routes based on real\u2011time traffic, distance, and cost parameters.",
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Optimize route for: ' + input.toString()); \n    def cot = 'Generated optimized routing plan based on traffic and cost data.'; \n    return [candidate: candidate, metadata: [method: 'RouteOptimizationAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DisruptionSimulationAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeSCMAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -98,7 +102,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Supply Chain Management KG dynamically optimizes logistics operations, simulates disruptions, and generates integrated risk mitigation strategies. Blockchain‑audited microtransactions and decentralized governance ensure transparent monetization and continuous system improvement."
+    "notes": "This Supply Chain Management KG dynamically optimizes logistics operations, simulates disruptions, and generates integrated risk mitigation strategies. Blockchain\u2011audited microtransactions and decentralized governance ensure transparent monetization and continuous system improvement."
   },
   "configuration": {
     "maxAgentChainLength": 3,

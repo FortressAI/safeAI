@@ -1,6 +1,6 @@
 {
   "domain": "RiskManagement",
-  "description": "A comprehensive Agentic KG for Risk Management and Operational Resilience. This KG dynamically generates agents to monitor, simulate, and mitigate risks across financial, cyber, operational, and reputational domains. It integrates blockchain‑audited licensing and decentralized governance to provide transparent, adaptive risk analytics and proactive mitigation strategies.",
+  "description": "A comprehensive Agentic KG for Risk Management and Operational Resilience. This KG dynamically generates agents to monitor, simulate, and mitigate risks across financial, cyber, operational, and reputational domains. It integrates blockchain\u2011audited licensing and decentralized governance to provide transparent, adaptive risk analytics and proactive mitigation strategies.",
   "endpoints": {
     "riskData": "https://api.example.com/risk/metrics",
     "financialData": "https://api.example.com/finance/indicators"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "FinancialRiskAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "CyberRiskAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "OperationalRiskAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeRiskAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Risk Management KG dynamically assesses and mitigates risks across financial, cyber, and operational domains. It uses adaptive agent generation and composite risk assessment, with blockchain‑audited microtransactions ensuring transparent, secure monetization and governance."
+    "notes": "This Risk Management KG dynamically assesses and mitigates risks across financial, cyber, and operational domains. It uses adaptive agent generation and composite risk assessment, with blockchain\u2011audited microtransactions ensuring transparent, secure monetization and governance."
   },
   "configuration": {
     "maxAgentChainLength": 3,

@@ -1,6 +1,6 @@
 {
   "domain": "DataPrivacySecurity",
-  "description": "An Agentic KG for Data Privacy and Security that enforces best practices, monitors compliance with data protection regulations, and dynamically generates agents to assess and mitigate risks associated with data handling. This KG integrates blockchain‑audited transactions and decentralized governance to ensure transparency and secure, monetizable enforcement of data privacy standards.",
+  "description": "An Agentic KG for Data Privacy and Security that enforces best practices, monitors compliance with data protection regulations, and dynamically generates agents to assess and mitigate risks associated with data handling. This KG integrates blockchain\u2011audited transactions and decentralized governance to ensure transparency and secure, monetizable enforcement of data privacy standards.",
   "endpoints": {
     "privacyPolicies": "https://api.example.com/privacy/policies",
     "securityStandards": "https://api.example.com/privacy/standards"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "EncryptionComplianceAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DataHandlingAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "PrivacyPolicyAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositePrivacyAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Data Privacy and Security KG enforces best practices for data handling and privacy compliance. It dynamically assesses encryption, data handling practices, and privacy policies, while blockchain‑audited microtransactions and decentralized governance ensure secure, transparent monetization and compliance."
+    "notes": "This Data Privacy and Security KG enforces best practices for data handling and privacy compliance. It dynamically assesses encryption, data handling practices, and privacy policies, while blockchain\u2011audited microtransactions and decentralized governance ensure secure, transparent monetization and compliance."
   },
   "configuration": {
     "maxAgentChainLength": 3,

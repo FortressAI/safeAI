@@ -1,6 +1,6 @@
 {
   "domain": "PersonalizedLearning",
-  "description": "An Agentic KG for Education and Personalized Learning designed to generate, adapt, and optimize educational content and assessments based on individual student performance. This KG dynamically produces personalized lessons, interactive assessments, and adaptive feedback, while integrating blockchain‑audited licensing and decentralized governance to ensure transparent, monetizable, and continuously improving learning outcomes.",
+  "description": "An Agentic KG for Education and Personalized Learning designed to generate, adapt, and optimize educational content and assessments based on individual student performance. This KG dynamically produces personalized lessons, interactive assessments, and adaptive feedback, while integrating blockchain\u2011audited licensing and decentralized governance to ensure transparent, monetizable, and continuously improving learning outcomes.",
   "endpoints": {
     "educationalContent": "https://api.example.com/education/content",
     "performanceData": "https://api.example.com/education/performance"
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ContentGenerationAgent",
@@ -58,7 +59,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "AssessmentAgent",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "FeedbackAnalysisAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeLearningAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Personalized Learning KG dynamically generates tailored educational content, assessments, and feedback for individual learners. Blockchain‑audited licensing and decentralized governance ensure transparent monetization and continuous content refinement based on student performance data."
+    "notes": "This Personalized Learning KG dynamically generates tailored educational content, assessments, and feedback for individual learners. Blockchain\u2011audited licensing and decentralized governance ensure transparent monetization and continuous content refinement based on student performance data."
   },
   "configuration": {
     "maxAgentChainLength": 3,

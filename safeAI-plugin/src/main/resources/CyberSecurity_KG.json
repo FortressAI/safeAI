@@ -1,6 +1,6 @@
 {
   "domain": "Cybersecurity",
-  "description": "An Agentic Knowledge Graph (KG) for cybersecurity that proactively implements offensive and defensive actions. This KG is designed to enforce best practices for system users by dynamically executing transformation agents to detect vulnerabilities, simulate attacks, and deploy defensive countermeasures. It integrates blockchain‑audited audit trails and decentralized governance to ensure transparency, security, and compliance.",
+  "description": "An Agentic Knowledge Graph (KG) for cybersecurity that proactively implements offensive and defensive actions. This KG is designed to enforce best practices for system users by dynamically executing transformation agents to detect vulnerabilities, simulate attacks, and deploy defensive countermeasures. It integrates blockchain\u2011audited audit trails and decentralized governance to ensure transparency, security, and compliance.",
   "endpoints": {},
   "agents": [
     {
@@ -15,7 +15,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ThreatDetectionAgent",
@@ -29,7 +30,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "VulnerabilityExploitationAgent",
@@ -43,7 +45,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DefensiveCountermeasureAgent",
@@ -57,7 +60,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "IncidentResponseAgent",
@@ -71,7 +75,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeCyberAgent",
@@ -85,7 +90,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {

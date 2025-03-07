@@ -1,6 +1,6 @@
 {
   "domain": "LegalCompliance",
-  "description": "A comprehensive Agentic Knowledge Graph for Legal and Regulatory Compliance. This KG integrates dynamic agent generation for legal text analysis, automated contract review, and regulatory monitoring. It leverages blockchain‑audited licensing and decentralized governance to ensure immutable audit trails and secure microtransaction-based revenue sharing. The system is designed to support trusted experts in validating and refining legal agent outputs while ensuring compliance with ever-changing regulatory frameworks.",
+  "description": "A comprehensive Agentic Knowledge Graph for Legal and Regulatory Compliance. This KG integrates dynamic agent generation for legal text analysis, automated contract review, and regulatory monitoring. It leverages blockchain\u2011audited licensing and decentralized governance to ensure immutable audit trails and secure microtransaction-based revenue sharing. The system is designed to support trusted experts in validating and refining legal agent outputs while ensuring compliance with ever-changing regulatory frameworks.",
   "endpoints": {
     "regulatory": "https://api.example.com/legal/regulations",
     "caseLaw": "https://api.example.com/legal/caselaw"
@@ -8,7 +8,7 @@
   "trainingExamples": [
     {
       "input": "Review the following contract clause for compliance with GDPR: 'Data may be processed for marketing purposes without consent.'",
-      "expectedOutput": "Clause flagged as non‑compliant with GDPR.",
+      "expectedOutput": "Clause flagged as non\u2011compliant with GDPR.",
       "description": "Contract compliance review example."
     },
     {
@@ -19,14 +19,14 @@
   ],
   "evaluationExamples": [
     {
-      "input": "Evaluate the legal risk of an employment contract clause that restricts non‑compete obligations for two years post‑termination.",
+      "input": "Evaluate the legal risk of an employment contract clause that restricts non\u2011compete obligations for two years post\u2011termination.",
       "expectedOutput": "Balanced evaluation outlining both the enforceability issues and the need for employee mobility.",
       "description": "Evaluation of employment contract clause."
     }
   ],
   "finalExamExamples": [
     {
-      "input": "Provide a comprehensive legal analysis on the impact of a new privacy regulation on cross‑border data transfers.",
+      "input": "Provide a comprehensive legal analysis on the impact of a new privacy regulation on cross\u2011border data transfers.",
       "expectedOutput": "A detailed analysis that includes statutory interpretation, case law references, and regulatory guidelines, concluding with recommended compliance measures.",
       "description": "Comprehensive legal analysis."
     }
@@ -44,7 +44,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "RegulatoryComplianceAgent",
@@ -58,13 +59,14 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "ContractAnalysisAgent",
       "category": "Document Analysis",
       "usageCount": 70000,
-      "description": "Performs detailed analysis of contract clauses to identify potential legal risks and non‑compliance issues.",
+      "description": "Performs detailed analysis of contract clauses to identify potential legal risks and non\u2011compliance issues.",
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze contract clause: ' + input.toString()); \n    def cot = 'Conducted clause-by-clause review against legal standards and best practices.'; \n    return [candidate: candidate, metadata: [method: 'ContractAnalysisAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
@@ -72,7 +74,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "CaseLawAnalysisAgent",
@@ -86,7 +89,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeLegalAgent",
@@ -100,7 +104,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -112,7 +117,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Legal and Regulatory Compliance KG enables dynamic legal text analysis, contract review, and regulatory monitoring. It is blockchain‑audited for secure, immutable record keeping and supports decentralized governance for continuous updates by legal experts."
+    "notes": "This Legal and Regulatory Compliance KG enables dynamic legal text analysis, contract review, and regulatory monitoring. It is blockchain\u2011audited for secure, immutable record keeping and supports decentralized governance for continuous updates by legal experts."
   },
   "configuration": {
     "maxAgentChainLength": 3,

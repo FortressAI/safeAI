@@ -117,7 +117,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ColorRemap",
@@ -131,7 +132,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ColorThreshold",
@@ -145,7 +147,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "CombineMirrors",
@@ -159,7 +162,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "CompositeTransform",
@@ -173,7 +177,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ConditionalTransform",
@@ -187,7 +192,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ConnectedComponentTransform",
@@ -201,7 +207,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "EdgeProcessing",
@@ -215,7 +222,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "FloodFill",
@@ -229,7 +237,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "GapFill",
@@ -243,7 +252,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "GridPartition",
@@ -257,7 +267,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "MirrorSymmetric",
@@ -271,7 +282,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "Overlay",
@@ -285,7 +297,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "PatternReplication",
@@ -299,7 +312,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ReflectDiagonalMain",
@@ -313,7 +327,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ReflectDiagonalSecondary",
@@ -327,7 +342,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ReflectHorizontal",
@@ -341,7 +357,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ReflectVertical",
@@ -355,7 +372,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "Resample",
@@ -369,49 +387,53 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "Rotate180",
       "category": "Rotation",
       "usageCount": 9093,
-      "description": "Rotate the grid 180°.",
+      "description": "Rotate the grid 180\u00b0.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate180 on ' + input.toString()); def cot = 'Rotated grid 180°.'; return [candidate: candidate, metadata: [method: 'Rotate180', chain_of_thought: cot, confidence: 0.85]]; }",
+      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate180 on ' + input.toString()); def cot = 'Rotated grid 180\u00b0.'; return [candidate: candidate, metadata: [method: 'Rotate180', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": 0.001,
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "Rotate270",
       "category": "Rotation",
       "usageCount": 9093,
-      "description": "Rotate the grid 270° clockwise (or 90° counterclockwise).",
+      "description": "Rotate the grid 270\u00b0 clockwise (or 90\u00b0 counterclockwise).",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate270 on ' + input.toString()); def cot = 'Rotated grid 270° clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate270', chain_of_thought: cot, confidence: 0.85]]; }",
+      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate270 on ' + input.toString()); def cot = 'Rotated grid 270\u00b0 clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate270', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": 0.001,
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "Rotate90",
       "category": "Rotation",
       "usageCount": 18186,
-      "description": "Rotate the grid 90° clockwise.",
+      "description": "Rotate the grid 90\u00b0 clockwise.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate90 on ' + input.toString()); def cot = 'Rotated grid 90° clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate90', chain_of_thought: cot, confidence: 0.85]]; }",
+      "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate90 on ' + input.toString()); def cot = 'Rotated grid 90\u00b0 clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate90', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": 0.001,
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ScaleDown",
@@ -425,7 +447,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ScaleUp",
@@ -439,7 +462,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ShiftDown",
@@ -453,7 +477,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ShiftLeft",
@@ -467,7 +492,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ShiftRight",
@@ -481,7 +507,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "ShiftUp",
@@ -495,7 +522,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "SubgridExtraction",
@@ -509,7 +537,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "DynamicCompositeAgent",
@@ -523,7 +552,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {

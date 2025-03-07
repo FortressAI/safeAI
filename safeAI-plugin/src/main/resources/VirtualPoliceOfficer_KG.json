@@ -1,6 +1,6 @@
 {
   "domain": "VirtualPoliceOfficer",
-  "description": "A comprehensive Agentic Knowledge Graph for Virtual Police Officer operations. This KG dynamically generates and refines agents to support tasks including crime detection, threat assessment, incident response planning, and community engagement. It incorporates blockchain‑audited licensing and decentralized governance to ensure secure, transparent, and monetizable law enforcement operations, while adaptive learning continuously improves the system based on real‑time data and expert feedback.",
+  "description": "A comprehensive Agentic Knowledge Graph for Virtual Police Officer operations. This KG dynamically generates and refines agents to support tasks including crime detection, threat assessment, incident response planning, and community engagement. It incorporates blockchain\u2011audited licensing and decentralized governance to ensure secure, transparent, and monetizable law enforcement operations, while adaptive learning continuously improves the system based on real\u2011time data and expert feedback.",
   "endpoints": {
     "crimeData": "https://api.example.com/police/crimedata",
     "incidentReports": "https://api.example.com/police/incidentreports",
@@ -46,7 +46,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     },
     {
       "name": "CrimeDetectionAgent",
@@ -60,7 +61,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "ThreatAssessmentAgent",
@@ -74,7 +76,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "ResponsePlanningAgent",
@@ -88,7 +91,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "CommunityEngagementAgent",
@@ -102,7 +106,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositePoliceAgent",
@@ -116,7 +121,8 @@
       "approvalCriteria": {
         "effectivenessThreshold": 0.95,
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      },
+      "agent_type": "Script"
     }
   ],
   "scripts": {
@@ -128,7 +134,7 @@
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Virtual Police Officer KG is designed to simulate and optimize law enforcement operations. It supports crime detection, threat assessment, incident response, and community engagement through dynamic agent generation and composite decision-making. Blockchain‑audited licensing and decentralized governance ensure transparent, secure monetization and adaptive learning."
+    "notes": "This Virtual Police Officer KG is designed to simulate and optimize law enforcement operations. It supports crime detection, threat assessment, incident response, and community engagement through dynamic agent generation and composite decision-making. Blockchain\u2011audited licensing and decentralized governance ensure transparent, secure monetization and adaptive learning."
   },
   "configuration": {
     "maxAgentChainLength": 3,
