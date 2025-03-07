@@ -260,6 +260,32 @@ This sets up your domain and configures billing automatically.
 - **Debugging:** Enable verbose logs, use Neo4j’s `PROFILE` command, and prune old session data to optimize performance.
 
 ---
+### Debug Procedures and Cypher Queries
+
+Below are some sample Cypher queries to interact with safeAI’s debug procedures for dynamic agent integration testing:
+
+```cypher
+// List KG JSON files in resources
+CALL safeai.debug.listKGFiles() YIELD value
+RETURN value;
+
+// Load all KG JSON files (and create KnowledgeGraph & Agent nodes)
+CALL safeai.debug.loadKGFiles() YIELD value
+RETURN value;
+
+// Test greeting procedure
+CALL safeai.debug.hello("Neo4j") YIELD value
+RETURN value;
+
+// Test dynamic Groovy agent integration independently
+CALL safeai.debug.testGroovyIntegration() YIELD value
+RETURN value;
+
+// Test dynamic LLM agent integration independently
+CALL safeai.debug.testLLMIntegration() YIELD value
+RETURN value;
+```
+
 
 ## 12. FAQ and Troubleshooting
 
