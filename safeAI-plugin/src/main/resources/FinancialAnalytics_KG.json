@@ -38,9 +38,9 @@
       "usageCount": 100000,
       "description": "Extracts and standardizes financial data and market signals for analysis.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 100000,
@@ -53,9 +53,9 @@
       "usageCount": 80000,
       "description": "Analyzes market data to detect trends and momentum shifts.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 80000,
@@ -68,9 +68,9 @@
       "usageCount": 70000,
       "description": "Evaluates financial risks based on market volatility and economic indicators.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 70000,
@@ -83,9 +83,9 @@
       "usageCount": 0,
       "description": "Dynamically combines outputs from multiple financial agents to generate an integrated trading strategy or risk analysis report.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "successCount": 0,
@@ -122,9 +122,9 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0xABCDEF123456789",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on market volatility and usage metrics",
-        "minFee": 0.0001,
+        "minFee": "0.0001",
         "usageQuota": 1000
       }
     },

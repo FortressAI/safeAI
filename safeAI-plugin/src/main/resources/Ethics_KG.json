@@ -34,9 +34,9 @@
       "agent_type": "LLM",
       "agent_code": "You are tasked to simulate a Wittgensteinian language game for the input '{{input}}' to establish a clear shared context between participants.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Context established must be unbiased, factual, and ethically neutral."
       }
     },
@@ -49,9 +49,9 @@
       "description": "Applies Aristotle's virtue ethics and golden mean to evaluate ethical questions.",
       "agent_code": "Evaluate the ethical considerations of '{{input}}' using Aristotle's virtue ethics and the golden mean, ensuring an objective and balanced analysis.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Analysis must adhere to Aristotelian ethics, objectively balancing virtues and vices."
       }
     },
@@ -63,9 +63,9 @@
       "agent_type": "LLM",
       "agent_code": "Apply Socratic questioning to the ethical issue '{{input}}', probing underlying assumptions and clarifying moral reasoning.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Questioning must be thorough, insightful, and ethically rigorous."
       }
     },
@@ -77,9 +77,9 @@
       "agent_type": "LLM",
       "agent_code": "Given audit feedback '{{audit_feedback}}', adapt your ethical reasoning framework to improve decision-making accuracy and consistency for future evaluations.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Learning adjustments must demonstrably enhance ethical accuracy and compliance."
       }
     },
@@ -91,9 +91,9 @@
       "agent_type": "LLM",
       "agent_code": "Integrate results from BaseLanguageGameAgent, AristotelianEthicsAgent, SocraticDialecticAgent, and AdaptiveEthicsLearningAgent for '{{input}}' into a cohesive, justified, and auditable ethical judgment.",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.002,
+      "transactionFee": "0.002",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.98,
+        "effectivenessThreshold": "0.98",
         "ethicsGuidelines": "Combined analysis must be thorough, consistent, transparent, and verifiable."
       }
     }
@@ -114,9 +114,9 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0x987654321ABCDEF",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on supply/demand",
-        "minFee": 0.0005,
+        "minFee": "0.0005",
         "usageQuota": 1000
       }
     },

@@ -40,9 +40,9 @@
       "successCount": 100000,
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline environmental data from input.'; \n    return [candidate: input, metadata: [method: 'BaseEnvAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "Script"
@@ -55,9 +55,9 @@
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze climate trends for: ' + input.toString()); \n    def cot = 'Identified key climate trends and anomalies.'; \n    return [candidate: candidate, metadata: [method: 'ClimateTrendAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -70,9 +70,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess pollution levels for: ' + input.toString()); \n    def cot = 'Analyzed pollution data to determine impact levels.'; \n    return [candidate: candidate, metadata: [method: 'PollutionAnalysisAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -85,9 +85,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate sustainability recommendations for: ' + input.toString()); \n    def cot = 'Provided actionable recommendations for sustainability improvements.'; \n    return [candidate: candidate, metadata: [method: 'SustainabilityRecommendationAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -100,9 +100,9 @@
       "successCount": 0,
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeEnvAgent', chain_of_thought: 'No valid composite sustainability strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "Script"
@@ -139,9 +139,9 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0xFEDCBA987654321",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on environmental impact and usage metrics",
-        "minFee": 0.0001,
+        "minFee": "0.0001",
         "usageQuota": 1000
       }
     },
