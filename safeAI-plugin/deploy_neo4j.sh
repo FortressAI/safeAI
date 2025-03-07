@@ -40,6 +40,11 @@ done
 # Wait a bit more to ensure procedures are loaded
 sleep 10
 
+# Execute a default cypher command to initialize the Agent node in the database
+# This command creates a default Agent node to verify that the Agents code is working correctly
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CREATE (:Agent {name: 'DefaultAgent', created: timestamp()})"
+echo "Default Agent node created."
+
 echo "Checking Neo4j logs..."
 docker logs neo4j-safeai
 
