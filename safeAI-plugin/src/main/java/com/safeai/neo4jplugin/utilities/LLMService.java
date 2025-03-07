@@ -1,5 +1,11 @@
 package com.safeai.neo4jplugin.utilities;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class LLMService {
     /**
      * Simulates an LLM call that generates example queries for a new domain.
@@ -20,5 +26,37 @@ public class LLMService {
             default:
                 return "No examples generated.";
         }
+    }
+    
+    public static String generateCandidate(String prompt) throws Exception {
+        String endpoint = System.getenv("LLM_ENDPOINT");
+        String apiKey = System.getenv("LLM_API_KEY");
+        if (endpoint == null) {
+            throw new RuntimeException("LLM_ENDPOINT not defined");
+        }
+        URL url = new URL(endpoint);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        if (apiKey != null && !apiKey.isEmpty()) {
+            conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        }
+        String safePrompt = prompt.replace("\"", "\\\"");
+        String inputJson = "{\"prompt\": \"" + safePrompt + "\"}";
+        OutputStream os = conn.getOutputStream();
+        os.write(inputJson.getBytes("UTF-8"));
+        os.flush();
+        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        conn.disconnect();
+        return sb.toString();
     }
 }
