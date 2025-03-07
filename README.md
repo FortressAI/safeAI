@@ -546,6 +546,13 @@ For local blockchain testing, we recommend using Ganache.
 
 ### 3. Running the Installation Procedure via Cypher
 
+**Viewing Transactions and Wallets:**
+
+- **CLI Output:** When running Ganache CLI, the terminal displays detailed logs including blocks, transaction hashes, wallet addresses, and gas usage. These logs can be used to verify that the plugin's blockchain transactions are being processed correctly.
+
+- **GUI Option:** For a graphical interface, download and install the Ganache GUI from https://www.trufflesuite.com/ganache. Set the network port to 8545 to match your configuration. The GUI provides a dashboard with account balances, transaction history, and block details, making it easier to confirm that your plugin's blockchain interactions are working as expected.
+
+
 Once your API key is set and Ganache is running, you can perform a full integration test by running the following Cypher command in the Neo4j Browser or via cypher-shell:
 
 ```cypher
