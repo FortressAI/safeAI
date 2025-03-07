@@ -22,31 +22,20 @@ public class UserInteractionDemo {
             System.out.println(agent.toString());
         }
 
-        // Dynamically load and apply Rotate90Agent if it is available
-        for (JSONObject agent : agents) {
-            String agentName = agent.getString("name");
-            if ("Rotate90Agent".equals(agentName)) {
-                try {
-                    // Dynamically load the agent class
-                    Class<?> clazz = Class.forName(agent.getString("class"));
-                    Object instance = clazz.getConstructor(GraphRAG.class).newInstance(graphRAG);
-                    System.out.println("Dynamically loaded agent: " + agentName);
-
-                    // Create a dummy puzzle grid
-                    List<List<Integer>> puzzleGrid = Arrays.asList(
-                        Arrays.asList(1, 2, 3),
-                        Arrays.asList(4, 5, 6),
-                        Arrays.asList(7, 8, 9)
-                    );
-
-                    // Assume that the agent implements a method generate_candidate
-                    // Here we cast it to Rotate90Agent as that's the expected type
-                    Rotate90Agent rotateAgent = (Rotate90Agent) instance;
-                    List<List<List<Integer>>> candidates = rotateAgent.generate_candidate(puzzleGrid);
-                    System.out.println("Transformed grid:\n" + candidates.get(0));
-                } catch (Exception e) {
-                    System.out.println("Error loading agent " + agentName + ": " + e.getMessage());
-                }
+        List<List<Integer>> puzzleGrid = Arrays.asList(
+            Arrays.asList(1, 2, 3),
+            Arrays.asList(4, 5, 6),
+            Arrays.asList(7, 8, 9)
+        );
+        for (JSONObject agentDef : agents) {
+            try {
+                Object agentInstance = DynamicAgentCreator.createAgent(agentDef, graphRAG);
+                System.out.println("Loaded agent: " + agentDef.getString("name"));
+                java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", List.class);
+                Object candidate = method.invoke(agentInstance, puzzleGrid);
+                System.out.println("Agent " + agentDef.getString("name") + " generated candidate: " + candidate);
+            } catch (Exception e) {
+                System.out.println("Error loading agent " + agentDef.getString("name") + ": " + e.getMessage());
             }
         }
 
