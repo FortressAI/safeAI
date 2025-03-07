@@ -58,15 +58,15 @@ echo "Checking available functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
 
 # Test if greeting procedure works
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.hello('Neo4j Test') YIELD output RETURN output;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;"
 echo "Debug hello procedure executed."
 
 # Test dynamic Groovy integration
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testGroovyIntegration() YIELD output RETURN output;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testGroovyIntegration() YIELD value RETURN value;"
 echo "Debug Groovy integration procedure executed."
 
 # Test dynamic LLM integration
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testLLMIntegration() YIELD output RETURN output;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testLLMIntegration() YIELD value RETURN value;"
 echo "Debug LLM integration procedure executed."
 
 echo "Testing governance functions..."
