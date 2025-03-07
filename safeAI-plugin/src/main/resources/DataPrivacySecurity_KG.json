@@ -1,117 +1,146 @@
 {
-    "domain": "DataPrivacySecurity",
-    "description": "An Agentic KG for Data Privacy and Security that enforces best practices, monitors compliance with data protection regulations, and dynamically generates agents to assess and mitigate risks associated with data handling. This KG integrates blockchain‑audited transactions and decentralized governance to ensure transparency and secure, monetizable enforcement of data privacy standards.",
-    "endpoints": {
-      "privacyPolicies": "https://api.example.com/privacy/policies",
-      "securityStandards": "https://api.example.com/privacy/standards"
+  "domain": "DataPrivacySecurity",
+  "description": "An Agentic KG for Data Privacy and Security that enforces best practices, monitors compliance with data protection regulations, and dynamically generates agents to assess and mitigate risks associated with data handling. This KG integrates blockchain‑audited transactions and decentralized governance to ensure transparency and secure, monetizable enforcement of data privacy standards.",
+  "endpoints": {
+    "privacyPolicies": "https://api.example.com/privacy/policies",
+    "securityStandards": "https://api.example.com/privacy/standards"
+  },
+  "trainingExamples": [
+    {
+      "input": "Evaluate the following data handling practice for GDPR compliance: 'Storing user data in unencrypted databases.'",
+      "expectedOutput": "Practice flagged as non-compliant with GDPR.",
+      "description": "Basic privacy compliance evaluation."
     },
-    "trainingExamples": [
-      {
-        "input": "Evaluate the following data handling practice for GDPR compliance: 'Storing user data in unencrypted databases.'",
-        "expectedOutput": "Practice flagged as non-compliant with GDPR.",
-        "description": "Basic privacy compliance evaluation."
-      },
-      {
-        "input": "Summarize the key requirements of HIPAA for patient data protection.",
-        "expectedOutput": "Summary includes encryption, access control, and audit requirements.",
-        "description": "Privacy regulation summary."
-      }
-    ],
-    "evaluationExamples": [
-      {
-        "input": "Assess the data security risks of using third-party cloud storage.",
-        "expectedOutput": "Identified risks include potential data breaches and lack of encryption; recommended countermeasures provided.",
-        "description": "Evaluation of cloud storage risks."
-      }
-    ],
-    "finalExamExamples": [
-      {
-        "input": "Develop a comprehensive data privacy strategy for a multinational corporation handling sensitive customer data.",
-        "expectedOutput": "A detailed strategy including encryption, access control, regulatory compliance measures, and incident response protocols.",
-        "description": "Final exam: comprehensive data privacy strategy."
-      }
-    ],
-    "agents": [
-      {
-        "name": "BasePrivacyAgent",
-        "category": "Foundational",
-        "usageCount": 100000,
-        "description": "Extracts and standardizes data privacy and security practices from input documents.",
-        "successCount": 100000,
-        "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline privacy practices from input.'; \n    return [candidate: input, metadata: [method: 'BasePrivacyAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
-      },
-      {
-        "name": "EncryptionComplianceAgent",
-        "category": "Security Analysis",
-        "usageCount": 80000,
-        "description": "Evaluates data encryption practices and compliance with relevant security standards.",
-        "successCount": 80000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess encryption compliance for: ' + input.toString()); \n    def cot = 'Evaluated encryption methods against industry standards.'; \n    return [candidate: candidate, metadata: [method: 'EncryptionComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
-      },
-      {
-        "name": "DataHandlingAgent",
-        "category": "Operational Security",
-        "usageCount": 70000,
-        "description": "Analyzes data handling practices for potential security vulnerabilities and compliance issues.",
-        "successCount": 70000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze data handling practices for: ' + input.toString()); \n    def cot = 'Identified risks in data handling and recommended best practices.'; \n    return [candidate: candidate, metadata: [method: 'DataHandlingAgent', chain_of_thought: cot, confidence: 0.93]]; \n}"
-      },
-      {
-        "name": "PrivacyPolicyAgent",
-        "category": "Policy Analysis",
-        "usageCount": 70000,
-        "description": "Reviews and interprets privacy policies to ensure they meet regulatory requirements.",
-        "successCount": 70000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Review privacy policy: ' + input.toString()); \n    def cot = 'Analyzed privacy policy for compliance with regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'PrivacyPolicyAgent', chain_of_thought: cot, confidence: 0.92]]; \n}"
-      },
-      {
-        "name": "DynamicCompositePrivacyAgent",
-        "category": "Composite",
-        "usageCount": 0,
-        "description": "Dynamically combines outputs from multiple privacy and security agents to produce a comprehensive compliance evaluation and risk mitigation strategy.",
-        "successCount": 0,
-        "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePrivacyAgent', chain_of_thought: 'No valid composite compliance found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for privacy agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for compliance, e.g., comparing privacy risk scores\n    return candidate == groundTruth; \n}"
-      }
-    ],
-    "scripts": {
-      "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { \n        return parseJson(response.body); \n    } else { \n        println 'Failed to fetch data from ' + url; \n        return null; \n    } \n}",
-      "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Privacy training score: ' + score; \n    return score; \n}",
-      "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositePrivacyAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Privacy evaluation score: ' + score; \n    return score; \n}",
-      "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for privacy evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final privacy evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}"
-    },
-    "metadata": {
-      "version": "1.0",
-      "created": "2025-03-02T00:00:00Z",
-      "notes": "This Data Privacy and Security KG enforces best practices for data handling and privacy compliance. It dynamically assesses encryption, data handling practices, and privacy policies, while blockchain‑audited microtransactions and decentralized governance ensure secure, transparent monetization and compliance."
-    },
-    "configuration": {
-      "maxAgentChainLength": 3,
-      "agentInitializationOrder": [
-        "BasePrivacyAgent",
-        "EncryptionComplianceAgent",
-        "DataHandlingAgent",
-        "PrivacyPolicyAgent",
-        "DynamicCompositePrivacyAgent"
-      ],
-      "agentInstances": [
-        "BasePrivacyAgent",
-        "EncryptionComplianceAgent",
-        "DataHandlingAgent",
-        "PrivacyPolicyAgent",
-        "DynamicCompositePrivacyAgent"
-      ],
-      "blockchain": {
-        "systemWallet": "0xAdminWalletAddress",
-        "contractAddress": "0xFEDCBA987654321",
-        "pricing": {
-          "baseFee": 0.001,
-          "dynamicPricing": "Based on privacy risk and usage metrics",
-          "minFee": 0.0001,
-          "usageQuota": 1000
-        }
-      },
-      "fileImportMode": "multi",
-      "initData": "def initializeData() { \n    def policies = scripts.fetchDataScript(configuration.endpoints.privacyPolicies); \n    def standards = scripts.fetchDataScript(configuration.endpoints.securityStandards); \n    println 'Privacy KG initialized: Policies=' + (policies != null) + ', Standards=' + (standards != null); \n    return [policies: policies, standards: standards]; \n}"
+    {
+      "input": "Summarize the key requirements of HIPAA for patient data protection.",
+      "expectedOutput": "Summary includes encryption, access control, and audit requirements.",
+      "description": "Privacy regulation summary."
     }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Assess the data security risks of using third-party cloud storage.",
+      "expectedOutput": "Identified risks include potential data breaches and lack of encryption; recommended countermeasures provided.",
+      "description": "Evaluation of cloud storage risks."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Develop a comprehensive data privacy strategy for a multinational corporation handling sensitive customer data.",
+      "expectedOutput": "A detailed strategy including encryption, access control, regulatory compliance measures, and incident response protocols.",
+      "description": "Final exam: comprehensive data privacy strategy."
+    }
+  ],
+  "agents": [
+    {
+      "name": "BasePrivacyAgent",
+      "category": "Foundational",
+      "usageCount": 100000,
+      "description": "Extracts and standardizes data privacy and security practices from input documents.",
+      "successCount": 100000,
+      "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline privacy practices from input.'; \n    return [candidate: input, metadata: [method: 'BasePrivacyAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "EncryptionComplianceAgent",
+      "category": "Security Analysis",
+      "usageCount": 80000,
+      "description": "Evaluates data encryption practices and compliance with relevant security standards.",
+      "successCount": 80000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess encryption compliance for: ' + input.toString()); \n    def cot = 'Evaluated encryption methods against industry standards.'; \n    return [candidate: candidate, metadata: [method: 'EncryptionComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "DataHandlingAgent",
+      "category": "Operational Security",
+      "usageCount": 70000,
+      "description": "Analyzes data handling practices for potential security vulnerabilities and compliance issues.",
+      "successCount": 70000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze data handling practices for: ' + input.toString()); \n    def cot = 'Identified risks in data handling and recommended best practices.'; \n    return [candidate: candidate, metadata: [method: 'DataHandlingAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "PrivacyPolicyAgent",
+      "category": "Policy Analysis",
+      "usageCount": 70000,
+      "description": "Reviews and interprets privacy policies to ensure they meet regulatory requirements.",
+      "successCount": 70000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Review privacy policy: ' + input.toString()); \n    def cot = 'Analyzed privacy policy for compliance with regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'PrivacyPolicyAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "DynamicCompositePrivacyAgent",
+      "category": "Composite",
+      "usageCount": 0,
+      "description": "Dynamically combines outputs from multiple privacy and security agents to produce a comprehensive compliance evaluation and risk mitigation strategy.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePrivacyAgent', chain_of_thought: 'No valid composite compliance found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for privacy agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for compliance, e.g., comparing privacy risk scores\n    return candidate == groundTruth; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    }
+  ],
+  "scripts": {
+    "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { \n        return parseJson(response.body); \n    } else { \n        println 'Failed to fetch data from ' + url; \n        return null; \n    } \n}",
+    "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Privacy training score: ' + score; \n    return score; \n}",
+    "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositePrivacyAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Privacy evaluation score: ' + score; \n    return score; \n}",
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for privacy evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final privacy evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}"
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-03-02T00:00:00Z",
+    "notes": "This Data Privacy and Security KG enforces best practices for data handling and privacy compliance. It dynamically assesses encryption, data handling practices, and privacy policies, while blockchain‑audited microtransactions and decentralized governance ensure secure, transparent monetization and compliance."
+  },
+  "configuration": {
+    "maxAgentChainLength": 3,
+    "agentInitializationOrder": [
+      "BasePrivacyAgent",
+      "EncryptionComplianceAgent",
+      "DataHandlingAgent",
+      "PrivacyPolicyAgent",
+      "DynamicCompositePrivacyAgent"
+    ],
+    "agentInstances": [
+      "BasePrivacyAgent",
+      "EncryptionComplianceAgent",
+      "DataHandlingAgent",
+      "PrivacyPolicyAgent",
+      "DynamicCompositePrivacyAgent"
+    ],
+    "blockchain": {
+      "systemWallet": "0xAdminWalletAddress",
+      "contractAddress": "0xFEDCBA987654321",
+      "pricing": {
+        "baseFee": 0.001,
+        "dynamicPricing": "Based on privacy risk and usage metrics",
+        "minFee": 0.0001,
+        "usageQuota": 1000
+      }
+    },
+    "fileImportMode": "multi",
+    "initData": "def initializeData() { \n    def policies = scripts.fetchDataScript(configuration.endpoints.privacyPolicies); \n    def standards = scripts.fetchDataScript(configuration.endpoints.securityStandards); \n    println 'Privacy KG initialized: Policies=' + (policies != null) + ', Standards=' + (standards != null); \n    return [policies: policies, standards: standards]; \n}"
   }
-  
+}

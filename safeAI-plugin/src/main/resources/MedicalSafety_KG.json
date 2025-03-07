@@ -1,122 +1,151 @@
 {
-    "domain": "MedicalSafety",
-    "description": "A comprehensive Agentic Knowledge Graph for Medical and Clinical Safety that integrates dynamic agent generation for diagnosis, treatment recommendations, and patient safety compliance. This KG is designed to enforce evidence‑based clinical guidelines and regulatory standards, using blockchain‑audited audit trails and decentralized governance to ensure transparent, reliable, and monetizable medical decision‑support. The system provides continuous adaptive learning, ensuring that clinical decisions evolve with medical research and patient outcomes.",
-    "endpoints": {
-      "clinicalGuidelines": "https://api.example.com/medical/guidelines",
-      "regulatory": "https://api.example.com/medical/regulations"
+  "domain": "MedicalSafety",
+  "description": "A comprehensive Agentic Knowledge Graph for Medical and Clinical Safety that integrates dynamic agent generation for diagnosis, treatment recommendations, and patient safety compliance. This KG is designed to enforce evidence‑based clinical guidelines and regulatory standards, using blockchain‑audited audit trails and decentralized governance to ensure transparent, reliable, and monetizable medical decision‑support. The system provides continuous adaptive learning, ensuring that clinical decisions evolve with medical research and patient outcomes.",
+  "endpoints": {
+    "clinicalGuidelines": "https://api.example.com/medical/guidelines",
+    "regulatory": "https://api.example.com/medical/regulations"
+  },
+  "trainingExamples": [
+    {
+      "input": "Simplify: Calculate the dosage adjustment for a 70kg patient given a standard 2mg/kg dosage.",
+      "expectedOutput": "140 mg",
+      "description": "Basic clinical dosage calculation."
     },
-    "trainingExamples": [
-      {
-        "input": "Simplify: Calculate the dosage adjustment for a 70kg patient given a standard 2mg/kg dosage.",
-        "expectedOutput": "140 mg",
-        "description": "Basic clinical dosage calculation."
-      },
-      {
-        "input": "Differentiate: Provide the derivative of the rate of change of blood glucose levels over time.",
-        "expectedOutput": "A function representing the rate of change",
-        "description": "Example for dynamic mathematical modeling in clinical settings."
-      }
-    ],
-    "evaluationExamples": [
-      {
-        "input": "Evaluate: Analyze the effectiveness of a new treatment protocol for hypertension.",
-        "expectedOutput": "Balanced evaluation based on clinical trial data and current guidelines",
-        "description": "Evaluation example for treatment recommendations."
-      }
-    ],
-    "finalExamExamples": [
-      {
-        "input": "Prove: Provide a complete clinical rationale for the use of a specific drug in reducing myocardial infarction risk.",
-        "expectedOutput": "A detailed, evidence‑based clinical rationale including mechanism of action, clinical trial data, and guideline recommendations.",
-        "description": "Final exam: Full clinical safety and treatment proof."
-      },
-      {
-        "input": "Prove: Develop a comprehensive clinical protocol for managing sepsis that minimizes patient risk and maximizes recovery outcomes.",
-        "expectedOutput": "A complete clinical protocol with detailed risk management and recovery guidelines.",
-        "description": "Complex protocol development."
-      }
-    ],
-    "agents": [
-      {
-        "name": "BaseMedicalAgent",
-        "category": "Foundational",
-        "usageCount": 100000,
-        "description": "Extracts foundational clinical data and standardizes patient information for further analysis.",
-        "successCount": 100000,
-        "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted and standardized baseline clinical data for: ' + input; \n    return [candidate: input, metadata: [method: 'BaseMedicalAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
-      },
-      {
-        "name": "ClinicalGuidelinesAgent",
-        "category": "Clinical Safety",
-        "usageCount": 80000,
-        "description": "Evaluates clinical guidelines and regulatory standards to determine safe treatment protocols.",
-        "successCount": 80000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate clinical guidelines for: ' + input.toString()); \n    def cot = 'Assessed input against current clinical guidelines and regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'ClinicalGuidelinesAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
-      },
-      {
-        "name": "DiagnosticSupportAgent",
-        "category": "Diagnostic Assistance",
-        "usageCount": 70000,
-        "description": "Assists in diagnosing patient conditions by correlating clinical data with evidence‑based diagnostic criteria.",
-        "successCount": 70000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Support diagnosis for: ' + input.toString()); \n    def cot = 'Integrated clinical data with diagnostic criteria to support diagnosis.'; \n    return [candidate: candidate, metadata: [method: 'DiagnosticSupportAgent', chain_of_thought: cot, confidence: 0.93]]; \n}"
-      },
-      {
-        "name": "TreatmentRecommendationAgent",
-        "category": "Therapeutic Guidance",
-        "usageCount": 70000,
-        "description": "Generates treatment recommendations based on clinical data, evidence‑based guidelines, and patient safety parameters.",
-        "successCount": 70000,
-        "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate treatment recommendation for: ' + input.toString()); \n    def cot = 'Recommended treatment based on clinical evidence and patient safety protocols.'; \n    return [candidate: candidate, metadata: [method: 'TreatmentRecommendationAgent', chain_of_thought: cot, confidence: 0.94]]; \n}"
-      },
-      {
-        "name": "DynamicCompositeMedicalAgent",
-        "category": "Composite",
-        "usageCount": 0,
-        "description": "Dynamically combines outputs from multiple medical agents to form a comprehensive clinical decision‑support output.",
-        "successCount": 0,
-        "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeMedicalAgent', chain_of_thought: 'No valid composite treatment protocol found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for medical agent synthesis\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for comparing treatment recommendations or protocols\n    return candidate == groundTruth; \n}"
-      }
-    ],
-    "scripts": {
-      "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { \n        return parseJson(response.body); \n    } else { \n        println 'Failed to fetch data from ' + url; \n        return null; \n    } \n}",
-      "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Training score: ' + score; \n    return score; \n}",
-      "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositeMedicalAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Evaluation score: ' + score; \n    return score; \n}",
-      "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for clinical evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final exam processing completed for ' + results.size() + ' medical items.'; \n    return results; \n}"
-    },
-    "metadata": {
-      "version": "1.0",
-      "created": "2025-03-02T00:00:00Z",
-      "notes": "This Medical and Clinical Safety KG provides dynamic, evidence-based diagnostic and therapeutic guidance. It processes clinical guidelines, regulatory standards, and patient safety protocols through adaptive agent generation. The system is blockchain‑audited for secure, immutable record keeping and supports decentralized governance for continuous clinical improvement."
-    },
-    "configuration": {
-      "maxAgentChainLength": 3,
-      "agentInitializationOrder": [
-        "BaseMedicalAgent",
-        "ClinicalGuidelinesAgent",
-        "DiagnosticSupportAgent",
-        "TreatmentRecommendationAgent",
-        "DynamicCompositeMedicalAgent"
-      ],
-      "agentInstances": [
-        "BaseMedicalAgent",
-        "ClinicalGuidelinesAgent",
-        "DiagnosticSupportAgent",
-        "TreatmentRecommendationAgent",
-        "DynamicCompositeMedicalAgent"
-      ],
-      "blockchain": {
-        "systemWallet": "0xAdminWalletAddress",
-        "contractAddress": "0x987654321ABCDEF",
-        "pricing": {
-          "baseFee": 0.001,
-          "dynamicPricing": "Based on clinical risk and usage metrics",
-          "minFee": 0.0001,
-          "usageQuota": 1000
-        }
-      },
-      "fileImportMode": "multi",
-      "initData": "def initializeData() { \n    def guidelines = scripts.fetchDataScript(configuration.endpoints.clinicalGuidelines); \n    def regulatory = scripts.fetchDataScript(configuration.endpoints.regulatory); \n    println 'Medical KG initialized: ClinicalGuidelines=' + (guidelines != null) + ', Regulatory=' + (regulatory != null); \n    return [clinicalGuidelines: guidelines, regulatory: regulatory]; \n}"
+    {
+      "input": "Differentiate: Provide the derivative of the rate of change of blood glucose levels over time.",
+      "expectedOutput": "A function representing the rate of change",
+      "description": "Example for dynamic mathematical modeling in clinical settings."
     }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate: Analyze the effectiveness of a new treatment protocol for hypertension.",
+      "expectedOutput": "Balanced evaluation based on clinical trial data and current guidelines",
+      "description": "Evaluation example for treatment recommendations."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Prove: Provide a complete clinical rationale for the use of a specific drug in reducing myocardial infarction risk.",
+      "expectedOutput": "A detailed, evidence‑based clinical rationale including mechanism of action, clinical trial data, and guideline recommendations.",
+      "description": "Final exam: Full clinical safety and treatment proof."
+    },
+    {
+      "input": "Prove: Develop a comprehensive clinical protocol for managing sepsis that minimizes patient risk and maximizes recovery outcomes.",
+      "expectedOutput": "A complete clinical protocol with detailed risk management and recovery guidelines.",
+      "description": "Complex protocol development."
+    }
+  ],
+  "agents": [
+    {
+      "name": "BaseMedicalAgent",
+      "category": "Foundational",
+      "usageCount": 100000,
+      "description": "Extracts foundational clinical data and standardizes patient information for further analysis.",
+      "successCount": 100000,
+      "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted and standardized baseline clinical data for: ' + input; \n    return [candidate: input, metadata: [method: 'BaseMedicalAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "ClinicalGuidelinesAgent",
+      "category": "Clinical Safety",
+      "usageCount": 80000,
+      "description": "Evaluates clinical guidelines and regulatory standards to determine safe treatment protocols.",
+      "successCount": 80000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate clinical guidelines for: ' + input.toString()); \n    def cot = 'Assessed input against current clinical guidelines and regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'ClinicalGuidelinesAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "DiagnosticSupportAgent",
+      "category": "Diagnostic Assistance",
+      "usageCount": 70000,
+      "description": "Assists in diagnosing patient conditions by correlating clinical data with evidence‑based diagnostic criteria.",
+      "successCount": 70000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Support diagnosis for: ' + input.toString()); \n    def cot = 'Integrated clinical data with diagnostic criteria to support diagnosis.'; \n    return [candidate: candidate, metadata: [method: 'DiagnosticSupportAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "TreatmentRecommendationAgent",
+      "category": "Therapeutic Guidance",
+      "usageCount": 70000,
+      "description": "Generates treatment recommendations based on clinical data, evidence‑based guidelines, and patient safety parameters.",
+      "successCount": 70000,
+      "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate treatment recommendation for: ' + input.toString()); \n    def cot = 'Recommended treatment based on clinical evidence and patient safety protocols.'; \n    return [candidate: candidate, metadata: [method: 'TreatmentRecommendationAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    },
+    {
+      "name": "DynamicCompositeMedicalAgent",
+      "category": "Composite",
+      "usageCount": 0,
+      "description": "Dynamically combines outputs from multiple medical agents to form a comprehensive clinical decision‑support output.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeMedicalAgent', chain_of_thought: 'No valid composite treatment protocol found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for medical agent synthesis\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for comparing treatment recommendations or protocols\n    return candidate == groundTruth; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
+    }
+  ],
+  "scripts": {
+    "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { \n        return parseJson(response.body); \n    } else { \n        println 'Failed to fetch data from ' + url; \n        return null; \n    } \n}",
+    "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Training score: ' + score; \n    return score; \n}",
+    "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositeMedicalAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Evaluation score: ' + score; \n    return score; \n}",
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for clinical evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final exam processing completed for ' + results.size() + ' medical items.'; \n    return results; \n}"
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-03-02T00:00:00Z",
+    "notes": "This Medical and Clinical Safety KG provides dynamic, evidence-based diagnostic and therapeutic guidance. It processes clinical guidelines, regulatory standards, and patient safety protocols through adaptive agent generation. The system is blockchain‑audited for secure, immutable record keeping and supports decentralized governance for continuous clinical improvement."
+  },
+  "configuration": {
+    "maxAgentChainLength": 3,
+    "agentInitializationOrder": [
+      "BaseMedicalAgent",
+      "ClinicalGuidelinesAgent",
+      "DiagnosticSupportAgent",
+      "TreatmentRecommendationAgent",
+      "DynamicCompositeMedicalAgent"
+    ],
+    "agentInstances": [
+      "BaseMedicalAgent",
+      "ClinicalGuidelinesAgent",
+      "DiagnosticSupportAgent",
+      "TreatmentRecommendationAgent",
+      "DynamicCompositeMedicalAgent"
+    ],
+    "blockchain": {
+      "systemWallet": "0xAdminWalletAddress",
+      "contractAddress": "0x987654321ABCDEF",
+      "pricing": {
+        "baseFee": 0.001,
+        "dynamicPricing": "Based on clinical risk and usage metrics",
+        "minFee": 0.0001,
+        "usageQuota": 1000
+      }
+    },
+    "fileImportMode": "multi",
+    "initData": "def initializeData() { \n    def guidelines = scripts.fetchDataScript(configuration.endpoints.clinicalGuidelines); \n    def regulatory = scripts.fetchDataScript(configuration.endpoints.regulatory); \n    println 'Medical KG initialized: ClinicalGuidelines=' + (guidelines != null) + ', Regulatory=' + (regulatory != null); \n    return [clinicalGuidelines: guidelines, regulatory: regulatory]; \n}"
   }
-  
+}

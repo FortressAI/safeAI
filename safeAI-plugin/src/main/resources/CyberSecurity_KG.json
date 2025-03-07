@@ -9,7 +9,13 @@
       "usageCount": 100000,
       "description": "Provides core functionalities and metadata extraction for cybersecurity operations.",
       "successCount": 100000,
-      "agent_code": "def generateCandidate(input) { \n  def cot = 'Base cyber reasoning: Extracted key metadata from input for further processing.'; \n  return [candidate: input, metadata: [method: 'BaseCyberAgent', chain_of_thought: cot, confidence: 1.0]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Base cyber reasoning: Extracted key metadata from input for further processing.'; \n  return [candidate: input, metadata: [method: 'BaseCyberAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "ThreatDetectionAgent",
@@ -17,7 +23,13 @@
       "usageCount": 80000,
       "description": "Monitors network and system inputs to detect potential threats using signature and anomaly-based techniques.",
       "successCount": 80000,
-      "agent_code": "def generateCandidate(input) { \n  // Analyze input data for known threat patterns and anomalies\n  def candidate = nlQuery('Detect threats in: ' + input.toString()); \n  def cot = 'Applied anomaly detection and signature matching for threat identification.'; \n  return [candidate: candidate, metadata: [method: 'ThreatDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  // Analyze input data for known threat patterns and anomalies\n  def candidate = nlQuery('Detect threats in: ' + input.toString()); \n  def cot = 'Applied anomaly detection and signature matching for threat identification.'; \n  return [candidate: candidate, metadata: [method: 'ThreatDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "VulnerabilityExploitationAgent",
@@ -25,7 +37,13 @@
       "usageCount": 50000,
       "description": "Simulates offensive actions by exploiting detected vulnerabilities to assess system weaknesses.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  // Simulate controlled penetration testing actions\n  def candidate = nlQuery('Simulate vulnerability exploitation on: ' + input.toString()); \n  def cot = 'Performed simulated penetration testing to identify potential exploit paths.'; \n  return [candidate: candidate, metadata: [method: 'VulnerabilityExploitationAgent', chain_of_thought: cot, confidence: 0.90]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  // Simulate controlled penetration testing actions\n  def candidate = nlQuery('Simulate vulnerability exploitation on: ' + input.toString()); \n  def cot = 'Performed simulated penetration testing to identify potential exploit paths.'; \n  return [candidate: candidate, metadata: [method: 'VulnerabilityExploitationAgent', chain_of_thought: cot, confidence: 0.90]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "DefensiveCountermeasureAgent",
@@ -33,7 +51,13 @@
       "usageCount": 60000,
       "description": "Deploys defensive countermeasures based on threat detection and vulnerability analysis.",
       "successCount": 60000,
-      "agent_code": "def generateCandidate(input) { \n  // Based on detected threats, determine and deploy the appropriate countermeasures\n  def candidate = nlQuery('Deploy countermeasures for: ' + input.toString()); \n  def cot = 'Deployed defensive countermeasures, such as patching vulnerabilities or isolating affected nodes.'; \n  return [candidate: candidate, metadata: [method: 'DefensiveCountermeasureAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  // Based on detected threats, determine and deploy the appropriate countermeasures\n  def candidate = nlQuery('Deploy countermeasures for: ' + input.toString()); \n  def cot = 'Deployed defensive countermeasures, such as patching vulnerabilities or isolating affected nodes.'; \n  return [candidate: candidate, metadata: [method: 'DefensiveCountermeasureAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "IncidentResponseAgent",
@@ -41,7 +65,13 @@
       "usageCount": 40000,
       "description": "Automates incident response by correlating events and executing remediation workflows.",
       "successCount": 40000,
-      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Execute incident response for: ' + input.toString()); \n  def cot = 'Automated incident response executed to mitigate ongoing threats.'; \n  return [candidate: candidate, metadata: [method: 'IncidentResponseAgent', chain_of_thought: cot, confidence: 0.93]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Execute incident response for: ' + input.toString()); \n  def cot = 'Automated incident response executed to mitigate ongoing threats.'; \n  return [candidate: candidate, metadata: [method: 'IncidentResponseAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "DynamicCompositeCyberAgent",
@@ -49,7 +79,13 @@
       "usageCount": 0,
       "description": "Dynamically combines outputs from multiple cybersecurity agents to produce an integrated offensive and defensive action plan.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input, context) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  // Generate combinations of agents to form a composite action plan\n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, context)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeCyberAgent', chain_of_thought: 'No valid composite action found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic here; for now, return an empty list as a placeholder\n    return []; \n}\n\ndef evaluateCandidate(candidate, context) { \n    // Implement evaluation logic based on cybersecurity best practices; for now, assume candidate is valid if non-null\n    return candidate != null; \n}"
+      "agent_code": "def generateCandidate(input, context) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  // Generate combinations of agents to form a composite action plan\n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, context)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeCyberAgent', chain_of_thought: 'No valid composite action found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic here; for now, return an empty list as a placeholder\n    return []; \n}\n\ndef evaluateCandidate(candidate, context) { \n    // Implement evaluation logic based on cybersecurity best practices; for now, assume candidate is valid if non-null\n    return candidate != null; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     }
   ],
   "scripts": {
