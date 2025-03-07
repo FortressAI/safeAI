@@ -603,6 +603,33 @@ Make sure to test this system thoroughly (using a test blockchain like Ganache) 
 This procedure will:
 - Check and configure the OpenAI API key (using a default if not set).
 - Test the LLM client by simulating an LLM query.
+
+## Build and Deployment Environment Variables
+
+Before building and deploying safeAI, ensure that the following environment variables are set in your environment. These variables are injected during build and runtime, ensuring that sensitive keys are not hard-coded:
+
+- **SAFEAI_API_KEY**: The API key for the safeAI plugin (used for LLM access).
+- **ADMIN_WALLET_KEY**: The private key for the admin wallet (used for blockchain transactions).
+
+For Unix-based systems (Linux/macOS), run:
+```
+export SAFEAI_API_KEY=your_api_key
+export ADMIN_WALLET_KEY=your_admin_wallet_key
+```
+For Windows Command Prompt, run:
+```
+set SAFEAI_API_KEY=your_api_key
+set ADMIN_WALLET_KEY=your_admin_wallet_key
+```
+
+These variables are referenced within the plugin-config.properties file as:
+```
+admin.api.key=${SAFEAI_API_KEY}
+admin.wallet.key=${ADMIN_WALLET_KEY}
+```
+
+Make sure to define these variables before starting the deployment.
+
 - Initialize the blockchain connection (ensure Ganache is running).
 - Verify Groovy agent integration.
 
