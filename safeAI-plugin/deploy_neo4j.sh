@@ -57,6 +57,14 @@ docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES 
 echo "Checking available functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;"
 
+# Test if Groovy integration in the plugin is working
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testGroovy() YIELD output RETURN output;"
+echo "Debug Groovy test procedure executed."
+
+# Test if LLM integration is working (should return a greeting)
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testLLM() YIELD output RETURN output;"
+echo "Debug LLM test procedure executed."
+
 echo "Testing governance functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.initiateVote('test-proposal') AS result;"
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;"
