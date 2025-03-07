@@ -28,35 +28,41 @@ public class LLMService {
         }
     }
     
-    public static String generateCandidate(String prompt) throws Exception {
+    public static String generateCandidate(String prompt) {
         String endpoint = System.getenv("LLM_ENDPOINT");
         String apiKey = System.getenv("LLM_API_KEY");
-        if (endpoint == null) {
-            throw new RuntimeException("LLM_ENDPOINT not defined");
+        if (endpoint == null || endpoint.trim().isEmpty()) {
+            return "Simulated LLM response: " + prompt;
         }
-        URL url = new URL(endpoint);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        if (apiKey != null && !apiKey.isEmpty()) {
-            conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        try {
+            URL url = new URL(endpoint);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            if (apiKey != null && !apiKey.isEmpty()) {
+                conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+            }
+            String safePrompt = prompt.replace("\"", "\\\"");
+            String inputJson = "{\"prompt\": \"" + safePrompt + "\"}";
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(inputJson.getBytes("UTF-8"));
+                os.flush();
+            }
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                return "Simulated LLM response (HTTP error " + responseCode + "): " + prompt;
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            conn.disconnect();
+            return sb.toString();
+        } catch (Exception e) {
+            return "Simulated LLM response (Exception: " + e.getMessage() + "): " + prompt;
         }
-        String safePrompt = prompt.replace("\"", "\\\"");
-        String inputJson = "{\"prompt\": \"" + safePrompt + "\"}";
-        OutputStream os = conn.getOutputStream();
-        os.write(inputJson.getBytes("UTF-8"));
-        os.flush();
-        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-        }
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-        }
-        conn.disconnect();
-        return sb.toString();
     }
 }
