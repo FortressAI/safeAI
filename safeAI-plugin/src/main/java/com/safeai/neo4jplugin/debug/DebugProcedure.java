@@ -157,7 +157,7 @@ public Stream<StringResult> loadKGFiles() {
                                 // Build a map of properties for the Agent.
                                 Map<String, Object> agentProps = new HashMap<>();
                                 for (String key : agentObj.keySet()) {
-                                    agentProps.put(key, agentObj.get(key));
+                                    agentProps.put(key, convertJson(agentObj.get(key)));
                                 }
                                 // Optionally add a property linking the agent to its KnowledgeGraph.
                                 agentProps.put("kgName", domainName);
@@ -342,3 +342,27 @@ public Stream<StringResult> hello(@Name("name") String name) {
 
 
 }
+
+    private Object convertJson(Object o) {
+        if (o instanceof Number) {
+            return Double.valueOf(((Number) o).doubleValue());
+        }
+        if (o instanceof org.json.JSONArray) {
+            org.json.JSONArray arr = (org.json.JSONArray) o;
+            java.util.List<Object> list = new java.util.ArrayList<>();
+            for (int i = 0; i < arr.length(); i++) {
+                list.add(convertJson(arr.get(i)));
+            }
+            return list;
+        }
+        if (o instanceof org.json.JSONObject) {
+            org.json.JSONObject json = (org.json.JSONObject) o;
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            for (String key : json.keySet()) {
+                map.put(key, convertJson(json.get(key)));
+            }
+            return map;
+        }
+        return o;
+    }
+

@@ -42,9 +42,9 @@
       "successCount": 100000,
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline law enforcement data and standardized report formats from input.'; \n    return [candidate: input, metadata: [method: 'BaseLawEnforcementAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "Script"
@@ -57,9 +57,9 @@
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze crime trends for: ' + input.toString()); \n    def cot = 'Detected emerging crime patterns using incident data and statistical analysis.'; \n    return [candidate: candidate, metadata: [method: 'CrimeDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -72,9 +72,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess threat level for: ' + input.toString()); \n    def cot = 'Computed risk scores by integrating crime data and contextual threat indicators.'; \n    return [candidate: candidate, metadata: [method: 'ThreatAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -87,9 +87,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate response plan for: ' + input.toString()); \n    def cot = 'Developed an integrated response plan including officer deployment and coordination measures.'; \n    return [candidate: candidate, metadata: [method: 'ResponsePlanningAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -102,9 +102,9 @@
       "successCount": 60000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze community feedback for: ' + input.toString()); \n    def cot = 'Synthesized public sentiment data and generated recommendations for community engagement.'; \n    return [candidate: candidate, metadata: [method: 'CommunityEngagementAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "LLM"
@@ -117,9 +117,9 @@
       "successCount": 0,
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePoliceAgent', chain_of_thought: 'No valid composite plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
+      "transactionFee": "0.001",
       "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
+        "effectivenessThreshold": "0.95",
         "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
       },
       "agent_type": "Script"
@@ -158,9 +158,9 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0xABCDEF123456789",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on incident severity and operational complexity",
-        "minFee": 0.0001,
+        "minFee": "0.0001",
         "usageQuota": 1000
       }
     },

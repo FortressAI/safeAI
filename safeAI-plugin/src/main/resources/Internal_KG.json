@@ -41,7 +41,7 @@
     "microtransactions": {
       "contract_address": "0xABCDEF123456789",
       "pricing": {
-        "base_price": 0.001,
+        "base_price": "0.001",
         "dynamic_pricing": "Based on current supply/demand of KG queries.",
         "last_updated": "2025-02-27T00:00:00Z"
       }
