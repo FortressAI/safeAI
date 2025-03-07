@@ -64,7 +64,7 @@ docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.go
 echo "Checking all procedures and functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES YIELD name, signature, description RETURN name, signature, description ORDER BY name;"
 # Call the install procedure from the debug class to initialize plugin-specific data
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.install() YIELD output RETURN output;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.loadAllKGs() YIELD output RETURN output;"
 echo "Debug install procedure executed."
 
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name, signature, description RETURN name, signature, description ORDER BY name;"
