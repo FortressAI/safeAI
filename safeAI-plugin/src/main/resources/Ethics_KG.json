@@ -31,7 +31,13 @@
       "usageCount": 50000,
       "description": "Captures the context of an interaction by simulating a shared internal dialogue using language games.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def cot = 'Established shared context via language game abstraction for: ' + input; \n  def candidate = 'Context captured: ' + input; \n  return [candidate: candidate, metadata: [method: 'BaseLanguageGameAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Established shared context via language game abstraction for: ' + input; \n  def candidate = 'Context captured: ' + input; \n  return [candidate: candidate, metadata: [method: 'BaseLanguageGameAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "AristotelianEthicsAgent",
@@ -39,7 +45,13 @@
       "usageCount": 50000,
       "description": "Applies Aristotelian ethical reasoning based on virtue ethics and the golden mean.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def cot = 'Applied Aristotelian logic to derive ethical conclusions for: ' + input; \n  def candidate = 'Ethically compliant under Aristotelian standards for: ' + input; \n  return [candidate: candidate, metadata: [method: 'AristotelianEthicsAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Applied Aristotelian logic to derive ethical conclusions for: ' + input; \n  def candidate = 'Ethically compliant under Aristotelian standards for: ' + input; \n  return [candidate: candidate, metadata: [method: 'AristotelianEthicsAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "SocraticDialecticAgent",
@@ -47,7 +59,13 @@
       "usageCount": 50000,
       "description": "Uses Socratic questioning to challenge assumptions and clarify ethical dilemmas.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def cot = 'Engaged in Socratic questioning to refine ethical stance for: ' + input; \n  def candidate = 'Dialectically refined ethical view for: ' + input; \n  return [candidate: candidate, metadata: [method: 'SocraticDialecticAgent', chain_of_thought: cot, confidence: 0.95]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Engaged in Socratic questioning to refine ethical stance for: ' + input; \n  def candidate = 'Dialectically refined ethical view for: ' + input; \n  return [candidate: candidate, metadata: [method: 'SocraticDialecticAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "AdaptiveEthicsLearningAgent",
@@ -55,7 +73,13 @@
       "usageCount": 0,
       "description": "Learns from audit feedback and updates internal parameters to improve ethical decision-making over time.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def auditFeedback = getAuditFeedback(input); \n  def updatedModel = updateEthicsModel(auditFeedback); \n  def cot = 'Adaptive learning applied based on audit feedback: ' + auditFeedback.toString(); \n  def candidate = updatedModel.evaluate(input);\n  return [candidate: candidate, metadata: [method: 'AdaptiveEthicsLearningAgent', chain_of_thought: cot, confidence: 0.95]]; \n}\n\ndef getAuditFeedback(input) { \n  return 'historical audit data for ' + input;\n}\n\ndef updateEthicsModel(auditFeedback) { \n  return [ evaluate: { in -> 'Updated ethical evaluation for: ' + in } ];\n}"
+      "agent_code": "def generateCandidate(input) { \n  def auditFeedback = getAuditFeedback(input); \n  def updatedModel = updateEthicsModel(auditFeedback); \n  def cot = 'Adaptive learning applied based on audit feedback: ' + auditFeedback.toString(); \n  def candidate = updatedModel.evaluate(input);\n  return [candidate: candidate, metadata: [method: 'AdaptiveEthicsLearningAgent', chain_of_thought: cot, confidence: 0.95]]; \n}\n\ndef getAuditFeedback(input) { \n  return 'historical audit data for ' + input;\n}\n\ndef updateEthicsModel(auditFeedback) { \n  return [ evaluate: { in -> 'Updated ethical evaluation for: ' + in } ];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     },
     {
       "name": "CompositeEthicsApprovalAgent",
@@ -63,7 +87,13 @@
       "usageCount": 0,
       "description": "Aggregates outputs from BaseLanguageGameAgent, AristotelianEthicsAgent, SocraticDialecticAgent, and AdaptiveEthicsLearningAgent to produce a final ethical decision that is fully auditable.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def context = BaseLanguageGameAgent.generateCandidate(input).candidate; \n  def ethicalLogic = AristotelianEthicsAgent.generateCandidate(context).candidate; \n  def dialectic = SocraticDialecticAgent.generateCandidate(context).candidate; \n  def adaptive = AdaptiveEthicsLearningAgent.generateCandidate(context).candidate; \n  def cot = 'Composite reasoning: ' + ethicalLogic + ' | ' + dialectic + ' | ' + adaptive; \n  def candidate = 'Final ethical decision for ' + input + ': APPROVED (with context: ' + context + ')'; \n  return [candidate: candidate, metadata: [method: 'CompositeEthicsApprovalAgent', chain_of_thought: cot, confidence: 0.98]]; \n}"
+      "agent_code": "def generateCandidate(input) { \n  def context = BaseLanguageGameAgent.generateCandidate(input).candidate; \n  def ethicalLogic = AristotelianEthicsAgent.generateCandidate(context).candidate; \n  def dialectic = SocraticDialecticAgent.generateCandidate(context).candidate; \n  def adaptive = AdaptiveEthicsLearningAgent.generateCandidate(context).candidate; \n  def cot = 'Composite reasoning: ' + ethicalLogic + ' | ' + dialectic + ' | ' + adaptive; \n  def candidate = 'Final ethical decision for ' + input + ': APPROVED (with context: ' + context + ')'; \n  return [candidate: candidate, metadata: [method: 'CompositeEthicsApprovalAgent', chain_of_thought: cot, confidence: 0.98]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": 0.001,
+      "approvalCriteria": {
+        "effectivenessThreshold": 0.95,
+        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
+      }
     }
   ],
   "scripts": {
