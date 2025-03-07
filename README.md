@@ -559,6 +559,47 @@ Once your API key is set and Ganache is running, you can perform a full integrat
 CALL safeai.debug.installAll() YIELD value;
 ```
 
+
+## Agent Transaction Support and Approval
+
+Every agent defined in your _KG.json files now includes financial transaction parameters. This mechanism ensures that whenever an agent is used, the creator is automatically credited, and the user is charged a transaction fee, provided the output meets established effectiveness and ethical standards.
+
+**Key Components:**
+
+- **Agent Metadata:** Each agent JSON definition now includes:
+  - `creatorWallet`: The Ethereum wallet address of the creator. This address is credited when the agent is used.
+  - `transactionFee`: The fee (in ETH or configured unit) to be charged each time the agent is invoked.
+  - `approvalCriteria`: A block that specifies:
+    - `effectivenessThreshold`: A score (e.g., 0.95) that the output must exceed to be considered effective.
+    - `ethicsGuidelines`: Guidelines that the output must adhere to, ensuring unbiased and fact-based results.
+
+- **Workflow on Agent Invocation:**
+  1. **Pre-Invocation – Fee Deduction:**
+     - When a user invokes an agent (e.g., through a Cypher call that triggers the agent's `generateCandidate` method), the plugin reads the `transactionFee` and `creatorWallet` from the agent's JSON configuration.
+     - The plugin then initiates a blockchain transaction (using BlockchainConnector/SmartContractHandler) to deduct the fee from the invoking user's wallet and credit it to the creator's wallet.
+     - Transaction details (timestamp, agent, fee amount, etc.) are logged for audit purposes.
+
+  2. **Agent Invocation & Output Generation:**
+     - The agent's code is executed to generate a candidate output, along with metadata such as chain-of-thought and confidence levels.
+
+  3. **Post-Invocation – Effectiveness & Ethics Evaluation:**
+     - The output is evaluated against the `approvalCriteria`:
+       - An effectiveness check ensures the result meets or exceeds the defined threshold.
+       - An ethical review verifies compliance with the established guidelines.
+     - Only if both evaluations pass is the transaction considered final. If not, the fee may be reverted or flagged for manual review.
+
+- **Blockchain Integration:**
+  - The smart contract associated with the plugin handles the actual fund transfers, ensuring transparency and auditability of all transactions.
+  - This mechanism provides an immutable record of all transactions, linking agent usage to the respective creator's wallet.
+
+**Benefits:**
+
+- **Incentivizes Quality:** Creators are rewarded for high-quality, ethically sound agents.
+- **Ensures Accountability:** Every transaction is tracked on the blockchain, offering a verifiable audit trail.
+- **Promotes Ethical Standards:** Agents are used only if their outputs meet the defined effectiveness and ethical criteria.
+
+Make sure to test this system thoroughly (using a test blockchain like Ganache) before deploying in production to validate fee transfers, output evaluation, and compliance with governance policies.
+
 This procedure will:
 - Check and configure the OpenAI API key (using a default if not set).
 - Test the LLM client by simulating an LLM query.
