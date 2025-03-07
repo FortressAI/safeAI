@@ -60,9 +60,14 @@ public class LLMService {
                 sb.append(line);
             }
             conn.disconnect();
-            return sb.toString();
+            String result = sb.toString();
+            if(result == null || result.trim().isEmpty()){
+                result = "Simulated LLM response (empty): " + prompt;
+            }
+            return result;
         } catch (Exception e) {
-            return "Simulated LLM response (Exception: " + e.getMessage() + "): " + prompt;
+            String errorMsg = e.getMessage() == null ? e.toString() : e.getMessage();
+                return "Simulated LLM response (Exception: " + errorMsg + "): " + prompt;
         }
     }
 }
