@@ -264,5 +264,77 @@ public Stream<StringResult> hello(@Name("name") String name) {
       return results.stream();
   }
 
+    @Procedure(name = "safeai.debug.installAll", mode = Mode.READ)
+    @Description("Performs complete installation: sets API keys, and tests Groovy, LLM, and Blockchain integration.")
+    public Stream<StringResult> installAll() {
+        List<StringResult> results = new ArrayList<>();
+        try {
+            String key = System.getenv("OPENAI_API_KEY");
+            if(key == null || key.isEmpty()){
+                key = System.getProperty("OPENAI_API_KEY");
+            }
+            if(key == null || key.isEmpty()){
+                System.setProperty("OPENAI_API_KEY", "test-api-key");
+                results.add(new StringResult("OPENAI_API_KEY was not set. Temporarily setting it to 'test-api-key' for integration testing."));
+            } else {
+                results.add(new StringResult("OPENAI_API_KEY is set."));
+            }
+            try {
+                com.safeai.neo4jplugin.LLMClient llmClient = new com.safeai.neo4jplugin.LLMClient();
+                com.safeai.neo4jplugin.LLMClient.QueryResult qr = llmClient.query_llm_schema("dummy query", "dummy-model");
+                results.add(new StringResult("LLM Integration Test Output: " + qr.solution_text));
+            } catch(Exception e) {
+                results.add(new StringResult("LLM Integration Test Error: " + e.getMessage()));
+            }
+            try {
+                com.safeai.neo4jplugin.blockchain.BlockchainConnector.initialize("http://blockchain.example.com/api");
+                if(com.safeai.neo4jplugin.blockchain.BlockchainConnector.getWeb3j() != null){
+                    results.add(new StringResult("Blockchain Integration Test Output: Successfully connected."));
+                } else {
+                    results.add(new StringResult("Blockchain Integration Test Error: Connection failed."));
+                }
+            } catch(Exception e) {
+                results.add(new StringResult("Blockchain Integration Test Error: " + e.getMessage()));
+            }
+            try {
+                com.safeai.neo4jplugin.graph_rag.GraphRAG dummyGraph = new com.safeai.neo4jplugin.graph_rag.GraphRAG("dummy", "dummy", "dummy");
+                org.json.JSONObject agentDef = new org.json.JSONObject();
+                agentDef.put("name", "GroovyAgentTest");
+                agentDef.put("description", "Test dynamic Groovy agent integration independently");
+                String groovyScript = "import com.safeai.neo4jplugin.graph_rag.GraphRAG\n" +
+                    "class GroovyAgent {\n" +
+                    "  def generate_candidate(puzzleGrid) {\n" +
+                    "    def rotated = []\n" +
+                    "    for (int c = 0; c < puzzleGrid[0].size(); c++) {\n" +
+                    "      def newRow = []\n" +
+                    "      for (int r = puzzleGrid.size()-1; r >= 0; r--) {\n" +
+                    "        newRow.add(puzzleGrid[r][c])\n" +
+                    "      }\n" +
+                    "      rotated.add(newRow)\n" +
+                    "    }\n" +
+                    "    return rotated\n" +
+                    "  }\n" +
+                    "}\n" +
+                    "return new GroovyAgent()";
+                agentDef.put("groovyScript", groovyScript);
+                agentDef.put("blockchainIntegration", false);
+                Object agentInstance = com.safeai.neo4jplugin.DynamicAgentCreator.createAgent(agentDef, dummyGraph);
+                java.util.List<java.util.List<Integer>> puzzleGrid = java.util.Arrays.asList(
+                    java.util.Arrays.asList(1, 2, 3),
+                    java.util.Arrays.asList(4, 5, 6),
+                    java.util.Arrays.asList(7, 8, 9)
+                );
+                java.lang.reflect.Method method = agentInstance.getClass().getMethod("generate_candidate", java.util.List.class);
+                Object candidate = method.invoke(agentInstance, puzzleGrid);
+                results.add(new StringResult("Groovy Integration Test Output: " + candidate.toString()));
+            } catch(Exception e) {
+                results.add(new StringResult("Groovy Integration Test Error: " + e.getMessage()));
+            }
+        } catch(Exception e) {
+            results.add(new StringResult("Installation procedure Error: " + e.getMessage()));
+        }
+        return results.stream();
+    }
+
 
 }
