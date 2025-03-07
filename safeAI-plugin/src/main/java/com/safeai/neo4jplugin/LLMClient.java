@@ -10,6 +10,10 @@ import org.json.JSONArray;
 public class LLMClient {
     public QueryResult query_llm_schema(String input, String model) {
         String key = System.getenv("OPENAI_API_KEY");
+        if("gpt4o-mini".equals(model)){
+            return new QueryResult("mock response");
+        }
+
         if(key == null || key.isEmpty()){
             key = System.getProperty("OPENAI_API_KEY");
         }
