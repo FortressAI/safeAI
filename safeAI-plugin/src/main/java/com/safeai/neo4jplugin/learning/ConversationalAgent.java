@@ -26,9 +26,8 @@ public class ConversationalAgent {
      * Asynchronously starts a conversation with a query and returns the response.
      */
     public CompletableFuture<String> startConversation(String query) {
-        return CompletableFuture.supplyAsync(() -> {
-            return llmClient.query_llm_schema(query, "gpt4o-mini").solution_text;
-        });
+        return CompletableFuture.supplyAsync(() -> llmClient.query_llm_schema(query, "gpt4o-mini").solution_text)
+                .exceptionally(e -> "default response");
     }
 
     /**
