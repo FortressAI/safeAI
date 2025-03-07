@@ -2,8 +2,14 @@ package com.safeai.neo4jplugin;
 
 public class LLMClient {
     public QueryResult query_llm_schema(String input, String model) {
-        // Minimal dummy implementation returning a default cypher query
-        return new QueryResult("MATCH (n) RETURN n LIMIT 25");
+        String key = System.getenv("OPENAI_API_KEY");
+        if(key == null || key.isEmpty()){
+            key = System.getProperty("OPENAI_API_KEY");
+        }
+        if(key == null || key.isEmpty()){
+            throw new RuntimeException("OPENAI_API_KEY is not set");
+        }
+        return new QueryResult("Simulated LLM query using API key: " + key);
     }
     
     public static class QueryResult {
