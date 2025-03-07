@@ -28,7 +28,7 @@ public class BlockchainModuleTest {
         SmartContractHandler handler = new SmartContractHandler(connector);
         
         // Call the instance method
-        String contractAddress = handler.deployContract("contractBinaryExample");
+        String contractAddress = handler.deployContract("contractBinaryExample").join();
         assertNotNull(contractAddress);
     }
 }

@@ -13,7 +13,8 @@ public class ConversationalAgentTest {
     public void testStartConversation() {
         GraphRAG graphRag = new GraphRAG("bolt://localhost:7687", "neo4j", "testpassword");
         ConversationalAgent agent = new ConversationalAgent(graphRag);
-        assertNotNull(agent);
+        String response = agent.startConversation("Hello").join();
+        assertNotNull(response);
         graphRag.close();
     }
 }
