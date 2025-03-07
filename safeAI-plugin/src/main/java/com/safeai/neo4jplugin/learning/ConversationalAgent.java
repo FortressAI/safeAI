@@ -6,6 +6,8 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * ConversationalAgent provides an interactive, natural language interface for querying the learning KG.
  */
@@ -17,6 +19,16 @@ public class ConversationalAgent {
     public ConversationalAgent(GraphRAG graphRag) {
         this.graphRag = graphRag;
         this.llmClient = new LLMClient();
+    }
+
+
+    /**
+     * Asynchronously starts a conversation with a query and returns the response.
+     */
+    public CompletableFuture<String> startConversation(String query) {
+        return CompletableFuture.supplyAsync(() -> {
+            return llmClient.query_llm_schema(query, "gpt4o-mini").solution_text;
+        });
     }
 
     /**
