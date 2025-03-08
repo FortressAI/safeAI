@@ -114,10 +114,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ColorComplement on ' + input.toString()); def cot = 'Inverted colors using x -> 9-x.'; return [candidate: candidate, metadata: [method: 'ColorComplement', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -129,10 +126,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ColorRemap on ' + input.toString()); def cot = 'Remapped colors using inversion lookup.'; return [candidate: candidate, metadata: [method: 'ColorRemap', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -144,10 +138,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ColorThreshold on ' + input.toString()); def cot = 'Applied color thresholding.'; return [candidate: candidate, metadata: [method: 'ColorThreshold', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -159,10 +150,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('CombineMirrors on ' + input.toString()); def cot = 'Combined mirrored copies by averaging overlaps.'; return [candidate: candidate, metadata: [method: 'CombineMirrors', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -174,10 +162,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('CompositeTransform on ' + input.toString()); def cot = 'Applied composite transformation.'; return [candidate: candidate, metadata: [method: 'CompositeTransform', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -189,10 +174,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ConditionalTransform on ' + input.toString()); def cot = 'Conditionally transformed grid cells.'; return [candidate: candidate, metadata: [method: 'ConditionalTransform', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -204,10 +186,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ConnectedComponentTransform on ' + input.toString()); def cot = 'Transformed connected components.'; return [candidate: candidate, metadata: [method: 'ConnectedComponentTransform', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -219,10 +198,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('EdgeProcessing on ' + input.toString()); def cot = 'Processed grid edges.'; return [candidate: candidate, metadata: [method: 'EdgeProcessing', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -234,10 +210,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('FloodFill on ' + input.toString()); def cot = 'Applied flood fill algorithm.'; return [candidate: candidate, metadata: [method: 'FloodFill', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -249,10 +222,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('GapFill on ' + input.toString()); def cot = 'Filled horizontal gaps between nonzero cells.'; return [candidate: candidate, metadata: [method: 'GapFill', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -264,10 +234,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('GridPartition on ' + input.toString()); def cot = 'Partitioned grid into quadrants and merged.'; return [candidate: candidate, metadata: [method: 'GridPartition', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -279,10 +246,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('MirrorSymmetric on ' + input.toString()); def cot = 'Created symmetric copies of the seed region.'; return [candidate: candidate, metadata: [method: 'MirrorSymmetric', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -294,10 +258,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Overlay on ' + input.toString()); def cot = 'Overlayed shifted grid on the original grid.'; return [candidate: candidate, metadata: [method: 'Overlay', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -309,10 +270,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('PatternReplication on ' + input.toString()); def cot = 'Replicated pattern across the grid.'; return [candidate: candidate, metadata: [method: 'PatternReplication', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -324,10 +282,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ReflectDiagonalMain on ' + input.toString()); def cot = 'Reflected grid along the main diagonal.'; return [candidate: candidate, metadata: [method: 'ReflectDiagonalMain', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -339,10 +294,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ReflectDiagonalSecondary on ' + input.toString()); def cot = 'Reflected grid along the secondary diagonal.'; return [candidate: candidate, metadata: [method: 'ReflectDiagonalSecondary', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -354,10 +306,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ReflectHorizontal on ' + input.toString()); def cot = 'Mirrored grid horizontally.'; return [candidate: candidate, metadata: [method: 'ReflectHorizontal', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -369,10 +318,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ReflectVertical on ' + input.toString()); def cot = 'Mirrored grid vertically.'; return [candidate: candidate, metadata: [method: 'ReflectVertical', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -384,10 +330,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Resample on ' + input.toString()); def cot = 'Resampled grid to new scale.'; return [candidate: candidate, metadata: [method: 'Resample', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -399,10 +342,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate180 on ' + input.toString()); def cot = 'Rotated grid 180\u00b0.'; return [candidate: candidate, metadata: [method: 'Rotate180', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -414,10 +354,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate270 on ' + input.toString()); def cot = 'Rotated grid 270\u00b0 clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate270', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -429,10 +366,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('Rotate90 on ' + input.toString()); def cot = 'Rotated grid 90\u00b0 clockwise.'; return [candidate: candidate, metadata: [method: 'Rotate90', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -444,10 +378,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ScaleDown on ' + input.toString()); def cot = 'Scaled grid down (2x reduction).'; return [candidate: candidate, metadata: [method: 'ScaleDown', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -459,10 +390,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ScaleUp on ' + input.toString()); def cot = 'Scaled grid up (2x scaling).'; return [candidate: candidate, metadata: [method: 'ScaleUp', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -474,10 +402,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ShiftDown on ' + input.toString()); def cot = 'Shifted grid down by one row.'; return [candidate: candidate, metadata: [method: 'ShiftDown', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -489,10 +414,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ShiftLeft on ' + input.toString()); def cot = 'Shifted grid left by one column.'; return [candidate: candidate, metadata: [method: 'ShiftLeft', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -504,10 +426,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ShiftRight on ' + input.toString()); def cot = 'Shifted grid right by one column.'; return [candidate: candidate, metadata: [method: 'ShiftRight', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -519,10 +438,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('ShiftUp on ' + input.toString()); def cot = 'Shifted grid up by one row.'; return [candidate: candidate, metadata: [method: 'ShiftUp', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -534,10 +450,7 @@
       "agent_code": "def generateCandidate(input) { def candidate = nlQuery('SubgridExtraction on ' + input.toString()); def cot = 'Extracted and repositioned a subgrid.'; return [candidate: candidate, metadata: [method: 'SubgridExtraction', chain_of_thought: cot, confidence: 0.85]]; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -549,10 +462,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { def agentsList = configuration.agentInstances; def bestCandidate = null; def bestCot = ''; for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { def sequences = generateAgentSequences(agentsList, chainLength); sequences.each { seq -> def candidate = input; def cot = ''; seq.each { agent -> def result = agent.generateCandidate(candidate); candidate = result.candidate; cot += result.metadata.chain_of_thought + ' -> '; }; if (evaluateCandidate(candidate, groundTruth)) { bestCandidate = candidate; bestCot = cot; return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; } } } return [candidate: null, metadata: [method: 'DynamicCompositeAgent', chain_of_thought: 'No valid composite transformation found.', confidence: 0.0]]; } def generateAgentSequences(agentsList, chainLength) { /* Implement combination logic here */ return []; } def evaluateCandidate(candidate, groundTruth) { /* Implement grid comparison logic here */ return candidate == groundTruth; }",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
