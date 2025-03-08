@@ -39,10 +39,7 @@
       "description": "Extracts and standardizes financial data and market signals for analysis.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "successCount": 100000,
       "agent_code": "def generateCandidate(input) { \n  def cot = 'Extracted baseline market and financial data from input.'; \n  return [candidate: input, metadata: [method: 'BaseFinanceAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "agent_type": "Script"
@@ -54,10 +51,7 @@
       "description": "Analyzes market data to detect trends and momentum shifts.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Analyze market trends for: ' + input.toString()); \n  def cot = 'Identified key market trends and momentum shifts.'; \n  return [candidate: candidate, metadata: [method: 'MarketTrendAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "agent_type": "LLM"
@@ -69,10 +63,7 @@
       "description": "Evaluates financial risks based on market volatility and economic indicators.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Assess financial risk for: ' + input.toString()); \n  def cot = 'Computed risk score using volatility and economic data.'; \n  return [candidate: candidate, metadata: [method: 'RiskAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "agent_type": "LLM"
@@ -84,10 +75,7 @@
       "description": "Dynamically combines outputs from multiple financial agents to generate an integrated trading strategy or risk analysis report.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "successCount": 0,
       "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n        def result = agent.generateCandidate(candidate); \n        candidate = result.candidate; \n        cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n        bestCandidate = candidate; \n        bestCot = cot; \n        return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeFinanceAgent', chain_of_thought: 'No valid composite strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n  return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n  return candidate == groundTruth; \n}",
       "agent_type": "Script"

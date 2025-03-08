@@ -52,10 +52,7 @@
       "agent_code": "def generateCandidate(input) { \n  def simplified = mathSimplifyArithmetic(input); \n  def cot = 'Simplified arithmetic expression using standard rules.'; \n  return [candidate: simplified, metadata: [method: 'ArithmeticSimplification', chain_of_thought: cot, confidence: 0.95]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -67,10 +64,7 @@
       "agent_code": "def generateCandidate(input) { \n  def simplified = mathSimplifyAlgebra(input);\n  def cot = 'Applied algebraic simplification rules.';\n  return [candidate: simplified, metadata: [method: 'AlgebraicSimplification', chain_of_thought: cot, confidence: 0.95]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -82,10 +76,7 @@
       "agent_code": "def generateCandidate(input) { \n  def factors = mathFactorPolynomial(input);\n  def cot = 'Factored polynomial into irreducible components.';\n  return [candidate: factors, metadata: [method: 'PolynomialFactorization', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -97,10 +88,7 @@
       "agent_code": "def generateCandidate(input) { \n  def solution = mathSolveEquation(input);\n  def cot = 'Solved equation using symbolic methods.';\n  return [candidate: solution, metadata: [method: 'EquationSolving', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -112,10 +100,7 @@
       "agent_code": "def generateCandidate(input) { \n  def derivative = mathDifferentiate(input);\n  def cot = 'Computed derivative using standard calculus rules.';\n  return [candidate: derivative, metadata: [method: 'CalculusDifferentiation', chain_of_thought: cot, confidence: 0.95]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -127,10 +112,7 @@
       "agent_code": "def generateCandidate(input) { \n  def integral = mathIntegrate(input);\n  def cot = 'Computed antiderivative using integration rules.';\n  return [candidate: integral, metadata: [method: 'CalculusIntegration', chain_of_thought: cot, confidence: 0.95]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -142,10 +124,7 @@
       "agent_code": "def generateCandidate(input) { \n  def product = mathMatrixMultiply(input);\n  def cot = 'Multiplied matrices using standard algorithm.';\n  return [candidate: product, metadata: [method: 'MatrixMultiplication', chain_of_thought: cot, confidence: 0.95]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -157,10 +136,7 @@
       "agent_code": "def generateCandidate(input) { \n  def inverse = mathMatrixInverse(input);\n  def cot = 'Calculated matrix inverse using standard methods.';\n  return [candidate: inverse, metadata: [method: 'MatrixInversion', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -172,10 +148,7 @@
       "agent_code": "def generateCandidate(input) { \n  def proof = mathGeometryProof(input);\n  def cot = 'Constructed geometric proof using classical Euclidean methods.';\n  return [candidate: proof, metadata: [method: 'GeometryProofAgent', chain_of_thought: cot, confidence: 0.92]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -187,10 +160,7 @@
       "agent_code": "def generateCandidate(input) { \n  def solution = mathNumberTheorySolve(input);\n  def cot = 'Applied number theory concepts to derive solution.';\n  return [candidate: solution, metadata: [method: 'NumberTheoryAgent', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -202,10 +172,7 @@
       "agent_code": "def generateCandidate(input) { \n  def solution = mathCombinatoricsSolve(input);\n  def cot = 'Computed combinatorial solution using counting principles.';\n  return [candidate: solution, metadata: [method: 'CombinatorialAgent', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -217,10 +184,7 @@
       "agent_code": "def generateCandidate(input) { \n  def proof = mathAdvancedProof(input);\n  def cot = 'Generated advanced proof using formal logic and induction/contradiction.';\n  return [candidate: proof, metadata: [method: 'AdvancedProofAgent', chain_of_thought: cot, confidence: 0.93]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -232,10 +196,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeMathAgent', chain_of_thought: 'No valid composite transformation found.', confidence: 0.0]]; \n} \n\ndef generateAgentSequences(agentsList, chainLength) { \n    /* Implement combination logic here */ \n    return []; \n} \n\ndef evaluateCandidate(candidate, groundTruth) { \n    /* Implement a strict evaluation function for math solutions */ \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],

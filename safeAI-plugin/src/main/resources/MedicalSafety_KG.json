@@ -46,10 +46,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted and standardized baseline clinical data for: ' + input; \n    return [candidate: input, metadata: [method: 'BaseMedicalAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -61,10 +58,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate clinical guidelines for: ' + input.toString()); \n    def cot = 'Assessed input against current clinical guidelines and regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'ClinicalGuidelinesAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -76,10 +70,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Support diagnosis for: ' + input.toString()); \n    def cot = 'Integrated clinical data with diagnostic criteria to support diagnosis.'; \n    return [candidate: candidate, metadata: [method: 'DiagnosticSupportAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -91,10 +82,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate treatment recommendation for: ' + input.toString()); \n    def cot = 'Recommended treatment based on clinical evidence and patient safety protocols.'; \n    return [candidate: candidate, metadata: [method: 'TreatmentRecommendationAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -106,10 +94,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeMedicalAgent', chain_of_thought: 'No valid composite treatment protocol found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for medical agent synthesis\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for comparing treatment recommendations or protocols\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],

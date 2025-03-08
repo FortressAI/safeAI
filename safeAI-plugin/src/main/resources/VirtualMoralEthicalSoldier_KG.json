@@ -42,10 +42,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline military data and standardized conflict scenario parameters.'; \n    return [candidate: input, metadata: [method: 'BaseSoldierAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -57,10 +54,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess international law compliance for: ' + input.toString()); \n    def cot = 'Analyzed input against international treaties and rules of engagement.'; \n    return [candidate: candidate, metadata: [method: 'InternationalLawComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -72,10 +66,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate ethical implications for: ' + input.toString() + ' using international ethical guidelines'); \n    def cot = 'Applied ethical frameworks including just war theory and international ethical codes to generate recommendations.'; \n    return [candidate: candidate, metadata: [method: 'EthicalMoralGuidanceAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -87,10 +78,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Propose conflict de-escalation measures for: ' + input.toString()); \n    def cot = 'Synthesized de-escalation strategies and alternative operational approaches to minimize conflict intensity.'; \n    return [candidate: candidate, metadata: [method: 'ConflictResolutionAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -102,10 +90,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeSoldierAgent', chain_of_thought: 'No valid composite operational plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for soldier agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic based on compliance with international law and ethical standards\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": {
-        "effectivenessThreshold": "0.95",
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      },
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
