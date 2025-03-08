@@ -34,7 +34,7 @@ public class DynamicAgentCreator {
                         }
                         String candidate = com.safeai.neo4jplugin.utilities.LLMService.generateCandidate(fullPrompt);
                         if(candidate == null || candidate.trim().isEmpty()){
-                            candidate = "Simulated LLM response (default): " + fullPrompt;
+                            throw new RuntimeException("LLM service returned empty response");
                         }
                         return candidate;
                     } catch (Exception e) {
