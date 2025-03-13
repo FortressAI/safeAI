@@ -39,6 +39,35 @@ Welcome to the SafeAI Platform documentation. This comprehensive guide covers go
    - Communication guidelines
    - Best practices
 
+## Technical Documentation
+
+1. [Knowledge Graph Implementation Guide](./KnowledgeGraph_Implementation_Guide.md)
+   - Basic structure and templates
+   - Node and agent creation
+   - Security features
+   - Relationships and queries
+   - Best practices
+
+2. [Agent Development Guide](./technical/agent-development-guide.md)
+   - Agent architecture
+   - Development workflow
+   - Best practices
+
+3. [Blockchain Integration](./technical/blockchain-integration.md)
+   - Smart contracts
+   - Token economics
+   - Transaction monitoring
+
+4. [Knowledge Graph Architecture](./technical/knowledge-graph-architecture.md)
+   - Graph structure
+   - Node types
+   - Query patterns
+
+5. [Language Games Framework](./technical/language-games-framework.md)
+   - Framework overview
+   - Implementation
+   - Validation
+
 ## Security Documentation
 
 1. [Security Hardening Guide](./security/security-hardening-guide.md)
@@ -118,28 +147,6 @@ Welcome to the SafeAI Platform documentation. This comprehensive guide covers go
 5. [Mathematics Domain Guide](./domains/math-domain-guide.md)
    - Mathematical concepts
    - Problem-solving
-   - Validation
-
-## Technical Documentation
-
-1. [Agent Development Guide](./technical/agent-development-guide.md)
-   - Agent architecture
-   - Development workflow
-   - Best practices
-
-2. [Blockchain Integration](./technical/blockchain-integration.md)
-   - Smart contracts
-   - Token economics
-   - Transaction monitoring
-
-3. [Knowledge Graph Architecture](./technical/knowledge-graph-architecture.md)
-   - Graph structure
-   - Node types
-   - Query patterns
-
-4. [Language Games Framework](./technical/language-games-framework.md)
-   - Framework overview
-   - Implementation
    - Validation
 
 ## Role-Based Guides
