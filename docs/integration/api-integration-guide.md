@@ -2,338 +2,373 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for integrating with the SafeAI Platform's APIs, including authentication, endpoints, data formats, and best practices for building robust integrations.
+This guide details how to integrate with the SafeAI Platform's Knowledge Graph API using Neo4j's Cypher query language. All interactions with the platform are performed through Cypher queries to ensure consistency and security.
 
 ## Table of Contents
 
-1. [API Architecture](#api-architecture)
-2. [Authentication](#authentication)
-3. [Core Endpoints](#core-endpoints)
-4. [Data Formats](#data-formats)
-5. [Integration Patterns](#integration-patterns)
-
-## API Architecture
-
-### RESTful API Structure
-
-```json
-{
-  "api_version": "v1",
-  "architecture": {
-    "style": "REST",
-    "protocols": [
-      "HTTPS",
-      "WebSocket"
-    ],
-    "formats": [
-      "JSON",
-      "Protocol Buffers"
-    ],
-    "security": {
-      "authentication": "OAuth2",
-      "rate_limiting": true,
-      "encryption": "TLS 1.3"
-    }
-  }
-}
-```
-
-### Core Components
-
-1. **API Gateway**
-   ```json
-   {
-     "gateway": {
-       "endpoints": {
-         "rest": "https://api.safeai.dev/v1",
-         "websocket": "wss://ws.safeai.dev/v1",
-         "grpc": "grpc://grpc.safeai.dev"
-       },
-       "features": {
-         "rate_limiting": true,
-         "caching": true,
-         "compression": true,
-         "cors": true
-       }
-     }
-   }
-   ```
-
-2. **Authentication Flow**
-   ```json
-   {
-     "auth": {
-       "methods": [
-         "oauth2",
-         "api_key",
-         "jwt"
-       ],
-       "oauth_flows": [
-         "authorization_code",
-         "client_credentials"
-       ],
-       "token_management": {
-         "expiration": "1h",
-         "refresh": true,
-         "rotation": true
-       }
-     }
-   }
-   ```
+1. [Authentication](#authentication)
+2. [Core Endpoints](#core-endpoints)
+3. [Data Models](#data-models)
+4. [Integration Patterns](#integration-patterns)
+5. [Error Handling](#error-handling)
+6. [Best Practices](#best-practices)
 
 ## Authentication
 
-### 1. OAuth2 Implementation
+### 1. Create API Client
 
-```python
-class OAuth2Client:
-    def __init__(self):
-        self.auth_server = OAuth2Server()
-        self.token_manager = TokenManager()
-        
-    async def authenticate(self, credentials):
-        # Obtain OAuth token
-        token = await self.auth_server.get_token(credentials)
-        
-        # Validate token
-        validation = await self.token_manager.validate_token(token)
-        
-        # Setup session
-        session = self.create_session(token)
-        
-        return {
-            'access_token': token,
-            'validation': validation,
-            'session': session
-        }
+```cypher
+// Create API Client Node
+CREATE (c:APIClient {
+    client_id: apoc.create.uuid(),
+    name: 'example_client',
+    description: 'Example integration client',
+    
+    // Authentication
+    auth_type: 'oauth2',
+    client_secret_hash: $hashed_secret,
+    
+    // Permissions
+    scopes: ['read', 'write', 'execute'],
+    rate_limit: 1000,
+    
+    // Security
+    ip_whitelist: ['192.168.1.0/24'],
+    require_ssl: true,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN c;
 ```
 
-### 2. API Key Management
+### 2. Generate Access Token
 
-```python
-class APIKeyManager:
-    def manage_keys(self, client):
-        # Generate API key
-        api_key = self.generate_key(client)
-        
-        # Set permissions
-        permissions = self.set_permissions(api_key)
-        
-        # Configure rate limits
-        rate_limits = self.configure_rate_limits(api_key)
-        
-        return {
-            'api_key': api_key,
-            'permissions': permissions,
-            'rate_limits': rate_limits
-        }
+```cypher
+// Create Access Token
+MATCH (c:APIClient {client_id: $client_id})
+WHERE c.status = 'active'
+CREATE (t:AccessToken {
+    token_id: apoc.create.uuid(),
+    client_id: c.client_id,
+    
+    // Token Details
+    token_hash: $token_hash,
+    expires_at: datetime() + duration('PT1H'),
+    
+    // Scopes
+    scopes: c.scopes,
+    
+    // Metadata
+    created_at: datetime(),
+    last_used: datetime(),
+    status: 'active'
+})
+CREATE (c)-[r:HAS_TOKEN {
+    created_at: datetime()
+}]->(t)
+RETURN t.token_id;
 ```
 
 ## Core Endpoints
 
-### 1. Agent Interaction API
+### 1. Knowledge Graph Access
 
-```python
-class AgentAPI:
-    def __init__(self):
-        self.agent_manager = AgentManager()
-        self.interaction_handler = InteractionHandler()
-        
-    async def handle_request(self, request):
-        # Validate request
-        validated_request = self.validate_request(request)
-        
-        # Process through agent
-        response = await self.agent_manager.process(validated_request)
-        
-        # Format response
-        formatted_response = self.format_response(response)
-        
-        return {
-            'status': 'success',
-            'data': formatted_response,
-            'metadata': self.generate_metadata(response)
-        }
+```cypher
+// Query Knowledge Graph
+MATCH (n:KnowledgeNode)
+WHERE n.domain IN $authorized_domains
+  AND n.access_level <= $client_access_level
+RETURN n.id,
+       n.type,
+       n.properties,
+       [(n)-[r]->(m) | {
+           type: type(r),
+           target_id: m.id,
+           properties: r.properties
+       }] as relationships
+LIMIT 100;
+
+// Create Knowledge Node
+CREATE (n:KnowledgeNode {
+    id: apoc.create.uuid(),
+    type: $node_type,
+    properties: $properties,
+    
+    // Metadata
+    created_by: $client_id,
+    created_at: datetime(),
+    access_level: $access_level
+})
+RETURN n;
 ```
 
-### 2. Knowledge Graph API
+### 2. Agent Interaction
 
-```python
-class KnowledgeGraphAPI:
-    def query_graph(self, query):
-        # Process query
-        processed_query = self.process_query(query)
-        
-        # Execute graph traversal
-        results = self.traverse_graph(processed_query)
-        
-        # Format results
-        formatted_results = self.format_results(results)
-        
-        return {
-            'query': processed_query,
-            'results': formatted_results,
-            'metadata': self.generate_metadata(results)
-        }
+```cypher
+// Execute Agent Action
+MATCH (a:Agent {id: $agent_id})
+WHERE a.status = 'active'
+  AND $client_id IN a.authorized_clients
+CREATE (e:Execution {
+    id: apoc.create.uuid(),
+    agent_id: a.id,
+    client_id: $client_id,
+    
+    // Execution Details
+    action: $action,
+    parameters: $parameters,
+    
+    // State
+    status: 'pending',
+    started_at: datetime(),
+    
+    // Security
+    validation_required: true,
+    validated: false
+})
+CREATE (a)-[r:EXECUTES {
+    created_at: datetime()
+}]->(e)
+RETURN e;
+
+// Monitor Execution
+MATCH (e:Execution {id: $execution_id})
+RETURN e.status,
+       e.started_at,
+       e.completed_at,
+       e.result,
+       e.error;
 ```
 
-## Data Formats
+## Data Models
 
-### 1. Request/Response Format
+### 1. Define Schema
 
-```python
-class APIFormatter:
-    def format_request(self, data):
-        return {
-            'version': 'v1',
-            'timestamp': self.get_timestamp(),
-            'request_id': self.generate_request_id(),
-            'data': self.validate_and_format(data),
-            'metadata': {
-                'client': self.get_client_info(),
-                'parameters': self.get_request_params()
-            }
-        }
-```
+```cypher
+// Create Node Types
+CREATE CONSTRAINT node_type_name IF NOT EXISTS
+FOR (n:NodeType) REQUIRE n.name IS UNIQUE;
 
-### 2. Error Handling
-
-```python
-class APIErrorHandler:
-    def handle_error(self, error):
-        return {
-            'error': {
-                'code': self.get_error_code(error),
-                'message': self.get_error_message(error),
-                'details': self.get_error_details(error),
-                'timestamp': self.get_timestamp()
-            },
-            'request_id': self.get_request_id(),
-            'documentation_url': self.get_docs_url(error)
-        }
-```
-
-## Usage Examples
-
-### 1. Agent Interaction
-
-```python
-# Agent interaction example
-request = {
-    'agent_id': 'math_solver_001',
-    'input': {
-        'problem': '2x + 3 = 7',
-        'solve_for': 'x'
+// Define Node Type
+CREATE (nt:NodeType {
+    name: 'ExampleType',
+    version: '1.0',
+    
+    // Schema
+    required_properties: ['name', 'description'],
+    optional_properties: ['tags', 'metadata'],
+    property_types: {
+        name: 'string',
+        description: 'string',
+        tags: 'list<string>',
+        metadata: 'map'
     },
-    'parameters': {
-        'show_work': True,
-        'format': 'detailed'
-    }
-}
-
-response = await api.agent.solve(request)
-print(response.solution)
-print(response.work_shown)
+    
+    // Validation
+    constraints: [
+        'name_length_max:100',
+        'description_length_max:1000'
+    ],
+    
+    // Metadata
+    created_at: datetime()
+})
+RETURN nt;
 ```
 
-### 2. Knowledge Graph Query
+### 2. Validate Data
 
-```python
-# Knowledge graph query
-query = {
-    'type': 'path_query',
-    'start_node': 'concept_a',
-    'end_node': 'concept_b',
-    'constraints': {
-        'max_depth': 3,
-        'relationship_types': ['related_to', 'depends_on']
-    }
-}
+```cypher
+// Validate Node Properties
+MATCH (n:ExampleType)
+WHERE n.created_at > $last_check
+RETURN n.id,
+       n.name IS NOT NULL AND size(n.name) <= 100 as valid_name,
+       n.description IS NOT NULL AND size(n.description) <= 1000 as valid_description,
+       ALL(tag IN n.tags WHERE tag IS NOT NULL) as valid_tags;
+```
 
-results = api.knowledge_graph.query(query)
-print(results.paths)
-print(results.metadata)
+## Integration Patterns
+
+### 1. Batch Processing
+
+```cypher
+// Create Batch Job
+CREATE (b:BatchJob {
+    id: apoc.create.uuid(),
+    client_id: $client_id,
+    
+    // Job Details
+    type: 'data_import',
+    status: 'pending',
+    total_items: $item_count,
+    processed_items: 0,
+    
+    // Configuration
+    batch_size: 1000,
+    retry_count: 3,
+    
+    // Tracking
+    started_at: datetime(),
+    last_updated: datetime()
+})
+RETURN b;
+
+// Process Batch
+MATCH (b:BatchJob {id: $batch_id})
+WHERE b.status = 'pending'
+  AND b.processed_items < b.total_items
+WITH b
+UNWIND $items as item
+CREATE (n:BatchItem {
+    batch_id: b.id,
+    data: item,
+    processed: false,
+    created_at: datetime()
+})
+WITH b, collect(n) as new_items
+SET b.last_updated = datetime(),
+    b.processed_items = b.processed_items + size(new_items)
+RETURN b.processed_items, b.total_items;
+```
+
+### 2. Event Streaming
+
+```cypher
+// Create Event Stream
+CREATE (s:EventStream {
+    id: apoc.create.uuid(),
+    name: 'example_stream',
+    
+    // Stream Config
+    event_types: ['data_change', 'agent_action'],
+    buffer_size: 1000,
+    retention_hours: 24,
+    
+    // Security
+    authorized_clients: $client_ids,
+    require_encryption: true,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN s;
+
+// Publish Event
+MATCH (s:EventStream {id: $stream_id})
+WHERE s.status = 'active'
+CREATE (e:Event {
+    id: apoc.create.uuid(),
+    stream_id: s.id,
+    
+    // Event Data
+    type: $event_type,
+    payload: $payload,
+    
+    // Metadata
+    published_at: datetime(),
+    publisher_id: $client_id,
+    processed: false
+})
+CREATE (s)-[r:CONTAINS {
+    created_at: datetime()
+}]->(e)
+RETURN e;
+```
+
+## Error Handling
+
+### 1. Error Logging
+
+```cypher
+// Log Error
+CREATE (e:Error {
+    id: apoc.create.uuid(),
+    client_id: $client_id,
+    
+    // Error Details
+    type: $error_type,
+    message: $error_message,
+    stack_trace: $stack_trace,
+    
+    // Context
+    request_id: $request_id,
+    endpoint: $endpoint,
+    parameters: $parameters,
+    
+    // Metadata
+    occurred_at: datetime(),
+    severity: $severity,
+    resolved: false
+})
+RETURN e;
+
+// Track Error Patterns
+MATCH (e:Error)
+WHERE e.occurred_at > datetime() - duration('P1D')
+RETURN e.type,
+       count(e) as error_count,
+       collect(DISTINCT e.client_id) as affected_clients,
+       avg(size((e)<-[:CAUSED_BY]-(:Request))) as avg_requests_affected
+ORDER BY error_count DESC;
+```
+
+### 2. Circuit Breaking
+
+```cypher
+// Check Service Health
+MATCH (s:Service {name: $service_name})
+MATCH (e:Error)-[:AFFECTS]->(s)
+WHERE e.occurred_at > datetime() - duration('PT5M')
+WITH s, count(e) as recent_errors
+SET s.status = CASE
+    WHEN recent_errors > s.error_threshold THEN 'degraded'
+    ELSE 'healthy'
+END
+RETURN s.name, s.status, recent_errors;
 ```
 
 ## Best Practices
 
-### 1. API Usage
+### 1. Performance Optimization
 
-- Use appropriate authentication
-- Implement rate limiting
-- Handle errors gracefully
-- Cache responses appropriately
-
-### 2. Integration Standards
-
-- Follow RESTful principles
-- Use proper HTTP methods
-- Implement retry logic
-- Version your endpoints
-
-### 3. Security
-
-- Validate all inputs
-- Use HTTPS only
-- Implement proper auth
-- Monitor usage
-
-## Error Handling
-
-```python
-class APIError(Exception):
-    def __init__(self, message, status_code, context):
-        super().__init__(message)
-        self.status_code = status_code
-        self.context = context
-        self.log_error()
-        self.format_response()
+```cypher
+// Create Indexes
+CREATE INDEX client_id IF NOT EXISTS FOR (c:APIClient) ON (c.client_id);
+CREATE INDEX token_id IF NOT EXISTS FOR (t:AccessToken) ON (t.token_id);
+CREATE INDEX execution_id IF NOT EXISTS FOR (e:Execution) ON (e.id);
+CREATE INDEX batch_job_id IF NOT EXISTS FOR (b:BatchJob) ON (b.id);
 ```
 
-## Rate Limiting
+### 2. Monitoring
 
-```python
-class RateLimiter:
-    def __init__(self):
-        self.limits = {
-            'default': 1000,
-            'authenticated': 10000,
-            'premium': 100000
-        }
-    
-    def check_rate_limit(self, client):
-        # Check current usage
-        current_usage = self.get_current_usage(client)
-        
-        # Check against limits
-        limit_check = self.verify_limits(client, current_usage)
-        
-        return {
-            'allowed': limit_check.allowed,
-            'remaining': limit_check.remaining,
-            'reset_time': limit_check.reset_time
-        }
+```cypher
+// Monitor API Usage
+MATCH (c:APIClient)
+MATCH (r:Request)-[:MADE_BY]->(c)
+WHERE r.timestamp > datetime() - duration('PT1H')
+RETURN c.name,
+       count(r) as request_count,
+       avg(r.response_time) as avg_response_time,
+       sum(CASE WHEN r.status_code >= 400 THEN 1 ELSE 0 END) as error_count
+ORDER BY request_count DESC;
+
+// Track Rate Limits
+MATCH (c:APIClient)
+MATCH (r:Request)-[:MADE_BY]->(c)
+WHERE r.timestamp > datetime() - duration('PT1M')
+WITH c, count(r) as recent_requests
+WHERE recent_requests > c.rate_limit
+SET c.status = 'rate_limited',
+    c.rate_limit_until = datetime() + duration('PT1M')
+RETURN c.client_id, c.name, recent_requests, c.rate_limit;
 ```
 
-## Monitoring and Metrics
+## See Also
 
-```python
-class APIMetrics:
-    def __init__(self):
-        self.metrics = {
-            'request_count': 0,
-            'error_rate': 0,
-            'response_time': 0
-        }
-    
-    def update_metrics(self, request_data):
-        # Update API metrics
-        pass
-```
-
-## Additional Resources
-
-- [API Reference](./api-reference.md)
-- [Authentication Guide](./authentication-guide.md)
-- [Rate Limiting Guide](./rate-limiting-guide.md)
-- [Error Handling Guide](./error-handling-guide.md) 
+- [Authentication Guide](../security/authentication.md)
+- [Error Codes Reference](../reference/error-codes.md)
+- [Performance Tuning](../operations/performance.md) 

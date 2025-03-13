@@ -1,313 +1,316 @@
-# Medical Safety Domain Implementation Guide
+# Medical Safety Knowledge Graph Implementation
 
 ## Overview
 
-The Medical Safety Domain in SafeAI Platform provides a specialized environment for medical decision support, safety validation, and ethical healthcare reasoning, with a strong emphasis on patient safety and medical ethics.
+This guide provides Cypher queries for implementing a Medical Safety Knowledge Graph in the SafeAI Platform. Each section includes:
+- Node creation
+- Relationship definitions
+- Analysis queries
+- Monitoring patterns
 
-## Table of Contents
+## Knowledge Graph Setup
 
-1. [Domain Architecture](#domain-architecture)
-2. [Safety Framework](#safety-framework)
-3. [Implementation Details](#implementation-details)
-4. [Validation Protocol](#validation-protocol)
-5. [Usage Guidelines](#usage-guidelines)
+### 1. Create Medical Safety KG
 
-## Domain Architecture
-
-### Knowledge Graph Structure
-
-```json
-{
-  "domain": "MedicalSafety",
-  "description": "Medical decision support and safety validation with blockchain-enabled verification",
-  "compliance": {
-    "hipaa": true,
-    "gdpr": true,
-    "fda": true
-  },
-  "endpoints": {
-    "medical_validation": "https://validation.safeai.med/",
-    "safety_check": "https://safety.safeai.med/"
-  }
-}
+```cypher
+CREATE (kg:KnowledgeGraph:Medical {
+    name: 'medical_safety_kg',
+    domain: 'medical',
+    description: 'Medical safety and decision support knowledge graph',
+    
+    // Domain Configuration
+    compliance_frameworks: ['hipaa', 'gdpr', 'fda'],
+    validation_levels: ['initial', 'cross_reference', 'ethical', 'final'],
+    update_frequency_minutes: 5,
+    
+    // Security Configuration
+    input_validation_enabled: true,
+    input_max_length: 10000,
+    input_allowed_chars: "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+    
+    // Resource Limits
+    resource_limit_memory_mb: 4096,
+    resource_limit_cpu_ms: 120000,
+    rate_limit_requests_per_min: 1000,
+    
+    // Metadata
+    created_at: datetime(),
+    updated_at: datetime(),
+    version: "1.0"
+})
+RETURN kg;
 ```
 
-### Core Components
+## Medical Agents
 
-1. **Safety Protocol**
-   ```json
-   {
-     "protocol_type": "medical_decision|drug_interaction|diagnosis_validation",
-     "safety_level": {
-       "critical": true,
-       "requires_human_oversight": true,
-       "validation_steps": [
-         "initial_assessment",
-         "cross_reference",
-         "ethical_review",
-         "final_validation"
-       ]
-     }
-   }
-   ```
+### 1. Safety Validation Agent
 
-2. **Validation Framework**
-   ```json
-   {
-     "validation_methods": [
-       "evidence_based_validation",
-       "clinical_guidelines_check",
-       "ethical_assessment"
-     ],
-     "confidence_threshold": 0.99999,
-     "required_documentation": [
-       "decision_path",
-       "evidence_sources",
-       "risk_assessment"
-     ]
-   }
-   ```
-
-## Safety Framework
-
-### 1. Medical Decision Support Agent
-
-```groovy
-def medicalAgent = [
-    name: "MedicalSafetyAgent",
-    category: "Clinical",
-    agent_type: "Script",
-    agent_code: """
-        def validateDecision(clinical_data) {
-            // Safety validation
-            def validation = performSafetyCheck(clinical_data)
-            def evidence = gatherEvidence()
-            
-            return [
-                decision: validation.result,
-                evidence: evidence,
-                confidence: calculateConfidence(validation),
-                risk_assessment: performRiskAssessment(validation)
-            ]
-        }
-    """
-]
+```cypher
+CREATE (sa:Agent:SafetyAgent {
+    name: 'safety_validation_agent',
+    category: 'medical',
+    agent_type: 'validation',
+    description: 'Validates medical decisions and ensures patient safety',
+    
+    // Validation Configuration
+    validation_types: ['clinical', 'drug_interaction', 'diagnosis'],
+    evidence_sources: ['clinical_trials', 'guidelines', 'literature'],
+    safety_protocols: ['initial_check', 'cross_reference', 'final_validation'],
+    
+    // Performance Settings
+    accuracy_threshold: 0.99999,
+    confidence_threshold: 0.99,
+    max_validation_time_ms: 2000,
+    
+    // Security
+    security_validation_enabled: true,
+    security_audit_enabled: true,
+    hipaa_compliant: true,
+    
+    // Resource Management
+    memory_limit_mb: 2048,
+    rate_limit_rpm: 300,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN sa;
 ```
 
 ### 2. Ethics Review Agent
 
-```json
-{
-  "name": "MedicalEthicsAgent",
-  "category": "Ethics",
-  "agent_type": "LLM",
-  "agent_code": {
-    "system_prompt": "You are a medical ethics expert...",
-    "task_template": "Evaluate the ethical implications of {{decision}}",
-    "validation_criteria": {
-      "patient_benefit": true,
-      "ethical_compliance": true,
-      "risk_minimization": true
-    }
-  }
-}
+```cypher
+CREATE (ea:Agent:EthicsAgent {
+    name: 'ethics_review_agent',
+    category: 'medical',
+    agent_type: 'ethics',
+    description: 'Reviews medical decisions for ethical compliance',
+    
+    // Ethics Configuration
+    review_types: ['patient_benefit', 'risk_assessment', 'ethical_compliance'],
+    ethical_frameworks: ['beneficence', 'non_maleficence', 'autonomy', 'justice'],
+    oversight_levels: ['automated', 'human_review', 'committee_review'],
+    
+    // Performance Settings
+    effectiveness_threshold: 0.99,
+    confidence_threshold: 0.95,
+    max_review_time_ms: 5000,
+    
+    // Security
+    security_validation_enabled: true,
+    security_audit_enabled: true,
+    hipaa_compliant: true,
+    
+    // Resource Management
+    memory_limit_mb: 1024,
+    rate_limit_rpm: 100,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN ea;
 ```
 
-## Implementation Details
+## Medical Components
 
-### 1. Decision Processing
+### 1. Clinical Decision Node
 
-```python
-class MedicalDecisionProcessor:
-    def __init__(self):
-        self.safety_engine = SafetyEngine()
-        self.ethics_validator = EthicsValidator()
-        
-    def process_decision(self, clinical_data):
-        # Initial safety check
-        safety_check = self.safety_engine.validate(clinical_data)
-        
-        # Ethics validation
-        ethics_check = self.ethics_validator.validate(safety_check)
-        
-        # Risk assessment
-        risk_assessment = self.assess_risks(safety_check, ethics_check)
-        
-        return {
-            'decision': safety_check.decision,
-            'validation': ethics_check,
-            'risks': risk_assessment,
-            'documentation': self.generate_documentation()
-        }
+```cypher
+CREATE (cd:ClinicalDecision {
+    id: $decision_id,
+    type: $type,                    // 'diagnosis', 'treatment', 'medication'
+    patient_id: $patient_id,
+    
+    // Decision Details
+    proposed_action: $action,
+    clinical_context: $context,
+    evidence_basis: $evidence,
+    
+    // Risk Assessment
+    risk_level: $risk,              // 'low', 'medium', 'high', 'critical'
+    contraindications: $contra,
+    precautions: $precautions,
+    
+    // Validation Status
+    safety_validated: false,
+    ethics_validated: false,
+    final_approved: false,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'pending'
+})
+RETURN cd;
 ```
 
-### 2. Safety Validation
+### 2. Safety Assessment Node
 
-```python
-class SafetyValidation:
-    def validate_decision(self, clinical_data, proposed_decision):
-        # Evidence-based validation
-        evidence_check = self.validate_evidence(clinical_data)
-        
-        # Guidelines compliance
-        guidelines_check = self.check_guidelines(proposed_decision)
-        
-        # Risk assessment
-        risk_check = self.assess_risks(proposed_decision)
-        
-        return all([evidence_check, guidelines_check, risk_check])
+```cypher
+CREATE (sa:SafetyAssessment {
+    id: $assessment_id,
+    decision_id: $decision_id,
+    assessor_id: $agent_id,
+    
+    // Assessment Details
+    safety_level: $level,           // 'safe', 'requires_review', 'unsafe'
+    risk_factors: $risks,
+    evidence_sources: $sources,
+    
+    // Validation
+    guidelines_checked: $guidelines,
+    interactions_verified: $interactions,
+    contraindications_checked: $contraindications,
+    
+    // Documentation
+    assessment_notes: $notes,
+    required_actions: $actions,
+    
+    // Metadata
+    created_at: datetime(),
+    verified: true
+})
+RETURN sa;
 ```
 
-## Validation Protocol
+## Relationships
 
-### 1. Evidence-Based Validation
+### 1. Safety Validation
 
-```python
-class EvidenceValidator:
-    def __init__(self):
-        self.evidence_db = MedicalEvidenceDB()
-        self.guidelines = ClinicalGuidelines()
-        
-    async def validate_with_evidence(self, decision):
-        # Gather evidence
-        evidence = await self.evidence_db.search(decision.context)
-        
-        # Validate against guidelines
-        guideline_check = self.guidelines.validate(decision, evidence)
-        
-        # Document validation
-        self.document_validation(decision, evidence, guideline_check)
-        
-        return guideline_check.is_valid
+```cypher
+// Connect Safety Agent to Decision
+MATCH (sa:SafetyAgent {name: $agent_name})
+MATCH (cd:ClinicalDecision {id: $decision_id})
+CREATE (sa)-[r:VALIDATES {
+    created_at: datetime(),
+    validation_type: $type,
+    confidence: $confidence,
+    
+    // Validation Details
+    protocols_followed: $protocols,
+    evidence_reviewed: $evidence,
+    guidelines_checked: $guidelines,
+    
+    // Security
+    security_validation_enabled: true,
+    hipaa_compliant: true
+}]->(cd)
+RETURN r;
+
+// Link Safety Assessment to Decision
+MATCH (sa:SafetyAssessment {id: $assessment_id})
+MATCH (cd:ClinicalDecision {id: $decision_id})
+CREATE (sa)-[r:ASSESSES {
+    created_at: datetime(),
+    assessment_type: $type,
+    
+    // Assessment Details
+    risk_level: $risk,
+    required_actions: $actions,
+    
+    // Validation
+    security_validation_enabled: true,
+    assessment_verified: true
+}]->(cd)
+RETURN r;
 ```
 
-### 2. Risk Assessment
+### 2. Ethics Review
 
-```python
-class RiskAssessment:
-    def assess_risks(self, decision, context):
-        risks = {
-            'patient_safety': self.evaluate_patient_safety(decision),
-            'clinical_risks': self.evaluate_clinical_risks(decision),
-            'ethical_risks': self.evaluate_ethical_risks(decision)
-        }
-        
-        return {
-            'risk_level': self.calculate_risk_level(risks),
-            'mitigation_steps': self.generate_mitigation_steps(risks),
-            'required_oversight': self.determine_oversight_level(risks)
-        }
+```cypher
+// Connect Ethics Agent to Decision
+MATCH (ea:EthicsAgent {name: $agent_name})
+MATCH (cd:ClinicalDecision {id: $decision_id})
+CREATE (ea)-[r:REVIEWS {
+    created_at: datetime(),
+    review_type: $type,
+    
+    // Review Details
+    ethical_framework: $framework,
+    oversight_level: $oversight,
+    review_outcome: $outcome,
+    
+    // Security
+    security_validation_enabled: true,
+    hipaa_compliant: true
+}]->(cd)
+RETURN r;
 ```
 
-## Usage Guidelines
+## Analysis Queries
 
-### 1. Clinical Decision Support
+### 1. Safety Analysis
 
-```python
-# Decision support example
-clinical_case = {
-    'patient_data': {
-        'condition': 'condition_code',
-        'history': 'patient_history',
-        'current_medications': ['med1', 'med2']
-    },
-    'proposed_treatment': {
-        'treatment_code': 'treatment_id',
-        'dosage': 'dosage_info',
-        'duration': 'duration_info'
-    }
-}
+```cypher
+// Get Decision Safety Status
+MATCH (cd:ClinicalDecision)
+WHERE cd.status = 'pending'
+RETURN cd.id,
+       cd.type,
+       cd.risk_level,
+       cd.safety_validated,
+       cd.ethics_validated,
+       cd.final_approved
+ORDER BY cd.risk_level DESC;
 
-validation = medical_safety.validate_decision(clinical_case)
-print(validation.safety_assessment)
-print(validation.risk_factors)
+// Analyze Safety Assessments
+MATCH (sa:SafetyAssessment)-[r:ASSESSES]->(cd:ClinicalDecision)
+WHERE cd.created_at > datetime() - duration('P1D')
+RETURN cd.type,
+       count(sa) as assessments,
+       collect(sa.safety_level) as safety_levels,
+       collect(sa.risk_factors) as risk_factors;
 ```
 
-### 2. Drug Interaction Check
+### 2. Ethics Review Analysis
 
-```python
-# Drug interaction validation
-interaction_check = {
-    'current_medications': ['med1', 'med2'],
-    'proposed_medication': 'med3',
-    'patient_factors': {
-        'allergies': ['allergy1'],
-        'conditions': ['condition1']
-    }
-}
+```cypher
+// Monitor Ethics Reviews
+MATCH (ea:EthicsAgent)-[r:REVIEWS]->(cd:ClinicalDecision)
+WHERE r.created_at > datetime() - duration('PT1H')
+RETURN ea.name,
+       count(r) as reviews,
+       collect(r.review_outcome) as outcomes,
+       collect(r.oversight_level) as oversight_levels;
 
-safety_check = medical_safety.check_interactions(interaction_check)
-print(safety_check.interactions)
-print(safety_check.recommendations)
+// Track Decision Progress
+MATCH (cd:ClinicalDecision)
+WHERE cd.created_at > datetime() - duration('P7D')
+RETURN cd.type,
+       count(cd) as decisions,
+       sum(CASE WHEN cd.final_approved THEN 1 ELSE 0 END) as approved,
+       avg(CASE WHEN cd.final_approved THEN 1 ELSE 0 END) as approval_rate;
 ```
 
 ## Best Practices
 
-### 1. Safety Protocols
+1. **Safety Validation**
+   - Follow all protocols
+   - Document evidence
+   - Track risk factors
+   - Maintain HIPAA compliance
 
-- Implement comprehensive validation
-- Maintain audit trails
-- Ensure HIPAA compliance
-- Document all decisions
+2. **Ethics Review**
+   - Apply ethical frameworks
+   - Ensure patient benefit
+   - Document decisions
+   - Enable oversight
 
-### 2. Risk Management
+3. **Performance Optimization**
+   - Index decision properties
+   - Optimize validation queries
+   - Monitor agent performance
+   - Regular maintenance
 
-- Continuous monitoring
-- Regular validation updates
-- Incident response planning
-- Safety review cycles
+4. **Security**
+   - HIPAA compliance
+   - Data encryption
+   - Audit trails
+   - Access controls
 
-### 3. Documentation
+## See Also
 
-- Detailed decision logs
-- Evidence tracking
-- Risk assessments
-- Validation reports
-
-## Error Handling
-
-```python
-class MedicalSafetyError(Exception):
-    def __init__(self, message, severity, context):
-        super().__init__(message)
-        self.severity = severity
-        self.context = context
-        self.log_incident()
-        self.trigger_alerts()
-```
-
-## Monitoring and Metrics
-
-```python
-class SafetyMetrics:
-    def __init__(self):
-        self.metrics = {
-            'safety_validation_rate': 0,
-            'risk_identification_rate': 0,
-            'incident_prevention_rate': 0
-        }
-    
-    def update_metrics(self, validation_result):
-        # Update safety metrics
-        pass
-```
-
-## Compliance and Auditing
-
-```python
-class ComplianceAuditor:
-    def audit_decision(self, decision_record):
-        return {
-            'hipaa_compliant': self.check_hipaa_compliance(decision_record),
-            'gdpr_compliant': self.check_gdpr_compliance(decision_record),
-            'fda_compliant': self.check_fda_compliance(decision_record),
-            'audit_trail': self.generate_audit_trail(decision_record)
-        }
-```
-
-## Additional Resources
-
-- [Clinical Guidelines Integration](./clinical-guidelines.md)
-- [Safety Protocol Documentation](./safety-protocols.md)
-- [Compliance Framework](./compliance-framework.md)
-- [Risk Management Guide](./risk-management.md) 
+- [Node Creation](../cypher/nodes.md)
+- [Relationship Creation](../cypher/relationships.md)
+- [Query Patterns](../cypher/queries.md) 

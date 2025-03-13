@@ -2,7 +2,7 @@
 
 ## Overview
 
-This comprehensive guide details how to implement, interact with, and maintain Knowledge Graphs (KGs) in the SafeAI Platform. It covers all necessary Cypher queries, security features, and best practices.
+This guide details how to interact with the SafeAI Platform's Knowledge Graph using Neo4j's Cypher query language. The platform provides a secure, blockchain-enabled graph database for AI agent interactions and knowledge management.
 
 ## Table of Contents
 
@@ -16,12 +16,12 @@ This comprehensive guide details how to implement, interact with, and maintain K
 
 ## Basic Structure
 
-Every Knowledge Graph follows this basic structure:
+Every Knowledge Graph starts with a root node:
 
 ```cypher
 CREATE (kg:KnowledgeGraph {
-  name: "Domain_Name_KG",
-  domain: "DomainName",
+  name: "domain_name_kg",
+  domain: "domain_name",
   description: "Comprehensive description of the KG's purpose",
   input_validation_enabled: true,
   input_max_length: 10000,
@@ -56,10 +56,10 @@ CREATE (w:Wallet {
 
 ```cypher
 CREATE (u:User {
-  name: "User Name",
-  affiliation: "Organization",
+  name: "user_name",
+  affiliation: "organization",
   description: "User role and responsibilities",
-  access_level: "admin|user|guest",
+  access_level: "admin",
   permission_publish: true,
   permission_modify: true,
   permission_delete: true,
@@ -69,38 +69,36 @@ CREATE (u:User {
 
 ## Agent Implementation
 
-### 1. Script Agent Template
+### 1. Script Agent
 
 ```cypher
 CREATE (a:Agent {
-  name: "ScriptAgent_Name",
-  category: "Domain_Category",
+  name: "script_agent_name",
+  category: "domain_category",
   usage_count: 0,
   description: "Agent's purpose and functionality",
   success_count: 0,
-  agent_code: "def generateCandidate(input){\n  if (!validateInput(input)) { return 'error:Invalid input'; }\n  def resources = monitorResources();\n  def result = processInput(input);\n  if (!validateOutput(result)) { return 'error:Invalid output'; }\n  return 'result:' + result + '|method:AgentName|chain_of_thought:Processing steps|confidence:0.95';\n}",
-  effectiveness_threshold: "0.95",
+  agent_type: "script",
+  effectiveness_threshold: 0.95,
   ethics_guidelines: "Ethical guidelines for agent operation",
-  agent_type: "Script",
   security_input_validation: true,
   security_resource_monitoring: true,
   security_output_validation: true
 });
 ```
 
-### 2. LLM Agent Template
+### 2. LLM Agent
 
 ```cypher
 CREATE (a:Agent {
-  name: "LLMAgent_Name",
-  category: "Domain_Category",
+  name: "llm_agent_name",
+  category: "domain_category",
   usage_count: 0,
   description: "Agent's purpose and functionality",
   success_count: 0,
-  agent_code: "def generateCandidate(input){\n  if (!validateInput(input)) { return 'error:Invalid input'; }\n  def resources = monitorResources();\n  def result = processWithLLM(input);\n  if (!validateOutput(result)) { return 'error:Invalid output'; }\n  return 'result:' + result + '|method:AgentName|chain_of_thought:Reasoning process|confidence:0.95';\n}",
-  effectiveness_threshold: "0.95",
+  agent_type: "llm",
+  effectiveness_threshold: 0.95,
   ethics_guidelines: "Ethical guidelines for agent operation",
-  agent_type: "LLM",
   security_input_validation: true,
   security_resource_monitoring: true,
   security_output_validation: true
@@ -113,25 +111,23 @@ CREATE (a:Agent {
 
 ```cypher
 MATCH (a:Agent)
-SET a.input_validation = {
-  enabled: true,
-  max_length: 10000,
-  allowed_chars: "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
-  timeout_ms: 30000
-};
+WHERE a.name = "agent_name"
+SET a.input_validation_enabled = true,
+    a.input_max_length = 10000,
+    a.input_allowed_chars = "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+    a.input_timeout_ms = 30000;
 ```
 
 ### 2. Resource Management
 
 ```cypher
 MATCH (a:Agent)
-SET a.resource_limits = {
-  memory_mb: 1024,
-  cpu_ms: 60000,
-  disk_mb: 100,
-  requests_per_min: 60,
-  burst_limit: 10
-};
+WHERE a.name = "agent_name"
+SET a.resource_limit_memory_mb = 1024,
+    a.resource_limit_cpu_ms = 60000,
+    a.resource_limit_disk_mb = 100,
+    a.rate_limit_requests_per_min = 60,
+    a.rate_limit_burst = 10;
 ```
 
 ## Relationships
@@ -139,8 +135,8 @@ SET a.resource_limits = {
 ### 1. KG to Agent Relationship
 
 ```cypher
-MATCH (kg:KnowledgeGraph {name: "Domain_Name_KG"}), (a:Agent)
-WHERE a.name IN ["Agent1", "Agent2", "Agent3"]
+MATCH (kg:KnowledgeGraph {name: "domain_name_kg"}), (a:Agent)
+WHERE a.name IN ["agent1", "agent2", "agent3"]
 CREATE (kg)-[:HAS_AGENT {
   required_permission: "execute",
   audit_logging_enabled: true
@@ -150,8 +146,8 @@ CREATE (kg)-[:HAS_AGENT {
 ### 2. User to Agent Relationship
 
 ```cypher
-MATCH (u:User {name: "User Name"}), (a:Agent)
-WHERE a.name IN ["Agent1", "Agent2", "Agent3"]
+MATCH (u:User {name: "user_name"}), (a:Agent)
+WHERE a.name IN ["agent1", "agent2", "agent3"]
 CREATE (u)-[:PUBLISHED_AGENT {
   transfer_requires_approval: true,
   audit_logging_enabled: true
@@ -162,7 +158,7 @@ CREATE (u)-[:PUBLISHED_AGENT {
 
 ```cypher
 MATCH (w:Wallet {wallet_id: "wallet-001"}), (a:Agent)
-WHERE a.name IN ["Agent1", "Agent2", "Agent3"]
+WHERE a.name IN ["agent1", "agent2", "agent3"]
 CREATE (w)-[:FUNDS_AGENT {
   smart_contract_verification: true,
   transaction_validation: true,
@@ -176,7 +172,7 @@ CREATE (w)-[:FUNDS_AGENT {
 
 ```cypher
 MATCH (a:Agent)
-WHERE a.category = "Domain_Category"
+WHERE a.category = "domain_category"
 RETURN a.name, a.description, a.usage_count
 ORDER BY a.usage_count DESC;
 ```
@@ -184,7 +180,7 @@ ORDER BY a.usage_count DESC;
 ### 2. Update Agent Properties
 
 ```cypher
-MATCH (a:Agent {name: "AgentName"})
+MATCH (a:Agent {name: "agent_name"})
 SET a.usage_count = a.usage_count + 1,
     a.success_count = a.success_count + 1
 RETURN a;
@@ -206,18 +202,18 @@ RETURN a.name,
 MATCH (a:Agent)
 WHERE a.usage_count > 0
 RETURN a.name,
-       a.resource_limits.memory_mb,
-       a.resource_limits.cpu_ms,
-       a.resource_limits.requests_per_min;
+       a.resource_limit_memory_mb,
+       a.resource_limit_cpu_ms,
+       a.rate_limit_requests_per_min;
 ```
 
 ## Best Practices
 
 1. **Data Format**
    - Use snake_case for all property names
-   - Return values as pipe-delimited strings
-   - Avoid nested JSON structures
-   - Use primitive types for all properties
+   - Store all values as primitive types (strings, numbers, booleans)
+   - Avoid nested structures
+   - Use consistent naming conventions
 
 2. **Security**
    - Always enable input validation
@@ -226,12 +222,12 @@ RETURN a.name,
    - Enable audit logging
    - Use secure transaction handling
 
-3. **Agent Development**
+3. **Agent Management**
    - Include error handling
    - Validate inputs and outputs
    - Monitor resource usage
    - Follow ethical guidelines
-   - Document chain-of-thought
+   - Document agent purpose and functionality
 
 4. **Maintenance**
    - Regularly update security features
@@ -244,7 +240,7 @@ RETURN a.name,
    - Use proper authentication
    - Implement rate limiting
    - Handle errors gracefully
-   - Cache responses appropriately
-   - Follow RESTful principles
+   - Follow Neo4j best practices
+   - Maintain data consistency
 
-This guide provides a foundation for implementing and working with Knowledge Graphs in the SafeAI Platform. For specific domain implementations, refer to the respective domain guides in the documentation. 
+This guide provides the foundation for working with Knowledge Graphs in the SafeAI Platform using Neo4j's Cypher query language. For domain-specific implementations, refer to the respective domain guides in the documentation. 

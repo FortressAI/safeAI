@@ -1,173 +1,177 @@
 # SafeAI Platform Documentation
 
-Welcome to the SafeAI Platform documentation. This comprehensive guide covers governance, security, integration, and domain-specific documentation to help you understand and work with our decentralized, blockchain-audited knowledge graph ecosystem.
+## Platform Overview
 
-## Governance and Guidelines
+The SafeAI Platform is a Neo4j-based Knowledge Graph system that enables the development, deployment, and management of Agentic Knowledge Graphs (AKGs). The platform provides:
 
-1. [Governance Framework](./governance/governance-framework-guide.md)
-   - Decision-making process
-   - Community participation
-   - Change management
+1. **Core Infrastructure**
+   - Neo4j graph database for storing knowledge and agent relationships
+   - Cypher query language for all interactions
+   - Blockchain integration for transaction verification and audit trails
 
-2. [Community Guidelines](./governance/community-guidelines.md)
-   - Code of conduct
-   - Communication guidelines
-   - Recognition and rewards
+2. **Key Features**
+   - Agent node creation and management
+   - Secure relationship definitions
+   - Resource monitoring and limits
+   - Blockchain-verified transactions
+   - Audit logging and compliance
 
-3. [Contributing Guide](./governance/contributing.md)
-   - Development workflow
-   - Code contributions
-   - Documentation contributions
+3. **Development Focus**
+   - All interactions are through Cypher queries
+   - No built-in UI/application layer
+   - Designed for integration into custom solutions
 
-4. [Development Setup](./governance/development-setup.md)
-   - Environment setup
-   - Prerequisites
-   - Installation steps
+## Role-Based Documentation
 
-5. [Testing Guide](./governance/testing-guide.md)
-   - Testing philosophy
-   - Test types
-   - Best practices
+### 1. Knowledge Graph Developers
+Essential documentation for creating and managing Knowledge Graphs:
 
-6. [Documentation Style](./governance/documentation-style.md)
-   - Writing guidelines
-   - Formatting standards
-   - Documentation types
+1. [KG Implementation Guide](./kg-developers/implementation-guide.md)
+   - Graph schema design
+   - Node type definitions
+   - Relationship patterns
+   - Security constraints
 
-7. [Code Review Guidelines](./governance/code-review.md)
-   - Review process
-   - Communication guidelines
-   - Best practices
+2. [Agent Development](./kg-developers/agent-development.md)
+   - Agent node structure
+   - Relationship definitions
+   - Security requirements
+   - Performance guidelines
 
-## Technical Documentation
-
-1. [Knowledge Graph Implementation Guide](./KnowledgeGraph_Implementation_Guide.md)
-   - Basic structure and templates
-   - Node and agent creation
-   - Security features
-   - Relationships and queries
-   - Best practices
-
-2. [Agent Development Guide](./technical/agent-development-guide.md)
-   - Agent architecture
-   - Development workflow
-   - Best practices
-
-3. [Blockchain Integration](./technical/blockchain-integration.md)
-   - Smart contracts
-   - Token economics
-   - Transaction monitoring
-
-4. [Knowledge Graph Architecture](./technical/knowledge-graph-architecture.md)
-   - Graph structure
-   - Node types
-   - Query patterns
-
-5. [Language Games Framework](./technical/language-games-framework.md)
-   - Framework overview
-   - Implementation
-   - Validation
-
-## Security Documentation
-
-1. [Security Hardening Guide](./security/security-hardening-guide.md)
-   - Security architecture
-   - Hardening measures
-   - Best practices
-
-2. [Audit Trail Guide](./security/audit-trail-guide.md)
-   - Event logging
-   - Audit architecture
-   - Implementation details
-
-3. [Compliance Framework](./security/compliance-framework.md)
-   - Regulatory requirements
-   - Implementation guidelines
-   - Certification process
-
-4. [Privacy Protection](./security/privacy-protection.md)
-   - Data protection
-   - Privacy controls
-   - Rights management
-
-5. [Incident Response Plan](./security/incident-response-plan.md)
-   - Response procedures
-   - Recovery process
-   - Post-incident analysis
-
-## Integration Guides
-
-1. [API Integration Guide](./integration/api-integration-guide.md)
-   - API overview
-   - Authentication
-   - Endpoints
-
-2. [Plugin Development Guide](./integration/plugin-development-guide.md)
-   - Plugin architecture
-   - Development process
-   - Best practices
-
-3. [Data Migration Guide](./integration/data-migration-guide.md)
-   - Migration strategies
-   - Data validation
+3. [Query Patterns](./kg-developers/query-patterns.md)
+   - Common query templates
    - Performance optimization
-
-4. [Cloud Deployment Guide](./integration/cloud-deployment-guide.md)
-   - Deployment options
-   - Configuration
-   - Monitoring
-
-5. [Enterprise Integration Guide](./integration/enterprise-integration-guide.md)
-   - Enterprise features
-   - Security considerations
-   - Scalability
-
-## Domain-Specific Guides
-
-1. [Cybersecurity Guide](./domains/cybersecurity-guide.md)
-   - Security measures
-   - Threat detection
-   - Response protocols
-
-2. [Environmental Sustainability Guide](./domains/environmental-sustainability-guide.md)
-   - Sustainability metrics
-   - Environmental impact
    - Best practices
 
-3. [Financial Analytics Guide](./domains/financial-analytics-guide.md)
-   - Financial metrics
-   - Analysis tools
-   - Reporting
+### 2. Security Engineers
+Documentation for implementing and maintaining security:
 
-4. [Medical Safety Guide](./domains/medical-safety-guide.md)
-   - Safety protocols
-   - Compliance requirements
-   - Risk management
+1. [Security Implementation](./security/implementation.md)
+   - Access control queries
+   - Validation rules
+   - Resource limits
+   - Audit logging
 
-5. [Mathematics Domain Guide](./domains/math-domain-guide.md)
-   - Mathematical concepts
-   - Problem-solving
-   - Validation
+2. [Blockchain Integration](./security/blockchain.md)
+   - Transaction verification
+   - Smart contract interaction
+   - Audit trails
 
-## Role-Based Guides
+3. [Compliance Framework](./security/compliance.md)
+   - Regulatory requirements
+   - Validation queries
+   - Audit procedures
 
-1. [End User Guide](./roles/end-user-guide.md)
-   - Basic usage
-   - Common workflows
-   - Troubleshooting
+### 3. Domain Experts
+Guides for specific knowledge domains:
 
-2. [Ethics Board Guide](./roles/ethics-board-guide.md)
-   - Ethics oversight
-   - Governance protocols
-   - Decision-making
+1. [Economics KG](./domains/economics.md)
+   - Economic agent patterns
+   - Transaction modeling
+   - Analysis queries
 
-## Performance Optimization
+2. [Cybersecurity KG](./domains/cybersecurity.md)
+   - Threat detection patterns
+   - Security agent queries
+   - Response workflows
 
-1. [Performance Optimization Guide](./performance/performance-optimization-guide.md)
-   - Performance basics
-   - Optimization strategies
-   - Monitoring and analysis
+3. [Environmental KG](./domains/environmental.md)
+   - Sustainability metrics
+   - Impact assessment
+   - Optimization queries
+
+## Core Documentation
+
+### 1. Cypher Query Reference
+Essential queries for working with the platform:
+
+1. [Node Creation](./cypher/nodes.md)
+   - Knowledge Graph nodes
+   - Agent nodes
+   - Support nodes
+
+2. [Relationships](./cypher/relationships.md)
+   - Agent relationships
+   - Security relationships
+   - Audit relationships
+
+3. [Queries](./cypher/queries.md)
+   - Search patterns
+   - Update operations
+   - Maintenance tasks
+
+### 2. Security Framework
+
+1. [Access Control](./security/access-control.md)
+   - Permission queries
+   - Role definitions
+   - Validation rules
+
+2. [Resource Management](./security/resources.md)
+   - Limit definitions
+   - Monitoring queries
+   - Alert patterns
+
+3. [Audit System](./security/audit.md)
+   - Logging queries
+   - Trail verification
+   - Compliance checks
+
+### 3. Performance Optimization
+
+1. [Query Optimization](./performance/queries.md)
+   - Index usage
+   - Pattern efficiency
+   - Cache utilization
+
+2. [Resource Tuning](./performance/resources.md)
+   - Memory allocation
+   - CPU utilization
+   - Network optimization
+
+## Development Guidelines
+
+1. [Setup Guide](./development/setup.md)
+   - Neo4j configuration
+   - Blockchain setup
+   - Security configuration
+
+2. [Testing Framework](./development/testing.md)
+   - Query testing
+   - Performance testing
+   - Security validation
+
+3. [Deployment Guide](./development/deployment.md)
+   - Production setup
+   - Monitoring
+   - Maintenance
 
 ## Contributing
 
-Please see our [Contributing Guide](./governance/contributing.md) for information on how to help improve this documentation. 
+For developers interested in contributing to the SafeAI Platform:
+
+1. [Contribution Guide](./contributing/guide.md)
+   - Development workflow
+   - Code standards
+   - Review process
+
+2. [Documentation Style](./contributing/documentation.md)
+   - Query formatting
+   - Example patterns
+   - Versioning
+
+## Support
+
+- [Common Issues](./support/common-issues.md)
+- [Troubleshooting](./support/troubleshooting.md)
+- [Contact](./support/contact.md)
+
+## Version History
+
+- [Changelog](./CHANGELOG.md)
+- [Migration Guide](./MIGRATION.md)
+- [Roadmap](./ROADMAP.md)
+
+---
+
+**Note**: The SafeAI Platform is a Knowledge Graph infrastructure. It does not include user interfaces or applications. All interactions are performed through Cypher queries, allowing developers to build custom solutions on top of the platform. 
