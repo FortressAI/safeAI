@@ -15,272 +15,219 @@ The SafeAI Platform's Agentic Knowledge Graph (AKG) represents a revolutionary a
 
 ## Core Concepts
 
-### What is an Agentic Knowledge Graph?
+### Knowledge Graph Setup
 
-An Agentic Knowledge Graph (AKG) is a dynamic knowledge representation system that:
-- Stores both knowledge and executable agents
-- Enables autonomous reasoning and learning
-- Records every transformation step
-- Supports blockchain-based microtransactions
-- Implements ethical validation
-- Learns through language games
-
-### Key Features
-
-1. **Dynamic Agent Loading**
-   - Agents are stored as executable code
-   - Real-time compilation and execution
-   - Performance monitoring and adaptation
-
-2. **Blockchain-Enabled Billing**
-   - Pay-per-use model
-   - Creator compensation
-   - Transparent pricing
-
-3. **Ethical Oversight**
-   - Built-in ethical validation
-   - Immutable ethical principles
-   - Adaptive moral learning
+```cypher
+// Create the base Knowledge Graph
+CREATE (kg:KnowledgeGraph {
+    name: 'agentic_kg',
+    description: 'Dynamic knowledge representation system with autonomous agents',
+    version: '1.0',
+    created_at: datetime(),
+    features: ['dynamic_agents', 'blockchain_enabled', 'ethical_validation'],
+    update_frequency_minutes: 5,
+    
+    // Security Configuration
+    input_validation_enabled: true,
+    input_max_length: 10000,
+    input_allowed_chars: "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+    
+    // Resource Limits
+    resource_limit_memory_mb: 4096,
+    resource_limit_cpu_ms: 120000,
+    rate_limit_requests_per_min: 1000
+})
+RETURN kg;
+```
 
 ## Agent Types
 
-The AKG supports two primary types of agents:
+### 1. Script Agent Definition
 
-### 1. Script Agents
-```json
-{
-  "name": "ColorComplement",
-  "category": "Color Transformation",
-  "agent_type": "Script",
-  "agent_code": "def generateCandidate(input) { 
-    def candidate = nlQuery('ColorComplement on ' + input.toString()); 
-    def cot = 'Inverted colors using x -> 9-x.'; 
-    return [candidate: candidate, metadata: [
-      method: 'ColorComplement', 
-      chain_of_thought: cot, 
-      confidence: 0.85
-    ]]; 
-  }"
-}
+```cypher
+// Create Script Agent Node
+CREATE (sa:Agent:ScriptAgent {
+    name: 'color_complement_agent',
+    category: 'transformation',
+    agent_type: 'script',
+    description: 'Performs color complement transformations',
+    
+    // Agent Configuration
+    effectiveness_threshold: 0.95,
+    confidence_threshold: 0.90,
+    max_execution_time_ms: 1000,
+    
+    // Security
+    security_validation_enabled: true,
+    security_audit_enabled: true,
+    
+    // Resource Management
+    memory_limit_mb: 512,
+    rate_limit_rpm: 60,
+    
+    // Blockchain
+    creator_wallet: '0xWalletAddress',
+    transaction_fee: 0.001,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN sa;
 ```
 
-Key characteristics:
-- Written in Groovy
-- Direct execution
-- Deterministic behavior
-- High performance
-- Specialized transformations
+### 2. LLM Agent Definition
 
-### 2. LLM Agents
-```json
-{
-  "name": "SocraticDialecticAgent",
-  "category": "Dialectic Inquiry",
-  "agent_type": "LLM",
-  "agent_code": "Apply Socratic questioning to the ethical issue '{{input}}', 
-    probing underlying assumptions and clarifying moral reasoning."
-}
-```
-
-Key characteristics:
-- Natural language processing
-- Adaptive reasoning
-- Complex problem solving
-- Ethical considerations
-- Learning capabilities
-
-## Knowledge Graph Structure
-
-### Base Structure
-```json
-{
-  "domain": "DomainName",
-  "description": "Domain description",
-  "immutable": false,
-  "endpoints": {},
-  "agents": [],
-  "configuration": {}
-}
-```
-
-### Agent Definition
-```json
-{
-  "name": "AgentName",
-  "category": "Category",
-  "usageCount": 0,
-  "description": "Agent description",
-  "agent_type": "Script|LLM",
-  "agent_code": "code or prompt",
-  "creatorWallet": "0xWalletAddress",
-  "transactionFee": "0.001",
-  "approvalCriteria": {
-    "effectivenessThreshold": "0.95",
-    "ethicsGuidelines": "Guidelines"
-  }
-}
+```cypher
+// Create LLM Agent Node
+CREATE (la:Agent:LLMAgent {
+    name: 'socratic_dialectic_agent',
+    category: 'reasoning',
+    agent_type: 'llm',
+    description: 'Applies Socratic questioning to ethical issues',
+    
+    // Agent Configuration
+    effectiveness_threshold: 0.90,
+    confidence_threshold: 0.85,
+    max_execution_time_ms: 5000,
+    
+    // Security
+    security_validation_enabled: true,
+    security_audit_enabled: true,
+    
+    // Resource Management
+    memory_limit_mb: 1024,
+    rate_limit_rpm: 30,
+    
+    // Blockchain
+    creator_wallet: '0xWalletAddress',
+    transaction_fee: 0.002,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN la;
 ```
 
 ## Agent Interaction Model
 
-### 1. Training Phase
-```mermaid
-graph LR
-    A[Input] --> B[Agent Selection]
-    B --> C[Execution]
-    C --> D[Validation]
-    D --> E[Learning]
+### 1. Create Agent Relationships
+
+```cypher
+// Connect Agents to Knowledge Graph
+MATCH (kg:KnowledgeGraph {name: 'agentic_kg'})
+MATCH (a:Agent)
+CREATE (kg)-[r:DEPLOYS {
+    deployment_time: datetime(),
+    security_validated: true,
+    audit_enabled: true
+}]->(a)
+RETURN type(r), count(r);
+
+// Create Agent Collaboration
+MATCH (a1:Agent), (a2:Agent)
+WHERE a1.name <> a2.name
+CREATE (a1)-[r:COLLABORATES_WITH {
+    created_at: datetime(),
+    interaction_type: 'chain',
+    security_validated: true
+}]->(a2)
+RETURN type(r), count(r);
 ```
 
-### 2. Execution Flow
-1. **Agent Selection**
-   - Based on problem type
-   - Performance history
-   - Cost considerations
+### 2. Monitor Agent Performance
 
-2. **Execution**
-   - Load agent code
-   - Execute transformation
-   - Record chain-of-thought
+```cypher
+// Track Agent Success Rates
+MATCH (a:Agent)-[r:PROCESSES]->(t:Task)
+WHERE r.created_at > datetime() - duration('P7D')
+RETURN a.name,
+       count(r) as total_tasks,
+       sum(CASE WHEN r.success = true THEN 1 ELSE 0 END) as successful_tasks,
+       avg(r.confidence) as avg_confidence
+ORDER BY successful_tasks DESC;
 
-3. **Validation**
-   - Ethical compliance
-   - Accuracy check
-   - Performance metrics
-
-4. **Learning**
-   - Update success rates
-   - Adapt strategies
-   - Refine parameters
+// Monitor Resource Usage
+MATCH (a:Agent)
+WHERE a.status = 'active'
+RETURN a.name,
+       a.memory_limit_mb,
+       a.rate_limit_rpm,
+       a.effectiveness_threshold;
+```
 
 ## Blockchain Integration
 
 ### Transaction Model
-```json
-{
-  "blockchain": {
-    "systemWallet": "0xAdminWalletAddress",
-    "contractAddress": "0x987654321ABCDEF",
-    "pricing": {
-      "baseFee": "0.001",
-      "dynamicPricing": "Based on supply/demand",
-      "minFee": "0.0005",
-      "usageQuota": 1000
-    }
-  }
-}
-```
 
-### Billing Flow
-1. User initiates query
-2. System calculates cost
-3. Smart contract validates balance
-4. Execute transformation
-5. Process microtransaction
-6. Distribute fees to creators
+```cypher
+// Create Transaction Node
+CREATE (t:Transaction {
+    id: apoc.create.uuid(),
+    type: 'agent_execution',
+    amount: 0.001,
+    currency: 'ETH',
+    
+    // Transaction Details
+    sender_wallet: '0xUserWallet',
+    receiver_wallet: '0xAgentCreatorWallet',
+    gas_price: 50,
+    gas_limit: 21000,
+    
+    // Validation
+    validated: true,
+    blockchain_confirmed: true,
+    
+    // Metadata
+    created_at: datetime(),
+    confirmed_at: datetime()
+})
+RETURN t;
 
-## Domain-Specific Implementation
-
-### 1. ARC Domain
-- Puzzle-solving agents
-- Visual transformations
-- Pattern recognition
-- Composite strategies
-
-Example Agent:
-```json
-{
-  "name": "CompositeTransform",
-  "category": "Composite",
-  "agent_type": "Script",
-  "agent_code": "def generateCandidate(input) {
-    def candidate = nlQuery('CompositeTransform on ' + input.toString());
-    def cot = 'Applied composite transformation.';
-    return [candidate: candidate, metadata: [
-      method: 'CompositeTransform',
-      chain_of_thought: cot,
-      confidence: 0.85
-    ]];
-  }"
-}
-```
-
-### 2. Ethics Domain
-- Language game agents
-- Ethical validation
-- Moral reasoning
-- Adaptive learning
-
-Example Agent:
-```json
-{
-  "name": "BaseLanguageGameAgent",
-  "category": "Contextualization",
-  "agent_type": "LLM",
-  "agent_code": "You are tasked to simulate a Wittgensteinian 
-    language game for the input '{{input}}' to establish a clear 
-    shared context between participants."
-}
+// Link Transaction to Agent Execution
+MATCH (t:Transaction {id: $transaction_id})
+MATCH (e:Execution {id: $execution_id})
+CREATE (e)-[r:PAID_BY {
+    created_at: datetime(),
+    status: 'confirmed'
+}]->(t)
+RETURN r;
 ```
 
 ## Best Practices
 
-### 1. Agent Development
-- Clear documentation
-- Ethical compliance
-- Performance optimization
-- Error handling
-- Chain-of-thought logging
+### 1. Query Performance
 
-### 2. Integration
-- Modular design
-- Scalable architecture
-- Security first
-- Audit trails
-- Ethical validation
+```cypher
+// Index Creation for Performance
+CREATE INDEX agent_name IF NOT EXISTS FOR (a:Agent) ON (a.name);
+CREATE INDEX transaction_id IF NOT EXISTS FOR (t:Transaction) ON (t.id);
+CREATE INDEX execution_timestamp IF NOT EXISTS FOR (e:Execution) ON (e.created_at);
+```
 
-### 3. Maintenance
-- Regular updates
-- Performance monitoring
-- Cost optimization
-- Security audits
-- Ethical reviews
+### 2. Security Validation
 
-## Security Considerations
+```cypher
+// Validate Agent Security
+MATCH (a:Agent)
+WHERE a.security_validation_enabled = true
+RETURN a.name,
+       a.security_audit_enabled,
+       a.effectiveness_threshold,
+       a.status;
 
-1. **Access Control**
-   - Agent permissions
-   - Execution limits
-   - Resource constraints
+// Monitor Security Events
+MATCH (e:SecurityEvent)-[:INVOLVES]->(a:Agent)
+WHERE e.created_at > datetime() - duration('P1D')
+RETURN a.name,
+       count(e) as event_count,
+       collect(e.type) as event_types
+ORDER BY event_count DESC;
+```
 
-2. **Validation**
-   - Input sanitization
-   - Output verification
-   - Ethical compliance
+## See Also
 
-3. **Monitoring**
-   - Usage patterns
-   - Performance metrics
-   - Error rates
-   - Cost analysis
-
-## Future Development
-
-1. **Planned Features**
-   - Multi-chain support
-   - Advanced agent composition
-   - Enhanced learning capabilities
-   - Improved ethical reasoning
-
-2. **Research Areas**
-   - Agent optimization
-   - Ethical frameworks
-   - Learning strategies
-   - Cost reduction
-
-## Additional Resources
-
-- [API Documentation](./api-reference.md)
-- [Ethics Framework](./ethics-framework.md)
-- [Security Guidelines](./security-framework.md)
-- [Developer Guide](../roles/developer-guide.md) 
+- [Node Creation](../cypher/nodes.md)
+- [Relationship Creation](../cypher/relationships.md)
+- [Query Patterns](../cypher/queries.md) 

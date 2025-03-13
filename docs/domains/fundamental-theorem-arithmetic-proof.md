@@ -1,266 +1,249 @@
-# Fundamental Theorem of Arithmetic - Proof Guide
+# Fundamental Theorem of Arithmetic - Knowledge Graph Implementation
 
 ## Overview
 
-This guide demonstrates how to construct a proof of the Fundamental Theorem of Arithmetic using the SafeAI Platform's Math KG. It also identifies necessary system enhancements to support this type of proof.
+This guide provides Cypher queries for implementing the Fundamental Theorem of Arithmetic proof in the SafeAI Platform's Math Knowledge Graph. It demonstrates how to:
+- Create proof components
+- Define relationships
+- Validate proof steps
+- Monitor proof construction
 
-## Required System Updates
+## Knowledge Graph Setup
 
-### 1. Agent Enhancements
+### 1. Create FTA Theorem Node
 
-```json
-{
-  "agent_updates": {
-    "NumberTheoryAgent": {
-      "new_capabilities": {
-        "prime_operations": {
-          "prime_test": "Test if a number is prime",
-          "prime_factorization": "Find prime factors of a number",
-          "prime_properties": "Verify properties of prime numbers"
-        },
-        "agent_code": "def prime_operations(n) { ... }"
-      }
-    },
-    "AdvancedProofAgent": {
-      "new_capabilities": {
-        "induction_types": {
-          "simple_induction": "Standard mathematical induction",
-          "complete_induction": "Strong/complete induction",
-          "structural_induction": "Induction over structures"
-        },
-        "agent_code": "def handle_induction(type, statement) { ... }"
-      }
-    }
-  }
-}
+```cypher
+CREATE (t:Theorem {
+    name: 'fundamental_theorem_arithmetic',
+    statement: 'Every positive integer greater than 1 can be represented uniquely as a product of prime numbers, up to the order of the factors',
+    domain: 'number_theory',
+    proof_method: 'complete_induction',
+    
+    // Theorem Properties
+    complexity: 'advanced',
+    prerequisites: ['prime_numbers', 'factorization', 'induction'],
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'in_progress'
+})
+RETURN t;
 ```
 
-### 2. Proof Template Structure
+### 2. Create Proof Components
 
-```python
-class CompleteInductionTemplate:
-    def setup_proof(self):
-        return {
-            "structure": {
-                "base_cases": [],
-                "inductive_hypothesis": {
-                    "assumption": "Statement true for all k < n",
-                    "scope": "n > base_case"
-                },
-                "inductive_step": {
-                    "goal": "Prove statement for n",
-                    "method": "case_analysis"
-                }
-            },
-            "validation": {
-                "check_base_cases": True,
-                "verify_hypothesis": True,
-                "confirm_step": True
-            }
+```cypher
+// Create Existence Part
+CREATE (e:ProofComponent {
+    theorem_name: 'fundamental_theorem_arithmetic',
+    part: 'existence',
+    type: 'complete_induction',
+    
+    // Base Case
+    base_case: {
+        number: 2,
+        statement: 'n = 2 is prime',
+        verification_method: 'prime_test'
+    },
+    
+    // Inductive Step
+    inductive_hypothesis: 'Every k < n has prime factorization',
+    cases: [
+        {
+            case_type: 'prime',
+            statement: 'n is prime',
+            conclusion: 'n is its own prime factorization'
+        },
+        {
+            case_type: 'composite',
+            statement: 'n is composite',
+            steps: [
+                'Find smallest prime factor p of n',
+                'Let q = n/p',
+                'Apply inductive hypothesis to q < n',
+                'Combine factors'
+            ]
         }
+    ],
+    
+    // Status
+    verified: false,
+    created_at: datetime()
+})
+RETURN e;
+
+// Create Uniqueness Part
+CREATE (u:ProofComponent {
+    theorem_name: 'fundamental_theorem_arithmetic',
+    part: 'uniqueness',
+    type: 'contradiction',
+    
+    // Proof Setup
+    assumption: 'Two different prime factorizations exist',
+    notation: 'n = p₁p₂...pₖ = q₁q₂...qₘ',
+    
+    // Proof Steps
+    steps: [
+        'Cancel common prime factors',
+        'Remaining primes must be equal (else contradiction)',
+        'Therefore factorization is unique'
+    ],
+    
+    // Status
+    verified: false,
+    created_at: datetime()
+})
+RETURN u;
 ```
 
 ## Proof Construction
 
-### 1. Initialize Proof Environment
+### 1. Create Proof Steps
 
-```python
-def initialize_fta_proof():
-    config = {
-        "theorem_type": "number_theory",
-        "proof_method": "complete_induction",
-        "required_agents": [
-            "NumberTheoryAgent",
-            "AdvancedProofAgent",
-            "DynamicCompositeMathAgent"
-        ],
-        "blockchain_validation": True
-    }
-    return config
-```
+```cypher
+// Create Base Case Step
+MATCH (t:Theorem {name: 'fundamental_theorem_arithmetic'})
+CREATE (s:ProofStep {
+    step_type: 'base_case',
+    number: 2,
+    statement: 'Verify 2 is prime',
+    verification_method: 'prime_test',
+    result: true,
+    verified: true,
+    created_at: datetime()
+})
+CREATE (t)-[r:HAS_STEP {
+    order: 1,
+    part: 'existence',
+    created_at: datetime()
+}]->(s)
+RETURN s, r;
 
-### 2. Proof Structure
-
-```python
-def construct_fta_proof():
-    proof = {
-        "part1_existence": {
-            "type": "complete_induction",
-            "base_case": {
-                "statement": "n = 2 is prime",
-                "verification": "prime_test(2)"
-            },
-            "inductive_step": {
-                "hypothesis": "Every k < n has prime factorization",
-                "cases": [
-                    {
-                        "case": "n is prime",
-                        "action": "prime_test(n)",
-                        "conclusion": "n is its own prime factorization"
-                    },
-                    {
-                        "case": "n is composite",
-                        "actions": [
-                            "p = find_smallest_prime_factor(n)",
-                            "q = n/p",
-                            "assert q < n",
-                            "factor_q = apply_inductive_hypothesis(q)",
-                            "combine_factors(p, factor_q)"
-                        ]
-                    }
-                ]
-            }
+// Create Inductive Steps
+MATCH (t:Theorem {name: 'fundamental_theorem_arithmetic'})
+CREATE (s:ProofStep {
+    step_type: 'inductive_step',
+    statement: 'Prove for arbitrary n > 2',
+    sub_steps: [
+        {
+            case: 'prime',
+            action: 'prime_test(n)',
+            verification: 'is_prime'
         },
-        "part2_uniqueness": {
-            "type": "contradiction",
-            "setup": {
-                "assumption": "Assume two different prime factorizations exist",
-                "notation": "n = p₁p₂...pₖ = q₁q₂...qₘ"
-            },
-            "steps": [
-                "Cancel common prime factors",
-                "Remaining primes must be equal (else contradiction)",
-                "Therefore factorization is unique"
-            ]
+        {
+            case: 'composite',
+            actions: [
+                'find_smallest_prime_factor',
+                'divide_by_factor',
+                'apply_induction',
+                'combine_factors'
+            ],
+            verification: 'verify_factorization'
         }
-    }
-    return proof
+    ],
+    verified: false,
+    created_at: datetime()
+})
+CREATE (t)-[r:HAS_STEP {
+    order: 2,
+    part: 'existence',
+    created_at: datetime()
+}]->(s)
+RETURN s, r;
 ```
 
-### 3. Implementation Details
+### 2. Create Validation Relationships
 
-```python
-def implement_proof_steps():
-    steps = {
-        "existence": {
-            "base_case": {
-                "agent": "NumberTheoryAgent",
-                "method": "prime_test",
-                "input": 2,
-                "expected": True
-            },
-            "inductive_step": {
-                "agent": "AdvancedProofAgent",
-                "method": "complete_induction",
-                "sub_steps": [
-                    {
-                        "agent": "NumberTheoryAgent",
-                        "method": "find_prime_factors",
-                        "validation": "verify_prime_factorization"
-                    }
-                ]
-            }
-        },
-        "uniqueness": {
-            "agent": "AdvancedProofAgent",
-            "method": "contradiction_proof",
-            "validation": "verify_contradiction"
-        }
-    }
-    return steps
+```cypher
+// Connect Number Theory Agent
+MATCH (t:Theorem {name: 'fundamental_theorem_arithmetic'})
+MATCH (a:Agent:NumberTheory {name: 'number_theory_agent'})
+CREATE (a)-[r:VALIDATES {
+    validation_type: 'prime_operations',
+    methods: ['prime_test', 'prime_factorization'],
+    created_at: datetime()
+}]->(t)
+RETURN r;
+
+// Connect Proof Agent
+MATCH (t:Theorem {name: 'fundamental_theorem_arithmetic'})
+MATCH (a:Agent:ProofAgent {name: 'advanced_proof_agent'})
+CREATE (a)-[r:VALIDATES {
+    validation_type: 'proof_structure',
+    methods: ['complete_induction', 'contradiction'],
+    created_at: datetime()
+}]->(t)
+RETURN r;
 ```
 
-## Required Agent Code Updates
+## Proof Validation
 
-### 1. NumberTheoryAgent Enhancement
+### 1. Validate Proof Steps
 
-```groovy
-def find_prime_factors(n) {
-    factors = []
-    for (p in generate_primes_up_to(sqrt(n))) {
-        while (n % p == 0) {
-            factors.add(p)
-            n = n/p
-        }
-    }
-    if (n > 1) factors.add(n)
-    return factors
-}
+```cypher
+// Check Base Case
+MATCH (s:ProofStep {step_type: 'base_case'})
+WHERE s.number = 2
+RETURN s.verified,
+       s.verification_method,
+       s.result;
 
-def verify_prime_factorization(n, factors) {
-    product = factors.inject(1) { acc, val -> acc * val }
-    all_prime = factors.every { is_prime(it) }
-    return product == n && all_prime
-}
+// Validate Inductive Steps
+MATCH (s:ProofStep {step_type: 'inductive_step'})
+RETURN s.sub_steps,
+       s.verified,
+       size(s.sub_steps) as step_count;
 ```
 
-### 2. AdvancedProofAgent Enhancement
+### 2. Monitor Proof Progress
 
-```groovy
-def complete_induction_proof(statement, base_cases, step_function) {
-    // Verify base cases
-    for (case in base_cases) {
-        if (!verify_case(case)) return false
-    }
-    
-    // Set up inductive hypothesis
-    def inductive_hypothesis = { k ->
-        k < current_n && statement_holds_for(k)
-    }
-    
-    // Verify inductive step
-    def verify_step = { n ->
-        assume(inductive_hypothesis)
-        return step_function(n)
-    }
-    
-    return verify_proof_structure(base_cases, inductive_hypothesis, verify_step)
-}
+```cypher
+// Track Overall Progress
+MATCH (t:Theorem {name: 'fundamental_theorem_arithmetic'})
+MATCH (t)-[r:HAS_STEP]->(s:ProofStep)
+RETURN t.name,
+       count(s) as total_steps,
+       sum(CASE WHEN s.verified THEN 1 ELSE 0 END) as verified_steps,
+       collect(s.step_type) as step_types;
+
+// Check Component Status
+MATCH (p:ProofComponent)
+WHERE p.theorem_name = 'fundamental_theorem_arithmetic'
+RETURN p.part,
+       p.type,
+       p.verified,
+       size(p.steps) as step_count;
 ```
 
-## Validation Process
+## Best Practices
 
-```python
-def validate_fta_proof(proof):
-    validation = {
-        "existence": {
-            "base_case": verify_base_case(proof.base_case),
-            "inductive_step": verify_inductive_step(proof.inductive_step),
-            "completeness": check_proof_completeness(proof.existence)
-        },
-        "uniqueness": {
-            "contradiction": verify_contradiction(proof.uniqueness),
-            "completeness": check_proof_completeness(proof.uniqueness)
-        },
-        "overall": {
-            "logical_flow": verify_logical_flow(proof),
-            "rigor": verify_mathematical_rigor(proof),
-            "clarity": assess_proof_clarity(proof)
-        }
-    }
-    return validation
-```
+1. **Proof Structure**
+   - Clear base cases
+   - Well-defined inductive steps
+   - Explicit assumptions
+   - Rigorous verification
 
-## Blockchain Integration
+2. **Validation**
+   - Test each step
+   - Verify assumptions
+   - Check completeness
+   - Document verification
 
-```python
-def record_proof_on_blockchain(proof):
-    proof_record = {
-        "theorem": "Fundamental Theorem of Arithmetic",
-        "proof_structure": proof,
-        "validation_results": validate_fta_proof(proof),
-        "timestamp": current_timestamp(),
-        "author": get_current_wallet(),
-        "verification_status": "pending_peer_review"
-    }
-    return submit_to_blockchain(proof_record)
-```
+3. **Performance**
+   - Index theorem properties
+   - Optimize proof queries
+   - Monitor agent validation
+   - Regular verification
 
-## Usage Example
+4. **Documentation**
+   - Clear step descriptions
+   - Complete proof chain
+   - Verification results
+   - Proof history
 
-```python
-# Initialize the proof environment
-config = initialize_fta_proof()
+## See Also
 
-# Construct the proof
-proof = construct_fta_proof()
-
-# Implement and validate each step
-implementation = implement_proof_steps()
-validation_results = validate_fta_proof(proof)
-
-# Record on blockchain if valid
-if validation_results["overall"]["logical_flow"] and 
-   validation_results["overall"]["rigor"]:
-    proof_record = record_proof_on_blockchain(proof)
-``` 
+- [Number Theory Proofs](../math/number-theory.md)
+- [Induction Techniques](../math/induction.md)
+- [Proof Validation](../math/validation.md)
+- [Agent Configuration](../agents/math-agents.md) 

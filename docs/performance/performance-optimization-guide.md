@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides a beginner-friendly introduction to optimizing the performance of the SafeAI Platform. We'll cover essential concepts, practical strategies, and step-by-step instructions for improving system efficiency.
+This guide provides a beginner-friendly introduction to optimizing the performance of the SafeAI Platform using Neo4j's Cypher query language. We'll cover essential concepts, practical strategies, and step-by-step instructions for improving system efficiency.
 
 ## Table of Contents
 
@@ -20,277 +20,432 @@ Performance optimization is the process of making your system run faster, use fe
 
 ### Key Performance Metrics
 
-```json
-{
-  "key_metrics": {
-    "response_time": {
-      "description": "How fast the system responds to requests",
-      "good_value": "< 200ms",
-      "warning_value": "200ms - 1s",
-      "critical_value": "> 1s"
+```cypher
+// Create Performance Metrics Node
+CREATE (pm:PerformanceMetrics {
+    name: 'system_metrics',
+    version: '1.0',
+    
+    // Response Time Thresholds
+    response_time_thresholds: {
+        good: 200,
+        warning: 1000,
+        critical: 1000
     },
-    "throughput": {
-      "description": "Number of requests handled per second",
-      "good_value": "> 1000 req/s",
-      "warning_value": "500-1000 req/s",
-      "critical_value": "< 500 req/s"
+    
+    // Throughput Thresholds
+    throughput_thresholds: {
+        good: 1000,
+        warning: 500,
+        critical: 500
     },
-    "resource_usage": {
-      "cpu": "Percentage of CPU being used",
-      "memory": "Amount of RAM being used",
-      "disk": "Amount of storage being used",
-      "network": "Amount of network bandwidth used"
-    }
-  }
-}
+    
+    // Resource Usage Thresholds
+    resource_thresholds: {
+        cpu: 80,
+        memory: 85,
+        disk: 90,
+        network: 75
+    },
+    
+    // Metadata
+    created_at: datetime(),
+    updated_at: datetime()
+})
+RETURN pm;
 ```
 
 ## System Resources
 
 ### 1. Resource Monitor
 
-```python
-class ResourceMonitor:
-    """
-    A simple resource monitor to track system performance.
-    Perfect for beginners to understand system resource usage.
-    """
-    def __init__(self):
-        self.metrics = {
-            'cpu_usage': 0,
-            'memory_usage': 0,
-            'disk_usage': 0,
-            'network_usage': 0
-        }
+```cypher
+// Create Resource Monitor Node
+CREATE (rm:ResourceMonitor {
+    name: 'system_monitor',
+    type: 'performance',
     
-    def check_resources(self):
-        """
-        Check current resource usage and provide simple recommendations
-        """
-        # Check CPU usage
-        cpu = self.check_cpu_usage()
-        
-        # Check memory usage
-        memory = self.check_memory_usage()
-        
-        # Check disk usage
-        disk = self.check_disk_usage()
-        
-        # Generate easy-to-understand recommendations
-        recommendations = self.generate_recommendations(cpu, memory, disk)
-        
-        return {
-            'current_usage': {
-                'cpu': f"{cpu}%",
-                'memory': f"{memory}%",
-                'disk': f"{disk}%"
-            },
-            'status': self.get_status(cpu, memory, disk),
-            'recommendations': recommendations
-        }
+    // Monitoring Configuration
+    metrics_enabled: true,
+    alerting_enabled: true,
+    logging_enabled: true,
+    
+    // Thresholds
+    cpu_threshold: 80,
+    memory_threshold: 85,
+    disk_threshold: 90,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN rm;
+
+// Monitor Current Resources
+MATCH (rm:ResourceMonitor {name: 'system_monitor'})
+MATCH (n)
+WHERE n.resource_metrics_enabled = true
+WITH rm, collect({
+    name: n.name,
+    cpu_usage: n.current_cpu_usage,
+    memory_usage: n.current_memory_usage,
+    disk_usage: n.current_disk_usage
+}) as metrics
+RETURN rm.name,
+       metrics,
+       CASE
+           WHEN any(m IN metrics WHERE m.cpu_usage > rm.cpu_threshold) THEN 'warning'
+           WHEN any(m IN metrics WHERE m.memory_usage > rm.memory_threshold) THEN 'warning'
+           WHEN any(m IN metrics WHERE m.disk_usage > rm.disk_threshold) THEN 'warning'
+           ELSE 'healthy'
+       END as status;
 ```
 
 ### 2. Performance Baseline
 
-```python
-class PerformanceBaseline:
-    """
-    Establish and track performance baselines.
-    Think of this as creating a 'normal' reference point.
-    """
-    def create_baseline(self):
-        # Collect normal performance data
-        normal_performance = self.measure_normal_performance()
-        
-        # Set acceptable ranges
-        ranges = self.set_acceptable_ranges(normal_performance)
-        
-        # Create alerts for when performance deviates
-        alerts = self.setup_alerts(ranges)
-        
-        return {
-            'baseline': normal_performance,
-            'acceptable_ranges': ranges,
-            'alerts': alerts
-        }
+```cypher
+// Create Performance Baseline
+CREATE (pb:PerformanceBaseline {
+    name: 'system_baseline',
+    type: 'normal',
+    
+    // Baseline Metrics
+    avg_response_time_ms: 150,
+    avg_throughput_rps: 1200,
+    avg_cpu_usage: 45,
+    avg_memory_usage: 60,
+    
+    // Acceptable Ranges
+    response_time_range: {
+        min: 100,
+        max: 300
+    },
+    throughput_range: {
+        min: 800,
+        max: 2000
+    },
+    
+    // Metadata
+    created_at: datetime(),
+    updated_at: datetime()
+})
+RETURN pb;
+
+// Track Performance Deviations
+MATCH (pb:PerformanceBaseline {name: 'system_baseline'})
+MATCH (n)
+WHERE n.performance_metrics_enabled = true
+WITH pb, n
+WHERE n.current_response_time > pb.response_time_range.max
+   OR n.current_throughput < pb.throughput_range.min
+CREATE (a:Alert {
+    type: 'performance_deviation',
+    severity: 'warning',
+    metric: CASE
+        WHEN n.current_response_time > pb.response_time_range.max THEN 'response_time'
+        ELSE 'throughput'
+    END,
+    value: CASE
+        WHEN n.current_response_time > pb.response_time_range.max THEN n.current_response_time
+        ELSE n.current_throughput
+    END,
+    created_at: datetime()
+})
+CREATE (n)-[:TRIGGERED]->(a)
+RETURN a;
 ```
 
 ## Optimization Strategies
 
 ### 1. Basic Optimization Steps
 
-```python
-class BasicOptimizer:
-    """
-    Simple optimization techniques for beginners
-    """
-    def optimize_basics(self):
-        optimizations = {
-            'caching': self.setup_basic_caching(),
-            'database': self.optimize_database_queries(),
-            'code': self.optimize_code_performance(),
-            'resources': self.optimize_resource_usage()
+```cypher
+// Create Optimization Plan
+CREATE (op:OptimizationPlan {
+    name: 'basic_optimization',
+    type: 'performance',
+    
+    // Optimization Steps
+    steps: [
+        {
+            name: 'caching',
+            priority: 'high',
+            status: 'pending'
+        },
+        {
+            name: 'query_optimization',
+            priority: 'high',
+            status: 'pending'
+        },
+        {
+            name: 'resource_optimization',
+            priority: 'medium',
+            status: 'pending'
         }
-        
-        return {
-            'applied_optimizations': optimizations,
-            'improvements': self.measure_improvements(),
-            'next_steps': self.suggest_next_steps()
-        }
+    ],
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN op;
+
+// Apply Optimizations
+MATCH (op:OptimizationPlan {name: 'basic_optimization'})
+MATCH (n)
+WHERE n.optimization_enabled = true
+WITH op, n
+UNWIND op.steps as step
+CREATE (o:Optimization {
+    name: step.name,
+    priority: step.priority,
+    status: 'in_progress',
+    started_at: datetime(),
+    target_node: n.name
+})
+CREATE (n)-[:OPTIMIZING]->(o)
+RETURN o;
 ```
 
 ### 2. Caching Implementation
 
-```python
-class SimpleCache:
-    """
-    A beginner-friendly caching system
-    """
-    def implement_caching(self):
-        # Setup basic caching
-        cache_config = {
-            'memory_cache': {
-                'size': '256MB',
-                'ttl': '1 hour'
-            },
-            'disk_cache': {
-                'size': '1GB',
-                'ttl': '1 day'
-            }
+```cypher
+// Create Cache Configuration
+CREATE (cc:CacheConfig {
+    name: 'system_cache',
+    type: 'performance',
+    
+    // Cache Settings
+    memory_cache: {
+        size_mb: 256,
+        ttl_minutes: 60
+    },
+    disk_cache: {
+        size_mb: 1024,
+        ttl_minutes: 1440
+    },
+    
+    // Cache Rules
+    cache_rules: [
+        {
+            pattern: 'frequent_queries',
+            ttl_minutes: 30
+        },
+        {
+            pattern: 'rare_queries',
+            ttl_minutes: 120
         }
-        
-        return self.setup_cache(cache_config)
+    ],
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN cc;
+
+// Monitor Cache Performance
+MATCH (cc:CacheConfig {name: 'system_cache'})
+MATCH (n)-[r:USES_CACHE]->(c:Cache)
+WHERE r.created_at > datetime() - duration('PT1H')
+RETURN cc.name,
+       count(r) as cache_operations,
+       avg(r.hit_rate) as avg_hit_rate,
+       avg(r.miss_rate) as avg_miss_rate;
 ```
 
 ## Monitoring and Analysis
 
 ### 1. Basic Performance Monitor
 
-```python
-class BasicPerformanceMonitor:
-    """
-    Simple performance monitoring for beginners
-    """
-    def monitor_performance(self):
-        # Track basic metrics
-        metrics = {
-            'response_time': self.measure_response_time(),
-            'error_rate': self.measure_error_rate(),
-            'system_load': self.measure_system_load()
-        }
-        
-        # Generate simple reports
-        report = self.create_simple_report(metrics)
-        
-        return {
-            'current_metrics': metrics,
-            'simple_report': report,
-            'suggestions': self.generate_suggestions(metrics)
-        }
+```cypher
+// Create Performance Monitor
+CREATE (pm:PerformanceMonitor {
+    name: 'basic_monitor',
+    type: 'system',
+    
+    // Monitoring Settings
+    metrics: ['response_time', 'error_rate', 'system_load'],
+    collection_interval_seconds: 60,
+    retention_days: 30,
+    
+    // Alert Thresholds
+    alert_thresholds: {
+        response_time_ms: 1000,
+        error_rate_percent: 5,
+        system_load: 80
+    },
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN pm;
+
+// Track Performance Metrics
+MATCH (pm:PerformanceMonitor {name: 'basic_monitor'})
+MATCH (n)
+WHERE n.monitoring_enabled = true
+CREATE (m:PerformanceMetric {
+    node_name: n.name,
+    response_time_ms: n.current_response_time,
+    error_rate: n.current_error_rate,
+    system_load: n.current_load,
+    timestamp: datetime()
+})
+CREATE (n)-[:MEASURED]->(m)
+RETURN m;
 ```
 
 ### 2. Performance Analysis
 
-```python
-class SimpleAnalyzer:
-    """
-    Basic performance analysis tools
-    """
-    def analyze_performance(self, data):
-        analysis = {
-            'average_response_time': self.calculate_average(data.response_times),
-            'peak_usage_times': self.find_peak_times(data),
-            'common_issues': self.identify_common_issues(data)
-        }
-        
-        return {
-            'analysis_results': analysis,
-            'simple_explanation': self.explain_results(analysis),
-            'suggested_actions': self.suggest_actions(analysis)
-        }
-```
-
-## Usage Examples
-
-### 1. Basic Performance Check
-
-```python
-# Simple performance check example
-monitor = BasicPerformanceMonitor()
-
-# Check current performance
-performance = monitor.check_performance()
-print("Current System Status:")
-print(f"CPU Usage: {performance.cpu_usage}%")
-print(f"Memory Usage: {performance.memory_usage}%")
-print(f"Response Time: {performance.response_time}ms")
-```
-
-### 2. Simple Optimization
-
-```python
-# Basic optimization example
-optimizer = BasicOptimizer()
-
-# Apply basic optimizations
-optimization = optimizer.optimize_basics()
-print("Optimization Results:")
-print(f"Improvements Made: {optimization.improvements}")
-print(f"Next Steps: {optimization.next_steps}")
+```cypher
+// Analyze Performance Data
+MATCH (m:PerformanceMetric)
+WHERE m.timestamp > datetime() - duration('P7D')
+WITH m.node_name as node_name,
+     avg(m.response_time_ms) as avg_response_time,
+     max(m.response_time_ms) as peak_response_time,
+     avg(m.error_rate) as avg_error_rate
+CREATE (pa:PerformanceAnalysis {
+    node_name: node_name,
+    period: '7d',
+    avg_response_time: avg_response_time,
+    peak_response_time: peak_response_time,
+    avg_error_rate: avg_error_rate,
+    created_at: datetime()
+})
+RETURN pa;
 ```
 
 ## Common Issues and Solutions
 
 ### 1. High CPU Usage
 
-- **Symptom**: System running slowly, high CPU usage
-- **Solution**: 
-  1. Check for resource-heavy processes
-  2. Optimize code loops and algorithms
-  3. Consider scaling resources
+```cypher
+// Detect High CPU Usage
+MATCH (n)
+WHERE n.cpu_usage > 80
+CREATE (a:Alert {
+    type: 'high_cpu_usage',
+    severity: 'warning',
+    value: n.cpu_usage,
+    created_at: datetime()
+})
+CREATE (n)-[:TRIGGERED]->(a)
+RETURN a;
+
+// Optimize Resource-Heavy Processes
+MATCH (n)
+WHERE n.cpu_usage > 80
+SET n.resource_limit_cpu = n.resource_limit_cpu * 0.8,
+    n.optimization_status = 'in_progress',
+    n.optimized_at = datetime()
+RETURN n.name, n.resource_limit_cpu;
+```
 
 ### 2. Memory Issues
 
-- **Symptom**: System using too much memory
-- **Solution**:
-  1. Check for memory leaks
-  2. Implement proper garbage collection
-  3. Optimize data structures
+```cypher
+// Monitor Memory Usage
+MATCH (n)
+WHERE n.memory_usage > 85
+CREATE (a:Alert {
+    type: 'high_memory_usage',
+    severity: 'warning',
+    value: n.memory_usage,
+    created_at: datetime()
+})
+CREATE (n)-[:TRIGGERED]->(a)
+RETURN a;
 
-### 3. Slow Response Times
+// Optimize Memory Allocation
+MATCH (n)
+WHERE n.memory_usage > 85
+SET n.resource_limit_memory = n.resource_limit_memory * 0.8,
+    n.optimization_status = 'in_progress',
+    n.optimized_at = datetime()
+RETURN n.name, n.resource_limit_memory;
+```
 
-- **Symptom**: System taking too long to respond
-- **Solution**:
-  1. Implement caching
-  2. Optimize database queries
-  3. Check network latency
+## Best Practices
 
-## Best Practices for Beginners
+### 1. Regular Maintenance
 
-### 1. Regular Monitoring
+```cypher
+// Schedule Maintenance Tasks
+CREATE (mt:MaintenanceTask {
+    name: 'regular_maintenance',
+    type: 'performance',
+    
+    // Task Schedule
+    schedule: {
+        frequency: 'daily',
+        time: '02:00',
+        timezone: 'UTC'
+    },
+    
+    // Tasks
+    tasks: [
+        {
+            name: 'cleanup_old_data',
+            priority: 'high'
+        },
+        {
+            name: 'optimize_indexes',
+            priority: 'medium'
+        },
+        {
+            name: 'update_statistics',
+            priority: 'low'
+        }
+    ],
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN mt;
+```
 
-- Check performance daily
-- Keep track of changes
-- Look for patterns
-- Act on warnings early
+### 2. Performance Monitoring
 
-### 2. Simple Optimizations
+```cypher
+// Create Performance Dashboard
+CREATE (pd:PerformanceDashboard {
+    name: 'system_dashboard',
+    type: 'monitoring',
+    
+    // Dashboard Metrics
+    metrics: [
+        {
+            name: 'response_time',
+            threshold: 200,
+            unit: 'ms'
+        },
+        {
+            name: 'throughput',
+            threshold: 1000,
+            unit: 'rps'
+        },
+        {
+            name: 'error_rate',
+            threshold: 1,
+            unit: '%'
+        }
+    ],
+    
+    // Refresh Settings
+    refresh_interval_seconds: 60,
+    
+    // Metadata
+    created_at: datetime(),
+    status: 'active'
+})
+RETURN pd;
+```
 
-- Start with basic improvements
-- Test one change at a time
-- Document what works
-- Learn from mistakes
+## See Also
 
-### 3. Resource Management
-
-- Monitor resource usage
-- Clean up unused resources
-- Scale when needed
-- Plan for growth
-
-## Additional Resources
-
-- [Performance Monitoring Basics](./monitoring-basics.md)
-- [Optimization for Beginners](./optimization-101.md)
-- [Troubleshooting Guide](./troubleshooting-guide.md)
-- [Resource Management](./resource-management.md) 
+- [Node Creation](../cypher/nodes.md)
+- [Relationship Creation](../cypher/relationships.md)
+- [Query Patterns](../cypher/queries.md) 
