@@ -1,5 +1,29 @@
 #!/bin/bash
 
+# Load environment variables from .env file if it exists
+if [ -f .env ]; then
+    echo "Loading environment variables from .env file..."
+    export $(cat .env | grep -v '^#' | xargs)
+else
+    echo "No .env file found. Make sure environment variables are set manually."
+fi
+
+# Verify required environment variables
+if [ -z "$OPENAI_API_KEY" ]; then
+    echo "ERROR: OPENAI_API_KEY is not set"
+    exit 1
+fi
+
+if [ -z "$ADMIN_WALLET_KEY" ]; then
+    echo "ERROR: ADMIN_WALLET_KEY is not set"
+    exit 1
+fi
+
+if [ -z "$BLOCKCHAIN_ENDPOINT" ]; then
+    echo "Using default blockchain endpoint: http://host.docker.internal:7545"
+    export BLOCKCHAIN_ENDPOINT="http://host.docker.internal:7545"
+fi
+
 # Build the plugin with Maven
 echo "Building plugin..."
 mvn clean package || { echo "Build failed"; exit 1; }
@@ -20,9 +44,13 @@ cp "$JAR" neo4j-plugins/
 echo "Stopping existing containers..."
 docker-compose down -v
 
-# Start the containers
-echo "Starting Neo4j container..."
-docker-compose up -d
+# Start the containers with environment variables
+echo "Starting Neo4j container with environment variables..."
+docker-compose up -d \
+    -e OPENAI_API_KEY="$OPENAI_API_KEY" \
+    -e ADMIN_WALLET_KEY="$ADMIN_WALLET_KEY" \
+    -e BLOCKCHAIN_ENDPOINT="$BLOCKCHAIN_ENDPOINT" \
+    -e SAFEAI_API_KEY="$SAFEAI_API_KEY"
 
 echo "Neo4j container deployed. Access Neo4j Browser at http://localhost:7474"
 echo "Waiting for Neo4j to start..."
