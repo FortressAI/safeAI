@@ -130,6 +130,33 @@ echo "Testing governance functions..."
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.initiateVote('test-proposal') AS result;" || { echo "Governance function test failed"; exit 1; }
 docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;" || { echo "Governance function test failed"; exit 1; }
 
+# Validate security and compliance
+echo "Validating security and compliance..."
+SECURITY_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.validateSecurity() YIELD value RETURN value;")
+echo "Security Validation Results:"
+echo "$SECURITY_CHECK"
+
+# Check for security warnings
+if echo "$SECURITY_CHECK" | grep -q "WARNING:"; then
+    echo "Security validation completed with warnings. Please review the output above."
+else
+    echo "Security validation completed successfully."
+fi
+
+# Perform production readiness check
+echo "Performing production readiness check..."
+READINESS_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;")
+echo "Production Readiness Check Results:"
+echo "$READINESS_CHECK"
+
+# Check for production readiness errors
+if echo "$READINESS_CHECK" | grep -q "ERROR:"; then
+    echo "Production readiness check failed. Please address the errors above before proceeding."
+    exit 1
+else
+    echo "Production readiness check passed successfully."
+fi
+
 echo "Deployment completed successfully!"
 echo "Access Neo4j Browser at http://localhost:7474 with username 'neo4j' and password 'testpassword'"
 echo "Knowledge Graphs have been loaded and verified."
