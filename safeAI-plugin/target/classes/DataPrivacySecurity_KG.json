@@ -1,39 +1,6 @@
 {
   "domain": "DataPrivacySecurity",
   "description": "An Agentic KG for Data Privacy and Security that enforces best practices, monitors compliance with data protection regulations, and dynamically generates agents to assess and mitigate risks associated with data handling. This KG integrates blockchain\u2011audited transactions and decentralized governance to ensure transparency and secure, monetizable enforcement of data privacy standards.",
-  "endpoints": {
-    "privacyPolicies": "https://api.example.com/privacy/policies",
-    "securityStandards": "https://api.example.com/privacy/standards",
-    "security": "https://example.com/dataprivacysecurity/security",
-    "validation": "https://example.com/dataprivacysecurity/validation",
-    "monitoring": "https://example.com/dataprivacysecurity/monitoring"
-  },
-  "trainingExamples": [
-    {
-      "input": "Evaluate the following data handling practice for GDPR compliance: 'Storing user data in unencrypted databases.'",
-      "expectedOutput": "Practice flagged as non-compliant with GDPR.",
-      "description": "Basic privacy compliance evaluation."
-    },
-    {
-      "input": "Summarize the key requirements of HIPAA for patient data protection.",
-      "expectedOutput": "Summary includes encryption, access control, and audit requirements.",
-      "description": "Privacy regulation summary."
-    }
-  ],
-  "evaluationExamples": [
-    {
-      "input": "Assess the data security risks of using third-party cloud storage.",
-      "expectedOutput": "Identified risks include potential data breaches and lack of encryption; recommended countermeasures provided.",
-      "description": "Evaluation of cloud storage risks."
-    }
-  ],
-  "finalExamExamples": [
-    {
-      "input": "Develop a comprehensive data privacy strategy for a multinational corporation handling sensitive customer data.",
-      "expectedOutput": "A detailed strategy including encryption, access control, regulatory compliance measures, and incident response protocols.",
-      "description": "Final exam: comprehensive data privacy strategy."
-    }
-  ],
   "agents": [
     {
       "name": "BasePrivacyAgent",
@@ -44,7 +11,8 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline privacy practices from input.'; \n    return [candidate: input, metadata: [method: 'BasePrivacyAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     },
     {
@@ -56,7 +24,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess encryption compliance for: ' + input.toString()); \n    def cot = 'Evaluated encryption methods against industry standards.'; \n    return [candidate: candidate, metadata: [method: 'EncryptionComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -68,7 +37,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze data handling practices for: ' + input.toString()); \n    def cot = 'Identified risks in data handling and recommended best practices.'; \n    return [candidate: candidate, metadata: [method: 'DataHandlingAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -80,7 +50,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Review privacy policy: ' + input.toString()); \n    def cot = 'Analyzed privacy policy for compliance with regulatory standards.'; \n    return [candidate: candidate, metadata: [method: 'PrivacyPolicyAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -92,7 +63,8 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePrivacyAgent', chain_of_thought: 'No valid composite compliance found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for privacy agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for compliance, e.g., comparing privacy risk scores\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     }
   ],
@@ -192,5 +164,36 @@
         "burst_limit": 10
       }
     }
-  }
+  },
+  "endpoint_privacyPolicies": "https://api.example.com/privacy/policies",
+  "endpoint_securityStandards": "https://api.example.com/privacy/standards",
+  "endpoint_security": "https://example.com/dataprivacysecurity/security",
+  "endpoint_validation": "https://example.com/dataprivacysecurity/validation",
+  "endpoint_monitoring": "https://example.com/dataprivacysecurity/monitoring",
+  "training_examples": [
+    {
+      "input": "Evaluate the following data handling practice for GDPR compliance: 'Storing user data in unencrypted databases.'",
+      "expected_output": "Practice flagged as non-compliant with GDPR.",
+      "description": "Basic privacy compliance evaluation."
+    },
+    {
+      "input": "Summarize the key requirements of HIPAA for patient data protection.",
+      "expected_output": "Summary includes encryption, access control, and audit requirements.",
+      "description": "Privacy regulation summary."
+    }
+  ],
+  "evaluation_examples": [
+    {
+      "input": "Assess the data security risks of using third-party cloud storage.",
+      "expected_output": "Identified risks include potential data breaches and lack of encryption; recommended countermeasures provided.",
+      "description": "Evaluation of cloud storage risks."
+    }
+  ],
+  "final_exam_examples": [
+    {
+      "input": "Develop a comprehensive data privacy strategy for a multinational corporation handling sensitive customer data.",
+      "expected_output": "A detailed strategy including encryption, access control, regulatory compliance measures, and incident response protocols.",
+      "description": "Final exam: comprehensive data privacy strategy."
+    }
+  ]
 }

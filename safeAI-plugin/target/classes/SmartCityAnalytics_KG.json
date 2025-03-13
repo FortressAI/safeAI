@@ -1,39 +1,6 @@
 {
   "domain": "SmartCityAnalytics",
   "description": "An Agentic KG for IoT and Smart City Analytics that aggregates data from urban sensors, traffic systems, and public infrastructure to optimize city planning, traffic management, and resource allocation. This KG dynamically generates agents to process real\u2011time data, identify patterns, and suggest operational improvements, while blockchain\u2011audited microtransactions and decentralized governance ensure transparency and continuous system evolution.",
-  "endpoints": {
-    "urbanSensors": "https://api.example.com/smartcity/sensors",
-    "trafficData": "https://api.example.com/smartcity/traffic",
-    "security": "https://example.com/smartcityanalytics/security",
-    "validation": "https://example.com/smartcityanalytics/validation",
-    "monitoring": "https://example.com/smartcityanalytics/monitoring"
-  },
-  "trainingExamples": [
-    {
-      "input": "Analyze traffic congestion data for a major intersection during peak hours.",
-      "expectedOutput": "A report identifying congestion patterns and recommending traffic signal adjustments.",
-      "description": "Training example for traffic analysis."
-    },
-    {
-      "input": "Evaluate energy consumption of city lighting systems during winter.",
-      "expectedOutput": "A report detailing energy usage patterns and suggesting optimization measures.",
-      "description": "Training example for urban energy management."
-    }
-  ],
-  "evaluationExamples": [
-    {
-      "input": "Assess the effectiveness of a new traffic management strategy implemented in downtown.",
-      "expectedOutput": "A balanced evaluation report with performance metrics and suggested adjustments.",
-      "description": "Evaluation example for traffic management."
-    }
-  ],
-  "finalExamExamples": [
-    {
-      "input": "Develop a comprehensive smart city optimization plan that addresses traffic, energy, and public safety.",
-      "expectedOutput": "A detailed plan with integrated recommendations, performance metrics, and an actionable roadmap.",
-      "description": "Final exam: integrated smart city plan."
-    }
-  ],
   "agents": [
     {
       "name": "BaseCityAgent",
@@ -44,7 +11,8 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline urban data from input.'; \n    return [candidate: input, metadata: [method: 'BaseCityAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     },
     {
@@ -56,7 +24,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze traffic for: ' + input.toString()); \n    def cot = 'Identified traffic patterns and suggested signal optimization.'; \n    return [candidate: candidate, metadata: [method: 'TrafficAnalysisAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -68,7 +37,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate energy usage for: ' + input.toString()); \n    def cot = 'Assessed energy consumption patterns and recommended optimization measures.'; \n    return [candidate: candidate, metadata: [method: 'EnergyUsageAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -80,7 +50,8 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeCityAgent', chain_of_thought: 'No valid composite urban plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     }
   ],
@@ -178,5 +149,36 @@
         "burst_limit": 10
       }
     }
-  }
+  },
+  "endpoint_urbanSensors": "https://api.example.com/smartcity/sensors",
+  "endpoint_trafficData": "https://api.example.com/smartcity/traffic",
+  "endpoint_security": "https://example.com/smartcityanalytics/security",
+  "endpoint_validation": "https://example.com/smartcityanalytics/validation",
+  "endpoint_monitoring": "https://example.com/smartcityanalytics/monitoring",
+  "training_examples": [
+    {
+      "input": "Analyze traffic congestion data for a major intersection during peak hours.",
+      "expected_output": "A report identifying congestion patterns and recommending traffic signal adjustments.",
+      "description": "Training example for traffic analysis."
+    },
+    {
+      "input": "Evaluate energy consumption of city lighting systems during winter.",
+      "expected_output": "A report detailing energy usage patterns and suggesting optimization measures.",
+      "description": "Training example for urban energy management."
+    }
+  ],
+  "evaluation_examples": [
+    {
+      "input": "Assess the effectiveness of a new traffic management strategy implemented in downtown.",
+      "expected_output": "A balanced evaluation report with performance metrics and suggested adjustments.",
+      "description": "Evaluation example for traffic management."
+    }
+  ],
+  "final_exam_examples": [
+    {
+      "input": "Develop a comprehensive smart city optimization plan that addresses traffic, energy, and public safety.",
+      "expected_output": "A detailed plan with integrated recommendations, performance metrics, and an actionable roadmap.",
+      "description": "Final exam: integrated smart city plan."
+    }
+  ]
 }
