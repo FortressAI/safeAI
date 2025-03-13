@@ -38,28 +38,7 @@ public class DebugProcedure {
         List<StringResult> results = new ArrayList<>();
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            String[] kgFiles = {
-                "CyberSecurity_KG.json",
-                "DataPrivacySecurity_KG.json",
-                "EnergyManagement_KG.json",
-                "EnvironmentalSustainability_KG.json",
-                "Ethics_KG.json",
-                "FinancialAnalytics_KG.json",
-                "FreePress_KG.json",
-                "Internal_KG.json",
-                "LegalCompliance_KG.json",
-                "Math_KG.json",
-                "MedicalSafety_KG.json",
-                "PersonalizedLearning_KG.json",
-                "RiskManagement_KG.json",
-                "SmartCityAnalytics_KG.json",
-                "SupplyChainManagement_KG.json",
-                "UserBehaviorTrust_KG.json",
-                "VirtualAssistant_KG.json",
-                "VirtualMoralEthicalSoldier_KG.json",
-                "VirtualPoliceOfficer_KG.json",
-                "ARC_Puzzle_Agent_Definitions_KG.json"
-            };
+            String[] kgFiles = getKGFiles();
 
             int foundCount = 0;
             for (String kgFile : kgFiles) {
@@ -82,47 +61,52 @@ public class DebugProcedure {
         return results.stream();
     }
 
+    private String[] getKGFiles() {
+        return new String[] {
+            "CyberSecurity_KG.json",
+            "DataPrivacySecurity_KG.json",
+            "EnergyManagement_KG.json",
+            "EnvironmentalSustainability_KG.json",
+            "Ethics_KG.json",
+            "FinancialAnalytics_KG.json",
+            "FreePress_KG.json",
+            "Internal_KG.json",
+            "LegalCompliance_KG.json",
+            "Math_KG.json",
+            "MedicalSafety_KG.json",
+            "PersonalizedLearning_KG.json",
+            "RiskManagement_KG.json",
+            "SmartCityAnalytics_KG.json",
+            "SupplyChainManagement_KG.json",
+            "UserBehaviorTrust_KG.json",
+            "VirtualAssistant_KG.json",
+            "VirtualMoralEthicalSoldier_KG.json",
+            "VirtualPoliceOfficer_KG.json",
+            "ARC_Puzzle_Agent_Definitions_KG.json"
+        };
+    }
+
     @Procedure(name = "safeai.debug.loadKGFiles", mode = Mode.WRITE)
-    @Description("Loads all KG JSON files from resources, creates a KnowledgeGraph node, and creates Agent nodes if defined")
+    @Description("Loads all KG JSON files from resources, creates KnowledgeGraph nodes with proper relationships")
     public Stream<StringResult> loadKGFiles() {
         List<StringResult> results = new ArrayList<>();
         try {
-            // Delete existing KnowledgeGraph and Agent nodes to avoid duplicates.
+            // Delete existing nodes to avoid duplicates
             try (Transaction tx = db.beginTx()) {
-                tx.execute("MATCH (n) WHERE n:KnowledgeGraph OR n:Agent DETACH DELETE n");
+                tx.execute("MATCH (n) WHERE n:KnowledgeGraph OR n:Agent OR n:Capability OR n:Relationship DETACH DELETE n");
                 tx.commit();
-                results.add(new StringResult("Deleted existing KnowledgeGraph and Agent nodes"));
+                results.add(new StringResult("Cleaned existing nodes"));
             }
 
             ClassLoader classLoader = getClass().getClassLoader();
-            String[] kgFiles = {
-                "CyberSecurity_KG.json",
-                "DataPrivacySecurity_KG.json",
-                "EnergyManagement_KG.json",
-                "EnvironmentalSustainability_KG.json",
-                "Ethics_KG.json",
-                "FinancialAnalytics_KG.json",
-                "FreePress_KG.json",
-                "Internal_KG.json",
-                "LegalCompliance_KG.json",
-                "Math_KG.json",
-                "MedicalSafety_KG.json",
-                "PersonalizedLearning_KG.json",
-                "RiskManagement_KG.json",
-                "SmartCityAnalytics_KG.json",
-                "SupplyChainManagement_KG.json",
-                "UserBehaviorTrust_KG.json",
-                "VirtualAssistant_KG.json",
-                "VirtualMoralEthicalSoldier_KG.json",
-                "VirtualPoliceOfficer_KG.json",
-                "ARC_Puzzle_Agent_Definitions_KG.json"
-            };
+            String[] kgFiles = getKGFiles();
 
             int loadedCount = 0;
             for (String kgFile : kgFiles) {
                 InputStream is = classLoader.getResourceAsStream(kgFile);
                 if (is != null) {
                     try {
+                        // Read and parse KG file
                         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                         StringBuilder contentBuilder = new StringBuilder();
                         String line;
@@ -131,43 +115,109 @@ public class DebugProcedure {
                         }
                         String jsonStr = contentBuilder.toString();
                         JSONObject jsonObj = new JSONObject(jsonStr);
+                        
+                        // Validate KG structure
+                        if (!validateKGStructure(jsonObj)) {
+                            results.add(new StringResult("Invalid KG structure in " + kgFile));
+                            continue;
+                        }
+
                         String domainName = jsonObj.has("domain") ? jsonObj.getString("domain")
                                 : kgFile.replace("_KG.json", "");
+
                         try (Transaction tx = db.beginTx()) {
+                            // Create KG node with full content
                             tx.execute(
-                                "CREATE (kg:KnowledgeGraph {name: $name, description: $description, content: $content})",
+                                "CREATE (kg:KnowledgeGraph {name: $name, description: $description, content: $content, created_at: datetime()})",
                                 Map.of(
                                     "name", domainName,
                                     "description", jsonObj.optString("description", "Agentic Knowledge Graph for " + domainName),
-                                    "content", jsonStr.substring(0, Math.min(1000, jsonStr.length()))
+                                    "content", jsonStr
                                 )
                             );
 
+                            // Process capabilities if present
+                            if (jsonObj.has("capabilities")) {
+                                JSONArray capabilities = jsonObj.getJSONArray("capabilities");
+                                for (int i = 0; i < capabilities.length(); i++) {
+                                    JSONObject capObj = capabilities.getJSONObject(i);
+                                    Map<String, Object> capProps = new HashMap<>();
+                                    for (String key : capObj.keySet()) {
+                                        capProps.put(key, convertJson(capObj.get(key)));
+                                    }
+                                    capProps.put("created_at", "datetime()");
+                                    
+                                    tx.execute(
+                                        "MATCH (kg:KnowledgeGraph {name: $kgName}) " +
+                                        "CREATE (c:Capability) SET c = $props " +
+                                        "CREATE (kg)-[:HAS_CAPABILITY]->(c)",
+                                        Map.of("kgName", domainName, "props", capProps)
+                                    );
+                                }
+                            }
+
+                            // Process agents with capabilities
                             if (jsonObj.has("agents")) {
                                 JSONArray agents = jsonObj.getJSONArray("agents");
                                 for (int i = 0; i < agents.length(); i++) {
                                     JSONObject agentObj = agents.getJSONObject(i);
                                     Map<String, Object> agentProps = new HashMap<>();
                                     for (String key : agentObj.keySet()) {
-                                        agentProps.put(key, convertJson(agentObj.get(key)));
+                                        if (!key.equals("capabilities")) {
+                                            agentProps.put(key, convertJson(agentObj.get(key)));
+                                        }
                                     }
                                     agentProps.put("kgName", domainName);
+                                    agentProps.put("created_at", "datetime()");
+
+                                    // Create agent node
                                     tx.execute(
                                         "MATCH (kg:KnowledgeGraph {name: $kgName}) " +
                                         "CREATE (a:Agent) SET a = $props " +
                                         "CREATE (kg)-[:HAS_AGENT]->(a)",
                                         Map.of("kgName", domainName, "props", agentProps)
                                     );
+
+                                    // Link agent to capabilities
+                                    if (agentObj.has("capabilities")) {
+                                        JSONArray agentCaps = agentObj.getJSONArray("capabilities");
+                                        for (int j = 0; j < agentCaps.length(); j++) {
+                                            String capName = agentCaps.getString(j);
+                                            tx.execute(
+                                                "MATCH (a:Agent {name: $agentName}), (c:Capability {name: $capName}) " +
+                                                "CREATE (a)-[:HAS_CAPABILITY]->(c)",
+                                                Map.of("agentName", agentProps.get("name"), "capName", capName)
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Process relationships if present
+                            if (jsonObj.has("relationships")) {
+                                JSONArray relationships = jsonObj.getJSONArray("relationships");
+                                for (int i = 0; i < relationships.length(); i++) {
+                                    JSONObject relObj = relationships.getJSONObject(i);
+                                    tx.execute(
+                                        "MATCH (from {name: $fromName}), (to {name: $toName}) " +
+                                        "CREATE (from)-[:RELATES_TO {type: $type, description: $description}]->(to)",
+                                        Map.of(
+                                            "fromName", relObj.getString("from"),
+                                            "toName", relObj.getString("to"),
+                                            "type", relObj.getString("type"),
+                                            "description", relObj.optString("description", "")
+                                        )
+                                    );
                                 }
                             }
 
                             tx.commit();
                             loadedCount++;
-                            int agentsCount = jsonObj.has("agents") ? jsonObj.getJSONArray("agents").length() : 0;
-                            results.add(new StringResult("Loaded KG: " + domainName + " with " + agentsCount + " agent(s)"));
+                            results.add(new StringResult("Successfully loaded KG: " + domainName));
                         }
                     } catch (Exception e) {
                         results.add(new StringResult("Error processing " + kgFile + ": " + e.getMessage()));
+                        e.printStackTrace();
                     } finally {
                         is.close();
                     }
@@ -176,8 +226,51 @@ public class DebugProcedure {
             results.add(new StringResult("Total KGs loaded: " + loadedCount));
         } catch (Exception e) {
             results.add(new StringResult("Error: " + e.getMessage()));
+            e.printStackTrace();
         }
         return results.stream();
+    }
+
+    private boolean validateKGStructure(JSONObject kg) {
+        // Required fields
+        if (!kg.has("domain") && !kg.has("name")) {
+            return false;
+        }
+
+        // Validate agents if present
+        if (kg.has("agents")) {
+            JSONArray agents = kg.getJSONArray("agents");
+            for (int i = 0; i < agents.length(); i++) {
+                JSONObject agent = agents.getJSONObject(i);
+                if (!agent.has("name") || !agent.has("description")) {
+                    return false;
+                }
+            }
+        }
+
+        // Validate capabilities if present
+        if (kg.has("capabilities")) {
+            JSONArray capabilities = kg.getJSONArray("capabilities");
+            for (int i = 0; i < capabilities.length(); i++) {
+                JSONObject capability = capabilities.getJSONObject(i);
+                if (!capability.has("name") || !capability.has("description")) {
+                    return false;
+                }
+            }
+        }
+
+        // Validate relationships if present
+        if (kg.has("relationships")) {
+            JSONArray relationships = kg.getJSONArray("relationships");
+            for (int i = 0; i < relationships.length(); i++) {
+                JSONObject relationship = relationships.getJSONObject(i);
+                if (!relationship.has("from") || !relationship.has("to") || !relationship.has("type")) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Procedure(name = "safeai.debug.hello", mode = Mode.READ)
@@ -331,25 +424,22 @@ public class DebugProcedure {
     }
 
     private Object convertJson(Object o) {
-        if (o instanceof Number) {
-            return o.toString();
-        }
         if (o instanceof JSONArray) {
-            JSONArray arr = (JSONArray) o;
             List<Object> list = new ArrayList<>();
+            JSONArray arr = (JSONArray) o;
             for (int i = 0; i < arr.length(); i++) {
                 list.add(convertJson(arr.get(i)));
             }
             return list;
-        }
-        if (o instanceof JSONObject) {
-            JSONObject json = (JSONObject) o;
+        } else if (o instanceof JSONObject) {
             Map<String, Object> map = new HashMap<>();
-            for (String key : json.keySet()) {
-                map.put(key, convertJson(json.get(key)));
+            JSONObject obj = (JSONObject) o;
+            for (String key : obj.keySet()) {
+                map.put(key, convertJson(obj.get(key)));
             }
             return map;
+        } else {
+            return o;
         }
-        return o;
     }
 }

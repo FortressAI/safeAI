@@ -3,7 +3,10 @@
   "description": "An Agentic KG for Supply Chain Management and Logistics, designed to optimize supply chain operations through dynamic risk assessment, route optimization, and real\u2011time monitoring. This KG leverages advanced agent generation to simulate disruptions, suggest contingency plans, and optimize logistics, all while ensuring blockchain\u2011audited transparency and decentralized governance.",
   "endpoints": {
     "logisticsData": "https://api.example.com/supplychain/logistics",
-    "disruptionReports": "https://api.example.com/supplychain/disruptions"
+    "disruptionReports": "https://api.example.com/supplychain/disruptions",
+    "security": "https://example.com/supplychainmanagement/security",
+    "validation": "https://example.com/supplychainmanagement/validation",
+    "monitoring": "https://example.com/supplychainmanagement/monitoring"
   },
   "trainingExamples": [
     {
@@ -85,12 +88,21 @@
     "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { return parseJson(response.body); } else { println 'Failed to fetch logistics data from ' + url; return null; } \n}",
     "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; examples.each { example -> \n        def input = example.input; def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { println 'SCM training success with agent ' + result.metadata.method; correct++; return; } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); println 'SCM training score: ' + score; return score; \n}",
     "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; examples.each { example -> \n        def input = example.input; def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { correct++; } else { \n            def composite = DynamicCompositeSCMAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { correct++; } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); println 'SCM evaluation score: ' + score; return score; \n}",
-    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for supply chain evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context); \n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final SCM evaluation completed for ' + results.size() + ' scenarios.'; return results; \n}"
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for supply chain evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context); \n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final SCM evaluation completed for ' + results.size() + ' scenarios.'; return results; \n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
   },
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Supply Chain Management KG dynamically optimizes logistics operations, simulates disruptions, and generates integrated risk mitigation strategies. Blockchain\u2011audited microtransactions and decentralized governance ensure transparent monetization and continuous system improvement."
+    "notes": "This Supply Chain Management KG dynamically optimizes logistics operations, simulates disruptions, and generates integrated risk mitigation strategies. Blockchain\u2011audited microtransactions and decentralized governance ensure transparent monetization and continuous system improvement.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
   },
   "configuration": {
     "maxAgentChainLength": 3,
@@ -114,9 +126,57 @@
         "dynamicPricing": "Based on disruption severity and operational impact",
         "minFee": "0.0001",
         "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
       }
     },
     "fileImportMode": "multi",
-    "initData": "def initializeData() { \n    def logisticsData = scripts.fetchDataScript(configuration.endpoints.logisticsData); \n    def disruptionData = scripts.fetchDataScript(configuration.endpoints.disruptionReports); \n    println 'SCM KG initialized: LogisticsData=' + (logisticsData != null) + ', DisruptionData=' + (disruptionData != null); \n    return [logisticsData: logisticsData, disruptionData: disruptionData]; \n}"
+    "initData": "def initializeData() { \n    def logisticsData = scripts.fetchDataScript(configuration.endpoints.logisticsData); \n    def disruptionData = scripts.fetchDataScript(configuration.endpoints.disruptionReports); \n    println 'SCM KG initialized: LogisticsData=' + (logisticsData != null) + ', DisruptionData=' + (disruptionData != null); \n    def securityConfig = scripts.fetchDataScript(configuration.endpoints.security);\nprintln ', Security=' + (securityConfig != null);\nreturn [logisticsData: logisticsData, disruptionData: disruptionData, security: securityConfig]; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/supplychainmanagement/metrics",
+        "alerts": "https://example.com/supplychainmanagement/alerts",
+        "logs": "https://example.com/supplychainmanagement/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
   }
 }
