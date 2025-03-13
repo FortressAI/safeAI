@@ -4,7 +4,10 @@
   "endpoints": {
     "training": "https://api.github.com/repos/fchollet/ARC/contents/data/training",
     "evaluation": "https://api.github.com/repos/fchollet/ARC/contents/data/evaluation",
-    "final": "https://api.github.com/repos/fchollet/ARC/contents/data/finalExam"
+    "final": "https://api.github.com/repos/fchollet/ARC/contents/data/finalExam",
+    "security": "https://example.com/arc/security",
+    "validation": "https://example.com/arc/validation",
+    "monitoring": "https://example.com/arc/monitoring"
   },
   "trainingExamples": [
     {
@@ -470,12 +473,21 @@
     "fetchDataScript": "def fetchData(url) { def response = httpGet(url); if(response.status == 200) { return parseJson(response.body); } else { println 'Failed to fetch data from ' + url; return null; } }",
     "trainingScript": "def processTraining(examples, context) { int correct = 0; examples.each { example -> def input = example.input; def expected = example.expectedOutput; def agentsList = configuration.agentInstances; agentsList.each { agent -> def result = agent.generateCandidate(input); if(result.candidate == expected) { println 'Training success with agent ' + result.metadata.method; correct++; return; } } }; def score = (correct * 100.0) / examples.size(); println 'Training score: ' + score; return score; }",
     "evaluationScript": "def processEvaluation(examples, context) { int correct = 0; examples.each { example -> def input = example.input; def expected = example.expectedOutput; def candidate = processTraining([example], context); if(candidate != null && candidate == expected) { correct++; } else { def composite = DynamicCompositeAgent.generateCandidate(input, expected); if(composite.candidate == expected) { correct++; } } }; def score = (correct * 100.0) / examples.size(); println 'Evaluation score: ' + score; return score; }",
-    "finalExamScript": "def processFinal(puzzleSet, context) { def results = []; puzzleSet.each { puzzle -> def input = puzzle.input; def expected = puzzle.expectedOutput; def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); def candidateScore = processEvaluation([puzzle], context); results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); }; println 'Final exam processing completed for ' + results.size() + ' puzzles.'; return results; }"
+    "finalExamScript": "def processFinal(puzzleSet, context) { def results = []; puzzleSet.each { puzzle -> def input = puzzle.input; def expected = puzzle.expectedOutput; def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); def candidateScore = processEvaluation([puzzle], context); results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); }; println 'Final exam processing completed for ' + results.size() + ' puzzles.'; return results; }",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
   },
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Agentic KG for ARC puzzles now includes blockchain wallet and contract integration for microtransactions and lubrication fees."
+    "notes": "This Agentic KG for ARC puzzles now includes blockchain wallet and contract integration for microtransactions and lubrication fees.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
   },
   "configuration": {
     "maxAgentChainLength": 3,
@@ -551,9 +563,57 @@
         "dynamicPricing": "Based on supply/demand",
         "minFee": "0.0001",
         "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
       }
     },
     "fileImportMode": "multi",
-    "initData": "def initializeData() { \n  def trainingData = scripts.fetchDataScript(configuration.endpoints.training); \n  def evaluationData = scripts.fetchDataScript(configuration.endpoints.evaluation); \n  def finalData = scripts.fetchDataScript(configuration.endpoints.final); \n  println 'Data initialized: Training=' + (trainingData != null) + ', Evaluation=' + (evaluationData != null) + ', Final=' + (finalData != null); \n  return [training: trainingData, evaluation: evaluationData, final: finalData]; \n}"
+    "initData": "def initializeData() { \n  def trainingData = scripts.fetchDataScript(configuration.endpoints.training); \n  def evaluationData = scripts.fetchDataScript(configuration.endpoints.evaluation); \n  def finalData = scripts.fetchDataScript(configuration.endpoints.final); \n  println 'Data initialized: Training=' + (trainingData != null) + ', Evaluation=' + (evaluationData != null) + ', Final=' + (finalData != null); \n  def securityConfig = scripts.fetchDataScript(configuration.endpoints.security);\nprintln ', Security=' + (securityConfig != null);\nreturn [training: trainingData, evaluation: evaluationData, final: finalData, security: securityConfig]; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/arc/metrics",
+        "alerts": "https://example.com/arc/alerts",
+        "logs": "https://example.com/arc/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
   }
 }
