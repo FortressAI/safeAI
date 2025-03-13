@@ -1,177 +1,119 @@
-# SafeAI Platform Documentation
+# SafeAI Neo4j Plugin Documentation
 
-## Platform Overview
+## Overview
+The SafeAI Neo4j Plugin is a powerful extension that enables intelligent agent-based interactions within Neo4j databases. It provides a comprehensive framework for managing knowledge graphs, dynamic agents, and governance systems.
 
-The SafeAI Platform is a Neo4j-based Knowledge Graph system that enables the development, deployment, and management of Agentic Knowledge Graphs (AKGs). The platform provides:
+## Table of Contents
 
-1. **Core Infrastructure**
-   - Neo4j graph database for storing knowledge and agent relationships
-   - Cypher query language for all interactions
-   - Blockchain integration for transaction verification and audit trails
+### Core Components
+- [Knowledge Graph Management](governance/knowledge-graph-management.md)
+  - Loading and managing knowledge graphs
+  - Agent definitions and capabilities
+  - Relationship management
+- [Dynamic Agent System](governance/dynamic-agent-system.md)
+  - Agent creation and management
+  - Capability integration
+  - Agent interactions
 
-2. **Key Features**
-   - Agent node creation and management
-   - Secure relationship definitions
-   - Resource monitoring and limits
-   - Blockchain-verified transactions
-   - Audit logging and compliance
+### Governance Framework
+- [Code Review Guide](governance/code-review.md)
+- [Development Setup](governance/development-setup.md)
+- [Code of Conduct](governance/code-of-conduct.md)
+- [Contributing Guidelines](governance/contributing.md)
+- [Testing Guide](governance/testing-guide.md)
+- [Documentation Style](governance/documentation-style.md)
+- [Community Guidelines](governance/community-guidelines.md)
+- [Governance Framework](governance/governance-framework-guide.md)
 
-3. **Development Focus**
-   - All interactions are through Cypher queries
-   - No built-in UI/application layer
-   - Designed for integration into custom solutions
+### Integration Guides
+- [Groovy Integration](integration/groovy-integration.md)
+- [LLM Integration](integration/llm-integration.md)
+- [Blockchain Integration](integration/blockchain-integration.md)
 
-## Role-Based Documentation
+## Quick Start
 
-### 1. Knowledge Graph Developers
-Essential documentation for creating and managing Knowledge Graphs:
+### Prerequisites
+- Neo4j 5.x or later
+- Java 11 or later
+- Maven 3.6 or later
 
-1. [KG Implementation Guide](./kg-developers/implementation-guide.md)
-   - Graph schema design
-   - Node type definitions
-   - Relationship patterns
-   - Security constraints
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/FortressAI/safeAI.git
+   cd safeAI/safeAI-plugin
+   ```
 
-2. [Agent Development](./kg-developers/agent-development.md)
-   - Agent node structure
-   - Relationship definitions
-   - Security requirements
-   - Performance guidelines
+2. Build the plugin:
+   ```bash
+   mvn clean package
+   ```
 
-3. [Query Patterns](./kg-developers/query-patterns.md)
-   - Common query templates
-   - Performance optimization
-   - Best practices
+3. Deploy using the provided script:
+   ```bash
+   ./deploy_neo4j.sh
+   ```
 
-### 2. Security Engineers
-Documentation for implementing and maintaining security:
+### Basic Usage
+1. Access Neo4j Browser at http://localhost:7474
+2. Login with default credentials:
+   - Username: neo4j
+   - Password: testpassword
 
-1. [Security Implementation](./security/implementation.md)
-   - Access control queries
-   - Validation rules
-   - Resource limits
-   - Audit logging
+3. Load knowledge graphs:
+   ```cypher
+   CALL safeai.debug.loadKGFiles()
+   ```
 
-2. [Blockchain Integration](./security/blockchain.md)
-   - Transaction verification
-   - Smart contract interaction
-   - Audit trails
+4. Test basic functionality:
+   ```cypher
+   CALL safeai.debug.hello('World')
+   ```
 
-3. [Compliance Framework](./security/compliance.md)
-   - Regulatory requirements
-   - Validation queries
-   - Audit procedures
+## Development
 
-### 3. Domain Experts
-Guides for specific knowledge domains:
+### Project Structure
+```
+safeAI-plugin/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/safeai/neo4jplugin/
+│   │   │       ├── debug/
+│   │   │       ├── graph_rag/
+│   │   │       ├── governance/
+│   │   │       └── integration/
+│   │   └── resources/
+│   │       └── *.json
+│   └── test/
+└── pom.xml
+```
 
-1. [Economics KG](./domains/economics.md)
-   - Economic agent patterns
-   - Transaction modeling
-   - Analysis queries
+### Key Components
+- `DebugProcedure.java`: Core debugging and initialization procedures
+- `GraphRAG.java`: Knowledge graph management and RAG implementation
+- `DynamicAgentCreator.java`: Dynamic agent creation and management
+- Knowledge Graph JSON files: Pre-defined agent and capability definitions
 
-2. [Cybersecurity KG](./domains/cybersecurity.md)
-   - Threat detection patterns
-   - Security agent queries
-   - Response workflows
-
-3. [Environmental KG](./domains/environmental.md)
-   - Sustainability metrics
-   - Impact assessment
-   - Optimization queries
-
-## Core Documentation
-
-### 1. Cypher Query Reference
-Essential queries for working with the platform:
-
-1. [Node Creation](./cypher/nodes.md)
-   - Knowledge Graph nodes
-   - Agent nodes
-   - Support nodes
-
-2. [Relationships](./cypher/relationships.md)
-   - Agent relationships
-   - Security relationships
-   - Audit relationships
-
-3. [Queries](./cypher/queries.md)
-   - Search patterns
-   - Update operations
-   - Maintenance tasks
-
-### 2. Security Framework
-
-1. [Access Control](./security/access-control.md)
-   - Permission queries
-   - Role definitions
-   - Validation rules
-
-2. [Resource Management](./security/resources.md)
-   - Limit definitions
-   - Monitoring queries
-   - Alert patterns
-
-3. [Audit System](./security/audit.md)
-   - Logging queries
-   - Trail verification
-   - Compliance checks
-
-### 3. Performance Optimization
-
-1. [Query Optimization](./performance/queries.md)
-   - Index usage
-   - Pattern efficiency
-   - Cache utilization
-
-2. [Resource Tuning](./performance/resources.md)
-   - Memory allocation
-   - CPU utilization
-   - Network optimization
-
-## Development Guidelines
-
-1. [Setup Guide](./development/setup.md)
-   - Neo4j configuration
-   - Blockchain setup
-   - Security configuration
-
-2. [Testing Framework](./development/testing.md)
-   - Query testing
-   - Performance testing
-   - Security validation
-
-3. [Deployment Guide](./development/deployment.md)
-   - Production setup
-   - Monitoring
-   - Maintenance
+### Testing
+Run the test suite:
+```bash
+mvn test
+```
 
 ## Contributing
+Please read our [Contributing Guidelines](governance/contributing.md) before submitting pull requests.
 
-For developers interested in contributing to the SafeAI Platform:
-
-1. [Contribution Guide](./contributing/guide.md)
-   - Development workflow
-   - Code standards
-   - Review process
-
-2. [Documentation Style](./contributing/documentation.md)
-   - Query formatting
-   - Example patterns
-   - Versioning
+## License
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ## Support
+For support and questions:
+1. Check the [documentation](governance/)
+2. Open an issue on GitHub
+3. Join our community discussions
 
-- [Common Issues](./support/common-issues.md)
-- [Troubleshooting](./support/troubleshooting.md)
-- [Contact](./support/contact.md)
-
-## Version History
-
-- [Changelog](./CHANGELOG.md)
-- [Migration Guide](./MIGRATION.md)
-- [Roadmap](./ROADMAP.md)
-
----
-
-**Note**: The SafeAI Platform is a Knowledge Graph infrastructure. It does not include user interfaces or applications. All interactions are performed through Cypher queries, allowing developers to build custom solutions on top of the platform. 
+## Acknowledgments
+- Neo4j Community
+- SafeAI Team
+- All contributors to this project 
