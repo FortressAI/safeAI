@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide outlines the comprehensive compliance framework for the SafeAI Platform, ensuring adherence to regulatory requirements, industry standards, and best practices for AI systems.
+This guide outlines the comprehensive compliance framework for the SafeAI Platform, ensuring adherence to regulatory requirements, industry standards, and best practices for AI systems, with a particular focus on Knowledge Graph (KG) security and compliance.
 
 ## Table of Contents
 
@@ -44,38 +44,33 @@ This guide outlines the comprehensive compliance framework for the SafeAI Platfo
 }
 ```
 
-### Control Matrix
+### Security Requirements
 
 ```json
 {
-  "control_matrix": {
-    "data_privacy": {
-      "controls": [
-        "data_encryption",
-        "access_control",
-        "data_retention",
-        "consent_management"
-      ],
-      "requirements": {
-        "encryption_standard": "AES-256",
-        "access_model": "RBAC",
-        "retention_period": "compliance_based",
-        "consent_tracking": true
-      }
+  "security_requirements": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
     },
-    "security": {
-      "controls": [
-        "authentication",
-        "authorization",
-        "audit_logging",
-        "incident_response"
-      ],
-      "requirements": {
-        "mfa_required": true,
-        "least_privilege": true,
-        "audit_retention": "7_years",
-        "incident_sla": "24h"
-      }
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "resource_management": {
+      "memory_limits": true,
+      "cpu_restrictions": true,
+      "io_controls": true,
+      "rate_limiting": true
+    },
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true
     }
   }
 }
@@ -88,217 +83,163 @@ This guide outlines the comprehensive compliance framework for the SafeAI Platfo
 ```python
 class ComplianceManager:
     def __init__(self):
-        self.control_manager = ControlManager()
-        self.audit_manager = AuditManager()
-        self.reporting_manager = ReportingManager()
+        self.security_validator = SecurityValidator()
+        self.compliance_checker = ComplianceChecker()
+        self.monitoring_manager = MonitoringManager()
         
     async def manage_compliance(self, compliance_config):
-        # Implement controls
-        controls = await self.control_manager.implement(compliance_config)
+        # Validate security
+        security = await self.security_validator.validate(compliance_config)
         
-        # Setup auditing
-        auditing = await self.audit_manager.setup(compliance_config)
+        # Check compliance
+        compliance = await self.compliance_checker.check(compliance_config)
         
-        # Configure reporting
-        reporting = await self.reporting_manager.configure(compliance_config)
+        # Setup monitoring
+        monitoring = await self.monitoring_manager.setup(compliance_config)
         
         return {
-            'controls_status': controls,
-            'audit_status': auditing,
-            'reporting_status': reporting
+            'security_status': security,
+            'compliance_status': compliance,
+            'monitoring_status': monitoring
         }
 ```
 
-### 2. Control Implementation
+### 2. Security Validator
 
 ```python
-class ControlImplementation:
-    def implement_controls(self, control_config):
-        # Configure controls
-        controls = self.configure_controls(control_config)
+class SecurityValidator:
+    def validate_security(self, security_config):
+        # Validate input controls
+        input_controls = self.validate_input_controls(security_config)
         
-        # Validate implementation
-        validation = self.validate_controls(controls)
+        # Check resource limits
+        resource_limits = self.check_resource_limits(security_config)
         
-        # Monitor effectiveness
-        monitoring = self.setup_monitoring(controls)
+        # Validate monitoring
+        monitoring = self.validate_monitoring(security_config)
         
         return {
-            'implemented_controls': controls,
-            'validation_status': validation,
-            'monitoring_config': monitoring
+            'input_status': input_controls,
+            'resource_status': resource_limits,
+            'monitoring_status': monitoring
         }
 ```
 
 ## Regulatory Requirements
 
-### 1. Requirement Manager
+### 1. GDPR Compliance
 
 ```python
-class RequirementManager:
-    def manage_requirements(self, requirement_config):
-        # Map requirements
-        requirements = self.map_requirements(requirement_config)
+class GDPRCompliance:
+    def check_compliance(self, config):
+        # Validate data protection
+        protection = self.validate_data_protection(config)
         
-        # Implement controls
-        controls = self.implement_controls(requirements)
+        # Check consent management
+        consent = self.check_consent_management(config)
         
-        # Track compliance
-        compliance = self.track_compliance(controls)
+        # Verify rights handling
+        rights = self.verify_rights_handling(config)
         
         return {
-            'mapped_requirements': requirements,
-            'control_status': controls,
-            'compliance_status': compliance
+            'protection_status': protection,
+            'consent_status': consent,
+            'rights_status': rights
         }
 ```
 
-### 2. Compliance Validator
+### 2. Security Standards
 
 ```python
-class ComplianceValidator:
-    def validate_compliance(self, validation_config):
-        # Check requirements
-        requirements = self.check_requirements(validation_config)
+class SecurityStandards:
+    def validate_standards(self, config):
+        # Check security controls
+        controls = self.check_security_controls(config)
         
-        # Validate controls
-        controls = self.validate_controls(validation_config)
+        # Validate monitoring
+        monitoring = self.validate_monitoring(config)
         
-        # Generate report
-        report = self.generate_validation_report(requirements, controls)
-        
-        return {
-            'validation_status': report.status,
-            'findings': report.findings,
-            'recommendations': report.recommendations
-        }
-```
-
-## Monitoring and Reporting
-
-### 1. Compliance Monitor
-
-```python
-class ComplianceMonitor:
-    def monitor_compliance(self, monitor_config):
-        # Setup monitoring
-        monitoring = self.setup_monitoring(monitor_config)
-        
-        # Configure alerts
-        alerts = self.configure_alerts(monitor_config)
-        
-        # Track metrics
-        metrics = self.track_metrics(monitor_config)
+        # Verify compliance
+        compliance = self.verify_compliance(config)
         
         return {
+            'controls_status': controls,
             'monitoring_status': monitoring,
-            'alert_config': alerts,
-            'metrics_tracking': metrics
-        }
-```
-
-### 2. Report Generator
-
-```python
-class ComplianceReporter:
-    def generate_report(self, report_config):
-        # Collect data
-        data = self.collect_compliance_data(report_config)
-        
-        # Generate report
-        report = self.create_compliance_report(data)
-        
-        # Distribute report
-        distribution = self.distribute_report(report)
-        
-        return {
-            'report': report,
-            'generation_time': datetime.now(),
-            'distribution_status': distribution
+            'compliance_status': compliance
         }
 ```
 
 ## Usage Examples
 
-### 1. Implementing Controls
+### 1. Compliance Validation
 
 ```python
-# Control implementation configuration
-control_config = {
-    'standard': 'GDPR',
-    'domain': 'data_privacy',
-    'controls': [
-        'encryption',
-        'access_control',
-        'consent_management'
-    ]
-}
-
-implementation = await compliance_manager.implement_controls(control_config)
-print(implementation.status)
-print(implementation.controls)
-```
-
-### 2. Generating Compliance Reports
-
-```python
-# Report configuration
-report_config = {
-    'type': 'compliance_summary',
-    'period': 'quarterly',
+# Compliance configuration
+compliance_config = {
     'standards': ['GDPR', 'HIPAA'],
-    'format': 'pdf'
+    'security_controls': {
+        'input_validation': True,
+        'resource_management': True
+    },
+    'monitoring': {
+        'metrics': True,
+        'alerts': True
+    }
 }
 
-report = compliance_reporter.generate_report(report_config)
-print(report.status)
-print(report.findings)
+validation = await compliance_manager.validate_compliance(compliance_config)
+print(validation.status)
 ```
 
-## Certification Process
+### 2. Security Audit
 
-### 1. Certification Requirements
+```python
+# Audit configuration
+audit_config = {
+    'security_checks': {
+        'input_controls': True,
+        'resource_limits': True,
+        'monitoring': True
+    },
+    'compliance_checks': {
+        'gdpr': True,
+        'hipaa': True
+    }
+}
 
-- Documentation completeness
-- Control effectiveness
-- Audit results
-- Remediation plans
-
-### 2. Certification Steps
-
-1. Pre-assessment
-2. Gap analysis
-3. Implementation
-4. Internal audit
-5. External audit
-6. Certification
+audit = security_auditor.perform_audit(audit_config)
+print(audit.findings)
+```
 
 ## Best Practices
 
-### 1. Implementation
+### 1. Security Controls
+- Enable all validation features
+- Set appropriate limits
+- Configure monitoring
+- Regular audits
 
-- Regular reviews
-- Documentation updates
-- Control testing
-- Staff training
-
-### 2. Monitoring
-
-- Continuous monitoring
+### 2. Compliance Management
 - Regular assessments
-- Incident tracking
-- Metric analysis
+- Documentation updates
+- Staff training
+- Incident response
 
-### 3. Reporting
+### 3. Monitoring
+- Comprehensive metrics
+- Real-time alerts
+- Regular reporting
+- Trend analysis
 
-- Timely reporting
-- Complete documentation
-- Clear findings
-- Action plans
+### 4. Documentation
+- Detailed procedures
+- Regular updates
+- Audit trails
+- Training materials
 
 ## Additional Resources
 
-- [Security Framework](./security-framework.md)
-- [Audit Guide](./audit-trail-guide.md)
-- [Privacy Policy](./privacy-policy.md)
+- [Security Architecture](./security-architecture.md)
+- [Security Hardening Guide](./security-hardening-guide.md)
+- [Audit Trail Guide](./audit-trail-guide.md)
 - [Training Materials](./compliance-training.md) 
