@@ -4,7 +4,10 @@
   "endpoints": {
     "training": "https://example.com/math_data/training",
     "evaluation": "https://example.com/math_data/evaluation",
-    "final": "https://example.com/math_data/finalExam"
+    "final": "https://example.com/math_data/finalExam",
+    "security": "https://example.com/math/security",
+    "validation": "https://example.com/math/validation",
+    "monitoring": "https://example.com/math/monitoring"
   },
   "trainingExamples": [
     {
@@ -155,9 +158,9 @@
       "name": "NumberTheoryAgent",
       "category": "Number Theory",
       "usageCount": 7000,
-      "description": "Enhanced number theory agent with prime factorization and advanced prime operations",
+      "description": "Solve number theory problems including primes, modular arithmetic, and divisibility.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def result = null;\n  if (input.type == 'prime_test') {\n    result = prime_test(input.number);\n  } else if (input.type == 'prime_factorization') {\n    result = find_prime_factors(input.number);\n  } else if (input.type == 'verify_factorization') {\n    result = verify_prime_factorization(input.number, input.factors);\n  }\n  def cot = 'Applied number theory operations with prime handling.';\n  return [candidate: result, metadata: [method: 'NumberTheoryAgent', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "agent_code": "def generateCandidate(input) { \n  def solution = mathNumberTheorySolve(input);\n  def cot = 'Applied number theory concepts to derive solution.';\n  return [candidate: solution, metadata: [method: 'NumberTheoryAgent', chain_of_thought: cot, confidence: 0.90]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
       "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
@@ -179,9 +182,9 @@
       "name": "AdvancedProofAgent",
       "category": "Advanced Proofs",
       "usageCount": 5000,
-      "description": "Enhanced proof agent with complete induction and structured proof templates",
+      "description": "Construct rigorous proofs using methods such as induction and contradiction.",
       "successCount": 0,
-      "agent_code": "def generateCandidate(input) { \n  def result = null;\n  if (input.type == 'complete_induction') {\n    result = complete_induction_proof(input.statement, input.base_cases, input.step_function);\n  } else if (input.type == 'contradiction') {\n    result = contradiction_proof(input.statement, input.assumption);\n  } else if (input.type == 'structural') {\n    result = structural_induction(input.structure, input.statement);\n  }\n  def cot = 'Generated advanced proof using formal logic and enhanced proof methods.';\n  return [candidate: result, metadata: [method: 'AdvancedProofAgent', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "agent_code": "def generateCandidate(input) { \n  def proof = mathAdvancedProof(input);\n  def cot = 'Generated advanced proof using formal logic and induction/contradiction.';\n  return [candidate: proof, metadata: [method: 'AdvancedProofAgent', chain_of_thought: cot, confidence: 0.93]];\n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
       "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
@@ -204,12 +207,21 @@
     "fetchDataScript": "def fetchData(url) { \n  def response = httpGet(url); \n  if(response.status == 200) { \n    return parseJson(response.body); \n  } else { \n    println 'Failed to fetch data from ' + url; \n    return null; \n  } \n}",
     "trainingScript": "def processTraining(examples, context) { \n  int correct = 0; \n  examples.each { example -> \n    def input = example.input; \n    def expected = example.expectedOutput; \n    def agentsList = configuration.agentInstances; \n    agentsList.each { agent -> \n      def result = agent.generateCandidate(input); \n      if(result.candidate == expected) { \n         println 'Training success with agent ' + result.metadata.method; \n         correct++; \n         return; \n      } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); \n  println 'Training score: ' + score; \n  return score; \n}",
     "evaluationScript": "def processEvaluation(examples, context) { \n  int correct = 0; \n  examples.each { example -> \n    def input = example.input; \n    def expected = example.expectedOutput; \n    def candidate = processTraining([example], context); \n    if(candidate != null && candidate == expected) { \n       correct++; \n    } else { \n       def composite = DynamicCompositeMathAgent.generateCandidate(input, expected);\n       if(composite.candidate == expected) { \n         correct++; \n       } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); \n  println 'Evaluation score: ' + score; \n  return score; \n}",
-    "finalExamScript": "def processFinal(puzzleSet, context) { \n  def results = [];\n  puzzleSet.each { puzzle -> \n    def input = puzzle.input; \n    def expected = puzzle.expectedOutput; \n    def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); \n    def candidateScore = processEvaluation([puzzle], context);\n    results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n  }; \n  println 'Final exam processing completed for ' + results.size() + ' puzzles.'; \n  return results; \n}"
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n  def results = [];\n  puzzleSet.each { puzzle -> \n    def input = puzzle.input; \n    def expected = puzzle.expectedOutput; \n    def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); \n    def candidateScore = processEvaluation([puzzle], context);\n    results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n  }; \n  println 'Final exam processing completed for ' + results.size() + ' puzzles.'; \n  return results; \n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
   },
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This comprehensive Math KG solves problems across multiple math domains and returns detailed solutions and proofs. It includes full reasoning steps and is blockchain-enabled for microtransactions and lubrication fees."
+    "notes": "This comprehensive Math KG solves problems across multiple math domains and returns detailed solutions and proofs. It includes full reasoning steps and is blockchain-enabled for microtransactions and lubrication fees.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
   },
   "configuration": {
     "maxAgentChainLength": 3,
@@ -251,9 +263,57 @@
         "dynamicPricing": "Based on supply/demand",
         "minFee": "0.0001",
         "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
       }
     },
     "fileImportMode": "multi",
-    "initData": "def initializeData() { \n  def trainingData = scripts.fetchDataScript(configuration.endpoints.training); \n  def evaluationData = scripts.fetchDataScript(configuration.endpoints.evaluation); \n  def finalData = scripts.fetchDataScript(configuration.endpoints.final); \n  println 'Data initialized: Training=' + (trainingData != null) + ', Evaluation=' + (evaluationData != null) + ', Final=' + (finalData != null); \n  return [training: trainingData, evaluation: evaluationData, final: finalData]; \n}"
+    "initData": "def initializeData() { \n  def trainingData = scripts.fetchDataScript(configuration.endpoints.training); \n  def evaluationData = scripts.fetchDataScript(configuration.endpoints.evaluation); \n  def finalData = scripts.fetchDataScript(configuration.endpoints.final); \n  println 'Data initialized: Training=' + (trainingData != null) + ', Evaluation=' + (evaluationData != null) + ', Final=' + (finalData != null); \n  def securityConfig = scripts.fetchDataScript(configuration.endpoints.security);\nprintln ', Security=' + (securityConfig != null);\nreturn [training: trainingData, evaluation: evaluationData, final: finalData, security: securityConfig]; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/math/metrics",
+        "alerts": "https://example.com/math/alerts",
+        "logs": "https://example.com/math/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
   }
 }

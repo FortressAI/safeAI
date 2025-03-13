@@ -1,15 +1,18 @@
 {
   "domain": "VirtualAssistant",
-  "description": "An Agentic Knowledge Graph for a Virtual Assistant that guides users on the functionalities, installed Agentic KGs, and billing procedures within the safeAI ecosystem. This KG dynamically generates comprehensive answers, interactive guides, and FAQs to educate and assist users. It leverages advanced agent generation, blockchain‑audited microtransactions, and decentralized governance to ensure transparent and adaptive support.",
+  "description": "An Agentic Knowledge Graph for a Virtual Assistant that guides users on the functionalities, installed Agentic KGs, and billing procedures within the safeAI ecosystem. This KG dynamically generates comprehensive answers, interactive guides, and FAQs to educate and assist users. It leverages advanced agent generation, blockchain\u2011audited microtransactions, and decentralized governance to ensure transparent and adaptive support.",
   "endpoints": {
     "kgOverview": "https://api.example.com/assistant/kgoverview",
     "billingInfo": "https://api.example.com/assistant/billing",
-    "faq": "https://api.example.com/assistant/faq"
+    "faq": "https://api.example.com/assistant/faq",
+    "security": "https://example.com/virtualassistant/security",
+    "validation": "https://example.com/virtualassistant/validation",
+    "monitoring": "https://example.com/virtualassistant/monitoring"
   },
   "trainingExamples": [
     {
       "input": "What are Agentic KGs?",
-      "expectedOutput": "Agentic KGs are knowledge graphs that integrate dynamic, executable agent code with continuous adaptive learning, blockchain‑audited licensing, and decentralized governance to provide transparent and self‑evolving decision‑support systems.",
+      "expectedOutput": "Agentic KGs are knowledge graphs that integrate dynamic, executable agent code with continuous adaptive learning, blockchain\u2011audited licensing, and decentralized governance to provide transparent and self\u2011evolving decision\u2011support systems.",
       "description": "Training example for defining Agentic KGs."
     },
     {
@@ -19,7 +22,7 @@
     },
     {
       "input": "How does the billing work?",
-      "expectedOutput": "Billing is managed via blockchain‑audited dynamic token‑based licensing. Each interaction triggers smart contract‑based microtransactions based on usage, complexity, and predefined pricing, ensuring transparent revenue sharing among creators.",
+      "expectedOutput": "Billing is managed via blockchain\u2011audited dynamic token\u2011based licensing. Each interaction triggers smart contract\u2011based microtransactions based on usage, complexity, and predefined pricing, ensuring transparent revenue sharing among creators.",
       "description": "Training example for explaining billing."
     }
   ],
@@ -33,7 +36,7 @@
   "finalExamExamples": [
     {
       "input": "Provide a detailed guide on Agentic KGs, including how to access system details, billing information, and operational procedures.",
-      "expectedOutput": "A comprehensive guide that explains what Agentic KGs are, lists the installed domains, details the blockchain‑audited billing system, and outlines how users can interact with and manage the system through decentralized governance.",
+      "expectedOutput": "A comprehensive guide that explains what Agentic KGs are, lists the installed domains, details the blockchain\u2011audited billing system, and outlines how users can interact with and manage the system through decentralized governance.",
       "description": "Final exam: full assistant guide."
     }
   ],
@@ -46,11 +49,9 @@
       "successCount": 100000,
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Provided baseline information for the Virtual Assistant.'; \n    return [candidate: 'This system uses Agentic KGs to provide dynamic, auditable, and decentralized support across multiple domains.', metadata: [method: 'BaseAssistantAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
     },
     {
       "name": "KGOverviewAgent",
@@ -60,25 +61,21 @@
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('List all installed Agentic KGs and provide brief descriptions.'); \n    def cot = 'Retrieved an overview of the installed KGs from the system registry.'; \n    return [candidate: candidate, metadata: [method: 'KGOverviewAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
     },
     {
       "name": "BillingInfoAgent",
       "category": "Financial",
       "usageCount": 70000,
-      "description": "Explains the billing mechanism, including token‑based licensing and revenue sharing via blockchain‑audited smart contracts.",
+      "description": "Explains the billing mechanism, including token\u2011based licensing and revenue sharing via blockchain\u2011audited smart contracts.",
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Explain the dynamic token-based licensing and billing process.'); \n    def cot = 'Outlined the blockchain-audited billing system with smart contract interactions.'; \n    return [candidate: candidate, metadata: [method: 'BillingInfoAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
     },
     {
       "name": "FAQAgent",
@@ -88,11 +85,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Provide answers to frequently asked questions about Agentic KGs.'); \n    def cot = 'Processed common queries regarding system operation, billing, and governance.'; \n    return [candidate: candidate, metadata: [method: 'FAQAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeAssistantAgent",
@@ -102,23 +97,30 @@
       "successCount": 0,
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeAssistantAgent', chain_of_thought: 'No valid composite guide found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
     }
   ],
   "scripts": {
     "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { return parseJson(response.body); } else { println 'Failed to fetch data from ' + url; return null; } \n}",
     "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Assistant training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Assistant training score: ' + score; \n    return score; \n}",
     "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositeAssistantAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Assistant evaluation score: ' + score; \n    return score; \n}",
-    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for assistant guidance of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context); \n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final assistant evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}"
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for assistant guidance of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context); \n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final assistant evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
   },
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This Virtual Assistant KG provides comprehensive guidance on the Agentic KG ecosystem, detailing installed domains, billing mechanisms, decentralized governance, and operational procedures. It serves as an interactive guide to help users and creators understand and effectively use the platform."
+    "notes": "This Virtual Assistant KG provides comprehensive guidance on the Agentic KG ecosystem, detailing installed domains, billing mechanisms, decentralized governance, and operational procedures. It serves as an interactive guide to help users and creators understand and effectively use the platform.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
   },
   "configuration": {
     "maxAgentChainLength": 3,
@@ -140,13 +142,61 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0xABCDEF987654321",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on assistant query complexity and usage metrics",
-        "minFee": 0.0001,
+        "minFee": "0.0001",
         "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
       }
     },
     "fileImportMode": "single",
-    "initData": "def initializeData() { \n    println 'Virtual Assistant KG initialized. Ready to guide users through Agentic KGs and billing processes.'; \n    return null; \n}"
+    "initData": "def initializeData() { \n    println 'Virtual Assistant KG initialized. Ready to guide users through Agentic KGs and billing processes.'; \n    return null; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/virtualassistant/metrics",
+        "alerts": "https://example.com/virtualassistant/alerts",
+        "logs": "https://example.com/virtualassistant/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
   }
 }

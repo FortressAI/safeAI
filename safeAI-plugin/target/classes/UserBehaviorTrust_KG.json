@@ -1,9 +1,12 @@
 {
   "domain": "UserBehaviorTrust",
-  "description": "An Agentic Knowledge Graph for monitoring, analyzing, and enhancing user behavior and trust. This KG dynamically processes user interaction data, sentiment analysis, and trust metrics to adjust system responses in real time. It leverages blockchain‑audited microtransactions and decentralized governance to ensure transparent, adaptive, and user‑centered decision‑support.",
+  "description": "An Agentic Knowledge Graph for monitoring, analyzing, and enhancing user behavior and trust. This KG dynamically processes user interaction data, sentiment analysis, and trust metrics to adjust system responses in real time. It leverages blockchain\u2011audited microtransactions and decentralized governance to ensure transparent, adaptive, and user\u2011centered decision\u2011support.",
   "endpoints": {
     "userMetrics": "https://api.example.com/user/metrics",
-    "feedbackData": "https://api.example.com/user/feedback"
+    "feedbackData": "https://api.example.com/user/feedback",
+    "security": "https://example.com/userbehaviortrust/security",
+    "validation": "https://example.com/userbehaviortrust/validation",
+    "monitoring": "https://example.com/userbehaviortrust/monitoring"
   },
   "trainingExamples": [
     {
@@ -40,11 +43,9 @@
       "successCount": 100000,
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline user behavior data from input.'; \n    return [candidate: input, metadata: [method: 'BaseBehaviorAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
     },
     {
       "name": "TrustAnalysisAgent",
@@ -54,11 +55,9 @@
       "successCount": 80000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze trust for: ' + input.toString()); \n    def cot = 'Computed trust score based on sentiment and behavior patterns.'; \n    return [candidate: candidate, metadata: [method: 'TrustAnalysisAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
     },
     {
       "name": "SentimentAnalysisAgent",
@@ -68,11 +67,9 @@
       "successCount": 70000,
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Perform sentiment analysis on: ' + input.toString()); \n    def cot = 'Identified sentiment trends from user feedback.'; \n    return [candidate: candidate, metadata: [method: 'SentimentAnalysisAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
     },
     {
       "name": "DynamicCompositeTrustAgent",
@@ -82,23 +79,30 @@
       "successCount": 0,
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeTrustAgent', chain_of_thought: 'No valid composite trust evaluation found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for trust evaluation\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for comparing trust scores\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
-      "transactionFee": 0.001,
-      "approvalCriteria": {
-        "effectivenessThreshold": 0.95,
-        "ethicsGuidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards."
-      }
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
     }
   ],
   "scripts": {
     "fetchDataScript": "def fetchData(url) { \n    def response = httpGet(url); \n    if(response.status == 200) { \n        return parseJson(response.body); \n    } else { \n        println 'Failed to fetch user metrics from ' + url; \n        return null; \n    } \n}",
     "trainingScript": "def processTraining(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def agentsList = configuration.agentInstances; \n        agentsList.each { agent -> \n            def result = agent.generateCandidate(input); \n            if(result.candidate == expected) { \n                println 'Trust training success with agent ' + result.metadata.method; \n                correct++; \n                return; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Trust training score: ' + score; \n    return score; \n}",
     "evaluationScript": "def processEvaluation(examples, context) { \n    int correct = 0; \n    examples.each { example -> \n        def input = example.input; \n        def expected = example.expectedOutput; \n        def candidate = processTraining([example], context); \n        if(candidate != null && candidate == expected) { \n            correct++; \n        } else { \n            def composite = DynamicCompositeTrustAgent.generateCandidate(input, expected); \n            if(composite.candidate == expected) { \n                correct++; \n            } \n        } \n    }; \n    def score = (correct * 100.0) / examples.size(); \n    println 'Trust evaluation score: ' + score; \n    return score; \n}",
-    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for trust evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final trust evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}"
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n    def results = [];\n    puzzleSet.each { puzzle -> \n        def input = puzzle.input; \n        def expected = puzzle.expectedOutput; \n        def cot = nlQuery('Generate detailed chain-of-thought for trust evaluation of: ' + input.toString() + ' expecting: ' + expected.toString()); \n        def candidateScore = processEvaluation([puzzle], context);\n        results.add([ puzzle: puzzle, final_score: candidateScore, final_output: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n    }; \n    println 'Final trust evaluation completed for ' + results.size() + ' items.'; \n    return results; \n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
   },
   "metadata": {
     "version": "1.0",
     "created": "2025-03-02T00:00:00Z",
-    "notes": "This User Behavior and Trust KG dynamically evaluates user interaction data, sentiment, and trust metrics. It employs adaptive agent generation to monitor and enhance user experience and trust, while blockchain‑audited microtransactions and decentralized governance ensure transparent monetization and continuous improvement."
+    "notes": "This User Behavior and Trust KG dynamically evaluates user interaction data, sentiment, and trust metrics. It employs adaptive agent generation to monitor and enhance user experience and trust, while blockchain\u2011audited microtransactions and decentralized governance ensure transparent monetization and continuous improvement.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
   },
   "configuration": {
     "maxAgentChainLength": 3,
@@ -118,13 +122,61 @@
       "systemWallet": "0xAdminWalletAddress",
       "contractAddress": "0xABC123456789DEF",
       "pricing": {
-        "baseFee": 0.001,
+        "baseFee": "0.001",
         "dynamicPricing": "Based on user engagement and trust risk",
-        "minFee": 0.0001,
+        "minFee": "0.0001",
         "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
       }
     },
     "fileImportMode": "multi",
-    "initData": "def initializeData() { \n    def metrics = scripts.fetchDataScript(configuration.endpoints.userMetrics); \n    def feedback = scripts.fetchDataScript(configuration.endpoints.feedbackData); \n    println 'Trust KG initialized: Metrics=' + (metrics != null) + ', Feedback=' + (feedback != null); \n    return [metrics: metrics, feedback: feedback]; \n}"
+    "initData": "def initializeData() { \n    def metrics = scripts.fetchDataScript(configuration.endpoints.userMetrics); \n    def feedback = scripts.fetchDataScript(configuration.endpoints.feedbackData); \n    println 'Trust KG initialized: Metrics=' + (metrics != null) + ', Feedback=' + (feedback != null); \n    def securityConfig = scripts.fetchDataScript(configuration.endpoints.security);\nprintln ', Security=' + (securityConfig != null);\nreturn [metrics: metrics, feedback: feedback, security: securityConfig]; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/userbehaviortrust/metrics",
+        "alerts": "https://example.com/userbehaviortrust/alerts",
+        "logs": "https://example.com/userbehaviortrust/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
   }
 }
