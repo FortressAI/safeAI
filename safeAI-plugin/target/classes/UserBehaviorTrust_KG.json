@@ -1,39 +1,6 @@
 {
   "domain": "UserBehaviorTrust",
   "description": "An Agentic Knowledge Graph for monitoring, analyzing, and enhancing user behavior and trust. This KG dynamically processes user interaction data, sentiment analysis, and trust metrics to adjust system responses in real time. It leverages blockchain\u2011audited microtransactions and decentralized governance to ensure transparent, adaptive, and user\u2011centered decision\u2011support.",
-  "endpoints": {
-    "userMetrics": "https://api.example.com/user/metrics",
-    "feedbackData": "https://api.example.com/user/feedback",
-    "security": "https://example.com/userbehaviortrust/security",
-    "validation": "https://example.com/userbehaviortrust/validation",
-    "monitoring": "https://example.com/userbehaviortrust/monitoring"
-  },
-  "trainingExamples": [
-    {
-      "input": "Analyze user interaction logs to determine trust score for a new feature.",
-      "expectedOutput": "Trust score: 85 with recommendations for improvement.",
-      "description": "User trust scoring from interaction data."
-    },
-    {
-      "input": "Identify negative sentiment trends in recent feedback.",
-      "expectedOutput": "Detected sentiment score: 30 with suggested interventions.",
-      "description": "Sentiment analysis training example."
-    }
-  ],
-  "evaluationExamples": [
-    {
-      "input": "Evaluate the overall trustworthiness of user engagement on the platform.",
-      "expectedOutput": "Composite trust score of 80 with detailed breakdown.",
-      "description": "Evaluation example for overall trust assessment."
-    }
-  ],
-  "finalExamExamples": [
-    {
-      "input": "Generate a comprehensive report on user behavior and trust dynamics over the past quarter, including actionable insights.",
-      "expectedOutput": "Detailed report with trust metrics, sentiment analysis, and improvement recommendations.",
-      "description": "Final exam: comprehensive user behavior and trust analysis."
-    }
-  ],
   "agents": [
     {
       "name": "BaseBehaviorAgent",
@@ -44,7 +11,8 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline user behavior data from input.'; \n    return [candidate: input, metadata: [method: 'BaseBehaviorAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     },
     {
@@ -56,7 +24,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze trust for: ' + input.toString()); \n    def cot = 'Computed trust score based on sentiment and behavior patterns.'; \n    return [candidate: candidate, metadata: [method: 'TrustAnalysisAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -68,7 +37,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Perform sentiment analysis on: ' + input.toString()); \n    def cot = 'Identified sentiment trends from user feedback.'; \n    return [candidate: candidate, metadata: [method: 'SentimentAnalysisAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -80,7 +50,8 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeTrustAgent', chain_of_thought: 'No valid composite trust evaluation found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for trust evaluation\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic for comparing trust scores\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     }
   ],
@@ -178,5 +149,36 @@
         "burst_limit": 10
       }
     }
-  }
+  },
+  "endpoint_userMetrics": "https://api.example.com/user/metrics",
+  "endpoint_feedbackData": "https://api.example.com/user/feedback",
+  "endpoint_security": "https://example.com/userbehaviortrust/security",
+  "endpoint_validation": "https://example.com/userbehaviortrust/validation",
+  "endpoint_monitoring": "https://example.com/userbehaviortrust/monitoring",
+  "training_examples": [
+    {
+      "input": "Analyze user interaction logs to determine trust score for a new feature.",
+      "expected_output": "Trust score: 85 with recommendations for improvement.",
+      "description": "User trust scoring from interaction data."
+    },
+    {
+      "input": "Identify negative sentiment trends in recent feedback.",
+      "expected_output": "Detected sentiment score: 30 with suggested interventions.",
+      "description": "Sentiment analysis training example."
+    }
+  ],
+  "evaluation_examples": [
+    {
+      "input": "Evaluate the overall trustworthiness of user engagement on the platform.",
+      "expected_output": "Composite trust score of 80 with detailed breakdown.",
+      "description": "Evaluation example for overall trust assessment."
+    }
+  ],
+  "final_exam_examples": [
+    {
+      "input": "Generate a comprehensive report on user behavior and trust dynamics over the past quarter, including actionable insights.",
+      "expected_output": "Detailed report with trust metrics, sentiment analysis, and improvement recommendations.",
+      "description": "Final exam: comprehensive user behavior and trust analysis."
+    }
+  ]
 }

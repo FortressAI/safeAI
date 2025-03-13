@@ -1,39 +1,6 @@
 {
   "domain": "EnergyManagement",
   "description": "An Agentic KG for Energy Management and Smart Grids that analyzes energy consumption data, optimizes grid performance, and integrates renewable energy sources. This KG uses dynamic agent generation to forecast demand, detect anomalies, and optimize energy distribution while ensuring secure, blockchain\u2011audited licensing and decentralized governance.",
-  "endpoints": {
-    "energyConsumption": "https://api.example.com/energy/consumption",
-    "renewableIntegration": "https://api.example.com/energy/renewables",
-    "security": "https://example.com/energymanagement/security",
-    "validation": "https://example.com/energymanagement/validation",
-    "monitoring": "https://example.com/energymanagement/monitoring"
-  },
-  "trainingExamples": [
-    {
-      "input": "Forecast energy demand for a city with 1M residents during peak summer hours.",
-      "expectedOutput": "A demand forecast with a predicted peak load and recommendations for load balancing.",
-      "description": "Training example for energy demand forecasting."
-    },
-    {
-      "input": "Assess grid performance under a simulated outage in a critical substation.",
-      "expectedOutput": "A report detailing expected system responses and recommended recovery actions.",
-      "description": "Training example for outage simulation."
-    }
-  ],
-  "evaluationExamples": [
-    {
-      "input": "Evaluate the effectiveness of a renewable energy integration strategy in reducing peak load.",
-      "expectedOutput": "An evaluation report with quantitative reduction in peak load and suggested improvements.",
-      "description": "Evaluation example for renewable energy strategy."
-    }
-  ],
-  "finalExamExamples": [
-    {
-      "input": "Develop a comprehensive energy management plan for a smart grid system integrating solar, wind, and conventional energy sources.",
-      "expectedOutput": "A complete management plan including demand forecasting, energy storage strategies, and grid optimization techniques.",
-      "description": "Final exam: integrated smart grid management plan."
-    }
-  ],
   "agents": [
     {
       "name": "BaseEnergyAgent",
@@ -44,7 +11,8 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline energy consumption data.'; \n    return [candidate: input, metadata: [method: 'BaseEnergyAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     },
     {
@@ -56,7 +24,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Forecast energy demand for: ' + input.toString()); \n    def cot = 'Generated demand forecast using historical and contextual data.'; \n    return [candidate: candidate, metadata: [method: 'DemandForecastAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -68,7 +37,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Detect anomalies in energy consumption for: ' + input.toString()); \n    def cot = 'Identified anomalies and deviations from expected energy patterns.'; \n    return [candidate: candidate, metadata: [method: 'AnomalyDetectionAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -80,7 +50,8 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Optimize grid performance for: ' + input.toString()); \n    def cot = 'Calculated optimal energy distribution and grid parameters.'; \n    return [candidate: candidate, metadata: [method: 'GridOptimizationAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "LLM"
     },
     {
@@ -92,7 +63,8 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeEnergyAgent', chain_of_thought: 'No valid composite energy management plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "effectiveness_threshold": "0.95",
+      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
       "agent_type": "Script"
     }
   ],
@@ -192,5 +164,36 @@
         "burst_limit": 10
       }
     }
-  }
+  },
+  "endpoint_energyConsumption": "https://api.example.com/energy/consumption",
+  "endpoint_renewableIntegration": "https://api.example.com/energy/renewables",
+  "endpoint_security": "https://example.com/energymanagement/security",
+  "endpoint_validation": "https://example.com/energymanagement/validation",
+  "endpoint_monitoring": "https://example.com/energymanagement/monitoring",
+  "training_examples": [
+    {
+      "input": "Forecast energy demand for a city with 1M residents during peak summer hours.",
+      "expected_output": "A demand forecast with a predicted peak load and recommendations for load balancing.",
+      "description": "Training example for energy demand forecasting."
+    },
+    {
+      "input": "Assess grid performance under a simulated outage in a critical substation.",
+      "expected_output": "A report detailing expected system responses and recommended recovery actions.",
+      "description": "Training example for outage simulation."
+    }
+  ],
+  "evaluation_examples": [
+    {
+      "input": "Evaluate the effectiveness of a renewable energy integration strategy in reducing peak load.",
+      "expected_output": "An evaluation report with quantitative reduction in peak load and suggested improvements.",
+      "description": "Evaluation example for renewable energy strategy."
+    }
+  ],
+  "final_exam_examples": [
+    {
+      "input": "Develop a comprehensive energy management plan for a smart grid system integrating solar, wind, and conventional energy sources.",
+      "expected_output": "A complete management plan including demand forecasting, energy storage strategies, and grid optimization techniques.",
+      "description": "Final exam: integrated smart grid management plan."
+    }
+  ]
 }
