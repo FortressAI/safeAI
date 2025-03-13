@@ -1,80 +1,166 @@
 # SafeAI Platform Documentation
 
-Welcome to the SafeAI Platform documentation. This comprehensive guide is organized by roles and technical domains to help you understand and work with our decentralized, blockchain-audited knowledge graph ecosystem.
+Welcome to the SafeAI Platform documentation. This comprehensive guide covers governance, security, integration, and domain-specific documentation to help you understand and work with our decentralized, blockchain-audited knowledge graph ecosystem.
 
-## Role-Based Guides
+## Governance and Guidelines
 
-1. [End Users Guide](./roles/end-user-guide.md)
-   - For users who want to interact with the platform to solve problems
-   - No technical background required
-   - Includes basic usage and billing understanding
+1. [Governance Framework](./governance/governance-framework-guide.md)
+   - Decision-making process
+   - Community participation
+   - Change management
 
-2. [Domain Experts Guide](./roles/domain-expert-guide.md)
-   - For subject matter experts who contribute to knowledge domains
-   - Includes governance participation
-   - Knowledge graph validation and enhancement
+2. [Community Guidelines](./governance/community-guidelines.md)
+   - Code of conduct
+   - Communication guidelines
+   - Recognition and rewards
 
-3. [Developers Guide](./roles/developer-guide.md)
-   - For technical users who want to extend the platform
-   - API documentation
-   - Plugin development guidelines
+3. [Contributing Guide](./governance/contributing.md)
+   - Development workflow
+   - Code contributions
+   - Documentation contributions
 
-4. [System Administrators Guide](./roles/system-admin-guide.md)
-   - For those managing platform deployments
-   - Installation and maintenance
+4. [Development Setup](./governance/development-setup.md)
+   - Environment setup
+   - Prerequisites
+   - Installation steps
+
+5. [Testing Guide](./governance/testing-guide.md)
+   - Testing philosophy
+   - Test types
+   - Best practices
+
+6. [Documentation Style](./governance/documentation-style.md)
+   - Writing guidelines
+   - Formatting standards
+   - Documentation types
+
+7. [Code Review Guidelines](./governance/code-review.md)
+   - Review process
+   - Communication guidelines
+   - Best practices
+
+## Security Documentation
+
+1. [Security Hardening Guide](./security/security-hardening-guide.md)
+   - Security architecture
+   - Hardening measures
+   - Best practices
+
+2. [Audit Trail Guide](./security/audit-trail-guide.md)
+   - Event logging
+   - Audit architecture
+   - Implementation details
+
+3. [Compliance Framework](./security/compliance-framework.md)
+   - Regulatory requirements
+   - Implementation guidelines
+   - Certification process
+
+4. [Privacy Protection](./security/privacy-protection.md)
+   - Data protection
+   - Privacy controls
+   - Rights management
+
+5. [Incident Response Plan](./security/incident-response-plan.md)
+   - Response procedures
+   - Recovery process
+   - Post-incident analysis
+
+## Integration Guides
+
+1. [API Integration Guide](./integration/api-integration-guide.md)
+   - API overview
+   - Authentication
+   - Endpoints
+
+2. [Plugin Development Guide](./integration/plugin-development-guide.md)
+   - Plugin architecture
+   - Development process
+   - Best practices
+
+3. [Data Migration Guide](./integration/data-migration-guide.md)
+   - Migration strategies
+   - Data validation
+   - Performance optimization
+
+4. [Cloud Deployment Guide](./integration/cloud-deployment-guide.md)
+   - Deployment options
+   - Configuration
+   - Monitoring
+
+5. [Enterprise Integration Guide](./integration/enterprise-integration-guide.md)
+   - Enterprise features
    - Security considerations
+   - Scalability
 
-5. [Ethics Board Members Guide](./roles/ethics-board-guide.md)
-   - For ethics oversight committee members
-   - Ethics node management
-   - Governance protocols
+## Domain-Specific Guides
+
+1. [Cybersecurity Guide](./domains/cybersecurity-guide.md)
+   - Security measures
+   - Threat detection
+   - Response protocols
+
+2. [Environmental Sustainability Guide](./domains/environmental-sustainability-guide.md)
+   - Sustainability metrics
+   - Environmental impact
+   - Best practices
+
+3. [Financial Analytics Guide](./domains/financial-analytics-guide.md)
+   - Financial metrics
+   - Analysis tools
+   - Reporting
+
+4. [Medical Safety Guide](./domains/medical-safety-guide.md)
+   - Safety protocols
+   - Compliance requirements
+   - Risk management
+
+5. [Mathematics Domain Guide](./domains/math-domain-guide.md)
+   - Mathematical concepts
+   - Problem-solving
+   - Validation
 
 ## Technical Documentation
 
-1. [Blockchain Integration](./technical/blockchain-integration.md)
-   - Smart contract details
+1. [Agent Development Guide](./technical/agent-development-guide.md)
+   - Agent architecture
+   - Development workflow
+   - Best practices
+
+2. [Blockchain Integration](./technical/blockchain-integration.md)
+   - Smart contracts
    - Token economics
    - Transaction monitoring
 
-2. [Knowledge Graph Architecture](./technical/knowledge-graph-architecture.md)
+3. [Knowledge Graph Architecture](./technical/knowledge-graph-architecture.md)
    - Graph structure
-   - Node types and relationships
+   - Node types
    - Query patterns
 
-3. [Security Framework](./technical/security-framework.md)
-   - Digital signatures
-   - Audit trails
-   - Access control
+4. [Language Games Framework](./technical/language-games-framework.md)
+   - Framework overview
+   - Implementation
+   - Validation
 
-4. [Ethics Framework](./technical/ethics-framework.md)
-   - Ethics node structure
-   - Validation processes
-   - Language games implementation
+## Role-Based Guides
 
-5. [API Reference](./technical/api-reference.md)
-   - REST API documentation
-   - GraphQL endpoints
-   - WebSocket interfaces
-
-## Tutorials and Examples
-
-1. [Getting Started](./tutorials/getting-started.md)
-   - First-time setup
-   - Basic operations
+1. [End User Guide](./roles/end-user-guide.md)
+   - Basic usage
    - Common workflows
+   - Troubleshooting
 
-2. [Advanced Usage](./tutorials/advanced-usage.md)
-   - Complex queries
-   - Custom transformations
-   - Integration patterns
+2. [Ethics Board Guide](./roles/ethics-board-guide.md)
+   - Ethics oversight
+   - Governance protocols
+   - Decision-making
 
-## Additional Resources
+## Performance Optimization
 
-- [Glossary](./resources/glossary.md)
-- [FAQ](./resources/faq.md)
-- [Troubleshooting](./resources/troubleshooting.md)
-- [Release Notes](./resources/release-notes.md)
+1. [Performance Optimization Guide](./performance/performance-optimization-guide.md)
+   - Performance basics
+   - Optimization strategies
+   - Monitoring and analysis
 
 ## Contributing
 
-Please see our [Contributing Guidelines](./CONTRIBUTING.md) for information on how to help improve this documentation. 
+Please see our [Contributing Guide](./governance/contributing.md) for information on how to help improve this documentation. 
