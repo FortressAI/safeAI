@@ -53,12 +53,20 @@ SafeAI implements a comprehensive security framework:
    cd safeAI
    ```
 
-2. Set up environment variables in `.env`:
-   ```bash
-   OPENAI_API_KEY=your-openai-api-key
-   ADMIN_WALLET_KEY=your-admin-wallet-key
-   BLOCKCHAIN_ENDPOINT=your-blockchain-endpoint
-   SAFEAI_API_KEY=your-safeai-api-key
+2. Configure the plugin in `plugin-config.properties`:
+   ```properties
+   # API Key Configuration
+   openai.api.key=your-openai-api-key
+   admin.api.key=your-safeai-api-key
+   
+   # Blockchain Settings
+   blockchain.endpoint=http://host.docker.internal:7545
+   admin.wallet.key=your-admin-wallet-key
+   
+   # LLM Configuration
+   llm.model=o3-mini
+   llm.temperature=0.7
+   llm.max_tokens=2000
    ```
 
 3. Deploy using Docker Compose:
@@ -69,22 +77,51 @@ SafeAI implements a comprehensive security framework:
 
 ## Configuration
 
-Configuration is managed through `plugin-config.properties`:
+The plugin is configured through `plugin-config.properties` in the Neo4j configuration directory:
 
 ```properties
 # API Key Configuration
-openai.api.key=${OPENAI_API_KEY}
-admin.api.key=${SAFEAI_API_KEY}
+openai.api.key=your-openai-api-key
+admin.api.key=your-safeai-api-key
 
 # Blockchain Settings
-blockchain.endpoint=${BLOCKCHAIN_ENDPOINT:http://host.docker.internal:7545}
-admin.wallet.key=${ADMIN_WALLET_KEY}
+blockchain.endpoint=http://host.docker.internal:7545
+admin.wallet.key=your-admin-wallet-key
 
 # LLM Configuration
-llm.model=gpt-4
+llm.model=o3-mini
 llm.temperature=0.7
 llm.max_tokens=2000
+
+# Security Settings
+security.input.validation=true
+security.resource.monitoring=true
+security.output.validation=true
+
+# Plugin Settings
+plugin.name=safeai
+plugin.version=1.0.0
+plugin.author=FortressAI
+
+# Neo4j Integration
+neo4j.procedure.allowlist=safeai.*
+neo4j.procedure.unrestricted=safeai.security.*,safeai.agents.*
 ```
+
+### Configuration Properties
+
+| Property | Description | Default |
+|----------|-------------|---------|
+| `openai.api.key` | OpenAI API key for LLM functionality | Required |
+| `admin.api.key` | SafeAI admin API key | Required |
+| `blockchain.endpoint` | Blockchain network endpoint | http://host.docker.internal:7545 |
+| `admin.wallet.key` | Admin wallet private key | Required |
+| `llm.model` | LLM model to use | o3-mini |
+| `llm.temperature` | LLM temperature setting | 0.7 |
+| `llm.max_tokens` | Maximum tokens for LLM responses | 2000 |
+| `security.input.validation` | Enable input validation | true |
+| `security.resource.monitoring` | Enable resource monitoring | true |
+| `security.output.validation` | Enable output validation | true |
 
 ## Built-in Knowledge Graphs
 
@@ -135,6 +172,72 @@ YIELD result
 RETURN result;
 ```
 
+## Creating Agents Using Natural Language
+
+SafeAI now supports creating and validating agents using natural language descriptions. This makes it easier for users to create secure and effective agents without needing to write code or complex configurations.
+
+### Creating a New Agent
+
+Use the `safeai.agents.createFromDescription` procedure:
+
+```cypher
+CALL safeai.agents.createFromDescription(
+    "Create an agent that analyzes code for security vulnerabilities. 
+     It should check for common issues like SQL injection, XSS, and 
+     buffer overflows. The agent should provide detailed explanations 
+     of found vulnerabilities and suggest fixes.",
+    "llm"  // or "groovy" for script-based agents
+) YIELD value, agent
+RETURN value, agent
+```
+
+The procedure will:
+1. Generate a complete agent definition using GPT-4
+2. Validate the definition for security and effectiveness
+3. Create the agent with appropriate security settings
+4. Link required capabilities
+5. Return the created agent configuration
+
+### Validating Existing Agents
+
+Use the `safeai.agents.validateAgent` procedure to validate existing agents:
+
+```cypher
+CALL safeai.agents.validateAgent("SecurityAnalyzer")
+YIELD value, agent
+RETURN value, agent
+```
+
+This will check the agent for:
+- Security vulnerabilities
+- Ethical compliance
+- Performance implications
+- Resource usage
+- Code/prompt safety
+
+### Example Agent Types
+
+1. **LLM-based Agents** (type: "llm")
+   - Code analysis agents
+   - Data validation agents
+   - Natural language processing agents
+   - Decision support agents
+
+2. **Groovy Script Agents** (type: "groovy")
+   - Data transformation agents
+   - Integration agents
+   - Monitoring agents
+   - Automation agents
+
+### Best Practices
+
+1. **Descriptive Names**: Use clear, descriptive names for your agents
+2. **Detailed Descriptions**: Provide comprehensive descriptions of agent functionality
+3. **Security First**: Always include security requirements in your descriptions
+4. **Capability Specification**: List all required capabilities explicitly
+5. **Ethics Guidelines**: Include clear ethical guidelines and constraints
+6. **Resource Limits**: Specify resource usage limits and effectiveness thresholds
+
 ## Development
 
 ### Building from Source
@@ -167,13 +270,15 @@ mvn test
 
 ### Common Issues
 
-1. **Environment Variables Not Set**
-   - Ensure all required environment variables are set in `.env`
-   - Check `plugin-config.properties` for correct variable references
+1. **Configuration Issues**
+   - Ensure `plugin-config.properties` is in the Neo4j configuration directory
+   - Verify all required properties are set correctly
+   - Check Neo4j logs for configuration-related errors
 
 2. **Blockchain Connection Issues**
    - Verify blockchain endpoint is accessible
    - Check admin wallet key configuration
+   - Ensure blockchain network is running
 
 3. **Security Validation Failures**
    - Review security validation output
@@ -192,5 +297,5 @@ Copyright © 2024 FortressAI. All rights reserved.
 
 ## Contributing
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+Please read our [Development Guidelines](MICROAGENT_DEV_GUIDELINES.md) and [Knowledge Graph Implementation Guide](docs/KnowledgeGraph_Implementation_Guide.md).
 
