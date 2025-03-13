@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +23,8 @@ import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 import com.safeai.neo4jplugin.graph_rag.GraphRAG;
 import com.safeai.neo4jplugin.DynamicAgentCreator;
+import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Node;
 
 public class DebugProcedure {
     @Context 
@@ -419,6 +424,232 @@ public class DebugProcedure {
             }
         } catch(Exception e) {
             results.add(new StringResult("Installation procedure Error: " + e.getMessage()));
+        }
+        return results.stream();
+    }
+
+    @Procedure(name = "safeai.debug.validateSecurity", mode = Mode.READ)
+    @Description("Validates security and compliance of loaded Knowledge Graphs")
+    public Stream<StringResult> validateSecurity() {
+        List<StringResult> results = new ArrayList<>();
+        try {
+            // Check for required security KGs
+            try (Transaction tx = db.beginTx()) {
+                Result securityKGs = tx.execute(
+                    "MATCH (kg:KnowledgeGraph) " +
+                    "WHERE kg.name IN ['CyberSecurity', 'DataPrivacySecurity', 'LegalCompliance', 'RiskManagement'] " +
+                    "RETURN kg.name as name, kg.description as description"
+                );
+                
+                if (!securityKGs.hasNext()) {
+                    results.add(new StringResult("WARNING: Required security KGs are missing"));
+                } else {
+                    while (securityKGs.hasNext()) {
+                        Map<String, Object> record = securityKGs.next();
+                        results.add(new StringResult("Found security KG: " + record.get("name")));
+                    }
+                }
+            }
+
+            // Verify agent security capabilities
+            try (Transaction tx = db.beginTx()) {
+                Result agentSecurity = tx.execute(
+                    "MATCH (a:Agent)-[:HAS_CAPABILITY]->(c:Capability) " +
+                    "WHERE c.name CONTAINS 'security' OR c.name CONTAINS 'compliance' " +
+                    "RETURN a.name as agent, collect(c.name) as security_capabilities"
+                );
+                
+                if (!agentSecurity.hasNext()) {
+                    results.add(new StringResult("WARNING: No agents found with security capabilities"));
+                } else {
+                    while (agentSecurity.hasNext()) {
+                        Map<String, Object> record = agentSecurity.next();
+                        results.add(new StringResult("Agent " + record.get("agent") + 
+                            " has security capabilities: " + record.get("security_capabilities")));
+                    }
+                }
+            }
+
+            // Check compliance requirements
+            try (Transaction tx = db.beginTx()) {
+                Result compliance = tx.execute(
+                    "MATCH (kg:KnowledgeGraph)-[:HAS_CAPABILITY]->(c:Capability) " +
+                    "WHERE c.name CONTAINS 'compliance' " +
+                    "RETURN kg.name as kg, collect(c.name) as compliance_capabilities"
+                );
+                
+                if (!compliance.hasNext()) {
+                    results.add(new StringResult("WARNING: No compliance capabilities found"));
+                } else {
+                    while (compliance.hasNext()) {
+                        Map<String, Object> record = compliance.next();
+                        results.add(new StringResult("KG " + record.get("kg") + 
+                            " has compliance capabilities: " + record.get("compliance_capabilities")));
+                    }
+                }
+            }
+
+            // Verify blockchain integration
+            try (Transaction tx = db.beginTx()) {
+                Result blockchain = tx.execute(
+                    "MATCH (a:Agent) " +
+                    "WHERE a.blockchainIntegration = true " +
+                    "RETURN a.name as agent, a.description as description"
+                );
+                
+                if (!blockchain.hasNext()) {
+                    results.add(new StringResult("WARNING: No agents found with blockchain integration"));
+                } else {
+                    while (blockchain.hasNext()) {
+                        Map<String, Object> record = blockchain.next();
+                        results.add(new StringResult("Agent " + record.get("agent") + 
+                            " has blockchain integration"));
+                    }
+                }
+            }
+
+            results.add(new StringResult("Security validation completed"));
+        } catch (Exception e) {
+            results.add(new StringResult("Error during security validation: " + e.getMessage()));
+            e.printStackTrace();
+        }
+        return results.stream();
+    }
+
+    @Procedure(name = "safeai.debug.checkProductionReadiness", mode = Mode.READ)
+    @Description("Performs comprehensive production readiness check")
+    public Stream<StringResult> checkProductionReadiness() {
+        List<StringResult> results = new ArrayList<>();
+        try {
+            // Check API keys and environment variables
+            String openaiKey = System.getenv("OPENAI_API_KEY");
+            String adminKey = System.getenv("ADMIN_WALLET_KEY");
+            String blockchainEndpoint = System.getenv("BLOCKCHAIN_ENDPOINT");
+            
+            if (openaiKey == null || openaiKey.isEmpty()) {
+                results.add(new StringResult("ERROR: OPENAI_API_KEY is not set"));
+            } else {
+                results.add(new StringResult("OPENAI_API_KEY is configured"));
+            }
+            
+            if (adminKey == null || adminKey.isEmpty()) {
+                results.add(new StringResult("ERROR: ADMIN_WALLET_KEY is not set"));
+            } else {
+                results.add(new StringResult("ADMIN_WALLET_KEY is configured"));
+            }
+            
+            if (blockchainEndpoint == null || blockchainEndpoint.isEmpty()) {
+                results.add(new StringResult("ERROR: BLOCKCHAIN_ENDPOINT is not set"));
+            } else {
+                results.add(new StringResult("BLOCKCHAIN_ENDPOINT is configured: " + blockchainEndpoint));
+            }
+
+            // Check database constraints
+            try (Transaction tx = db.beginTx()) {
+                Result constraints = tx.execute("SHOW CONSTRAINTS");
+                boolean hasRequiredConstraints = false;
+                while (constraints.hasNext()) {
+                    Map<String, Object> constraint = constraints.next();
+                    String name = (String) constraint.get("name");
+                    if (name.equals("unique_kg_name") || 
+                        name.equals("unique_agent_name") || 
+                        name.equals("unique_capability_name")) {
+                        hasRequiredConstraints = true;
+                        results.add(new StringResult("Found required constraint: " + name));
+                    }
+                }
+                if (!hasRequiredConstraints) {
+                    results.add(new StringResult("ERROR: Required database constraints are missing"));
+                }
+            }
+
+            // Check required procedures
+            try (Transaction tx = db.beginTx()) {
+                Result procedures = tx.execute("SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai'");
+                List<String> requiredProcedures = Arrays.asList(
+                    "safeai.debug.loadKGFiles",
+                    "safeai.debug.validateSecurity",
+                    "safeai.governance.initiateVote",
+                    "safeai.governance.recordVote"
+                );
+                Set<String> foundProcedures = new HashSet<>();
+                while (procedures.hasNext()) {
+                    Map<String, Object> proc = procedures.next();
+                    foundProcedures.add((String) proc.get("name"));
+                }
+                
+                for (String required : requiredProcedures) {
+                    if (!foundProcedures.contains(required)) {
+                        results.add(new StringResult("ERROR: Required procedure missing: " + required));
+                    } else {
+                        results.add(new StringResult("Found required procedure: " + required));
+                    }
+                }
+            }
+
+            // Check required KGs
+            try (Transaction tx = db.beginTx()) {
+                Result kgs = tx.execute(
+                    "MATCH (kg:KnowledgeGraph) " +
+                    "WHERE kg.name IN ['CyberSecurity', 'DataPrivacySecurity', 'LegalCompliance', 'RiskManagement'] " +
+                    "RETURN kg.name as name"
+                );
+                Set<String> foundKGs = new HashSet<>();
+                while (kgs.hasNext()) {
+                    Map<String, Object> kg = kgs.next();
+                    foundKGs.add((String) kg.get("name"));
+                }
+                
+                List<String> requiredKGs = Arrays.asList(
+                    "CyberSecurity",
+                    "DataPrivacySecurity",
+                    "LegalCompliance",
+                    "RiskManagement"
+                );
+                
+                for (String required : requiredKGs) {
+                    if (!foundKGs.contains(required)) {
+                        results.add(new StringResult("ERROR: Required KG missing: " + required));
+                    } else {
+                        results.add(new StringResult("Found required KG: " + required));
+                    }
+                }
+            }
+
+            // Check blockchain integration
+            try {
+                com.safeai.neo4jplugin.blockchain.BlockchainConnector.initialize(blockchainEndpoint);
+                if (com.safeai.neo4jplugin.blockchain.BlockchainConnector.getWeb3j() != null) {
+                    results.add(new StringResult("Blockchain connection verified"));
+                } else {
+                    results.add(new StringResult("ERROR: Blockchain connection failed"));
+                }
+            } catch (Exception e) {
+                results.add(new StringResult("ERROR: Blockchain integration failed: " + e.getMessage()));
+            }
+
+            // Check LLM integration
+            try {
+                com.safeai.neo4jplugin.LLMClient llmClient = new com.safeai.neo4jplugin.LLMClient();
+                com.safeai.neo4jplugin.LLMClient.QueryResult qr = llmClient.query_llm_schema("test query", "gpt-4");
+                results.add(new StringResult("LLM integration verified"));
+            } catch (Exception e) {
+                results.add(new StringResult("ERROR: LLM integration failed: " + e.getMessage()));
+            }
+
+            // Check for any errors
+            boolean hasErrors = results.stream()
+                .anyMatch(r -> r.value.startsWith("ERROR:"));
+            
+            if (hasErrors) {
+                results.add(new StringResult("PRODUCTION READINESS CHECK FAILED - Please address the errors above"));
+            } else {
+                results.add(new StringResult("PRODUCTION READINESS CHECK PASSED - System is ready for production use"));
+            }
+
+        } catch (Exception e) {
+            results.add(new StringResult("ERROR during production readiness check: " + e.getMessage()));
+            e.printStackTrace();
         }
         return results.stream();
     }
