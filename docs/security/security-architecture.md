@@ -16,167 +16,280 @@ This guide outlines the comprehensive security architecture implemented across a
 
 ### Core Architecture
 
-```json
-{
-  "security_spec": "v1",
-  "framework": {
-    "components": {
-      "input_validation": {
-        "sanitization": true,
-        "max_input_length": 10000,
-        "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
-        "timeout_ms": 30000
-      },
-      "output_validation": {
-        "verify_steps": true,
-        "max_output_length": 50000,
-        "result_validation": true
-      },
-      "agent_security": {
-        "isolation_level": "high",
-        "resource_limits": {
-          "max_memory_mb": 1024,
-          "max_cpu_time_ms": 60000,
-          "max_disk_io_mb": 100
-        },
-        "rate_limiting": {
-          "requests_per_minute": 60,
-          "burst_limit": 10
-        }
-      }
-    }
-  }
-}
+```cypher
+// Create Security Framework
+CREATE (sf:SecurityFramework {
+    name: 'security_framework',
+    version: 'v1',
+    created_at: datetime()
+});
+
+// Create Input Validation Component
+CREATE (iv:InputValidation {
+    name: 'input_validation',
+    sanitization_enabled: true,
+    max_input_length: 10000,
+    allowed_characters: '^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$',
+    timeout_ms: 30000,
+    created_at: datetime()
+});
+
+// Create Output Validation Component
+CREATE (ov:OutputValidation {
+    name: 'output_validation',
+    verify_steps_enabled: true,
+    max_output_length: 50000,
+    result_validation_enabled: true,
+    created_at: datetime()
+});
+
+// Create Agent Security Component
+CREATE (as:AgentSecurity {
+    name: 'agent_security',
+    isolation_level: 'high',
+    created_at: datetime()
+});
+
+// Create Resource Limits
+CREATE (rl:ResourceLimits {
+    name: 'resource_limits',
+    max_memory_mb: 1024,
+    max_cpu_time_ms: 60000,
+    max_disk_io_mb: 100,
+    created_at: datetime()
+});
+
+// Create Rate Limiting
+CREATE (rt:RateLimiting {
+    name: 'rate_limiting',
+    requests_per_minute: 60,
+    burst_limit: 10,
+    created_at: datetime()
+});
+
+// Link Components
+MATCH (sf:SecurityFramework)
+MATCH (iv:InputValidation)
+MATCH (ov:OutputValidation)
+MATCH (as:AgentSecurity)
+MATCH (rl:ResourceLimits)
+MATCH (rt:RateLimiting)
+CREATE (sf)-[:HAS_INPUT_VALIDATION]->(iv),
+       (sf)-[:HAS_OUTPUT_VALIDATION]->(ov),
+       (sf)-[:HAS_AGENT_SECURITY]->(as),
+       (as)-[:HAS_RESOURCE_LIMITS]->(rl),
+       (as)-[:HAS_RATE_LIMITING]->(rt);
 ```
 
 ## Implementation Details
 
 ### 1. Security Integration
 
-```python
-class SecurityIntegration:
-    def __init__(self):
-        self.input_validator = InputValidator()
-        self.output_validator = OutputValidator()
-        self.resource_monitor = ResourceMonitor()
-        
-    async def validate_operation(self, input_data):
-        # Validate input
-        input_valid = await self.input_validator.validate(input_data)
-        
-        # Monitor resources
-        resources = await self.resource_monitor.check()
-        
-        # Validate output
-        output_valid = await self.output_validator.validate(input_valid)
-        
-        return {
-            'input_status': input_valid,
-            'resource_status': resources,
-            'output_status': output_valid
-        }
+```cypher
+// Create Security Integration
+CREATE (si:SecurityIntegration {
+    name: 'security_integration',
+    status: 'active',
+    created_at: datetime()
+});
+
+// Create Input Validator
+CREATE (iv:InputValidator {
+    name: 'input_validator',
+    validation_enabled: true,
+    created_at: datetime()
+});
+
+// Create Output Validator
+CREATE (ov:OutputValidator {
+    name: 'output_validator',
+    validation_enabled: true,
+    created_at: datetime()
+});
+
+// Create Resource Monitor
+CREATE (rm:ResourceMonitor {
+    name: 'resource_monitor',
+    monitoring_enabled: true,
+    created_at: datetime()
+});
+
+// Link Components
+MATCH (si:SecurityIntegration)
+MATCH (iv:InputValidator)
+MATCH (ov:OutputValidator)
+MATCH (rm:ResourceMonitor)
+CREATE (si)-[:HAS_INPUT_VALIDATOR]->(iv),
+       (si)-[:HAS_OUTPUT_VALIDATOR]->(ov),
+       (si)-[:HAS_RESOURCE_MONITOR]->(rm);
 ```
 
 ### 2. Blockchain Security
 
-```python
-class BlockchainSecurity:
-    def implement_security(self, security_config):
-        # Verify smart contracts
-        contracts = self.verify_contracts(security_config)
-        
-        # Validate transactions
-        transactions = self.validate_transactions(security_config)
-        
-        # Implement key rotation
-        key_rotation = self.setup_key_rotation(security_config)
-        
-        return {
-            'contract_status': contracts,
-            'transaction_status': transactions,
-            'key_rotation_status': key_rotation
-        }
+```cypher
+// Create Blockchain Security
+CREATE (bs:BlockchainSecurity {
+    name: 'blockchain_security',
+    status: 'active',
+    created_at: datetime()
+});
+
+// Create Smart Contract Verification
+CREATE (scv:SmartContractVerification {
+    name: 'contract_verification',
+    verification_enabled: true,
+    created_at: datetime()
+});
+
+// Create Transaction Validation
+CREATE (tv:TransactionValidation {
+    name: 'transaction_validation',
+    validation_enabled: true,
+    created_at: datetime()
+});
+
+// Create Key Rotation
+CREATE (kr:KeyRotation {
+    name: 'key_rotation',
+    rotation_enabled: true,
+    created_at: datetime()
+});
+
+// Link Components
+MATCH (bs:BlockchainSecurity)
+MATCH (scv:SmartContractVerification)
+MATCH (tv:TransactionValidation)
+MATCH (kr:KeyRotation)
+CREATE (bs)-[:HAS_CONTRACT_VERIFICATION]->(scv),
+       (bs)-[:HAS_TRANSACTION_VALIDATION]->(tv),
+       (bs)-[:HAS_KEY_ROTATION]->(kr);
 ```
 
 ## Monitoring and Validation
 
 ### 1. Security Monitor
 
-```python
-class SecurityMonitor:
-    def monitor_security(self, monitor_config):
-        # Track performance
-        performance = self.track_performance(monitor_config)
-        
-        # Monitor errors
-        errors = self.track_errors(monitor_config)
-        
-        # Generate alerts
-        alerts = self.generate_alerts(monitor_config)
-        
-        return {
-            'performance_metrics': performance,
-            'error_tracking': errors,
-            'security_alerts': alerts
-        }
+```cypher
+// Create Security Monitor
+CREATE (sm:SecurityMonitor {
+    name: 'security_monitor',
+    status: 'active',
+    created_at: datetime()
+});
+
+// Create Performance Tracking
+CREATE (pt:PerformanceTracking {
+    name: 'performance_tracking',
+    tracking_enabled: true,
+    created_at: datetime()
+});
+
+// Create Error Tracking
+CREATE (et:ErrorTracking {
+    name: 'error_tracking',
+    tracking_enabled: true,
+    created_at: datetime()
+});
+
+// Create Alert Generation
+CREATE (ag:AlertGeneration {
+    name: 'alert_generation',
+    generation_enabled: true,
+    created_at: datetime()
+});
+
+// Link Components
+MATCH (sm:SecurityMonitor)
+MATCH (pt:PerformanceTracking)
+MATCH (et:ErrorTracking)
+MATCH (ag:AlertGeneration)
+CREATE (sm)-[:HAS_PERFORMANCE_TRACKING]->(pt),
+       (sm)-[:HAS_ERROR_TRACKING]->(et),
+       (sm)-[:HAS_ALERT_GENERATION]->(ag);
 ```
 
 ### 2. Validation Framework
 
-```python
-class ValidationFramework:
-    def validate_operation(self, validation_config):
-        # Verify operation
-        operation = self.verify_operation(validation_config)
-        
-        # Sanitize input
-        input_clean = self.sanitize_input(validation_config)
-        
-        # Monitor resources
-        resources = self.monitor_resources(validation_config)
-        
-        return {
-            'operation_status': operation,
-            'input_status': input_clean,
-            'resource_status': resources
-        }
+```cypher
+// Create Validation Framework
+CREATE (vf:ValidationFramework {
+    name: 'validation_framework',
+    status: 'active',
+    created_at: datetime()
+});
+
+// Create Operation Verification
+CREATE (ov:OperationVerification {
+    name: 'operation_verification',
+    verification_enabled: true,
+    created_at: datetime()
+});
+
+// Create Input Sanitization
+CREATE (is:InputSanitization {
+    name: 'input_sanitization',
+    sanitization_enabled: true,
+    created_at: datetime()
+});
+
+// Create Resource Monitoring
+CREATE (rm:ResourceMonitoring {
+    name: 'resource_monitoring',
+    monitoring_enabled: true,
+    created_at: datetime()
+});
+
+// Link Components
+MATCH (vf:ValidationFramework)
+MATCH (ov:OperationVerification)
+MATCH (is:InputSanitization)
+MATCH (rm:ResourceMonitoring)
+CREATE (vf)-[:HAS_OPERATION_VERIFICATION]->(ov),
+       (vf)-[:HAS_INPUT_SANITIZATION]->(is),
+       (vf)-[:HAS_RESOURCE_MONITORING]->(rm);
 ```
 
 ## Usage Examples
 
 ### 1. Implementing Security
 
-```python
-# Security configuration
-security_config = {
-    'input_validation': True,
-    'output_validation': True,
-    'resource_monitoring': True,
-    'blockchain_security': {
-        'smart_contract_verification': True,
-        'transaction_validation': True
-    }
-}
-
-security = await security_integration.validate_operation(security_config)
-print(security.status)
+```cypher
+// Create Security Implementation
+MATCH (si:SecurityIntegration)
+CREATE (sim:SecurityImplementation {
+    id: apoc.create.uuid(),
+    timestamp: datetime(),
+    input_validation: true,
+    output_validation: true,
+    resource_monitoring: true,
+    blockchain_security: {
+        smart_contract_verification: true,
+        transaction_validation: true
+    },
+    status: 'pending'
+})
+CREATE (si)-[:PERFORMS_IMPLEMENTATION]->(sim)
+RETURN sim;
 ```
 
 ### 2. Monitoring Operations
 
-```python
-# Monitoring configuration
-monitor_config = {
-    'metrics': ['performance', 'errors', 'security'],
-    'alerts': True,
-    'reporting': {
-        'interval': 'hourly',
-        'format': 'json'
-    }
-}
-
-monitoring = security_monitor.monitor_security(monitor_config)
-print(monitoring.metrics)
+```cypher
+// Create Monitoring Implementation
+MATCH (sm:SecurityMonitor)
+CREATE (mi:MonitoringImplementation {
+    id: apoc.create.uuid(),
+    timestamp: datetime(),
+    metrics: ['performance', 'errors', 'security'],
+    alerts_enabled: true,
+    reporting: {
+        interval: 'hourly',
+        format: 'json'
+    },
+    status: 'pending'
+})
+CREATE (sm)-[:PERFORMS_MONITORING]->(mi)
+RETURN mi;
 ```
 
 ## Best Practices
