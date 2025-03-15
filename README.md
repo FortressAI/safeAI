@@ -53,21 +53,11 @@ SafeAI implements a comprehensive security framework:
    cd safeAI
    ```
 
-2. Configure the plugin in `plugin-config.properties`:
-   ```properties
-   # API Key Configuration
-   openai.api.key=your-openai-api-key
-   admin.api.key=your-safeai-api-key
-   
-   # Blockchain Settings
-   blockchain.endpoint=http://host.docker.internal:7545
-   admin.wallet.key=your-admin-wallet-key
-   
-   # LLM Configuration
-   llm.model=o3-mini
-   llm.temperature=0.7
-   llm.max_tokens=2000
+2. Copy the sample configuration:
+   ```bash
+   cp config/plugin-config.properties.sample plugin-config.properties
    ```
+   Then edit `plugin-config.properties` with your settings (see [Configuration](#configuration) section below).
 
 3. Deploy using Docker Compose:
    ```bash
@@ -242,14 +232,14 @@ This will check the agent for:
 
 ### Building from Source
 
-```bash
+     ```bash
 cd safeAI-plugin
 mvn clean package
 ```
 
 ### Running Tests
 
-```bash
+     ```bash
 mvn test
 ```
 
@@ -258,11 +248,11 @@ mvn test
 1. Set up environment variables
 2. Configure security settings
 3. Run deployment script:
-   ```bash
+     ```bash
    ./deploy_neo4j.sh
    ```
 4. Verify installation:
-   ```cypher
+     ```cypher
    CALL safeai.debug.checkProductionReadiness()
    ```
 
