@@ -10,7 +10,7 @@ public class MainPlugin {
             config.load(new FileInputStream("config/plugin-config.properties"));
             String apiKey = config.getProperty("admin.api.key", "").trim();
             if(apiKey.isEmpty() || apiKey.contains("${")) {
-                System.out.println("WARNING: Secure API Key not set. Please export SAFEAI_API_KEY with a secure value.");
+                System.out.println("WARNING: Admin API Key not set. Please set admin.api.key in plugin-config.properties with a secure value.");
             } else {
                 System.out.println("API Key loaded securely.");
             }
