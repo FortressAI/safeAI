@@ -46,11 +46,16 @@ docker-compose down -v
 
 # Start the containers with environment variables
 echo "Starting Neo4j container with environment variables..."
-docker-compose up -d \
+docker run -d \
+    -p 7474:7474 -p 7687:7687 \
+    -e NEO4J_AUTH=neo4j/password \
+    -e NEO4J_PLUGINS='["apoc", "graph-data-science"]' \
+    -e NEO4J_dbms_security_procedures_unrestricted=apoc.*,gds.*,safeai.* \
     -e OPENAI_API_KEY="$OPENAI_API_KEY" \
     -e ADMIN_WALLET_KEY="$ADMIN_WALLET_KEY" \
-    -e BLOCKCHAIN_ENDPOINT="$BLOCKCHAIN_ENDPOINT" \
-    -e SAFEAI_API_KEY="$SAFEAI_API_KEY"
+    -e BLOCKCHAIN_ENDPOINT="${BLOCKCHAIN_ENDPOINT:-http://host.docker.internal:7545}" \
+    -v $PWD/neo4j-plugins:/plugins \
+    neo4j:5.15.0
 
 echo "Neo4j container deployed. Access Neo4j Browser at http://localhost:7474"
 echo "Waiting for Neo4j to start..."

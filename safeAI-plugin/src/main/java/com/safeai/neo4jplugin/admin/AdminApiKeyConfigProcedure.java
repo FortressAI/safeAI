@@ -17,11 +17,10 @@ public class AdminApiKeyConfigProcedure {
     @Procedure(name = "safeai.configureApiKeys", mode = Mode.READ)
     @Description("Returns instructions on how to securely configure API keys for SafeAI Plugin")
     public Stream<Result> configureApiKeys() {
-        String msg = "Secure API Key Setup Instructions:\n" +
-                     "1. Set an environment variable in your shell: export SAFEAI_API_KEY=your_secure_key\n" +
-                     "2. Ensure that config/plugin-config.properties has admin.api.key=${SAFEAI_API_KEY}\n" +
-                     "3. For production, consider integrating with a dedicated secrets management system.\n" +
-                     "4. Restart Neo4j after updating the API key.";
-        return Stream.of(new Result(msg));
+        String message = "Admin API Key not configured properly. Please follow these steps:\n" +
+            "1. Open config/plugin-config.properties\n" +
+            "2. Set admin.api.key=your_secure_key\n" +
+            "3. Restart the plugin to apply changes";
+        return Stream.of(new Result(message));
     }
 }
