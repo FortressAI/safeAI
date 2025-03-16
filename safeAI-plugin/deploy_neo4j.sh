@@ -1,29 +1,5 @@
 #!/bin/bash
 
-# Load environment variables from .env file if it exists
-if [ -f .env ]; then
-    echo "Loading environment variables from .env file..."
-    export $(cat .env | grep -v '^#' | xargs)
-else
-    echo "No .env file found. Make sure environment variables are set manually."
-fi
-
-# Verify required environment variables
-if [ -z "$OPENAI_API_KEY" ]; then
-    echo "ERROR: OPENAI_API_KEY is not set"
-    exit 1
-fi
-
-if [ -z "$ADMIN_WALLET_KEY" ]; then
-    echo "ERROR: ADMIN_WALLET_KEY is not set"
-    exit 1
-fi
-
-if [ -z "$BLOCKCHAIN_ENDPOINT" ]; then
-    echo "Using default blockchain endpoint: http://host.docker.internal:7545"
-    export BLOCKCHAIN_ENDPOINT="http://host.docker.internal:7545"
-fi
-
 # Build the plugin with Maven
 echo "Building plugin..."
 mvn clean package || { echo "Build failed"; exit 1; }
@@ -45,16 +21,14 @@ echo "Stopping existing containers..."
 docker-compose down -v
 
 # Start the containers with environment variables
-echo "Starting Neo4j container with environment variables..."
+echo "Starting Neo4j container..."
 docker run -d \
     -p 7474:7474 -p 7687:7687 \
     -e NEO4J_AUTH=neo4j/password \
     -e NEO4J_PLUGINS='["apoc", "graph-data-science"]' \
     -e NEO4J_dbms_security_procedures_unrestricted=apoc.*,gds.*,safeai.* \
-    -e OPENAI_API_KEY="$OPENAI_API_KEY" \
-    -e ADMIN_WALLET_KEY="$ADMIN_WALLET_KEY" \
-    -e BLOCKCHAIN_ENDPOINT="${BLOCKCHAIN_ENDPOINT:-http://host.docker.internal:7545}" \
     -v $PWD/neo4j-plugins:/plugins \
+    -v $PWD/config:/conf \
     neo4j:5.15.0
 
 echo "Neo4j container deployed. Access Neo4j Browser at http://localhost:7474"
@@ -86,7 +60,7 @@ docker exec neo4j-safeai ls -la /plugins
 
 # Check available procedures
 echo "Checking available procedures..."
-PROCEDURES=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
+PROCEDURES=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
 if [ -z "$PROCEDURES" ]; then
   echo "No SafeAI procedures found. Plugin may not be loaded correctly."
   exit 1
@@ -95,7 +69,7 @@ echo "Found procedures: $PROCEDURES"
 
 # Check available functions
 echo "Checking available functions..."
-FUNCTIONS=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
+FUNCTIONS=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
 if [ -z "$FUNCTIONS" ]; then
   echo "No SafeAI functions found. Plugin may not be loaded correctly."
   exit 1
@@ -104,39 +78,39 @@ echo "Found functions: $FUNCTIONS"
 
 # Test basic functionality
 echo "Testing basic functionality..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { echo "Basic functionality test failed"; exit 1; }
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { echo "Basic functionality test failed"; exit 1; }
 
 # Initialize the database
 echo "Initializing database..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
 
 # Load and verify KG files
 echo "Loading Knowledge Graph files..."
-KG_LOAD_RESULT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
+KG_LOAD_RESULT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
 echo "$KG_LOAD_RESULT"
 
 # Verify KG loading
 echo "Verifying Knowledge Graph loading..."
-KG_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
+KG_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
 if [[ $KG_COUNT == *"0"* ]]; then
   echo "No Knowledge Graphs were loaded. Please check the logs for errors."
   exit 1
 fi
 
-AGENT_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "MATCH (a:Agent) RETURN count(a) as count;")
+AGENT_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (a:Agent) RETURN count(a) as count;")
 echo "Found $AGENT_COUNT agents"
 
-CAPABILITY_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "MATCH (c:Capability) RETURN count(c) as count;")
+CAPABILITY_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (c:Capability) RETURN count(c) as count;")
 echo "Found $CAPABILITY_COUNT capabilities"
 
-RELATIONSHIP_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
+RELATIONSHIP_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
 echo "Found $RELATIONSHIP_COUNT relationships"
 
 # Verify KG structure
 echo "Verifying Knowledge Graph structure..."
-STRUCTURE_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "
+STRUCTURE_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "
 MATCH (kg:KnowledgeGraph)
 OPTIONAL MATCH (kg)-[:HAS_AGENT]->(a:Agent)
 OPTIONAL MATCH (kg)-[:HAS_CAPABILITY]->(c:Capability)
@@ -152,20 +126,20 @@ echo "$STRUCTURE_CHECK"
 
 # Test Groovy integration
 echo "Testing Groovy integration..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testGroovyIntegration() YIELD value RETURN value;" || { echo "Groovy integration test failed"; exit 1; }
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.testGroovyIntegration() YIELD value RETURN value;" || { echo "Groovy integration test failed"; exit 1; }
 
 # Test LLM integration
 echo "Testing LLM integration..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.testLLMIntegration() YIELD value RETURN value;" || { echo "LLM integration test failed"; exit 1; }
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.testLLMIntegration() YIELD value RETURN value;" || { echo "LLM integration test failed"; exit 1; }
 
 # Test governance functions
 echo "Testing governance functions..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.initiateVote('test-proposal') AS result;" || { echo "Governance function test failed"; exit 1; }
-docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;" || { echo "Governance function test failed"; exit 1; }
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "RETURN safeai.governance.initiateVote('test-proposal') AS result;" || { echo "Governance function test failed"; exit 1; }
+docker exec neo4j-safeai cypher-shell -u neo4j -p password "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;" || { echo "Governance function test failed"; exit 1; }
 
 # Validate security and compliance
 echo "Validating security and compliance..."
-SECURITY_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.validateSecurity() YIELD value RETURN value;")
+SECURITY_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.validateSecurity() YIELD value RETURN value;")
 echo "Security Validation Results:"
 echo "$SECURITY_CHECK"
 
@@ -178,7 +152,7 @@ fi
 
 # Perform production readiness check
 echo "Performing production readiness check..."
-READINESS_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p testpassword "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;")
+READINESS_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;")
 echo "Production Readiness Check Results:"
 echo "$READINESS_CHECK"
 
@@ -191,5 +165,5 @@ else
 fi
 
 echo "Deployment completed successfully!"
-echo "Access Neo4j Browser at http://localhost:7474 with username 'neo4j' and password 'testpassword'"
+echo "Access Neo4j Browser at http://localhost:7474 with username 'neo4j' and password 'password'"
 echo "Knowledge Graphs have been loaded and verified."
