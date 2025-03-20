@@ -1,6 +1,11 @@
 {
   "domain": "Cybersecurity",
   "description": "An Agentic Knowledge Graph (KG) for cybersecurity that proactively implements offensive and defensive actions. This KG is designed to enforce best practices for system users by dynamically executing transformation agents to detect vulnerabilities, simulate attacks, and deploy defensive countermeasures. It integrates blockchain\u2011audited audit trails and decentralized governance to ensure transparency, security, and compliance.",
+  "endpoints": {
+    "security": "https://example.com/cybersecurity/security",
+    "validation": "https://example.com/cybersecurity/validation",
+    "monitoring": "https://example.com/cybersecurity/monitoring"
+  },
   "agents": [
     {
       "name": "BaseCyberAgent",
@@ -11,8 +16,7 @@
       "agent_code": "def generateCandidate(input) { \n  def cot = 'Base cyber reasoning: Extracted key metadata from input for further processing.'; \n  return [candidate: input, metadata: [method: 'BaseCyberAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +28,7 @@
       "agent_code": "def generateCandidate(input) { \n  // Analyze input data for known threat patterns and anomalies\n  def candidate = nlQuery('Detect threats in: ' + input.toString()); \n  def cot = 'Applied anomaly detection and signature matching for threat identification.'; \n  return [candidate: candidate, metadata: [method: 'ThreatDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +40,7 @@
       "agent_code": "def generateCandidate(input) { \n  // Simulate controlled penetration testing actions\n  def candidate = nlQuery('Simulate vulnerability exploitation on: ' + input.toString()); \n  def cot = 'Performed simulated penetration testing to identify potential exploit paths.'; \n  return [candidate: candidate, metadata: [method: 'VulnerabilityExploitationAgent', chain_of_thought: cot, confidence: 0.90]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +52,7 @@
       "agent_code": "def generateCandidate(input) { \n  // Based on detected threats, determine and deploy the appropriate countermeasures\n  def candidate = nlQuery('Deploy countermeasures for: ' + input.toString()); \n  def cot = 'Deployed defensive countermeasures, such as patching vulnerabilities or isolating affected nodes.'; \n  return [candidate: candidate, metadata: [method: 'DefensiveCountermeasureAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +64,7 @@
       "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Execute incident response for: ' + input.toString()); \n  def cot = 'Automated incident response executed to mitigate ongoing threats.'; \n  return [candidate: candidate, metadata: [method: 'IncidentResponseAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -76,8 +76,7 @@
       "agent_code": "def generateCandidate(input, context) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  // Generate combinations of agents to form a composite action plan\n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, context)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeCyberAgent', chain_of_thought: 'No valid composite action found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic here; for now, return an empty list as a placeholder\n    return []; \n}\n\ndef evaluateCandidate(candidate, context) { \n    // Implement evaluation logic based on cybersecurity best practices; for now, assume candidate is valid if non-null\n    return candidate != null; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -177,8 +176,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_security": "https://example.com/cybersecurity/security",
-  "endpoint_validation": "https://example.com/cybersecurity/validation",
-  "endpoint_monitoring": "https://example.com/cybersecurity/monitoring"
+  }
 }

@@ -1,6 +1,39 @@
 {
   "domain": "LegalCompliance",
   "description": "A comprehensive Agentic Knowledge Graph for Legal and Regulatory Compliance. This KG integrates dynamic agent generation for legal text analysis, automated contract review, and regulatory monitoring. It leverages blockchain\u2011audited licensing and decentralized governance to ensure immutable audit trails and secure microtransaction-based revenue sharing. The system is designed to support trusted experts in validating and refining legal agent outputs while ensuring compliance with ever-changing regulatory frameworks.",
+  "endpoints": {
+    "regulatory": "https://api.example.com/legal/regulations",
+    "caseLaw": "https://api.example.com/legal/caselaw",
+    "security": "https://example.com/legalcompliance/security",
+    "validation": "https://example.com/legalcompliance/validation",
+    "monitoring": "https://example.com/legalcompliance/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Review the following contract clause for compliance with GDPR: 'Data may be processed for marketing purposes without consent.'",
+      "expectedOutput": "Clause flagged as non\u2011compliant with GDPR.",
+      "description": "Contract compliance review example."
+    },
+    {
+      "input": "Summarize recent regulatory changes in the financial industry.",
+      "expectedOutput": "Summary of recent financial regulatory changes including updates to capital requirements and consumer protection measures.",
+      "description": "Regulatory update summary."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the legal risk of an employment contract clause that restricts non\u2011compete obligations for two years post\u2011termination.",
+      "expectedOutput": "Balanced evaluation outlining both the enforceability issues and the need for employee mobility.",
+      "description": "Evaluation of employment contract clause."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Provide a comprehensive legal analysis on the impact of a new privacy regulation on cross\u2011border data transfers.",
+      "expectedOutput": "A detailed analysis that includes statutory interpretation, case law references, and regulatory guidelines, concluding with recommended compliance measures.",
+      "description": "Comprehensive legal analysis."
+    }
+  ],
   "agents": [
     {
       "name": "BaseLegalAgent",
@@ -11,8 +44,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Base legal reasoning: Extracted fundamental legal concepts from the input.'; \n    return [candidate: input, metadata: [method: 'BaseLegalAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +56,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess regulatory compliance for: ' + input.toString()); \n    def cot = 'Evaluated input against current statutory and regulatory requirements.'; \n    return [candidate: candidate, metadata: [method: 'RegulatoryComplianceAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +68,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze contract clause: ' + input.toString()); \n    def cot = 'Conducted clause-by-clause review against legal standards and best practices.'; \n    return [candidate: candidate, metadata: [method: 'ContractAnalysisAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +80,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Retrieve case law related to: ' + input.toString()); \n    def cot = 'Synthesized relevant case law and judicial opinions to inform legal analysis.'; \n    return [candidate: candidate, metadata: [method: 'CaseLawAnalysisAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +92,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeLegalAgent', chain_of_thought: 'No valid composite legal opinion found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement agent combination logic for legal analysis\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic based on legal standards (symbolic comparison, precedent matching, etc.)\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -164,36 +192,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_regulatory": "https://api.example.com/legal/regulations",
-  "endpoint_caseLaw": "https://api.example.com/legal/caselaw",
-  "endpoint_security": "https://example.com/legalcompliance/security",
-  "endpoint_validation": "https://example.com/legalcompliance/validation",
-  "endpoint_monitoring": "https://example.com/legalcompliance/monitoring",
-  "training_examples": [
-    {
-      "input": "Review the following contract clause for compliance with GDPR: 'Data may be processed for marketing purposes without consent.'",
-      "expected_output": "Clause flagged as non\u2011compliant with GDPR.",
-      "description": "Contract compliance review example."
-    },
-    {
-      "input": "Summarize recent regulatory changes in the financial industry.",
-      "expected_output": "Summary of recent financial regulatory changes including updates to capital requirements and consumer protection measures.",
-      "description": "Regulatory update summary."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the legal risk of an employment contract clause that restricts non\u2011compete obligations for two years post\u2011termination.",
-      "expected_output": "Balanced evaluation outlining both the enforceability issues and the need for employee mobility.",
-      "description": "Evaluation of employment contract clause."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Provide a comprehensive legal analysis on the impact of a new privacy regulation on cross\u2011border data transfers.",
-      "expected_output": "A detailed analysis that includes statutory interpretation, case law references, and regulatory guidelines, concluding with recommended compliance measures.",
-      "description": "Comprehensive legal analysis."
-    }
-  ]
+  }
 }

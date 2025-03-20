@@ -1,6 +1,39 @@
 {
   "domain": "SupplyChainManagement",
   "description": "An Agentic KG for Supply Chain Management and Logistics, designed to optimize supply chain operations through dynamic risk assessment, route optimization, and real\u2011time monitoring. This KG leverages advanced agent generation to simulate disruptions, suggest contingency plans, and optimize logistics, all while ensuring blockchain\u2011audited transparency and decentralized governance.",
+  "endpoints": {
+    "logisticsData": "https://api.example.com/supplychain/logistics",
+    "disruptionReports": "https://api.example.com/supplychain/disruptions",
+    "security": "https://example.com/supplychainmanagement/security",
+    "validation": "https://example.com/supplychainmanagement/validation",
+    "monitoring": "https://example.com/supplychainmanagement/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Simulate a major supply chain disruption due to natural disasters in a key region.",
+      "expectedOutput": "A detailed contingency plan with alternative sourcing and routing strategies.",
+      "description": "Training example for supply chain disruption simulation."
+    },
+    {
+      "input": "Optimize the delivery route for perishable goods under time constraints.",
+      "expectedOutput": "A route plan that minimizes delivery time and preserves product quality.",
+      "description": "Training example for route optimization."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the impact of increased transportation costs on overall supply chain efficiency.",
+      "expectedOutput": "A comprehensive analysis with cost\u2013benefit recommendations.",
+      "description": "Evaluation example for cost analysis."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Develop a complete supply chain risk mitigation strategy for a multinational retailer facing disruptions, high fuel costs, and regulatory challenges.",
+      "expectedOutput": "An integrated strategy document covering contingency plans, alternative sourcing, cost optimization, and regulatory compliance.",
+      "description": "Final exam: integrated supply chain strategy."
+    }
+  ],
   "agents": [
     {
       "name": "BaseLogisticsAgent",
@@ -11,8 +44,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Standardized logistics and supply chain data extracted.'; \n    return [candidate: input, metadata: [method: 'BaseLogisticsAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +56,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Optimize route for: ' + input.toString()); \n    def cot = 'Generated optimized routing plan based on traffic and cost data.'; \n    return [candidate: candidate, metadata: [method: 'RouteOptimizationAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +68,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Simulate disruption for: ' + input.toString()); \n    def cot = 'Simulated disruption scenario and assessed impact on supply chain efficiency.'; \n    return [candidate: candidate, metadata: [method: 'DisruptionSimulationAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +80,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeSCMAgent', chain_of_thought: 'No valid composite supply chain strategy found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -149,36 +178,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_logisticsData": "https://api.example.com/supplychain/logistics",
-  "endpoint_disruptionReports": "https://api.example.com/supplychain/disruptions",
-  "endpoint_security": "https://example.com/supplychainmanagement/security",
-  "endpoint_validation": "https://example.com/supplychainmanagement/validation",
-  "endpoint_monitoring": "https://example.com/supplychainmanagement/monitoring",
-  "training_examples": [
-    {
-      "input": "Simulate a major supply chain disruption due to natural disasters in a key region.",
-      "expected_output": "A detailed contingency plan with alternative sourcing and routing strategies.",
-      "description": "Training example for supply chain disruption simulation."
-    },
-    {
-      "input": "Optimize the delivery route for perishable goods under time constraints.",
-      "expected_output": "A route plan that minimizes delivery time and preserves product quality.",
-      "description": "Training example for route optimization."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the impact of increased transportation costs on overall supply chain efficiency.",
-      "expected_output": "A comprehensive analysis with cost\u2013benefit recommendations.",
-      "description": "Evaluation example for cost analysis."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Develop a complete supply chain risk mitigation strategy for a multinational retailer facing disruptions, high fuel costs, and regulatory challenges.",
-      "expected_output": "An integrated strategy document covering contingency plans, alternative sourcing, cost optimization, and regulatory compliance.",
-      "description": "Final exam: integrated supply chain strategy."
-    }
-  ]
+  }
 }
