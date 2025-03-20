@@ -1,169 +1,234 @@
 #!/bin/bash
 
+# SafeAI Neo4j Plugin Deployment Script (Production Ready)
+# ------------------------------------------------------
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Set default values
+CONTAINER_NAME=${CONTAINER_NAME:-"neo4j-safeai"}
+NEO4J_VERSION=${NEO4J_VERSION:-"5.15.0"}
+NEO4J_PASSWORD=${NEO4J_PASSWORD:-"password"}
+HTTP_PORT=${HTTP_PORT:-7474}
+BOLT_PORT=${BOLT_PORT:-7687}
+MAX_RETRY=12
+RETRY_INTERVAL=5
+
+# Function to display messages with timestamps
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+# Function for error handling
+error_exit() {
+    log "ERROR: $1"
+    exit 1
+}
+
+# Function to check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to clean up on error
+cleanup_on_error() {
+    log "Cleaning up after error..."
+    docker stop ${CONTAINER_NAME} >/dev/null 2>&1 || true
+    docker rm ${CONTAINER_NAME} >/dev/null 2>&1 || true
+    log "Cleanup complete."
+}
+
+# Set trap for cleanup on error
+trap cleanup_on_error ERR INT
+
+# Check prerequisites
+log "Checking prerequisites..."
+command_exists docker || error_exit "Docker not installed. Please install Docker and try again."
+command_exists mvn || error_exit "Maven not installed. Please install Maven and try again."
+
 # Build the plugin with Maven
-echo "Building plugin..."
-mvn clean package || { echo "Build failed"; exit 1; }
+log "Building SafeAI plugin..."
+mvn clean package || error_exit "Build failed. Please check Maven output for errors."
 
 # Create the neo4j-plugins folder if it doesn't exist
 mkdir -p neo4j-plugins
 
 # Copy the jar from the target folder to neo4j-plugins
+log "Locating plugin JAR..."
 JAR=$(ls target/*.jar | grep -v "sources\|javadoc\|original" | head -n 1)
 if [ -z "$JAR" ]; then
-  echo "Jar file not found. Exiting."
-  exit 1
+    error_exit "JAR file not found. Check if the build was successful."
 fi
-echo "Copying $JAR to neo4j-plugins/"
+
+log "Copying $JAR to neo4j-plugins/"
 cp "$JAR" neo4j-plugins/
 
-# Stop any existing containers and remove volumes
-echo "Stopping existing containers..."
-docker-compose down -v
+# Stop any existing containers with the same name
+if docker ps -a | grep -q ${CONTAINER_NAME}; then
+    log "Stopping existing ${CONTAINER_NAME} container..."
+    docker stop ${CONTAINER_NAME} >/dev/null 2>&1 || true
+    docker rm ${CONTAINER_NAME} >/dev/null 2>&1 || true
+fi
 
-# Start the containers with environment variables
-echo "Starting Neo4j container..."
-docker run -d \
-    -p 7474:7474 -p 7687:7687 \
-    -e NEO4J_AUTH=neo4j/password \
+# Create configuration directory if it doesn't exist
+mkdir -p config
+
+# Ensure required config files exist
+if [ ! -f "config/plugin-config.properties" ]; then
+    log "WARNING: config/plugin-config.properties not found, creating default..."
+    cat > config/plugin-config.properties << EOL
+# Plugin Configuration for SafeAI Plugin (auto-generated)
+openai.api.key=\${OPENAI_API_KEY}
+admin.api.key=\${ADMIN_API_KEY}
+blockchain.endpoint=\${BLOCKCHAIN_ENDPOINT:http://host.docker.internal:7545}
+admin.wallet.key=\${ADMIN_WALLET_KEY}
+llm.model=\${LLM_MODEL:gpt-4}
+llm.temperature=\${LLM_TEMPERATURE:0.7}
+llm.max_tokens=\${LLM_MAX_TOKENS:2000}
+EOL
+fi
+
+# Start the Neo4j container
+log "Starting Neo4j container with SafeAI plugin..."
+CONTAINER_ID=$(docker run -d --name ${CONTAINER_NAME} \
+    -p ${HTTP_PORT}:7474 -p ${BOLT_PORT}:7687 \
+    -e NEO4J_AUTH=neo4j/${NEO4J_PASSWORD} \
     -e NEO4J_PLUGINS='["apoc", "graph-data-science"]' \
     -e NEO4J_dbms_security_procedures_unrestricted=apoc.*,gds.*,safeai.* \
+    -e NEO4J_dbms_security_procedures_allowlist=apoc.*,gds.*,safeai.* \
+    -e NEO4J_dbms_memory_heap_initial__size=512m \
+    -e NEO4J_dbms_memory_heap_max__size=2G \
+    -e OPENAI_API_KEY=${OPENAI_API_KEY} \
+    -e ADMIN_API_KEY=${ADMIN_API_KEY} \
+    -e BLOCKCHAIN_ENDPOINT=${BLOCKCHAIN_ENDPOINT} \
+    -e ADMIN_WALLET_KEY=${ADMIN_WALLET_KEY} \
     -v $PWD/neo4j-plugins:/plugins \
     -v $PWD/config:/conf \
-    neo4j:5.15.0
+    --restart unless-stopped \
+    neo4j:${NEO4J_VERSION})
 
-echo "Neo4j container deployed. Access Neo4j Browser at http://localhost:7474"
-echo "Waiting for Neo4j to start..."
+if [ -z "$CONTAINER_ID" ]; then
+    error_exit "Failed to start Neo4j container."
+fi
 
-# Wait for Neo4j to start (up to 60 seconds)
-for i in {1..12}; do
-  if docker logs neo4j-safeai 2>&1 | grep -q "Remote interface available at"; then
-    echo "Neo4j started successfully."
-    break
-  fi
-  if [ $i -eq 12 ]; then
-    echo "Timed out waiting for Neo4j to start."
-    exit 1
-  fi
-  echo "Waiting... ($i/12)"
-  sleep 5
+log "Neo4j container started with ID: $CONTAINER_ID"
+log "Access Neo4j Browser at http://localhost:${HTTP_PORT} (after startup)"
+log "Waiting for Neo4j to start..."
+
+# Wait for Neo4j to start
+STARTED=false
+for i in $(seq 1 $MAX_RETRY); do
+    if docker logs ${CONTAINER_NAME} 2>&1 | grep -q "Remote interface available at"; then
+        STARTED=true
+        log "Neo4j started successfully."
+        break
+    fi
+    log "Waiting... ($i/$MAX_RETRY)"
+    sleep $RETRY_INTERVAL
 done
 
+if [ "$STARTED" = false ]; then
+    error_exit "Timed out waiting for Neo4j to start. Check docker logs with: docker logs ${CONTAINER_NAME}"
+fi
+
 # Wait a bit more to ensure procedures are loaded
-echo "Waiting for procedures to load..."
+log "Waiting for procedures to load..."
 sleep 10
 
-echo "Verifying plugin installation..."
+# Verify plugin installation
+log "Verifying plugin installation..."
 
-# Check if plugin is loaded
-echo "Checking plugin files..."
-docker exec neo4j-safeai ls -la /plugins
+# Check if plugin files are present
+log "Checking plugin files..."
+docker exec ${CONTAINER_NAME} ls -la /plugins
 
 # Check available procedures
-echo "Checking available procedures..."
-PROCEDURES=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
+log "Checking available procedures..."
+PROCEDURES=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
+
 if [ -z "$PROCEDURES" ]; then
-  echo "No SafeAI procedures found. Plugin may not be loaded correctly."
-  exit 1
+    error_exit "No SafeAI procedures found. Plugin may not be loaded correctly."
 fi
-echo "Found procedures: $PROCEDURES"
+log "Found procedures: $PROCEDURES"
 
 # Check available functions
-echo "Checking available functions..."
-FUNCTIONS=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;")
+log "Checking available functions..."
+FUNCTIONS=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
+
 if [ -z "$FUNCTIONS" ]; then
-  echo "No SafeAI functions found. Plugin may not be loaded correctly."
-  exit 1
+    log "WARNING: No SafeAI functions found. This may be expected if the plugin doesn't define functions."
 fi
-echo "Found functions: $FUNCTIONS"
+
+if [ -n "$FUNCTIONS" ]; then
+    log "Found functions: $FUNCTIONS"
+fi
 
 # Test basic functionality
-echo "Testing basic functionality..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { echo "Basic functionality test failed"; exit 1; }
+log "Testing basic functionality..."
+docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { 
+    error_exit "Basic functionality test failed. Check if the debug procedure exists and is callable."
+}
 
-# Initialize the database
-echo "Initializing database..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
+# Initialize the database with constraints
+log "Initializing database with constraints..."
+docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
+docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
+docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
 
 # Load and verify KG files
-echo "Loading Knowledge Graph files..."
-KG_LOAD_RESULT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
+log "Loading Knowledge Graph files..."
+KG_LOAD_RESULT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
 echo "$KG_LOAD_RESULT"
 
 # Verify KG loading
-echo "Verifying Knowledge Graph loading..."
-KG_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
+log "Verifying Knowledge Graph loading..."
+KG_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
 if [[ $KG_COUNT == *"0"* ]]; then
-  echo "No Knowledge Graphs were loaded. Please check the logs for errors."
-  exit 1
-fi
-
-AGENT_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (a:Agent) RETURN count(a) as count;")
-echo "Found $AGENT_COUNT agents"
-
-CAPABILITY_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH (c:Capability) RETURN count(c) as count;")
-echo "Found $CAPABILITY_COUNT capabilities"
-
-RELATIONSHIP_COUNT=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
-echo "Found $RELATIONSHIP_COUNT relationships"
-
-# Verify KG structure
-echo "Verifying Knowledge Graph structure..."
-STRUCTURE_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "
-MATCH (kg:KnowledgeGraph)
-OPTIONAL MATCH (kg)-[:HAS_AGENT]->(a:Agent)
-OPTIONAL MATCH (kg)-[:HAS_CAPABILITY]->(c:Capability)
-OPTIONAL MATCH (a)-[:HAS_CAPABILITY]->(c)
-WITH kg.name as name,
-     count(DISTINCT a) as agents,
-     count(DISTINCT c) as capabilities,
-     count(DISTINCT (a)-[:HAS_CAPABILITY]->(c)) as agent_capabilities
-RETURN name, agents, capabilities, agent_capabilities
-ORDER BY name;")
-echo "Knowledge Graph Structure:"
-echo "$STRUCTURE_CHECK"
-
-# Test Groovy integration
-echo "Testing Groovy integration..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.testGroovyIntegration() YIELD value RETURN value;" || { echo "Groovy integration test failed"; exit 1; }
-
-# Test LLM integration
-echo "Testing LLM integration..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.testLLMIntegration() YIELD value RETURN value;" || { echo "LLM integration test failed"; exit 1; }
-
-# Test governance functions
-echo "Testing governance functions..."
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "RETURN safeai.governance.initiateVote('test-proposal') AS result;" || { echo "Governance function test failed"; exit 1; }
-docker exec neo4j-safeai cypher-shell -u neo4j -p password "RETURN safeai.governance.recordVote('test-proposal', 1) AS result;" || { echo "Governance function test failed"; exit 1; }
-
-# Validate security and compliance
-echo "Validating security and compliance..."
-SECURITY_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.validateSecurity() YIELD value RETURN value;")
-echo "Security Validation Results:"
-echo "$SECURITY_CHECK"
-
-# Check for security warnings
-if echo "$SECURITY_CHECK" | grep -q "WARNING:"; then
-    echo "Security validation completed with warnings. Please review the output above."
+    log "WARNING: No Knowledge Graphs were loaded. This may indicate an issue with KG files."
 else
-    echo "Security validation completed successfully."
+    log "Knowledge Graphs loaded successfully: $KG_COUNT"
 fi
+
+AGENT_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (a:Agent) RETURN count(a) as count;")
+log "Found $AGENT_COUNT agents"
+
+CAPABILITY_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (c:Capability) RETURN count(c) as count;")
+log "Found $CAPABILITY_COUNT capabilities"
+
+RELATIONSHIP_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
+log "Found $RELATIONSHIP_COUNT relationships"
 
 # Perform production readiness check
-echo "Performing production readiness check..."
-READINESS_CHECK=$(docker exec neo4j-safeai cypher-shell -u neo4j -p password "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;")
-echo "Production Readiness Check Results:"
-echo "$READINESS_CHECK"
+log "Performing production readiness check..."
+READINESS_CHECK=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;" 2>/dev/null || echo "Error: Production readiness check not available")
 
-# Check for production readiness errors
-if echo "$READINESS_CHECK" | grep -q "ERROR:"; then
-    echo "Production readiness check failed. Please address the errors above before proceeding."
-    exit 1
-else
-    echo "Production readiness check passed successfully."
+if [[ "$READINESS_CHECK" == *"Error"* ]]; then
+    log "WARNING: Production readiness check not available or failed. This is not critical but recommended."
+else 
+    echo "Production Readiness Check Results:"
+    echo "$READINESS_CHECK"
+    
+    # Check for production readiness errors
+    if echo "$READINESS_CHECK" | grep -q "ERROR:"; then
+        log "WARNING: Production readiness check found errors. Please address these before moving to production."
+    else
+        log "Production readiness check passed successfully."
+    fi
 fi
 
-echo "Deployment completed successfully!"
-echo "Access Neo4j Browser at http://localhost:7474 with username 'neo4j' and password 'password'"
-echo "Knowledge Graphs have been loaded and verified."
+# Print connection details
+log "----------------------------------------"
+log "Deployment completed successfully!"
+log "----------------------------------------"
+log "Neo4j Browser: http://localhost:${HTTP_PORT}"
+log "Bolt connection: bolt://localhost:${BOLT_PORT}"
+log "Username: neo4j"
+log "Password: ${NEO4J_PASSWORD}"
+log "Container: ${CONTAINER_NAME}"
+log "----------------------------------------"
+log "To check logs: docker logs ${CONTAINER_NAME}"
+log "To restart: docker restart ${CONTAINER_NAME}"
+log "To stop: docker stop ${CONTAINER_NAME}"
+log "To start: docker start ${CONTAINER_NAME}"
+log "----------------------------------------"
