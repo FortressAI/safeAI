@@ -54,9 +54,9 @@ SafeAI implements a comprehensive security framework:
    ```
 
 2. Copy the sample configuration:
-   ```bash
+```bash
    cp config/plugin-config.properties.sample plugin-config.properties
-   ```
+```
    Then edit `plugin-config.properties` with your settings (see [Configuration](#configuration) section below).
 
 3. Deploy using Docker Compose:
@@ -103,7 +103,6 @@ neo4j.procedure.unrestricted=safeai.security.*,safeai.agents.*
 | Property | Description | Default |
 |----------|-------------|---------|
 | `openai.api.key` | OpenAI API key for LLM functionality | Required |
-| `admin.api.key` | SafeAI admin API key | Required |
 | `blockchain.endpoint` | Blockchain network endpoint | http://host.docker.internal:7545 |
 | `admin.wallet.key` | Admin wallet private key | Required |
 | `llm.model` | LLM model to use | o3-mini |
