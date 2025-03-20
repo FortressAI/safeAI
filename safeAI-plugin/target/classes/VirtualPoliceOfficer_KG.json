@@ -1,6 +1,41 @@
 {
   "domain": "VirtualPoliceOfficer",
   "description": "A comprehensive Agentic Knowledge Graph for Virtual Police Officer operations. This KG dynamically generates and refines agents to support tasks including crime detection, threat assessment, incident response planning, and community engagement. It incorporates blockchain\u2011audited licensing and decentralized governance to ensure secure, transparent, and monetizable law enforcement operations, while adaptive learning continuously improves the system based on real\u2011time data and expert feedback.",
+  "endpoints": {
+    "crimeData": "https://api.example.com/police/crimedata",
+    "incidentReports": "https://api.example.com/police/incidentreports",
+    "lawEnforcementGuidelines": "https://api.example.com/police/guidelines",
+    "communityFeedback": "https://api.example.com/police/feedback",
+    "security": "https://example.com/virtualpoliceofficer/security",
+    "validation": "https://example.com/virtualpoliceofficer/validation",
+    "monitoring": "https://example.com/virtualpoliceofficer/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Analyze recent incident reports to detect emerging crime patterns in downtown.",
+      "expectedOutput": "A report identifying a surge in burglaries and suggesting increased patrols.",
+      "description": "Training example for detecting crime patterns."
+    },
+    {
+      "input": "Assess threat levels based on a recent spike in social media reports of violence.",
+      "expectedOutput": "A threat assessment report with a risk score and recommended response actions.",
+      "description": "Training example for threat assessment."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the response plan for a simulated major public disturbance in a crowded area.",
+      "expectedOutput": "A balanced response plan that includes rapid deployment of officers, crowd control measures, and clear communication protocols.",
+      "description": "Evaluation example for incident response planning."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Develop a comprehensive operational plan for a coordinated response to a series of coordinated cyber-enabled crimes.",
+      "expectedOutput": "An integrated operational plan detailing proactive crime detection, multi-agency coordination, threat mitigation, and community engagement protocols.",
+      "description": "Final exam: full operational plan for virtual police officer response."
+    }
+  ],
   "agents": [
     {
       "name": "BaseLawEnforcementAgent",
@@ -11,8 +46,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline law enforcement data and standardized report formats from input.'; \n    return [candidate: input, metadata: [method: 'BaseLawEnforcementAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +58,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze crime trends for: ' + input.toString()); \n    def cot = 'Detected emerging crime patterns using incident data and statistical analysis.'; \n    return [candidate: candidate, metadata: [method: 'CrimeDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +70,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess threat level for: ' + input.toString()); \n    def cot = 'Computed risk scores by integrating crime data and contextual threat indicators.'; \n    return [candidate: candidate, metadata: [method: 'ThreatAssessmentAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +82,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate response plan for: ' + input.toString()); \n    def cot = 'Developed an integrated response plan including officer deployment and coordination measures.'; \n    return [candidate: candidate, metadata: [method: 'ResponsePlanningAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +94,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze community feedback for: ' + input.toString()); \n    def cot = 'Synthesized public sentiment data and generated recommendations for community engagement.'; \n    return [candidate: candidate, metadata: [method: 'CommunityEngagementAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -76,8 +106,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePoliceAgent', chain_of_thought: 'No valid composite plan found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -179,38 +208,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_crimeData": "https://api.example.com/police/crimedata",
-  "endpoint_incidentReports": "https://api.example.com/police/incidentreports",
-  "endpoint_lawEnforcementGuidelines": "https://api.example.com/police/guidelines",
-  "endpoint_communityFeedback": "https://api.example.com/police/feedback",
-  "endpoint_security": "https://example.com/virtualpoliceofficer/security",
-  "endpoint_validation": "https://example.com/virtualpoliceofficer/validation",
-  "endpoint_monitoring": "https://example.com/virtualpoliceofficer/monitoring",
-  "training_examples": [
-    {
-      "input": "Analyze recent incident reports to detect emerging crime patterns in downtown.",
-      "expected_output": "A report identifying a surge in burglaries and suggesting increased patrols.",
-      "description": "Training example for detecting crime patterns."
-    },
-    {
-      "input": "Assess threat levels based on a recent spike in social media reports of violence.",
-      "expected_output": "A threat assessment report with a risk score and recommended response actions.",
-      "description": "Training example for threat assessment."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the response plan for a simulated major public disturbance in a crowded area.",
-      "expected_output": "A balanced response plan that includes rapid deployment of officers, crowd control measures, and clear communication protocols.",
-      "description": "Evaluation example for incident response planning."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Develop a comprehensive operational plan for a coordinated response to a series of coordinated cyber-enabled crimes.",
-      "expected_output": "An integrated operational plan detailing proactive crime detection, multi-agency coordination, threat mitigation, and community engagement protocols.",
-      "description": "Final exam: full operational plan for virtual police officer response."
-    }
-  ]
+  }
 }

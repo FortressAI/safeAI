@@ -1,6 +1,39 @@
 {
   "domain": "RiskManagement",
   "description": "A comprehensive Agentic KG for Risk Management and Operational Resilience. This KG dynamically generates agents to monitor, simulate, and mitigate risks across financial, cyber, operational, and reputational domains. It integrates blockchain\u2011audited licensing and decentralized governance to provide transparent, adaptive risk analytics and proactive mitigation strategies.",
+  "endpoints": {
+    "riskData": "https://api.example.com/risk/metrics",
+    "financialData": "https://api.example.com/finance/indicators",
+    "security": "https://example.com/riskmanagement/security",
+    "validation": "https://example.com/riskmanagement/validation",
+    "monitoring": "https://example.com/riskmanagement/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Simulate risk scenario for supply chain disruption in a multinational corporation.",
+      "expectedOutput": "Risk score: 78, with suggested mitigation: diversify suppliers and increase inventory buffers.",
+      "description": "Training example for supply chain risk simulation."
+    },
+    {
+      "input": "Assess cyber risk based on recent incident reports.",
+      "expectedOutput": "Risk score: 85, with recommended measures: enhance firewall protocols and employee training.",
+      "description": "Cyber risk assessment example."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the operational risk of a major IT outage in a global bank.",
+      "expectedOutput": "Risk score: 90, with recommendations for redundancy and rapid response.",
+      "description": "Evaluation example for operational risk."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Develop a comprehensive risk mitigation plan for a company facing simultaneous financial, cyber, and operational risks.",
+      "expectedOutput": "Integrated risk mitigation plan with overall risk score below 50 and detailed countermeasures for each risk area.",
+      "description": "Final exam: complete integrated risk mitigation plan."
+    }
+  ],
   "agents": [
     {
       "name": "BaseRiskAgent",
@@ -11,8 +44,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Standardized base risk data extracted from input.'; \n    return [candidate: input, metadata: [method: 'BaseRiskAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +56,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess financial risk for: ' + input.toString()); \n    def cot = 'Applied economic indicators and market trends for risk assessment.'; \n    return [candidate: candidate, metadata: [method: 'FinancialRiskAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +68,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate cyber risk for: ' + input.toString()); \n    def cot = 'Analyzed incident reports and threat intelligence for cyber risk evaluation.'; \n    return [candidate: candidate, metadata: [method: 'CyberRiskAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +80,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Assess operational risk for: ' + input.toString()); \n    def cot = 'Evaluated system redundancies and failure likelihood for operational risk.'; \n    return [candidate: candidate, metadata: [method: 'OperationalRiskAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +92,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeRiskAgent', chain_of_thought: 'No valid composite risk assessment found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for risk agents\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic (e.g., threshold comparison of risk scores)\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -164,36 +192,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_riskData": "https://api.example.com/risk/metrics",
-  "endpoint_financialData": "https://api.example.com/finance/indicators",
-  "endpoint_security": "https://example.com/riskmanagement/security",
-  "endpoint_validation": "https://example.com/riskmanagement/validation",
-  "endpoint_monitoring": "https://example.com/riskmanagement/monitoring",
-  "training_examples": [
-    {
-      "input": "Simulate risk scenario for supply chain disruption in a multinational corporation.",
-      "expected_output": "Risk score: 78, with suggested mitigation: diversify suppliers and increase inventory buffers.",
-      "description": "Training example for supply chain risk simulation."
-    },
-    {
-      "input": "Assess cyber risk based on recent incident reports.",
-      "expected_output": "Risk score: 85, with recommended measures: enhance firewall protocols and employee training.",
-      "description": "Cyber risk assessment example."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the operational risk of a major IT outage in a global bank.",
-      "expected_output": "Risk score: 90, with recommendations for redundancy and rapid response.",
-      "description": "Evaluation example for operational risk."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Develop a comprehensive risk mitigation plan for a company facing simultaneous financial, cyber, and operational risks.",
-      "expected_output": "Integrated risk mitigation plan with overall risk score below 50 and detailed countermeasures for each risk area.",
-      "description": "Final exam: complete integrated risk mitigation plan."
-    }
-  ]
+  }
 }

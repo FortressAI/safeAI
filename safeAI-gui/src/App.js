@@ -14,6 +14,9 @@ import AgentWorkshop from './pages/AgentWorkshop';
 import SecurityCenter from './pages/SecurityCenter';
 import KnowledgeGraphs from './pages/KnowledgeGraphs';
 import Settings from './pages/Settings';
+import ARCPrize from './pages/ARCPrize';
+import MathATP from './pages/MathATP';
+import MathKG from './pages/MathKG';
 
 // Create a theme instance
 const theme = createTheme({
@@ -128,6 +131,9 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="agents" element={<AgentBrowser />} />
               <Route path="agent-workshop" element={<AgentWorkshop />} />
+              <Route path="arc-prize" element={<ARCPrize />} />
+              <Route path="math-atp" element={<MathATP />} />
+              <Route path="math-kg" element={<MathKG />} />
               <Route path="security" element={<SecurityCenter />} />
               <Route path="knowledge-graphs" element={<KnowledgeGraphs />} />
               <Route path="settings" element={<Settings />} />

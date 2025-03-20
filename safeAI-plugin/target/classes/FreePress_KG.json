@@ -1,6 +1,41 @@
 {
   "domain": "FreePress",
   "description": "A highly advanced Agentic Knowledge Graph for safeguarding the free press. This KG dynamically generates, verifies, and validates journalistic content while filtering out propagandist, biased, or manipulative information. It integrates state\u2011of\u2011the\u2011art fact\u2011checking, bias detection, and ethical validation agents\u2014leveraging established journalistic ethics standards and automated veracity scoring models. Blockchain\u2011audited microtransactions and decentralized governance ensure transparent, secure monetization and continuous editorial oversight, providing a trusted, adaptive framework for news content.",
+  "endpoints": {
+    "newsFeeds": "https://api.example.com/press/newsfeeds",
+    "factCheckSources": "https://api.example.com/press/factcheck",
+    "editorialGuidelines": "https://api.example.com/press/editorial",
+    "trustedSources": "https://api.example.com/press/trustedsources",
+    "security": "https://example.com/freepress/security",
+    "validation": "https://example.com/freepress/validation",
+    "monitoring": "https://example.com/freepress/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Generate an unbiased headline for recent election results.",
+      "expectedOutput": "A factual, concise headline that accurately reflects the election outcome without sensationalism.",
+      "description": "Example for generating neutral headlines."
+    },
+    {
+      "input": "Summarize an investigative report on corporate malfeasance.",
+      "expectedOutput": "A clear summary that captures key facts and implications without editorial bias.",
+      "description": "Example for news summarization with strict factual integrity."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the following article for factual accuracy and potential bias: 'XYZ Corp manipulated earnings figures in Q1.'",
+      "expectedOutput": "A balanced evaluation that cross\u2011references multiple fact\u2011checking sources and identifies any potential bias in tone or omission.",
+      "description": "Evaluation of content accuracy and bias detection."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Produce a comprehensive investigative report on government surveillance including multiple sources, verified facts, and ethical considerations.",
+      "expectedOutput": "A detailed report with verifiable sources, a clear chain\u2011of\u2011thought that explains source validation, and an explicit ethical review demonstrating adherence to journalistic standards.",
+      "description": "Final exam for full investigative reporting with ethical safeguards."
+    }
+  ],
   "agents": [
     {
       "name": "BasePressAgent",
@@ -11,8 +46,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline press data and standardized metadata from input.'; \n    return [candidate: input, metadata: [method: 'BasePressAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +58,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate unbiased news content for: ' + input.toString()); \n    def cot = 'Produced fact\u2011based news content ensuring clarity and neutrality.'; \n    return [candidate: candidate, metadata: [method: 'NewsContentGenerationAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +70,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Verify factual accuracy for: ' + input.toString() + ' using trusted sources'); \n    def cot = 'Cross\u2011checked information against multiple verified fact\u2011checking services.'; \n    return [candidate: candidate, metadata: [method: 'FactCheckingAgent', chain_of_thought: cot, confidence: 0.94]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +82,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Detect bias in: ' + input.toString()); \n    def cot = 'Analyzed content sentiment and compared against established editorial guidelines to detect bias.'; \n    return [candidate: candidate, metadata: [method: 'BiasDetectionAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +94,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Evaluate ethical standards for press content: ' + input.toString() + ' using editorial guidelines'); \n    def cot = 'Evaluated the content for adherence to journalistic ethics and verified accuracy.'; \n    return [candidate: candidate, metadata: [method: 'EditorialEthicsAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -76,8 +106,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositePressAgent', chain_of_thought: 'No valid composite news output found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic for press agent synthesis\n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    // Implement evaluation logic, e.g., comparing factual accuracy, neutrality, and ethical compliance\n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -175,38 +204,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_newsFeeds": "https://api.example.com/press/newsfeeds",
-  "endpoint_factCheckSources": "https://api.example.com/press/factcheck",
-  "endpoint_editorialGuidelines": "https://api.example.com/press/editorial",
-  "endpoint_trustedSources": "https://api.example.com/press/trustedsources",
-  "endpoint_security": "https://example.com/freepress/security",
-  "endpoint_validation": "https://example.com/freepress/validation",
-  "endpoint_monitoring": "https://example.com/freepress/monitoring",
-  "training_examples": [
-    {
-      "input": "Generate an unbiased headline for recent election results.",
-      "expected_output": "A factual, concise headline that accurately reflects the election outcome without sensationalism.",
-      "description": "Example for generating neutral headlines."
-    },
-    {
-      "input": "Summarize an investigative report on corporate malfeasance.",
-      "expected_output": "A clear summary that captures key facts and implications without editorial bias.",
-      "description": "Example for news summarization with strict factual integrity."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the following article for factual accuracy and potential bias: 'XYZ Corp manipulated earnings figures in Q1.'",
-      "expected_output": "A balanced evaluation that cross\u2011references multiple fact\u2011checking sources and identifies any potential bias in tone or omission.",
-      "description": "Evaluation of content accuracy and bias detection."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Produce a comprehensive investigative report on government surveillance including multiple sources, verified facts, and ethical considerations.",
-      "expected_output": "A detailed report with verifiable sources, a clear chain\u2011of\u2011thought that explains source validation, and an explicit ethical review demonstrating adherence to journalistic standards.",
-      "description": "Final exam for full investigative reporting with ethical safeguards."
-    }
-  ]
+  }
 }

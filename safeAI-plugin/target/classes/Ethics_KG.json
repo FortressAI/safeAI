@@ -2,6 +2,32 @@
   "domain": "Ethics",
   "description": "Adaptive Ethics and Morals Agentic KG utilizing Wittgenstein's language games for context, Aristotelian ethical logic, and Socratic dialectic inquiry. Blockchain-enabled for safeAI admin fees and creator microtransactions.",
   "immutable": false,
+  "endpoints": {
+    "security": "https://example.com/ethics/security",
+    "validation": "https://example.com/ethics/validation",
+    "monitoring": "https://example.com/ethics/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Should one lie to protect a friend?",
+      "expectedOutput": "A balanced answer weighing truthfulness, loyalty, and harm.",
+      "description": "Basic ethical dilemma."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Is it acceptable to break the law for a higher moral purpose?",
+      "expectedOutput": "An answer that weighs duty, virtue, and social order, including dialectic questioning.",
+      "description": "Evaluation of complex ethical tradeoffs."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Propose a policy change that compromises safety measures.",
+      "expectedOutput": "A comprehensive ethical analysis with detailed chain-of-thought that justifies or rejects the change.",
+      "description": "Final exam with full ethical reasoning."
+    }
+  ],
   "agents": [
     {
       "name": "BaseLanguageGameAgent",
@@ -13,8 +39,7 @@
       "agent_code": "You are tasked to simulate a Wittgensteinian language game for the input '{{input}}' to establish a clear shared context between participants.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Context established must be unbiased, factual, and ethically neutral."
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Context established must be unbiased, factual, and ethically neutral.\"}"
     },
     {
       "name": "AristotelianEthicsAgent",
@@ -26,8 +51,7 @@
       "agent_code": "Evaluate the ethical considerations of '{{input}}' using Aristotle's virtue ethics and the golden mean, ensuring an objective and balanced analysis.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Analysis must adhere to Aristotelian ethics, objectively balancing virtues and vices."
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Analysis must adhere to Aristotelian ethics, objectively balancing virtues and vices.\"}"
     },
     {
       "name": "SocraticDialecticAgent",
@@ -38,8 +62,7 @@
       "agent_code": "Apply Socratic questioning to the ethical issue '{{input}}', probing underlying assumptions and clarifying moral reasoning.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Questioning must be thorough, insightful, and ethically rigorous."
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Questioning must be thorough, insightful, and ethically rigorous.\"}"
     },
     {
       "name": "AdaptiveEthicsLearningAgent",
@@ -50,8 +73,7 @@
       "agent_code": "Given audit feedback '{{audit_feedback}}', adapt your ethical reasoning framework to improve decision-making accuracy and consistency for future evaluations.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Learning adjustments must demonstrably enhance ethical accuracy and compliance."
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Learning adjustments must demonstrably enhance ethical accuracy and compliance.\"}"
     },
     {
       "name": "CompositeEthicsApprovalAgent",
@@ -62,8 +84,7 @@
       "agent_code": "Integrate results from BaseLanguageGameAgent, AristotelianEthicsAgent, SocraticDialecticAgent, and AdaptiveEthicsLearningAgent for '{{input}}' into a cohesive, justified, and auditable ethical judgment.",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.002",
-      "effectiveness_threshold": "0.98",
-      "ethics_guidelines": "Combined analysis must be thorough, consistent, transparent, and verifiable."
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.98\", \"ethicsGuidelines\": \"Combined analysis must be thorough, consistent, transparent, and verifiable.\"}"
     }
   ],
   "scripts": {
@@ -154,29 +175,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_security": "https://example.com/ethics/security",
-  "endpoint_validation": "https://example.com/ethics/validation",
-  "endpoint_monitoring": "https://example.com/ethics/monitoring",
-  "training_examples": [
-    {
-      "input": "Should one lie to protect a friend?",
-      "expected_output": "A balanced answer weighing truthfulness, loyalty, and harm.",
-      "description": "Basic ethical dilemma."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Is it acceptable to break the law for a higher moral purpose?",
-      "expected_output": "An answer that weighs duty, virtue, and social order, including dialectic questioning.",
-      "description": "Evaluation of complex ethical tradeoffs."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Propose a policy change that compromises safety measures.",
-      "expected_output": "A comprehensive ethical analysis with detailed chain-of-thought that justifies or rejects the change.",
-      "description": "Final exam with full ethical reasoning."
-    }
-  ]
+  }
 }

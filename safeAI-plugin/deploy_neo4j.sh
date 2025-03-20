@@ -122,8 +122,8 @@ for i in $(seq 1 $MAX_RETRY); do
     if docker logs ${CONTAINER_NAME} 2>&1 | grep -q "Remote interface available at"; then
         STARTED=true
         log "Neo4j started successfully."
-        break
-    fi
+    break
+  fi
     log "Waiting... ($i/$MAX_RETRY)"
     sleep $RETRY_INTERVAL
 done

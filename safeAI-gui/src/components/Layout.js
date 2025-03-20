@@ -39,6 +39,8 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LockIcon from '@mui/icons-material/Lock';
 import CodeIcon from '@mui/icons-material/Code';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import FunctionsIcon from '@mui/icons-material/Functions';
 
 // Drawer width
 const drawerWidth = 260;
@@ -94,6 +96,24 @@ function Layout() {
       path: '/agent-workshop', 
       icon: <AddCircleOutlineIcon />,
       description: 'Create new intelligent agents'
+    },
+    { 
+      name: 'ARC Prize', 
+      path: '/arc-prize', 
+      icon: <EmojiEventsIcon />,
+      description: 'Test agents on ARC competition'
+    },
+    { 
+      name: 'Math ATP', 
+      path: '/math-atp', 
+      icon: <CodeIcon />,
+      description: 'Automated Theorem Proving with Agentic KG'
+    },
+    { 
+      name: 'Math KG', 
+      path: '/math-kg', 
+      icon: <FunctionsIcon />,
+      description: 'Mathematics Knowledge Graph Explorer'
     },
     { 
       name: 'Security Center', 

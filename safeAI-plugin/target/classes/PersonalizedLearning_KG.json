@@ -1,6 +1,39 @@
 {
   "domain": "PersonalizedLearning",
   "description": "An Agentic KG for Education and Personalized Learning designed to generate, adapt, and optimize educational content and assessments based on individual student performance. This KG dynamically produces personalized lessons, interactive assessments, and adaptive feedback, while integrating blockchain\u2011audited licensing and decentralized governance to ensure transparent, monetizable, and continuously improving learning outcomes.",
+  "endpoints": {
+    "educationalContent": "https://api.example.com/education/content",
+    "performanceData": "https://api.example.com/education/performance",
+    "security": "https://example.com/personalizedlearning/security",
+    "validation": "https://example.com/personalizedlearning/validation",
+    "monitoring": "https://example.com/personalizedlearning/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Generate a personalized algebra lesson for a student struggling with quadratic equations.",
+      "expectedOutput": "A detailed lesson plan with examples, exercises, and adaptive assessments tailored to the student's needs.",
+      "description": "Training example for personalized lesson generation."
+    },
+    {
+      "input": "Design a science quiz based on updated curriculum topics.",
+      "expectedOutput": "A quiz with questions that reflect current curriculum standards and accurately assess student understanding.",
+      "description": "Training example for quiz generation."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Evaluate the effectiveness of a personalized lesson plan for improving student test scores in geometry.",
+      "expectedOutput": "A report comparing pre- and post-lesson assessment scores, with recommendations for further adaptation.",
+      "description": "Evaluation example for educational impact."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Design an adaptive learning module for a high school history curriculum that adjusts content based on student feedback.",
+      "expectedOutput": "A comprehensive learning module with interactive lessons, adaptive assessments, and feedback loops that personalize the educational experience.",
+      "description": "Final exam: comprehensive personalized learning module."
+    }
+  ],
   "agents": [
     {
       "name": "BaseLearningAgent",
@@ -11,8 +44,7 @@
       "agent_code": "def generateCandidate(input) { \n    def cot = 'Extracted baseline educational content and standardized performance metrics.'; \n    return [candidate: input, metadata: [method: 'BaseLearningAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     },
     {
@@ -24,8 +56,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Generate personalized educational content for: ' + input.toString()); \n    def cot = 'Created tailored content and lesson plans based on student performance and curriculum guidelines.'; \n    return [candidate: candidate, metadata: [method: 'ContentGenerationAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -37,8 +68,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Create adaptive assessment for: ' + input.toString()); \n    def cot = 'Developed assessments tailored to student performance data.'; \n    return [candidate: candidate, metadata: [method: 'AssessmentAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -50,8 +80,7 @@
       "agent_code": "def generateCandidate(input) { \n    def candidate = nlQuery('Analyze student feedback for: ' + input.toString()); \n    def cot = 'Processed and interpreted student feedback to optimize educational content.'; \n    return [candidate: candidate, metadata: [method: 'FeedbackAnalysisAgent', chain_of_thought: cot, confidence: 0.92]]; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "LLM"
     },
     {
@@ -63,8 +92,7 @@
       "agent_code": "def generateCandidate(input, groundTruth) { \n    def agentsList = configuration.agentInstances; \n    def bestCandidate = null; \n    def bestCot = ''; \n    for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n        def sequences = generateAgentSequences(agentsList, chainLength); \n        sequences.each { seq -> \n            def candidate = input; \n            def cot = ''; \n            seq.each { agent -> \n                def result = agent.generateCandidate(candidate); \n                candidate = result.candidate; \n                cot += result.metadata.chain_of_thought + ' -> '; \n            }; \n            if (evaluateCandidate(candidate, groundTruth)) { \n                bestCandidate = candidate; \n                bestCot = cot; \n                return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n            } \n        } \n    } \n    return [candidate: null, metadata: [method: 'DynamicCompositeLearningAgent', chain_of_thought: 'No valid composite learning module found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    return []; \n}\n\ndef evaluateCandidate(candidate, groundTruth) { \n    return candidate == groundTruth; \n}",
       "creatorWallet": "0xDefaultCreator",
       "transactionFee": "0.001",
-      "effectiveness_threshold": "0.95",
-      "ethics_guidelines": "Output must be unbiased, fact-based, and comply with internal ethical standards.",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
     }
   ],
@@ -164,36 +192,5 @@
         "burst_limit": 10
       }
     }
-  },
-  "endpoint_educationalContent": "https://api.example.com/education/content",
-  "endpoint_performanceData": "https://api.example.com/education/performance",
-  "endpoint_security": "https://example.com/personalizedlearning/security",
-  "endpoint_validation": "https://example.com/personalizedlearning/validation",
-  "endpoint_monitoring": "https://example.com/personalizedlearning/monitoring",
-  "training_examples": [
-    {
-      "input": "Generate a personalized algebra lesson for a student struggling with quadratic equations.",
-      "expected_output": "A detailed lesson plan with examples, exercises, and adaptive assessments tailored to the student's needs.",
-      "description": "Training example for personalized lesson generation."
-    },
-    {
-      "input": "Design a science quiz based on updated curriculum topics.",
-      "expected_output": "A quiz with questions that reflect current curriculum standards and accurately assess student understanding.",
-      "description": "Training example for quiz generation."
-    }
-  ],
-  "evaluation_examples": [
-    {
-      "input": "Evaluate the effectiveness of a personalized lesson plan for improving student test scores in geometry.",
-      "expected_output": "A report comparing pre- and post-lesson assessment scores, with recommendations for further adaptation.",
-      "description": "Evaluation example for educational impact."
-    }
-  ],
-  "final_exam_examples": [
-    {
-      "input": "Design an adaptive learning module for a high school history curriculum that adjusts content based on student feedback.",
-      "expected_output": "A comprehensive learning module with interactive lessons, adaptive assessments, and feedback loops that personalize the educational experience.",
-      "description": "Final exam: comprehensive personalized learning module."
-    }
-  ]
+  }
 }
