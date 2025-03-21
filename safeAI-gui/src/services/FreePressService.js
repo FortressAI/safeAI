@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import FreePressContract from '../contracts/FreePressContract.json';
 import IPFSService from './IPFSService';
 
 class FreePressService {
@@ -16,14 +15,17 @@ class FreePressService {
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
                 this.web3 = new Web3(window.ethereum);
                 
-                // Get the network ID
-                const networkId = await this.web3.eth.net.getId();
-                const deployedNetwork = FreePressContract.networks[networkId];
+                // Get the contract address from environment variables
+                const contractAddress = process.env.REACT_APP_FREEPRESS_CONTRACT_ADDRESS;
+                
+                // Import contract ABI from artifacts
+                // This will be available after running 'npm run compile'
+                const contractABI = require('../artifacts/contracts/FreePressContract.sol/FreePressContract.json').abi;
                 
                 // Create contract instance
                 this.contract = new this.web3.eth.Contract(
-                    FreePressContract.abi,
-                    deployedNetwork && deployedNetwork.address
+                    contractABI,
+                    contractAddress
                 );
                 
                 // Get the active account
@@ -41,7 +43,8 @@ class FreePressService {
                 throw error;
             }
         } else {
-            throw new Error('Please install MetaMask to use this application');
+            console.error('Web3 not found. Please install MetaMask.');
+            throw new Error('Web3 not found. Please install MetaMask.');
         }
     }
 
