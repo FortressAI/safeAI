@@ -1,179 +1,172 @@
-# SafeAI Neo4j Plugin Documentation
+# Welcome to SafeAI: Your Guide to Ethical AI
 
-## Overview
-The SafeAI Neo4j Plugin is a powerful extension that enables intelligent agent-based interactions within Neo4j databases. It provides a comprehensive framework for managing knowledge graphs, dynamic agents, and governance systems. The ecosystem includes both a Neo4j plugin for backend processing and a modern web-based Management Console for user interaction.
+## What is SafeAI?
 
-## Table of Contents
+SafeAI is a comprehensive platform that helps you create, manage, and monitor AI systems with a focus on ethics, security, and knowledge organization. It consists of two main parts:
 
-### Core Components
-- [Knowledge Graph Management](governance/knowledge-graph-management.md)
-  - Loading and managing knowledge graphs
-  - Agent definitions and capabilities
-  - Relationship management
-- [Dynamic Agent System](governance/dynamic-agent-system.md)
-  - Agent creation and management
-  - Capability integration
-  - Agent interactions
+1. **Neo4j Plugin**: A powerful extension for the Neo4j graph database that handles the backend processing
+2. **Management Console**: A user-friendly web interface for interacting with the system
 
-### Governance Framework
-- [Code Review Guide](governance/code-review.md)
-- [Development Setup](governance/development-setup.md)
-- [Code of Conduct](governance/code-of-conduct.md)
-- [Contributing Guidelines](governance/contributing.md)
-- [Testing Guide](governance/testing-guide.md)
-- [Documentation Style](governance/documentation-style.md)
-- [Community Guidelines](governance/community-guidelines.md)
-- [Governance Framework](governance/governance-framework-guide.md)
+Think of SafeAI as an "operating system" for AI that makes sure your intelligent agents behave properly and work together effectively.
 
-### Integration Guides
-- [Groovy Integration](integration/groovy-integration.md)
-- [LLM Integration](integration/llm-integration.md)
-- [Blockchain Integration](integration/blockchain-integration.md)
+![SafeAI Overview](images/safeai-overview.png)
+*SafeAI combines knowledge graphs, ethical frameworks, and security monitoring in one platform*
 
-### Management Console
-- [Web Interface Overview](../safeAI-gui/README.md)
-- [Knowledge Graph Modules](../safeAI-gui/README.md#user-guides)
-- [Deployment Guide](../safeAI-gui/README.md#production-deployment-on-aws)
-- [Blockchain Integration](../safeAI-gui/README.md#connecting-to-safeaicoincom-blockchain)
+## Why Use SafeAI?
 
-## Quick Start
+- **Ensure Ethical AI**: Built-in tools to audit AI agents against ethical frameworks
+- **Organize Knowledge**: Structure information in specialized knowledge graphs
+- **Enhance Security**: Monitor and manage security vulnerabilities
+- **Simplify Management**: Create and monitor AI agents through an intuitive interface
+- **Blockchain Integration**: Leverage decentralized technologies for transparency and trust
 
-### Prerequisites
-- Neo4j 5.x or later
-- Java 11 or later
-- Maven 3.6 or later
-- Node.js 18.x or later (for Management Console)
+## Getting Started (For Beginners)
 
-### Plugin Installation
-1. Clone the repository:
+### What You'll Need
+
+- A computer with at least 8GB RAM
+- Basic familiarity with running commands in a terminal
+- Neo4j database (version 5.x or newer)
+- Node.js (version 18.x or newer) for the web interface
+
+### Step 1: Install Neo4j
+
+1. Download Neo4j Desktop from [neo4j.com/download](https://neo4j.com/download/)
+2. Install and open Neo4j Desktop
+3. Create a new database by clicking "Add Database"
+4. Choose a name and password (remember this password!)
+5. Start the database
+
+### Step 2: Install the SafeAI Plugin
+
+1. Open a terminal or command prompt
+2. Clone the SafeAI repository:
    ```bash
    git clone https://github.com/FortressAI/safeAI.git
-   cd safeAI/safeAI-plugin
+   cd safeAI
    ```
 
-2. Build the plugin:
+3. Build and install the plugin:
    ```bash
-   mvn clean package
+   cd safeAI-plugin
+   ./install_plugin.sh
    ```
+   
+   This will automatically build the plugin and install it in your Neo4j database.
 
-3. Deploy using the provided script:
-   ```bash
-   ./deploy_neo4j.sh
-   ```
+### Step 3: Set Up the Management Console
 
-### Management Console Setup
 1. Navigate to the GUI directory:
    ```bash
    cd ../safeAI-gui
    ```
 
-2. Install dependencies:
+2. Install the required packages:
    ```bash
    npm install
    ```
 
-3. Configure environment:
+3. Set up your configuration:
    ```bash
    cp .env.example .env
-   # Edit .env with your settings
    ```
+   
+   Open the `.env` file in a text editor and update:
+   - `NEO4J_URI`: The address of your Neo4j database (usually `bolt://localhost:7687`)
+   - `NEO4J_USER`: Your Neo4j username (usually `neo4j`)
+   - `NEO4J_PASSWORD`: The password you set when creating the database
 
-4. Start the development server:
+4. Start the web interface:
    ```bash
    npm start
    ```
 
-5. Access the console at http://localhost:3000
+5. Open your web browser and go to http://localhost:3000
 
-### Basic Usage
-1. Access Neo4j Browser at http://localhost:7474
-2. Login with default credentials:
-   - Username: neo4j
-   - Password: testpassword
+### Step 4: Explore the Platform
 
-3. Load knowledge graphs:
-   ```cypher
-   CALL safeai.debug.loadKGFiles()
-   ```
+Now that you're up and running, take time to explore:
 
-4. Test basic functionality:
-   ```cypher
-   CALL safeai.debug.hello('World')
-   ```
+1. **Dashboard**: View the overall status of your system
+2. **Knowledge Graphs**: Explore the Ethics, CyberSecurity, and Math knowledge graphs
+3. **Agent Workshop**: Create your first AI agent
+4. **Security Center**: Monitor security vulnerabilities
 
-5. Use the Management Console to interact with the system through a user-friendly interface.
+## Detailed Documentation
 
-## Development
+After getting familiar with the basics, you might want to explore specific areas in more depth:
 
-### Project Structure
+### Management Console Guide
+- [Complete User Guide](gui/management-console.md) - Learn how to use all features of the web interface
+
+### Knowledge Graph Guides
+- [Cypher Query Guide](cypher/queries.md) - Learn how to query the knowledge graphs
+- [Node Creation Guide](cypher/nodes.md) - Understand how to create nodes in the graphs
+- [Relationships Guide](cypher/relationships.md) - Learn about connecting nodes with relationships
+
+### Technical Documentation
+- [Plugin Architecture](technical/plugin-architecture.md) - Understand how the Neo4j plugin works
+- [API References](technical/api-reference.md) - Complete API documentation
+- [Blockchain Integration](integration/blockchain-integration.md) - Details on the blockchain components
+
+### Governance and Community
+- [Contributing Guidelines](governance/contributing.md) - How to contribute to the project
+- [Code of Conduct](governance/code-of-conduct.md) - Community guidelines
+- [Testing Guide](governance/testing-guide.md) - How to test the system
+
+## Common Tasks
+
+### Creating Your First Agent
+
+1. Open the Management Console in your browser
+2. Navigate to "Agent Workshop" → "Create Agent"
+3. Fill in the basic information:
+   - Name: "MyFirstAgent"
+   - Description: "A test agent to explore SafeAI capabilities"
+   - Purpose: "Learning and experimentation"
+4. Select basic capabilities like "Natural Language Processing"
+5. Click "Create Agent"
+6. Test your agent by clicking "Test Agent" and typing a simple request
+
+### Performing an Ethical Audit
+
+1. Navigate to "Knowledge Graphs" → "Ethics KG"
+2. Click "Audit Agent"
+3. Select your agent from the dropdown
+4. Click "Start Audit"
+5. Review the results and recommendations
+
+## Getting Help
+
+If you encounter any issues or have questions:
+
+- Check the [Troubleshooting Guide](technical/troubleshooting.md)
+- Visit our [GitHub Discussions](https://github.com/FortressAI/safeAI/discussions)
+- Join our [Discord Community](https://discord.gg/safeai)
+- Email support at help@safeai.org
+
+## Project Structure
+
+For developers interested in the codebase organization:
+
 ```
 safeAI/
-├── safeAI-plugin/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/safeai/neo4jplugin/
-│   │   │   │       ├── debug/
-│   │   │   │       ├── graph_rag/
-│   │   │   │       ├── governance/
-│   │   │   │       └── integration/
-│   │   │   └── resources/
-│   │   │       └── *.json
-│   │   └── test/
-│   └── pom.xml
-├── safeAI-gui/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── contracts/
-│   │   └── utils/
-│   ├── public/
-│   ├── scripts/
-│   └── package.json
-├── docs/
-└── README.md
+├── safeAI-plugin/          # Neo4j plugin code
+├── safeAI-gui/             # Web interface code
+├── docs/                   # Documentation
+│   ├── cypher/             # Cypher query guides
+│   ├── gui/                # Management Console guides
+│   ├── governance/         # Contribution guidelines
+│   └── technical/          # Technical documentation
+└── README.md               # This file
 ```
-
-### Key Components
-- **Plugin**:
-  - `DebugProcedure.java`: Core debugging and initialization procedures
-  - `GraphRAG.java`: Knowledge graph management and RAG implementation
-  - `DynamicAgentCreator.java`: Dynamic agent creation and management
-  - Knowledge Graph JSON files: Pre-defined agent and capability definitions
-
-- **Management Console**:
-  - Blockchain integration with Hardhat and Solidity contracts
-  - Service classes for interfacing with knowledge graph contracts
-  - React components for interactive UI
-  - IPFS integration for decentralized storage
-
-### Testing
-Run the plugin test suite:
-```bash
-cd safeAI-plugin
-mvn test
-```
-
-Run the GUI tests:
-```bash
-cd safeAI-gui
-npm test
-```
-
-## Contributing
-Please read our [Contributing Guidelines](governance/contributing.md) before submitting pull requests.
 
 ## License
+
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
-## Support
-For support and questions:
-1. Check the [documentation](governance/)
-2. Open an issue on GitHub
-3. Join our community discussions
-
 ## Acknowledgments
-- Neo4j Community
-- SafeAI Team
-- All contributors to this project 
+
+- The Neo4j Community for their excellent graph database
+- All contributors who have helped build SafeAI
+- Our users who provide valuable feedback and insights 
