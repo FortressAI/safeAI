@@ -68,7 +68,7 @@ SafeAI implements a comprehensive security framework:
    ```
 
 4. Set up the Management Console:
-   ```bash
+```bash
    cd ../safeAI-gui
    npm install
    npm start
@@ -263,18 +263,18 @@ The SafeAI Management Console provides a user-friendly web interface for interac
    ```
 
 2. Install dependencies:
-   ```bash
+     ```bash
    npm install
-   ```
+     ```
 
 3. Configure environment:
-   ```bash
+     ```bash
    cp .env.example .env
    # Edit .env with your settings
    ```
 
 4. Start the development server:
-   ```bash
+     ```bash
    npm start
    ```
 

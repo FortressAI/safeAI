@@ -44,7 +44,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "compile": "hardhat compile",
+    "deploy:local": "hardhat run scripts/deploy-knowledge-graphs.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy-knowledge-graphs.js --network sepolia",
+    "deploy:mumbai": "hardhat run scripts/deploy-knowledge-graphs.js --network mumbai",
+    "deploy:ethics:local": "hardhat run scripts/deploy-ethics-kg.js --network localhost",
+    "deploy:ethics:sepolia": "hardhat run scripts/deploy-ethics-kg.js --network sepolia",
+    "node": "hardhat node",
+    "generate-types": "hardhat typechain"
   },
   "eslintConfig": {
     "extends": [
@@ -64,5 +72,21 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:7474"
+  "proxy": "http://localhost:7474",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "chai": "^4.2.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.7.1",
+    "hardhat": "^2.19.3",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.5",
+    "typechain": "^8.3.0"
+  }
 }
