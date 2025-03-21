@@ -44,6 +44,7 @@ import FunctionsIcon from '@mui/icons-material/Functions';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 
 // Drawer width
 const drawerWidth = 260;
@@ -141,6 +142,12 @@ function Layout() {
       path: '/ethics-kg',
       icon: <PsychologyIcon />,
       description: 'Ethics Knowledge Graph Explorer'
+    },
+    {
+      name: 'FreePress',
+      path: '/free-press',
+      icon: <NewspaperIcon />,
+      description: 'Decentralized News Platform'
     }
   ];
   
