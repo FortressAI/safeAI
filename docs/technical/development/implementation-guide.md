@@ -1,4 +1,7 @@
 # SafeAI IPTO Technical Implementation Guide
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Development](../technical/development/README.md) > [Implementation Guide](../technical/development/implementation-guide.md)
+---
 This document provides detailed technical specifications and implementation guidelines for the SafeAI IPTO smart contracts.
 ## Table of Contents
 1. [Overview](#overview)

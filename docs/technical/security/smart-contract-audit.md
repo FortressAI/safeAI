@@ -1,4 +1,9 @@
 # SafeAI Smart Contract Security Audit
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Security](../technical/security/README.md) > [Smart Contract Audit](../technical/security/smart-contract-audit.md)
+---
+---
+---
 This document outlines the security audit process and findings for the SafeAI IPTO smart contracts.
 
 

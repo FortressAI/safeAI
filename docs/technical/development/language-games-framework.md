@@ -1,4 +1,7 @@
 # Language Games Framework
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Development](../technical/development/README.md) > [Language Games Framework](../technical/development/language-games-framework.md)
+---
 
 ## Overview
 
