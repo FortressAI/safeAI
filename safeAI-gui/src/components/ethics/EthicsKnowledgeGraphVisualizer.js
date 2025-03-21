@@ -1,198 +1,139 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Typography, TextField, IconButton, Paper } from '@mui/material';
-import * as d3 from 'd3';
-import SearchIcon from '@mui/icons-material/Search';
-import 'katex/dist/katex.min.css';
-import { InlineMath } from 'react-katex';
-
-// Mock API function - replace with actual API call
-const fetchEthicsKnowledgeGraph = () => {
-  return {
-    nodes: [
-      { id: 'ethics', label: 'Ethics', type: 'domain' },
-      { id: 'autonomy', label: 'Autonomy', type: 'concept' },
-      { id: 'responsibility', label: 'Responsibility', type: 'concept' },
-      { id: 'transparency', label: 'Transparency', type: 'principle' },
-      { id: 'accountability', label: 'Accountability', type: 'principle' },
-      { id: 'fairness', label: 'Fairness', type: 'principle' },
-    ],
-    links: [
-      { source: 'ethics', target: 'autonomy' },
-      { source: 'ethics', target: 'responsibility' },
-      { source: 'autonomy', target: 'transparency' },
-      { source: 'responsibility', target: 'accountability' },
-      { source: 'ethics', target: 'fairness' },
-    ],
-  };
-};
-
-const nodeColors = {
-  domain: '#4CAF50',
-  concept: '#2196F3',
-  principle: '#FFC107',
-  example: '#9C27B0',
-};
+import React, { useRef, useEffect, useState } from 'react';
+import ForceGraph2D from 'react-force-graph-2d';
+import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 
 const EthicsKnowledgeGraphVisualizer = () => {
-  const svgRef = useRef(null);
-  const [graphData, setGraphData] = useState({ nodes: [], links: [] });
-  const [loading, setLoading] = useState(true);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+    const [graphData, setGraphData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const fgRef = useRef();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchEthicsKnowledgeGraph();
-        setGraphData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching graph data:', error);
-        setLoading(false);
-      }
+    useEffect(() => {
+        fetchGraphData();
+    }, []);
+
+    const fetchGraphData = async () => {
+        try {
+            const response = await fetch('/api/ethics/kg');
+            const data = await response.json();
+            
+            // Transform data into format expected by react-force-graph
+            const nodes = [];
+            const links = [];
+            
+            // Add Ethics Agents
+            data.agents.forEach(agent => {
+                nodes.push({
+                    id: agent.id,
+                    name: agent.name,
+                    type: 'agent',
+                    status: agent.status,
+                    score: agent.ethicalScore,
+                    color: getNodeColor(agent.status)
+                });
+            });
+
+            // Add Ethical Principles
+            data.principles.forEach(principle => {
+                nodes.push({
+                    id: principle.id,
+                    name: principle.name,
+                    type: 'principle',
+                    color: '#4CAF50'  // Green for principles
+                });
+            });
+
+            // Add Relationships
+            data.relationships.forEach(rel => {
+                links.push({
+                    source: rel.source,
+                    target: rel.target,
+                    type: rel.type,
+                    strength: rel.strength
+                });
+            });
+
+            setGraphData({ nodes, links });
+        } catch (err) {
+            console.error('Error fetching graph data:', err);
+            setError('Failed to load Ethics Knowledge Graph data');
+        } finally {
+            setLoading(false);
+        }
     };
-    fetchData();
-  }, []);
 
-  useEffect(() => {
-    if (!loading && graphData.nodes.length > 0) {
-      renderGraph();
-    }
-  }, [graphData, loading]);
+    const getNodeColor = (status) => {
+        switch (status) {
+            case 'EXCELLENT':
+                return '#2196F3';  // Blue
+            case 'GOOD':
+                return '#4CAF50';  // Green
+            case 'ACCEPTABLE':
+                return '#FFC107';  // Amber
+            case 'NEEDS_IMPROVEMENT':
+                return '#FF9800';  // Orange
+            case 'FAILED':
+                return '#F44336';  // Red
+            default:
+                return '#9E9E9E';  // Grey
+        }
+    };
 
-  const renderGraph = () => {
-    const width = 800;
-    const height = 600;
+    const handleNodeClick = (node) => {
+        if (fgRef.current) {
+            // Aim at node from outside
+            const distance = 40;
+            const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
 
-    // Clear existing SVG content
-    d3.select(svgRef.current).selectAll('*').remove();
+            fgRef.current.centerAt(
+                node.x * distRatio,
+                node.y * distRatio,
+                1000
+            );
+            fgRef.current.zoom(2.5, 1000);
+        }
+    };
 
-    const svg = d3.select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height);
-
-    // Create zoom behavior
-    const zoom = d3.zoom()
-      .scaleExtent([0.1, 4])
-      .on('zoom', (event) => {
-        g.attr('transform', event.transform);
-      });
-
-    svg.call(zoom);
-
-    const g = svg.append('g');
-
-    // Create force simulation
-    const simulation = d3.forceSimulation(graphData.nodes)
-      .force('link', d3.forceLink(graphData.links).id(d => d.id).distance(100))
-      .force('charge', d3.forceManyBody().strength(-200))
-      .force('center', d3.forceCenter(width / 2, height / 2));
-
-    // Draw links
-    const links = g.selectAll('.link')
-      .data(graphData.links)
-      .enter()
-      .append('line')
-      .attr('class', 'link')
-      .style('stroke', '#999')
-      .style('stroke-opacity', 0.6)
-      .style('stroke-width', 1);
-
-    // Draw nodes
-    const nodes = g.selectAll('.node')
-      .data(graphData.nodes)
-      .enter()
-      .append('g')
-      .attr('class', 'node')
-      .call(d3.drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended));
-
-    nodes.append('circle')
-      .attr('r', 10)
-      .style('fill', d => nodeColors[d.type])
-      .style('stroke', '#fff')
-      .style('stroke-width', 1.5);
-
-    nodes.append('text')
-      .attr('dx', 12)
-      .attr('dy', '.35em')
-      .text(d => d.label);
-
-    // Add title for hover effect
-    nodes.append('title')
-      .text(d => `${d.label} (${d.type})`);
-
-    // Update positions on each tick
-    simulation.on('tick', () => {
-      links
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
-
-      nodes
-        .attr('transform', d => `translate(${d.x},${d.y})`);
-    });
-
-    // Drag functions
-    function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
     }
 
-    function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
+    if (error) {
+        return (
+            <Box sx={{ my: 2 }}>
+                <Alert severity="error">{error}</Alert>
+            </Box>
+        );
     }
 
-    function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
-  };
-
-  const handleSearch = () => {
-    if (!searchTerm) return;
-    const node = graphData.nodes.find(n => 
-      n.label.toLowerCase().includes(searchTerm.toLowerCase())
+    return (
+        <Box>
+            <Typography variant="h6" gutterBottom>
+                Ethics Knowledge Graph Visualization
+            </Typography>
+            <Box sx={{ height: '600px', border: '1px solid #ddd', borderRadius: '4px' }}>
+                {graphData && (
+                    <ForceGraph2D
+                        ref={fgRef}
+                        graphData={graphData}
+                        nodeLabel="name"
+                        nodeColor={node => node.color}
+                        nodeRelSize={6}
+                        linkWidth={link => link.strength}
+                        linkColor={() => '#999'}
+                        onNodeClick={handleNodeClick}
+                        cooldownTicks={100}
+                        linkDirectionalParticles={2}
+                        linkDirectionalParticleSpeed={0.005}
+                    />
+                )}
+            </Box>
+        </Box>
     );
-    setSelectedNode(node || null);
-  };
-
-  return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-        <TextField
-          label="Search nodes"
-          variant="outlined"
-          size="small"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ mr: 1 }}
-        />
-        <IconButton onClick={handleSearch} color="primary">
-          <SearchIcon />
-        </IconButton>
-      </Box>
-
-      {selectedNode && (
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h6">{selectedNode.label}</Typography>
-          <Typography variant="body2">Type: {selectedNode.type}</Typography>
-        </Paper>
-      )}
-
-      {loading ? (
-        <Typography>Loading graph...</Typography>
-      ) : (
-        <svg ref={svgRef} style={{ border: '1px solid #ccc' }} />
-      )}
-    </Box>
-  );
 };
 
 export default EthicsKnowledgeGraphVisualizer; 
