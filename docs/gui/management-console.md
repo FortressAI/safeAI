@@ -1,308 +1,447 @@
-# SafeAI Management Console: A Beginner's Guide
+# SafeAI Management Console Guide
 
-## What is the SafeAI Management Console?
+![Management Console](https://safeaicoin.com/images/management-console-header.png)
 
-The SafeAI Management Console is a user-friendly web application that lets you interact with the SafeAI platform. Think of it as a control center where you can:
+## Introduction
 
-- Create and manage AI agents
-- Check if your AI systems are behaving ethically
-- Store and organize knowledge in specialized databases (Knowledge Graphs)
-- Keep track of security issues
-- Publish content in a decentralized way
+The SafeAI Management Console is the central hub for interacting with, monitoring, and managing all aspects of the SafeAI platform. This comprehensive guide will walk you through the Management Console's features, with detailed explanations and step-by-step instructions designed for users new to the Agentic Knowledge Graph ecosystem.
 
-This guide will help you understand how to use the Management Console, even if you're new to SafeAI or blockchain technology.
+## Accessing the Management Console
 
-![SafeAI Management Console Dashboard](../images/dashboard-overview.png)
-*The SafeAI Management Console dashboard showing system health, active agents, and recent activity*
+To access the Management Console:
 
-## Getting Started
+1. Navigate to [console.safeAIcoin.com](https://console.safeAIcoin.com) in your web browser
+2. Click the "Connect Wallet" button in the upper right corner
+3. Select your wallet provider (MetaMask, WalletConnect, etc.)
+4. Approve the connection request
+5. You will be logged in and redirected to the Dashboard
 
-### How to Access the Console
+![Login Screen](https://safeaicoin.com/images/management-console-login.png)
 
-1. Open your web browser and navigate to your SafeAI installation URL
-2. Connect your digital wallet (like MetaMask) by clicking "Connect Wallet" in the upper right corner
-3. Once connected, you'll see your address and account balance in the navigation bar
+## User Interface Overview
 
-![Connecting your wallet](../images/wallet-connection.png)
-*The wallet connection process showing the MetaMask popup*
+The Management Console features a modern, intuitive interface designed for ease of use:
 
-### Understanding the Interface
+![Console Overview](https://safeaicoin.com/images/console-overview.png)
 
-The console has a navigation sidebar with these main sections:
+### Key Interface Elements
 
-- **Dashboard**: Overview of your system
-- **Knowledge Graphs**: Manage different types of knowledge databases
-- **Agent Workshop**: Create and manage AI agents
-- **Security Center**: Monitor and address security concerns
-- **Settings**: Configure your account and system preferences
+1. **Main Navigation** - Left sidebar for accessing major platform sections
+2. **Top Bar** - Account information, notifications, and global actions
+3. **Content Area** - Main workspace that changes based on selected section
+4. **Action Bar** - Contextual actions for the current view
+5. **Status Panel** - System health and important metrics
 
-## Working with Knowledge Graphs
+## Dashboard
 
-Knowledge Graphs are specialized databases that store information in a way that shows relationships between different pieces of data. The SafeAI platform uses several types of Knowledge Graphs:
+The Dashboard provides a high-level overview of your SafeAI ecosystem:
 
-### Ethics Knowledge Graph
+![Dashboard](https://safeaicoin.com/images/dashboard.png)
 
-**What it does**: Helps ensure your AI agents behave ethically by storing ethical principles and evaluation criteria.
+### Dashboard Components
 
-**Common tasks**:
+1. **System Health** - Real-time status of all system components
+2. **Agent Overview** - Summary of active and inactive agents
+3. **Recent Activity** - Latest system events and transactions
+4. **Resource Usage** - Current and historical resource consumption
+5. **Security Status** - Overall security posture and recent alerts
+6. **Quick Actions** - Shortcuts to common tasks
 
-1. **Auditing an Agent for Ethical Compliance**:
-   - Navigate to Knowledge Graphs → Ethics KG
-   - Click "Audit Agent"
-   - Select the agent from the dropdown menu
-   - Click "Start Audit"
-   - Review the results, including overall score and recommendations
+### Customizing Your Dashboard
 
-![Ethics Audit Process](../images/ethics-audit.png)
-*The ethics audit interface showing audit results for an agent*
+To personalize your dashboard:
 
-2. **Viewing Ethical Principles**:
-   - Navigate to Knowledge Graphs → Ethics KG → Principles
-   - Browse the list of ethical frameworks and principles
-   - Click on any principle to see detailed information
+1. Click the "Customize" button in the upper right corner
+2. Drag and drop widgets to rearrange them
+3. Click the "+" button to add new widgets
+4. Remove widgets by clicking the "X" in their upper right corner
+5. Click "Save Layout" when you're satisfied with the arrangement
 
-### CyberSecurity Knowledge Graph
+## Knowledge Graph Explorer
 
-**What it does**: Keeps track of security vulnerabilities, incidents, and best practices to help protect your AI systems.
+The Knowledge Graph Explorer provides a visual interface for exploring and manipulating knowledge graphs:
 
-**Common tasks**:
+![Knowledge Graph Explorer](https://safeaicoin.com/images/kg-explorer.png)
 
-1. **Adding a New Security Vulnerability**:
-   - Navigate to Knowledge Graphs → CyberSecurity KG → Vulnerabilities
-   - Click "Add Vulnerability"
-   - Fill in the details (name, description, severity, etc.)
-   - Click "Save"
+### Exploring Knowledge Graphs
 
-2. **Viewing Security Incidents**:
-   - Navigate to Knowledge Graphs → CyberSecurity KG → Incidents
-   - Browse the list of recorded incidents
-   - Filter by date, severity, or status
-   - Click on any incident to see detailed information
+1. Select a knowledge graph from the dropdown menu
+2. Use the search bar to find specific nodes or relationships
+3. Click on nodes to view their properties and connections
+4. Use the filter panel to show/hide specific node or relationship types
+5. Zoom and pan to navigate complex graphs
 
-### Math Knowledge Graph
+### Interacting with Graph Elements
 
-**What it does**: Organizes mathematical concepts, problems, and proofs to help AI agents with mathematical reasoning.
+To work with graph elements:
 
-**Common tasks**:
+1. **View Node Details** - Click on a node to see its properties in the sidebar
+2. **Expand Node** - Double-click a node to show its connections
+3. **Edit Properties** - Select a node and click "Edit" in the properties panel
+4. **Add Relationship** - Select two nodes and click "Create Relationship"
+5. **Delete Element** - Select an element and press Delete or click the trash icon
 
-1. **Adding a Mathematical Concept**:
-   - Navigate to Knowledge Graphs → Math KG → Concepts
-   - Click "Add Concept"
-   - Fill in the details (name, description, category, etc.)
-   - Add relationships to other concepts if needed
-   - Click "Save"
+### Running Queries
 
-2. **Browsing Math Problems**:
-   - Navigate to Knowledge Graphs → Math KG → Problems
-   - Browse the list of problems
-   - Filter by difficulty, category, or status
-   - Click on any problem to see detailed information
+To query the knowledge graph:
 
-## Creating and Managing AI Agents
+1. Click the "Query" tab in the top bar
+2. Enter your Cypher query in the query editor
+3. Click "Run" to execute the query
+4. View the results in the table or graph visualization
+5. Save frequently used queries by clicking "Save Query"
 
-The Agent Workshop lets you create, configure, and monitor AI agents.
+## Agent Management
 
-### Creating a New Agent
+The Agent Management section allows you to create, monitor, and manage AI agents:
 
-1. Navigate to Agent Workshop → Create Agent
-2. Provide basic information:
-   - Name: A unique name for your agent
-   - Description: What the agent does
-   - Purpose: The agent's main goal
-3. Select capabilities (what the agent can do):
-   - Natural Language Processing
-   - Mathematical Reasoning
-   - Ethical Decision Making
-   - etc.
-4. Configure Knowledge Graph access:
-   - Select which Knowledge Graphs the agent can access
-   - Set permission levels (read, write, admin)
-5. Click "Create Agent"
+![Agent Management](https://safeaicoin.com/images/agent-management.png)
 
-![Agent Creation Process](../images/create-agent.png)
-*The agent creation interface showing capability selection*
+### Agent Browser
 
-### Monitoring Agent Performance
+The Agent Browser provides a list of all your agents with key information:
 
-1. Navigate to Agent Workshop → My Agents
-2. Select an agent from the list
-3. Review the performance dashboard:
-   - Usage statistics
-   - Success rate
+1. Agent name and description
+2. Current status (Active, Inactive, Error)
+3. Resource usage
+4. Last activity timestamp
+5. Quick action buttons
+
+### Agent Details
+
+To view detailed information about an agent:
+
+1. Click on an agent in the Agent Browser
+2. The Agent Details panel will display:
+   - Configuration summary
+   - Performance metrics
+   - Capability list
+   - Interaction history
+   - Security status
+
+### Common Agent Actions
+
+#### Starting and Stopping Agents
+
+1. Find the agent in the Agent Browser
+2. Click the "Start/Stop" toggle switch
+3. Confirm the action in the dialog
+
+#### Monitoring Agent Performance
+
+1. Select an agent in the Agent Browser
+2. Click the "Metrics" tab
+3. View performance graphs for:
    - Response time
-   - Ethical compliance score
+   - Success rate
+   - Resource usage
+   - Query volume
 
-### Improving an Agent
+#### Agent Interaction
 
-1. Navigate to Agent Workshop → My Agents
-2. Select an agent from the list
-3. Click "Train Agent"
-4. Upload training data or use the interactive training interface
-5. Monitor progress and results
+1. Select an agent in the Agent Browser
+2. Click the "Interact" button
+3. Use the interaction panel to:
+   - Send commands or queries
+   - View agent responses
+   - Test specific capabilities
+   - Simulate various scenarios
 
-## Understanding Blockchain Integration
+## Security Center
 
-The SafeAI platform uses blockchain technology to ensure transparency, security, and decentralization. Here's what you need to know:
+The Security Center provides comprehensive tools for monitoring and managing security:
 
-### What is a Wallet?
+![Security Center](https://safeaicoin.com/images/security-center.png)
 
-A digital wallet (like MetaMask) stores your digital identity and allows you to interact with blockchain applications. In the SafeAI platform, your wallet:
+### Security Dashboard
 
-- Authenticates you (proves who you are)
-- Signs transactions (confirms your actions)
-- Stores tokens that may be needed for certain operations
+The Security Dashboard shows:
 
-### Connecting Your Wallet
+1. Overall security score
+2. Identified vulnerabilities
+3. Compliance status
+4. Recent security events
+5. Upcoming security tasks
 
-1. Click "Connect Wallet" in the upper right corner
-2. Select your wallet provider (MetaMask, etc.)
-3. Approve the connection request in your wallet
-4. Your address will appear in the navigation bar
+### Security Scans
 
-### Understanding Transactions
+To run a security scan:
 
-When you perform certain actions in the SafeAI platform (like creating an agent or adding knowledge), you'll need to approve a transaction:
+1. Click "New Scan" in the Security Center
+2. Select the scan type:
+   - Vulnerability Assessment
+   - Configuration Audit
+   - Compliance Check
+   - Penetration Test
+3. Choose the target (system-wide or specific component)
+4. Click "Start Scan"
+5. View results when the scan completes
 
-1. The platform will show a transaction preview
-2. Click "Submit" to proceed
-3. Your wallet will ask you to confirm the transaction
-4. Once confirmed, the transaction will be processed
-5. Wait for the confirmation (this may take a few seconds)
+### Security Policies
 
-![Transaction Process](../images/transaction-confirmation.png)
-*The transaction confirmation process showing the MetaMask approval dialog*
+To manage security policies:
 
-## Decentralized Storage with IPFS
+1. Navigate to the "Policies" tab
+2. View existing policies or create new ones
+3. Configure policy settings:
+   - Access controls
+   - Password requirements
+   - Network restrictions
+   - Data handling rules
+4. Click "Apply Policy" to enforce changes
 
-The SafeAI platform uses IPFS (InterPlanetary File System) to store content in a decentralized way.
+### Audit Logs
 
-### What is IPFS?
+To review audit logs:
 
-IPFS is a system for storing and sharing files across a distributed network, rather than on a single server. This makes the content:
+1. Navigate to the "Audit" tab
+2. Use filters to narrow down the log entries
+3. View detailed information about each event
+4. Export logs for external analysis
+5. Configure alerting for specific event types
 
-- Resilient (available even if some computers go offline)
-- Censorship-resistant (difficult to block or remove)
-- Verifiable (you can confirm the content hasn't been tampered with)
+## Blockchain Integration
 
-### Uploading Content to IPFS
+The Blockchain section provides tools for managing SafeAI's blockchain features:
 
-1. Navigate to the appropriate section (depends on what you're uploading)
-2. Click "Upload" or "Add File"
-3. Select the file from your computer
-4. Wait for the upload to complete
-5. The system will display an IPFS hash (a unique identifier for your content)
+![Blockchain Integration](https://safeaicoin.com/images/blockchain-section.png)
 
-### Viewing IPFS Content
+### Wallet Management
 
-1. Navigate to the section containing your content
-2. Click on the content to view it
-3. If you want to view it directly on IPFS, click the IPFS icon next to the content
+To manage your wallet:
 
-## Common Tasks Guide
+1. Click on your wallet address in the top bar
+2. View your SafeAI Coin (SAFE) balance
+3. Send or receive tokens
+4. View transaction history
+5. Manage connected wallets
 
-### Task 1: Auditing an Agent for Ethical Compliance
+### Token Operations
 
-1. Navigate to Knowledge Graphs → Ethics KG
-2. Click "Audit Agent"
-3. Select the agent from the dropdown menu
-4. Click "Start Audit"
-5. Review the results:
-   - Overall ethical score
-   - Category-by-category breakdown
-   - Critical issues (if any)
-   - Recommendations for improvement
-6. Click "Generate Report" to create a downloadable report
-7. Apply recommended labels by clicking "Apply Labels"
+To perform token operations:
 
-### Task 2: Adding a Security Vulnerability
+1. Navigate to the "Tokens" tab
+2. View your token balances
+3. Use the "Send" button to transfer tokens
+4. Use the "Receive" button to get your deposit address
+5. View token transaction history
 
-1. Navigate to Knowledge Graphs → CyberSecurity KG → Vulnerabilities
-2. Click "Add Vulnerability"
-3. Fill in the details:
-   - Name: A descriptive name for the vulnerability
-   - Description: Detailed explanation
-   - Severity: How serious the vulnerability is (Low, Medium, High, Critical)
-   - Affected Components: Which parts of your system are affected
-   - Status: Current status (Open, In Progress, Resolved)
-   - Mitigation: Steps to address the vulnerability
-4. Click "Save"
+### Smart Contract Interaction
 
-### Task 3: Creating and Configuring an Agent
+To interact with smart contracts:
 
-1. Navigate to Agent Workshop → Create Agent
-2. Provide basic information:
-   - Name: A unique name for your agent
-   - Description: What the agent does
-   - Purpose: The agent's main goal
-3. Select capabilities
-4. Configure Knowledge Graph access
-5. Set resource limits (memory, CPU, etc.)
-6. Click "Create Agent"
-7. Once created, navigate to the agent's detail page
-8. Click "Configure" to adjust settings
-9. Test the agent by clicking "Test Agent" and entering a prompt
+1. Navigate to the "Contracts" tab
+2. Select a contract from the list
+3. View contract details and functions
+4. Call read functions to retrieve information
+5. Execute write functions to modify contract state
+
+### Transaction Monitoring
+
+To monitor blockchain transactions:
+
+1. Navigate to the "Transactions" tab
+2. View pending and completed transactions
+3. Check transaction status and confirmations
+4. View gas usage and fees
+5. Export transaction records
+
+## Settings and Configuration
+
+The Settings section allows you to configure the Management Console and platform:
+
+![Settings](https://safeaicoin.com/images/settings.png)
+
+### User Preferences
+
+To set user preferences:
+
+1. Click on your profile in the top bar
+2. Select "User Preferences"
+3. Configure options:
+   - Theme (Light/Dark)
+   - Language
+   - Time zone
+   - Notification preferences
+   - Dashboard layout
+
+### System Configuration
+
+To configure system settings (admin only):
+
+1. Navigate to the "System" tab in Settings
+2. Configure options:
+   - Resource allocation
+   - Default policies
+   - Integration settings
+   - Backup frequency
+   - Performance tuning
+
+### API Access
+
+To manage API access:
+
+1. Navigate to the "API" tab in Settings
+2. Generate or revoke API keys
+3. Set API usage limits
+4. Configure authentication methods
+5. View API usage statistics
+
+## Customization Features
+
+### Creating Custom Dashboards
+
+To create a custom dashboard:
+
+1. Click "Dashboards" in the main navigation
+2. Click "Create New Dashboard"
+3. Give your dashboard a name and description
+4. Add widgets from the widget gallery
+5. Arrange widgets as desired
+6. Click "Save Dashboard"
+
+### Saved Queries
+
+To save and manage frequently used queries:
+
+1. Click "Saved Queries" in the Knowledge Graph Explorer
+2. Click "New Query" to create a new saved query
+3. Enter a name, description, and the query text
+4. Set sharing permissions
+5. Click "Save"
+
+### Custom Reports
+
+To create custom reports:
+
+1. Navigate to the "Reports" section
+2. Click "Create New Report"
+3. Select data sources for the report
+4. Configure visualization options
+5. Set up scheduled generation if desired
+6. Click "Save Report"
+
+## Advanced Features
+
+### Batch Operations
+
+To perform operations on multiple items:
+
+1. Use checkboxes to select multiple items in any list
+2. Use the "Actions" dropdown to select an operation
+3. Configure operation parameters in the dialog
+4. Click "Apply" to execute the operation
+
+### Import/Export Functionality
+
+To import or export data:
+
+1. Navigate to the relevant section
+2. Click the "Import/Export" button
+3. Select "Import" or "Export"
+4. For imports, select a file and mapping options
+5. For exports, select format and content options
+6. Click "Begin" to start the process
+
+### Automation
+
+To set up automated tasks:
+
+1. Navigate to the "Automation" section
+2. Click "Create New Automation"
+3. Configure trigger conditions
+4. Define actions to perform
+5. Set schedule or event triggers
+6. Enable the automation
 
 ## Troubleshooting
 
-### Common Issues and Solutions
+### Common Issues
 
-#### Wallet Connection Issues
+#### Login Problems
 
-**Problem**: Can't connect your wallet or wallet keeps disconnecting.
+**Issue**: Unable to connect wallet  
+**Solution**: 
+1. Ensure your wallet is unlocked
+2. Check if you're on the correct network
+3. Try a different browser or clear your cache
 
+#### Performance Issues
+
+**Issue**: Management Console is slow or unresponsive  
 **Solution**:
-1. Make sure your wallet extension is installed and updated
-2. Try refreshing the page
-3. Ensure you're on the correct network in your wallet settings
-4. Clear browser cache and try again
+1. Close unused tabs or sections
+2. Reduce the size of data sets being visualized
+3. Check your network connection
+4. Try disabling complex visualizations
 
-#### Transaction Failures
+#### Data Visualization Problems
 
-**Problem**: Transactions fail or get stuck.
-
+**Issue**: Knowledge graph visualization not loading  
 **Solution**:
-1. Check that you have enough funds for gas fees
-2. Ensure you're on the correct network
-3. Try increasing the gas limit/price
-4. If a transaction is stuck, you may need to "speed up" or "cancel" it from your wallet
+1. Reduce the query result size
+2. Use filters to limit the displayed nodes
+3. Try switching to table view temporarily
+4. Check browser console for specific errors
 
-#### Content Not Loading
+## Best Practices
 
-**Problem**: IPFS content doesn't load or takes too long.
+### Effective Dashboard Organization
 
-**Solution**:
-1. Check your internet connection
-2. Try a different IPFS gateway by clicking the gateway selector
-3. Refresh the page
-4. If the content was recently added, it may still be propagating through the network
+1. Prioritize critical information at the top
+2. Group related metrics together
+3. Use color coding consistently
+4. Include actionable insights, not just raw data
+5. Review and update regularly
 
-## Glossary of Terms
+### Security Management
 
-- **Agent**: An AI system designed to perform specific tasks
-- **Blockchain**: A distributed ledger technology that records transactions across multiple computers
-- **Ethical Audit**: The process of evaluating an AI agent against ethical principles
-- **Gas Fees**: Small amounts of cryptocurrency required to perform transactions on a blockchain
-- **IPFS**: InterPlanetary File System, a protocol for storing and sharing data in a distributed file system
-- **Knowledge Graph**: A specialized database that shows relationships between data points
-- **MetaMask**: A popular cryptocurrency wallet that works as a browser extension
-- **Smart Contract**: Self-executing code that runs on a blockchain
-- **Token**: A digital asset on a blockchain that can represent value or access rights
-- **Wallet**: Software that stores private keys and allows interactions with blockchain applications
+1. Review audit logs regularly
+2. Run security scans on a schedule
+3. Implement the principle of least privilege
+4. Enable two-factor authentication
+5. Keep all components updated
+
+### Knowledge Graph Maintenance
+
+1. Regularly review and clean up unused nodes
+2. Maintain consistent naming conventions
+3. Document graph schema changes
+4. Back up knowledge graphs regularly
+5. Test complex queries on small data sets first
 
 ## Getting Help
 
-If you need additional assistance:
+### Documentation Resources
 
-- Click the "Help" icon in the lower left corner of the console
-- Visit the [SafeAI Community Forums](https://github.com/FortressAI/safeAI/discussions)
-- Check the [Video Tutorials](https://www.youtube.com/c/SafeAI) for step-by-step guidance
-- Contact support at support@safeai.org
+- [Complete API Reference](https://docs.safeAIcoin.com/api)
+- [Knowledge Base](https://safeAIcoin.com/knowledge-base)
+- [Video Tutorials](https://safeAIcoin.com/tutorials)
+- [Community Forums](https://community.safeAIcoin.com)
 
-## Next Steps
+### Support Options
 
-Now that you're familiar with the basics of the SafeAI Management Console, you might want to:
+- **Community Support**: Post questions on the community forum
+- **Email Support**: Contact support@safeAIcoin.com
+- **Live Chat**: Available during business hours
+- **Premium Support**: Available for enterprise customers
 
-1. Explore the [Advanced User Guide](./advanced-guide.md) for more complex operations
-2. Learn about [Cypher queries](../cypher/queries.md) for advanced knowledge graph interactions
-3. Understand [node creation](../cypher/nodes.md) and [relationships](../cypher/relationships.md) in the knowledge graph
-4. Explore the [API Documentation](../api/overview.md) for programmatic access 
+## Upcoming Features
+
+Stay tuned for these upcoming Management Console features:
+
+- Advanced visualization options
+- Enhanced collaboration tools
+- Mobile application support
+- Expanded AI assistant capabilities
+- Integration with additional blockchain networks
+
+## Glossary
+
+- **Agent**: An autonomous software entity that performs tasks using the knowledge graph
+- **Capability**: A specific function an agent can perform
+- **Knowledge Graph (KG)**: A structured database that represents information as a network of interconnected entities
+- **Node**: An entity in the knowledge graph
+- **Relationship**: A connection between two nodes
+- **Cypher**: The query language used to interact with the knowledge graph
+- **SafeAI Coin (SAFE)**: The native utility token of the SafeAI platform 
