@@ -6,46 +6,52 @@ breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README
 ## Overview
 This document provides detailed documentation for all UI components in the SafeAI platform, including their usage, props, and examples.
 
+## Component Hierarchy
+
+The following diagram illustrates the hierarchical relationship between different UI components:
+
+![UI Component Hierarchy](../images/ui-component-hierarchy.svg)
+
+## Layout Structure
+
+The main layout structure of the application is shown below:
+
+![UI Layout Structure](../images/ui-layout-structure.svg)
+
 ## Core Components
 
+### MainLayout
+The main layout component that provides the basic structure for the application.
+
+```typescript
+interface MainLayoutProps {
+  children: React.ReactNode;
+  header?: React.ReactNode;
+  sidebar?: React.ReactNode;
+  footer?: React.ReactNode;
+}
+```
+
 ### AgentWorkspace
-The main workspace component for agent interaction and management.
+The primary workspace for agent management and interaction.
 
 ```typescript
 interface AgentWorkspaceProps {
-  agentId: string;
-  onAgentSelect: (agent: Agent) => void;
-  onAgentUpdate: (agent: Agent) => void;
+  agent: Agent;
+  onUpdate: (agent: Agent) => void;
+  onDelete: (agentId: string) => void;
 }
-```
-
-#### Usage
-```typescript
-<AgentWorkspace
-  agentId="agent-123"
-  onAgentSelect={(agent) => handleAgentSelect(agent)}
-  onAgentUpdate={(agent) => handleAgentUpdate(agent)}
-/>
 ```
 
 ### KnowledgeGraphViewer
-Component for visualizing and interacting with the knowledge graph.
+Component for visualizing and interacting with the agentic knowledge graph.
 
 ```typescript
 interface KnowledgeGraphViewerProps {
-  graphData: GraphData;
-  onNodeSelect: (node: GraphNode) => void;
-  onEdgeSelect: (edge: GraphEdge) => void;
+  graph: KnowledgeGraph;
+  onNodeClick: (nodeId: string) => void;
+  onEdgeClick: (edgeId: string) => void;
 }
-```
-
-#### Usage
-```typescript
-<KnowledgeGraphViewer
-  graphData={graphData}
-  onNodeSelect={(node) => handleNodeSelect(node)}
-  onEdgeSelect={(edge) => handleEdgeSelect(edge)}
-/>
 ```
 
 ### ContentPublisher
@@ -114,15 +120,20 @@ interface CardProps {
 
 ## Form Components
 
+The form components available in the platform are shown in the following diagram:
+
+![UI Form Components](../images/ui-form-components.svg)
+
 ### Input
-A reusable input component with various styles and states.
+A versatile input component supporting various input types.
 
 ```typescript
 interface InputProps {
-  label: string;
+  type: 'text' | 'password' | 'email' | 'number';
   value: string;
   onChange: (value: string) => void;
-  type?: 'text' | 'password' | 'email';
+  placeholder?: string;
+  label?: string;
   error?: string;
 }
 ```
@@ -138,7 +149,7 @@ interface InputProps {
 ```
 
 ### Button
-A versatile button component with multiple variants.
+Button component with multiple variants and states.
 
 ```typescript
 interface ButtonProps {
@@ -146,6 +157,7 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   loading?: boolean;
+  children: React.ReactNode;
 }
 ```
 
@@ -162,6 +174,10 @@ interface ButtonProps {
 
 ## Data Display Components
 
+The data display components and their relationships are shown below:
+
+![UI Data Display](../images/ui-data-display.svg)
+
 ### Table
 A flexible table component for displaying structured data.
 
@@ -169,7 +185,9 @@ A flexible table component for displaying structured data.
 interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
-  onRowSelect?: (row: T) => void;
+  onRowClick?: (row: T) => void;
+  sortable?: boolean;
+  pagination?: PaginationProps;
 }
 ```
 
@@ -178,12 +196,12 @@ interface TableProps<T> {
 <Table
   data={agents}
   columns={agentColumns}
-  onRowSelect={(agent) => handleAgentSelect(agent)}
+  onRowClick={(agent) => handleAgentSelect(agent)}
 />
 ```
 
 ### Chart
-A component for displaying various types of charts and graphs.
+Component for visualizing data using various chart types.
 
 ```typescript
 interface ChartProps {
@@ -205,7 +223,7 @@ interface ChartProps {
 ## Navigation Components
 
 ### Breadcrumb
-A navigation component showing the current location in the hierarchy.
+Shows the current location in the application hierarchy.
 
 ```typescript
 interface BreadcrumbProps {
@@ -223,7 +241,7 @@ interface BreadcrumbProps {
 ```
 
 ### Tabs
-A component for organizing content into tabs.
+Tab navigation component for organizing content.
 
 ```typescript
 interface TabsProps {
@@ -248,13 +266,14 @@ interface TabsProps {
 ## Feedback Components
 
 ### Toast
-A notification component for displaying temporary messages.
+Notification component for displaying temporary messages.
 
 ```typescript
 interface ToastProps {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
+  onClose: () => void;
 }
 ```
 
@@ -268,7 +287,7 @@ interface ToastProps {
 ```
 
 ### Modal
-A dialog component for displaying important information or actions.
+Dialog component for displaying important information or collecting user input.
 
 ```typescript
 interface ModalProps {
@@ -276,6 +295,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  footer?: React.ReactNode;
 }
 ```
 
@@ -292,24 +312,31 @@ interface ModalProps {
 
 ## Best Practices
 
-### Component Usage
-1. Always provide proper TypeScript types for props
-2. Include error handling and loading states
-3. Follow accessibility guidelines
-4. Implement proper event handling
-5. Use consistent naming conventions
+1. **Component Composition**
+   - Use composition over inheritance
+   - Break down complex components into smaller, reusable pieces
+   - Keep components focused on a single responsibility
 
-### Performance
-1. Implement proper memoization
-2. Use lazy loading for heavy components
-3. Optimize re-renders
-4. Follow React best practices
+2. **State Management**
+   - Use local state for component-specific data
+   - Implement Redux for global state management
+   - Keep state as close as possible to where it's used
 
-### Accessibility
-1. Include proper ARIA labels
-2. Ensure keyboard navigation
-3. Maintain proper focus management
-4. Support screen readers
+3. **Performance**
+   - Implement React.memo for expensive renders
+   - Use useCallback and useMemo for optimization
+   - Lazy load components when possible
+
+4. **Accessibility**
+   - Include ARIA labels and roles
+   - Ensure keyboard navigation works
+   - Maintain sufficient color contrast
+   - Provide alternative text for images
+
+5. **Testing**
+   - Write unit tests for components
+   - Include integration tests for complex interactions
+   - Test edge cases and error states
 
 ## Support
 For component-related questions or issues:
