@@ -1,179 +1,308 @@
-# SafeAI Management Console
+# SafeAI Management Console: A Beginner's Guide
 
-## Overview
+## What is the SafeAI Management Console?
 
-The SafeAI Management Console is a modern web interface designed to provide a user-friendly way to interact with the SafeAI ecosystem. It combines advanced blockchain integration with intuitive UI components to manage Knowledge Graphs (KGs), create and monitor agents, ensure ethical compliance, and leverage decentralized storage capabilities.
+The SafeAI Management Console is a user-friendly web application that lets you interact with the SafeAI platform. Think of it as a control center where you can:
 
-This document provides an overview of the Management Console's architecture, functionality, and integration points with the rest of the SafeAI ecosystem.
+- Create and manage AI agents
+- Check if your AI systems are behaving ethically
+- Store and organize knowledge in specialized databases (Knowledge Graphs)
+- Keep track of security issues
+- Publish content in a decentralized way
 
-## Architecture
+This guide will help you understand how to use the Management Console, even if you're new to SafeAI or blockchain technology.
 
-The Management Console follows a modular architecture to provide a comprehensive interface to the SafeAI ecosystem:
+![SafeAI Management Console Dashboard](../images/dashboard-overview.png)
+*The SafeAI Management Console dashboard showing system health, active agents, and recent activity*
 
-### Frontend Components
+## Getting Started
 
-- **React-based UI**: Modern, responsive user interface built with React
-- **Material-UI**: Component library for consistent visual design
-- **Web3 Integration**: Seamless connection to blockchain networks
-- **IPFS Integration**: Decentralized content storage and retrieval
-- **Visualization Tools**: Visual representation of knowledge graphs
+### How to Access the Console
 
-### Backend Integration
+1. Open your web browser and navigate to your SafeAI installation URL
+2. Connect your digital wallet (like MetaMask) by clicking "Connect Wallet" in the upper right corner
+3. Once connected, you'll see your address and account balance in the navigation bar
 
-- **Blockchain Contracts**: Smart contracts for Knowledge Graph management
-- **Neo4j Plugin API**: Direct interaction with the SafeAI Neo4j plugin
-- **Authentication**: Secure access control with wallet-based authentication
-- **Configuration Management**: Centralized configuration for all components
+![Connecting your wallet](../images/wallet-connection.png)
+*The wallet connection process showing the MetaMask popup*
 
-## Key Modules
+### Understanding the Interface
 
-### Dashboard
+The console has a navigation sidebar with these main sections:
 
-The Dashboard provides an overview of the SafeAI ecosystem:
+- **Dashboard**: Overview of your system
+- **Knowledge Graphs**: Manage different types of knowledge databases
+- **Agent Workshop**: Create and manage AI agents
+- **Security Center**: Monitor and address security concerns
+- **Settings**: Configure your account and system preferences
 
-- **System Health Monitoring**: Status of all connected services
-- **Agent Statistics**: Active agents and their performance metrics
-- **Recent Activity**: Timeline of recent interactions
-- **Security Status**: Current security posture and alerts
-- **Network Status**: Blockchain and IPFS connection information
+## Working with Knowledge Graphs
 
-### Knowledge Graph Management
+Knowledge Graphs are specialized databases that store information in a way that shows relationships between different pieces of data. The SafeAI platform uses several types of Knowledge Graphs:
 
-#### Ethics Knowledge Graph
+### Ethics Knowledge Graph
 
-- **Agent Auditing**: Evaluate agents against ethical frameworks
-- **Ethical Principles Management**: Define and manage ethical guidelines
-- **Compliance Tracking**: Monitor agent ethical compliance
-- **Ethical Labeling**: Apply ethical labels to agents
+**What it does**: Helps ensure your AI agents behave ethically by storing ethical principles and evaluation criteria.
 
-#### CyberSecurity Knowledge Graph
+**Common tasks**:
 
-- **Vulnerability Management**: Track and mitigate security vulnerabilities
-- **Incident Response**: Record and analyze security incidents
-- **CVE Integration**: Link to Common Vulnerabilities and Exposures
-- **Security Posture Assessment**: Evaluate system security status
+1. **Auditing an Agent for Ethical Compliance**:
+   - Navigate to Knowledge Graphs → Ethics KG
+   - Click "Audit Agent"
+   - Select the agent from the dropdown menu
+   - Click "Start Audit"
+   - Review the results, including overall score and recommendations
 
-#### Math Knowledge Graph
+![Ethics Audit Process](../images/ethics-audit.png)
+*The ethics audit interface showing audit results for an agent*
 
-- **Mathematical Concept Organization**: Structured representation of math concepts
-- **Problem Repository**: Collection of mathematical problems
-- **Proof Library**: Documentation of mathematical proofs
-- **Visualization**: Visual representation of concept relationships
+2. **Viewing Ethical Principles**:
+   - Navigate to Knowledge Graphs → Ethics KG → Principles
+   - Browse the list of ethical frameworks and principles
+   - Click on any principle to see detailed information
 
-#### FreePress Decentralized News
+### CyberSecurity Knowledge Graph
 
-- **Decentralized Publishing**: IPFS-based content publishing
-- **Content Licensing**: Manage access to published content
-- **Author Verification**: Blockchain-based authorship verification
-- **Decentralized Comments**: Engage with readers on the blockchain
+**What it does**: Keeps track of security vulnerabilities, incidents, and best practices to help protect your AI systems.
 
-### Agent Workshop
+**Common tasks**:
 
-- **Agent Creation**: Create new AI agents using natural language
-- **Capability Management**: Add and remove agent capabilities
-- **Performance Monitoring**: Track agent effectiveness
-- **Training Interface**: Improve agent performance
-- **Agent Marketplace**: Share and discover agents
+1. **Adding a New Security Vulnerability**:
+   - Navigate to Knowledge Graphs → CyberSecurity KG → Vulnerabilities
+   - Click "Add Vulnerability"
+   - Fill in the details (name, description, severity, etc.)
+   - Click "Save"
 
-### Security Center
+2. **Viewing Security Incidents**:
+   - Navigate to Knowledge Graphs → CyberSecurity KG → Incidents
+   - Browse the list of recorded incidents
+   - Filter by date, severity, or status
+   - Click on any incident to see detailed information
 
-- **Security Monitoring**: Track potential threats
-- **Access Control**: Manage permissions and roles
-- **Audit Logs**: Review system activity
-- **Compliance Verification**: Ensure regulatory compliance
-- **Incident Response Management**: Handle security events
+### Math Knowledge Graph
 
-## Blockchain Integration
+**What it does**: Organizes mathematical concepts, problems, and proofs to help AI agents with mathematical reasoning.
 
-The Management Console features comprehensive blockchain integration:
+**Common tasks**:
 
-### Smart Contracts
+1. **Adding a Mathematical Concept**:
+   - Navigate to Knowledge Graphs → Math KG → Concepts
+   - Click "Add Concept"
+   - Fill in the details (name, description, category, etc.)
+   - Add relationships to other concepts if needed
+   - Click "Save"
 
-- **KnowledgeGraphBase.sol**: Base contract for all knowledge graphs
-- **EthicsKG.sol**: Contract for ethics knowledge graph
-- **CyberSecurityKG.sol**: Contract for cybersecurity knowledge graph
-- **MathKG.sol**: Contract for mathematics knowledge graph
-- **FreePressContract.sol**: Contract for decentralized content publishing
+2. **Browsing Math Problems**:
+   - Navigate to Knowledge Graphs → Math KG → Problems
+   - Browse the list of problems
+   - Filter by difficulty, category, or status
+   - Click on any problem to see detailed information
 
-### Deployment and Interaction
+## Creating and Managing AI Agents
 
-- **Hardhat Integration**: For contract compilation and deployment
-- **Web3/ethers.js**: For blockchain interaction
-- **MetaMask Support**: For wallet connection and transaction signing
-- **Multiple Network Support**: Deploy to Ethereum, Polygon, or SafeAI blockchain
+The Agent Workshop lets you create, configure, and monitor AI agents.
 
-### Custom Blockchain Integration
+### Creating a New Agent
 
-The Management Console supports deployment to the SafeAI custom blockchain (safeAIcoin.com), with specialized features:
+1. Navigate to Agent Workshop → Create Agent
+2. Provide basic information:
+   - Name: A unique name for your agent
+   - Description: What the agent does
+   - Purpose: The agent's main goal
+3. Select capabilities (what the agent can do):
+   - Natural Language Processing
+   - Mathematical Reasoning
+   - Ethical Decision Making
+   - etc.
+4. Configure Knowledge Graph access:
+   - Select which Knowledge Graphs the agent can access
+   - Set permission levels (read, write, admin)
+5. Click "Create Agent"
 
-- **Custom RPC Endpoint**: Connect to SafeAI blockchain nodes
-- **SAI Token Support**: Use native SAI tokens for transactions
-- **Block Explorer Integration**: Track transactions on the SafeAI explorer
-- **Governance Participation**: Vote on platform decisions
+![Agent Creation Process](../images/create-agent.png)
+*The agent creation interface showing capability selection*
 
-## IPFS Integration
+### Monitoring Agent Performance
 
-The console leverages the InterPlanetary File System (IPFS) for decentralized storage:
+1. Navigate to Agent Workshop → My Agents
+2. Select an agent from the list
+3. Review the performance dashboard:
+   - Usage statistics
+   - Success rate
+   - Response time
+   - Ethical compliance score
 
-- **Content Upload**: Store documents, images, and multimedia
-- **Pinning Services**: Ensure content persistence
-- **Gateway Integration**: Access content through multiple gateways
-- **Metadata Management**: Store and retrieve content metadata
+### Improving an Agent
 
-## Deployment Options
+1. Navigate to Agent Workshop → My Agents
+2. Select an agent from the list
+3. Click "Train Agent"
+4. Upload training data or use the interactive training interface
+5. Monitor progress and results
 
-The Management Console supports multiple deployment options:
+## Understanding Blockchain Integration
 
-### Local Development
+The SafeAI platform uses blockchain technology to ensure transparency, security, and decentralization. Here's what you need to know:
 
-- Run the development server for local testing
-- Connect to local blockchain nodes
-- Develop and test new features
+### What is a Wallet?
 
-### AWS Deployment
+A digital wallet (like MetaMask) stores your digital identity and allows you to interact with blockchain applications. In the SafeAI platform, your wallet:
 
-- Deploy to Amazon S3 for static hosting
-- Use CloudFront for content delivery
-- Configure secure access with IAM
-- Set up CI/CD pipelines
+- Authenticates you (proves who you are)
+- Signs transactions (confirms your actions)
+- Stores tokens that may be needed for certain operations
 
-### Custom Hosting
+### Connecting Your Wallet
 
-- Deploy to any web server supporting static files
-- Configure for domain-specific hosting
-- Implement SSL/TLS for secure connections
+1. Click "Connect Wallet" in the upper right corner
+2. Select your wallet provider (MetaMask, etc.)
+3. Approve the connection request in your wallet
+4. Your address will appear in the navigation bar
 
-## Integration with Neo4j Plugin
+### Understanding Transactions
 
-The Management Console integrates with the SafeAI Neo4j plugin:
+When you perform certain actions in the SafeAI platform (like creating an agent or adding knowledge), you'll need to approve a transaction:
 
-- **API Communication**: Direct interaction with Neo4j procedures
-- **Agent Synchronization**: Keep agents synchronized between systems
-- **Knowledge Graph Alignment**: Ensure consistency between blockchain and Neo4j
-- **Authentication Sharing**: Unified authentication across platforms
+1. The platform will show a transaction preview
+2. Click "Submit" to proceed
+3. Your wallet will ask you to confirm the transaction
+4. Once confirmed, the transaction will be processed
+5. Wait for the confirmation (this may take a few seconds)
 
-## User Roles and Permissions
+![Transaction Process](../images/transaction-confirmation.png)
+*The transaction confirmation process showing the MetaMask approval dialog*
 
-The console supports different user roles:
+## Decentralized Storage with IPFS
 
-- **Administrators**: Full access to all features
-- **Developers**: Create and manage agents
-- **Auditors**: Review agent ethical compliance
-- **Content Publishers**: Publish to FreePress
-- **Readers**: Access published content
+The SafeAI platform uses IPFS (InterPlanetary File System) to store content in a decentralized way.
 
-## Future Extensions
+### What is IPFS?
 
-Planned enhancements for the Management Console:
+IPFS is a system for storing and sharing files across a distributed network, rather than on a single server. This makes the content:
 
-- **Multi-language Support**: Internationalization for global users
-- **Mobile Application**: Dedicated mobile experience
-- **Analytics Dashboard**: Advanced metrics and insights
-- **Plugin System**: Support for third-party extensions
-- **API Gateway**: Centralized API management
+- Resilient (available even if some computers go offline)
+- Censorship-resistant (difficult to block or remove)
+- Verifiable (you can confirm the content hasn't been tampered with)
 
-## Conclusion
+### Uploading Content to IPFS
 
-The SafeAI Management Console provides a comprehensive interface to the SafeAI ecosystem, combining blockchain-based knowledge graphs with intuitive user interfaces. It enables users to manage agents, ensure ethical compliance, publish content, and leverage the full power of the SafeAI platform in a user-friendly manner.
+1. Navigate to the appropriate section (depends on what you're uploading)
+2. Click "Upload" or "Add File"
+3. Select the file from your computer
+4. Wait for the upload to complete
+5. The system will display an IPFS hash (a unique identifier for your content)
 
-For detailed installation and usage instructions, refer to the [SafeAI Management Console User Manual](../../safeAI-gui/README.md). 
+### Viewing IPFS Content
+
+1. Navigate to the section containing your content
+2. Click on the content to view it
+3. If you want to view it directly on IPFS, click the IPFS icon next to the content
+
+## Common Tasks Guide
+
+### Task 1: Auditing an Agent for Ethical Compliance
+
+1. Navigate to Knowledge Graphs → Ethics KG
+2. Click "Audit Agent"
+3. Select the agent from the dropdown menu
+4. Click "Start Audit"
+5. Review the results:
+   - Overall ethical score
+   - Category-by-category breakdown
+   - Critical issues (if any)
+   - Recommendations for improvement
+6. Click "Generate Report" to create a downloadable report
+7. Apply recommended labels by clicking "Apply Labels"
+
+### Task 2: Adding a Security Vulnerability
+
+1. Navigate to Knowledge Graphs → CyberSecurity KG → Vulnerabilities
+2. Click "Add Vulnerability"
+3. Fill in the details:
+   - Name: A descriptive name for the vulnerability
+   - Description: Detailed explanation
+   - Severity: How serious the vulnerability is (Low, Medium, High, Critical)
+   - Affected Components: Which parts of your system are affected
+   - Status: Current status (Open, In Progress, Resolved)
+   - Mitigation: Steps to address the vulnerability
+4. Click "Save"
+
+### Task 3: Creating and Configuring an Agent
+
+1. Navigate to Agent Workshop → Create Agent
+2. Provide basic information:
+   - Name: A unique name for your agent
+   - Description: What the agent does
+   - Purpose: The agent's main goal
+3. Select capabilities
+4. Configure Knowledge Graph access
+5. Set resource limits (memory, CPU, etc.)
+6. Click "Create Agent"
+7. Once created, navigate to the agent's detail page
+8. Click "Configure" to adjust settings
+9. Test the agent by clicking "Test Agent" and entering a prompt
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Wallet Connection Issues
+
+**Problem**: Can't connect your wallet or wallet keeps disconnecting.
+
+**Solution**:
+1. Make sure your wallet extension is installed and updated
+2. Try refreshing the page
+3. Ensure you're on the correct network in your wallet settings
+4. Clear browser cache and try again
+
+#### Transaction Failures
+
+**Problem**: Transactions fail or get stuck.
+
+**Solution**:
+1. Check that you have enough funds for gas fees
+2. Ensure you're on the correct network
+3. Try increasing the gas limit/price
+4. If a transaction is stuck, you may need to "speed up" or "cancel" it from your wallet
+
+#### Content Not Loading
+
+**Problem**: IPFS content doesn't load or takes too long.
+
+**Solution**:
+1. Check your internet connection
+2. Try a different IPFS gateway by clicking the gateway selector
+3. Refresh the page
+4. If the content was recently added, it may still be propagating through the network
+
+## Glossary of Terms
+
+- **Agent**: An AI system designed to perform specific tasks
+- **Blockchain**: A distributed ledger technology that records transactions across multiple computers
+- **Ethical Audit**: The process of evaluating an AI agent against ethical principles
+- **Gas Fees**: Small amounts of cryptocurrency required to perform transactions on a blockchain
+- **IPFS**: InterPlanetary File System, a protocol for storing and sharing data in a distributed file system
+- **Knowledge Graph**: A specialized database that shows relationships between data points
+- **MetaMask**: A popular cryptocurrency wallet that works as a browser extension
+- **Smart Contract**: Self-executing code that runs on a blockchain
+- **Token**: A digital asset on a blockchain that can represent value or access rights
+- **Wallet**: Software that stores private keys and allows interactions with blockchain applications
+
+## Getting Help
+
+If you need additional assistance:
+
+- Click the "Help" icon in the lower left corner of the console
+- Visit the [SafeAI Community Forums](https://github.com/FortressAI/safeAI/discussions)
+- Check the [Video Tutorials](https://www.youtube.com/c/SafeAI) for step-by-step guidance
+- Contact support at support@safeai.org
+
+## Next Steps
+
+Now that you're familiar with the basics of the SafeAI Management Console, you might want to:
+
+1. Explore the [Advanced User Guide](./advanced-guide.md) for more complex operations
+2. Learn about [Cypher queries](../cypher/queries.md) for advanced knowledge graph interactions
+3. Understand [node creation](../cypher/nodes.md) and [relationships](../cypher/relationships.md) in the knowledge graph
+4. Explore the [API Documentation](../api/overview.md) for programmatic access 
