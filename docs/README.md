@@ -1,78 +1,89 @@
-# SafeAI Documentation
+# SafeAI Platform Documentation
 
-Welcome to SafeAI - the secure, transparent, and ethical AI plugin for Neo4j that combines advanced AI capabilities with robust security measures, comprehensive compliance frameworks, and blockchain-based governance.
+![SafeAI Logo](https://safeaicoin.com/images/safeai-logo.png)
 
-![SafeAI Dashboard](https://safeaicoin.com/images/dashboard-preview.png)
+Welcome to the official documentation for the SafeAI platform - a comprehensive ecosystem for secure, transparent, and ethical AI built on graph database technology and blockchain integration.
 
-## About SafeAI
+## Overview
 
-SafeAI transforms graph databases into secure, transparent, and ethical AI reasoning engines. Our platform combines:
+SafeAI is a revolutionary platform that combines knowledge graph technology, agent-based AI, secure blockchain transactions, and intuitive user interfaces to provide a complete solution for organizations and individuals looking to harness the power of artificial intelligence safely and ethically.
 
-- **Intuitive Visual Interface**: Modern UI components for easy interaction
-- **Agentic Knowledge Graphs**: Built-in domain-specific knowledge
-- **Blockchain Integration**: Smart contract-based licensing and SafeAI coin token economy
-- **Security-First Architecture**: Comprehensive security framework
-- **Production Ready**: Enterprise-grade implementation with all necessary compliance features
+## Core Components
 
-## Documentation Sections
+The SafeAI platform consists of several integrated components:
 
-1. [**Getting Started**](./getting-started.md)
-   - Quick installation and setup guide
-   - First steps with the SafeAI Management Console
+### User Interfaces
 
-2. [**UI Components**](./gui/ui-components.md)
-   - Complete component library documentation
-   - Usage examples and best practices
+* [Management Console](gui/management-console.md) - The central dashboard for platform control and monitoring
+* [Agent Workshop](gui/agent-workshop.md) - Create, configure, and manage AI agents
+* [Agent Browser](agent-browser-guide.md) - Discover and utilize agents created by others
 
-3. [**Management Console**](./gui/management-console.md)
-   - Dashboard overview
-   - System configuration
-   - User management
+### Specialized Modules
 
-4. [**Agent Workshop**](./gui/agent-workshop.md)
-   - Creating custom agents
-   - Testing and validation
-   - Deployment workflows
+* [Knowledge Graphs](knowledge-graphs-guide.md) - Explore and manage semantic knowledge networks
+* [Math ATP (Automated Theorem Proving)](math-atp-guide.md) - Create and verify mathematical proofs
+* [ARC Prize Challenge](arc-prize-guide.md) - Test and develop abstract reasoning capabilities
+* [FreePress](freepress-guide.md) - Decentralized content publishing and consumption
+* [Security Center](security-center-guide.md) - Comprehensive security monitoring and management
 
-5. [**Knowledge Graphs**](./KnowledgeGraph_Implementation_Guide.md)
-   - KG structure and concepts
-   - Available knowledge domains
-   - Query patterns and examples
+### Technical Foundations
 
-6. [**Cypher Queries**](./cypher/README.md)
-   - Basic and advanced query patterns
-   - Domain-specific queries
-   - Performance optimization
+* [Blockchain Integration](blockchain-integration.md) - SafeAI's blockchain technology and SAFE coin
+* [Cypher Query Language](cypher/README.md) - Technical interface for querying the knowledge graph
+* [Settings & Configuration](settings-guide.md) - Detailed platform configuration options
 
-7. [**Security and Compliance**](./security/README.md)
-   - Security model
-   - Compliance frameworks
-   - Audit procedures
+## User Guides
 
-8. [**Blockchain Integration**](./blockchain-integration.md)
-   - SafeAI Coin implementation
-   - Smart contracts
-   - Audit reports
+If you're new to the SafeAI platform, we recommend starting with our [User Manual](user-manual.md) which provides a comprehensive overview of all platform capabilities.
 
-9. [**Domain Implementations**](./domains/README.md)
-   - Ethics
-   - Mathematics
-   - FreePress
-   - Security
-   - And more
+### For Beginners
 
-10. [**Technical Reference**](./technical/README.md)
-    - API documentation
-    - Integration guides
-    - Performance considerations
+* [Getting Started Guide](getting-started.md) - Quick setup and first steps
+* [UI Components Overview](gui/ui-components.md) - Understanding the user interface
+* [Basic Concepts](basic-concepts.md) - Core terminology and concepts
 
-## Official Resources
+### For Advanced Users
 
-- **Website**: [safeAIcoin.com](https://safeAIcoin.com)
-- **GitHub**: [github.com/FortressAI/safeAI](https://github.com/FortressAI/safeAI)
-- **Documentation**: [docs.safeAIcoin.com](https://docs.safeAIcoin.com)
-- **Community**: [community.safeAIcoin.com](https://community.safeAIcoin.com)
+* [Technical Integration](technical/integration-guide.md) - API and service integration
+* [Performance Optimization](performance/optimization-guide.md) - Tuning for best results
+* [Governance Framework](governance/overview.md) - Understanding platform governance
+
+## Domain-Specific Documentation
+
+* [Ethics KG Guide](domains/ethics-kg-guide.md) - Working with the Ethics Knowledge Graph
+* [Math KG Guide](domains/math-kg-guide.md) - Mathematical Knowledge Graph usage
+
+## Developer Resources
+
+* [API Reference](technical/api-reference.md) - Complete API documentation
+* [SDK Documentation](technical/sdk-docs.md) - Software Development Kit guide
+* [Contributing Guide](technical/contributing.md) - How to contribute to the platform
+
+## Release Information
+
+* [Latest Release Notes](release-notes.md) - Details about the most recent release
+* [Roadmap](roadmap.md) - Upcoming features and development plan
+* [Version History](version-history.md) - Archive of previous releases
 
 ## Support
 
-For questions and support, please visit our [community forum](https://community.safeAIcoin.com) or contact us at support@safeAIcoin.com. 
+* [Troubleshooting Guide](troubleshooting.md) - Common issues and solutions
+* [FAQ](faq.md) - Frequently asked questions
+* [Community Resources](community-resources.md) - Forums, Discord, and social media
+* [Contact Support](support-contact.md) - How to reach the support team
+
+## Legal Information
+
+* [Terms of Service](legal/terms-of-service.md)
+* [Privacy Policy](legal/privacy-policy.md)
+* [License Information](legal/licensing.md)
+
+---
+
+## Contributing to Documentation
+
+We welcome contributions to improve this documentation. Please see our [Documentation Contributing Guide](technical/docs-contributing.md) for more information on how to submit improvements.
+
+---
+
+Copyright © 2024 SafeAI Platform. All rights reserved. 
