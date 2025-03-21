@@ -1,7 +1,11 @@
 # SafeAI User Guide
+---
+breadcrumb: [Home](../README.md) > [User Documentation](../docs/README.md) > [User Guide](../docs/user-guide.md)
+---
+
 Welcome to the SafeAI User Guide. This comprehensive guide will help you understand and use all features of the SafeAI platform effectively.
 
-![SafeAI Platform Overview](https://safeaicoin.com/images/platform-overview.png)
+![SafeAI Platform Overview](../assets/images/platform-overview.png)
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
@@ -21,7 +25,7 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 - Basic understanding of blockchain concepts
 
 ### Initial Setup
-1. Visit [console.safeAIcoin.com](https://console.safeAIcoin.com)
+1. Visit [console.safeai.com](https://console.safeai.com)
 2. Click "Connect Wallet" in the top right
 3. Select your Web3 wallet
 4. Approve the connection request
@@ -270,26 +274,26 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 ## Resources
 
 ### Documentation
-- [API Reference](technical/api-reference.md)
-- [SDK Guide](technical/sdk-documentation.md)
-- [Architecture Overview](technical/architecture.md)
+- [API Reference](../technical/api/README.md)
+- [SDK Guide](../technical/api/sdk-guide.md)
+- [Architecture Overview](../technical/architecture/README.md)
 
 ### Community
 - [Discord Server](https://discord.gg/safeai)
-- [Community Forum](https://community.safeAIcoin.com)
-- [Blog](https://blog.safeAIcoin.com)
+- [Community Forum](https://community.safeai.com)
+- [Blog](https://blog.safeai.com)
 
 ### Support
-- [Help Center](https://help.safeAIcoin.com)
-- [Status Page](https://status.safeAIcoin.com)
-- [Contact Support](mailto:support@safeAIcoin.com)
+- [Help Center](https://help.safeai.com)
+- [Status Page](https://status.safeai.com)
+- [Contact Support](mailto:support@safeai.com)
 
 ## Next Steps
-1. [Explore Advanced Features](technical/advanced-features.md)
-2. [Join the Community](community-resources.md)
-3. [Contribute to SafeAI](technical/contributing-guide.md)
-4. [Stay Updated](release-notes.md)
+1. [Explore Advanced Features](../technical/advanced-features.md)
+2. [Join the Community](../community/resources.md)
+3. [Contribute to SafeAI](../technical/contributing-guide.md)
+4. [Stay Updated](../release-notes.md)
 
 ---
-
-© 2024 SafeAI. All rights reserved. 
+*Last updated: March 2024*
+Copyright © 2024 SafeAI. All rights reserved. 
