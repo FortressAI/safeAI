@@ -1,89 +1,159 @@
-# SafeAI Platform Documentation
+# SafeAI Documentation
+Welcome to the SafeAI platform documentation. This guide will help you find the right information based on your role and needs.
 
-![SafeAI Logo](https://safeaicoin.com/images/safeai-logo.png)
+## Quick Start
+- [Getting Started Guide](getting-started.md) - For new users
+- [Basic Concepts](basic-concepts.md) - Core platform concepts
+- [User Manual](user-manual.md) - Complete user guide
 
-Welcome to the official documentation for the SafeAI platform - a comprehensive ecosystem for secure, transparent, and ethical AI built on graph database technology and blockchain integration.
+## User Documentation
+### Platform Features
+- [Agent Management](user/agent-management.md)
+  - Creating and configuring agents
+  - Monitoring agent performance
+  - Managing agent permissions
+- [Knowledge Graphs](user/knowledge-graphs.md)
+  - Browsing knowledge domains
+  - Executing queries
+  - Visualizing relationships
+- [Content Publishing](user/content-publishing.md)
+  - Creating and editing content
+  - Managing licenses
+  - Publishing workflows
 
-## Overview
+### User Interface
+- [UI Components Guide](user/ui-components.md)
+  - Navigation and layout
+  - Common UI elements
+  - Interactive features
+- [Workflow Guides](user/workflows.md)
+  - Step-by-step tutorials
+  - Best practices
+  - Common tasks
 
-SafeAI is a revolutionary platform that combines knowledge graph technology, agent-based AI, secure blockchain transactions, and intuitive user interfaces to provide a complete solution for organizations and individuals looking to harness the power of artificial intelligence safely and ethically.
+## Developer Documentation
+### Technical Guides
+- [Architecture Overview](technical/architecture.md)
+- [API Reference](technical/api-reference.md)
+- [SDK Documentation](technical/sdk-documentation.md)
 
-## Core Components
+### Implementation Guides
+- [UI Implementation](technical/ui-implementation.md)
+- [Blockchain Integration](technical/blockchain-integration.md)
+- [Agent Development](technical/agent-development.md)
 
-The SafeAI platform consists of several integrated components:
-
-### User Interfaces
-
-* [Management Console](gui/management-console.md) - The central dashboard for platform control and monitoring
-* [Agent Workshop](gui/agent-workshop.md) - Create, configure, and manage AI agents
-* [Agent Browser](agent-browser-guide.md) - Discover and utilize agents created by others
-
-### Specialized Modules
-
-* [Knowledge Graphs](knowledge-graphs-guide.md) - Explore and manage semantic knowledge networks
-* [Math ATP (Automated Theorem Proving)](math-atp-guide.md) - Create and verify mathematical proofs
-* [ARC Prize Challenge](arc-prize-guide.md) - Test and develop abstract reasoning capabilities
-* [FreePress](freepress-guide.md) - Decentralized content publishing and consumption
-* [Security Center](security-center-guide.md) - Comprehensive security monitoring and management
-
-### Technical Foundations
-
-* [Blockchain Integration](blockchain-integration.md) - SafeAI's blockchain technology and SAFE coin
-* [Cypher Query Language](cypher/README.md) - Technical interface for querying the knowledge graph
-* [Settings & Configuration](settings-guide.md) - Detailed platform configuration options
-
-## User Guides
-
-If you're new to the SafeAI platform, we recommend starting with our [User Manual](user-manual.md) which provides a comprehensive overview of all platform capabilities.
-
-### For Beginners
-
-* [Getting Started Guide](getting-started.md) - Quick setup and first steps
-* [UI Components Overview](gui/ui-components.md) - Understanding the user interface
-* [Basic Concepts](basic-concepts.md) - Core terminology and concepts
-
-### For Advanced Users
-
-* [Technical Integration](technical/integration-guide.md) - API and service integration
-* [Performance Optimization](performance/optimization-guide.md) - Tuning for best results
-* [Governance Framework](governance/overview.md) - Understanding platform governance
+### Development Resources
+- [Contributing Guide](technical/contributing-guide.md)
+- [Style Guide](technical/style-guide.md)
+- [Testing Guide](technical/testing-guide.md)
 
 ## Domain-Specific Documentation
+### ARC Prize
+- [ARC Prize Guide](domains/arc-prize-guide.md)
+- [Submission Process](domains/arc-submission.md)
+- [Voting System](domains/arc-voting.md)
 
-* [Ethics KG Guide](domains/ethics-kg-guide.md) - Working with the Ethics Knowledge Graph
-* [Math KG Guide](domains/math-kg-guide.md) - Mathematical Knowledge Graph usage
+### Free Press
+- [Free Press Guide](domains/freepress-guide.md)
+- [Content Management](domains/freepress-content.md)
+- [License Management](domains/freepress-license.md)
 
-## Developer Resources
+### Knowledge Graphs
+- [Implementation Guide](domains/knowledge-graphs-guide.md)
+- [Query Guide](domains/knowledge-queries.md)
+- [Schema Design](domains/knowledge-schema.md)
 
-* [API Reference](technical/api-reference.md) - Complete API documentation
-* [SDK Documentation](technical/sdk-docs.md) - Software Development Kit guide
-* [Contributing Guide](technical/contributing.md) - How to contribute to the platform
+## Support and Resources
+### Help and Support
+- [FAQ](support/faq.md)
+- [Troubleshooting](support/troubleshooting.md)
+- [Contact Support](support/contact.md)
 
-## Release Information
+### Community
+- [Community Guidelines](community/guidelines.md)
+- [Contributing](community/contributing.md)
+- [Discord Server](https://discord.gg/safeai)
 
-* [Latest Release Notes](release-notes.md) - Details about the most recent release
-* [Roadmap](roadmap.md) - Upcoming features and development plan
-* [Version History](version-history.md) - Archive of previous releases
+### Legal
+- [Terms of Service](legal/terms.md)
+- [Privacy Policy](legal/privacy.md)
+- [License Information](legal/licenses.md)
 
-## Support
+## Documentation Structure
+```
+docs/
+├── README.md                 # Main entry point
+├── getting-started.md        # Quick start guide
+├── basic-concepts.md         # Core concepts
+├── user-manual.md           # Complete user guide
+├── user/                    # User documentation
+│   ├── agent-management.md
+│   ├── knowledge-graphs.md
+│   ├── content-publishing.md
+│   ├── ui-components.md
+│   └── workflows.md
+├── technical/               # Developer documentation
+│   ├── architecture.md
+│   ├── api-reference.md
+│   ├── sdk-documentation.md
+│   ├── ui-implementation.md
+│   ├── blockchain-integration.md
+│   ├── agent-development.md
+│   ├── contributing-guide.md
+│   ├── style-guide.md
+│   └── testing-guide.md
+├── domains/                 # Domain-specific guides
+│   ├── arc-prize-guide.md
+│   ├── freepress-guide.md
+│   └── knowledge-graphs-guide.md
+├── support/                 # Support documentation
+│   ├── faq.md
+│   ├── troubleshooting.md
+│   └── contact.md
+├── community/              # Community resources
+│   ├── guidelines.md
+│   └── contributing.md
+└── legal/                  # Legal documentation
+    ├── terms.md
+    ├── privacy.md
+    └── licenses.md
+```
 
-* [Troubleshooting Guide](troubleshooting.md) - Common issues and solutions
-* [FAQ](faq.md) - Frequently asked questions
-* [Community Resources](community-resources.md) - Forums, Discord, and social media
-* [Contact Support](support-contact.md) - How to reach the support team
+## User Journey Maps
 
-## Legal Information
+### New User Journey
+1. Getting Started Guide
+2. Basic Concepts
+3. User Manual
+4. Specific Feature Guides
+5. Advanced Topics
 
-* [Terms of Service](legal/terms-of-service.md)
-* [Privacy Policy](legal/privacy-policy.md)
-* [License Information](legal/licensing.md)
+### Developer Journey
+1. Architecture Overview
+2. Technical Guides
+3. Implementation Guides
+4. Development Resources
+5. Contributing Guide
 
----
+### Domain Expert Journey
+1. Domain-Specific Guides
+2. Implementation Details
+3. Advanced Features
+4. Integration Guides
+5. Best Practices
 
 ## Contributing to Documentation
+We welcome contributions to our documentation. Please see our [Documentation Contributing Guide](technical/docs-contributing-guide.md) for details on:
+- Writing style guidelines
+- Documentation structure
+- Review process
+- Publishing workflow
 
-We welcome contributions to improve this documentation. Please see our [Documentation Contributing Guide](technical/docs-contributing.md) for more information on how to submit improvements.
+## Support
+For documentation support:
+1. Check our [FAQ](support/faq.md)
+2. Join our [Discord Server](https://discord.gg/safeai)
+3. Contact docs@safeAIcoin.com
 
 ---
-
-Copyright © 2024 SafeAI Platform. All rights reserved. 
+© 2024 SafeAI. All rights reserved. 

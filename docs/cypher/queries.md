@@ -1,49 +1,441 @@
-# Cypher Query Guide for SafeAI: A Beginner's Introduction
+# Cypher Queries: A Beginner's Guide to SafeAI
+
+## Introduction
+
+Cypher is the query language used to interact with SafeAI's knowledge graphs. This guide will help you understand how to use Cypher effectively, even if you're new to databases or programming.
 
 ## What is Cypher?
 
-Cypher is the query language used by Neo4j, the graph database that powers the SafeAI platform. Think of Cypher as the "SQL for graph databases" - it allows you to create, read, update, and delete data in the database.
+Cypher is a powerful query language designed specifically for graph databases. Think of it as a way to:
+- Find information in your knowledge graphs
+- Create new connections between data
+- Update existing information
+- Delete unwanted data
+- Manage relationships between different pieces of information
 
-### Why Cypher?
+## Basic Concepts
 
-Unlike traditional databases that store data in tables, Neo4j organizes information as a network of connected entities (nodes) and their relationships. Cypher is specifically designed to work with this structure, making it perfect for:
+### Nodes
+Nodes are the basic units of information in a graph database. They can represent:
+- AI agents
+- Users
+- Concepts
+- Documents
+- Any other entity in your system
 
-- Navigating complex connections between AI agents, knowledge graphs, and other components
-- Finding patterns in your data that would be difficult to express in SQL
-- Creating and managing intelligent agents and their capabilities
-- Analyzing the performance and security of your SafeAI ecosystem
+Example of a node:
+```cypher
+CREATE (agent:Agent {
+    name: "Math Tutor",
+    type: "LLM",
+    capabilities: ["problem_solving", "explanation"]
+})
+```
 
-## Getting Started with Cypher
+### Relationships
+Relationships connect nodes and show how they're related. They can have:
+- Types (like "BELONGS_TO" or "KNOWS")
+- Properties (like "since" or "confidence")
+- Directions (one-way or bidirectional)
 
-If you're new to Cypher, here are the basics:
+Example of a relationship:
+```cypher
+CREATE (agent:Agent)-[:BELONGS_TO {
+    since: datetime(),
+    role: "tutor"
+}]->(user:User)
+```
 
-1. **Nodes** are represented with parentheses: `(node)`
-2. **Relationships** are represented with arrows: `-[relationship]->` 
-3. **Properties** are represented like JSON: `{name: "value"}`
-4. **Variables** let you reference entities: `(kg:KnowledgeGraph {name: "Ethics_KG"})`
+### Properties
+Properties are key-value pairs that store information about nodes or relationships.
 
-In the examples above:
-- `kg` is a variable name
-- `:KnowledgeGraph` is a label (like a table name in SQL)
-- `{name: "Ethics_KG"}` is a property with a value
+Example of properties:
+```cypher
+CREATE (concept:Concept {
+    name: "Algebra",
+    difficulty: "intermediate",
+    prerequisites: ["basic_math"],
+    description: "Study of mathematical symbols"
+})
+```
 
-### Accessing the Cypher Interface
+## Common Queries
 
-1. Open the Neo4j Browser by navigating to http://localhost:7474 in your web browser
-2. Log in with your credentials (default is username: neo4j, password: testpassword)
-3. Enter Cypher queries in the command line at the top of the interface
-4. Click the "Play" button or press Ctrl+Enter to execute the query
+### 1. Finding Information
 
-## Knowledge Graph Exploration Queries
+#### Basic Search
+```cypher
+// Find all agents
+MATCH (agent:Agent)
+RETURN agent.name, agent.type
 
-Understanding the structure and content of your Knowledge Graphs is essential for working with SafeAI. Here are queries to help you explore them.
+// Find specific agent
+MATCH (agent:Agent {name: "Math Tutor"})
+RETURN agent
+```
 
-### Getting a Knowledge Graph Overview
+#### Pattern Matching
+```cypher
+// Find agents belonging to a user
+MATCH (agent:Agent)-[:BELONGS_TO]->(user:User {name: "John"})
+RETURN agent.name, user.name
 
-This query gives you a high-level summary of a specific Knowledge Graph:
+// Find connected concepts
+MATCH (concept1:Concept)-[:RELATES_TO]->(concept2:Concept)
+RETURN concept1.name, concept2.name
+```
+
+### 2. Creating New Data
+
+#### Creating Nodes
+```cypher
+// Create a new agent
+CREATE (agent:Agent {
+    name: "Science Tutor",
+    type: "LLM",
+    capabilities: ["physics", "chemistry"]
+})
+
+// Create multiple nodes
+CREATE 
+    (math:Concept {name: "Mathematics"}),
+    (physics:Concept {name: "Physics"}),
+    (chemistry:Concept {name: "Chemistry"})
+```
+
+#### Creating Relationships
+```cypher
+// Connect concepts
+MATCH 
+    (math:Concept {name: "Mathematics"}),
+    (physics:Concept {name: "Physics"})
+CREATE (math)-[:PREREQUISITE_FOR]->(physics)
+
+// Create bidirectional relationship
+CREATE (a:Agent)-[:KNOWS]-(b:Agent)
+```
+
+### 3. Updating Data
+
+#### Modifying Properties
+```cypher
+// Update agent capabilities
+MATCH (agent:Agent {name: "Math Tutor"})
+SET agent.capabilities = agent.capabilities + ["calculus"]
+RETURN agent
+
+// Update relationship properties
+MATCH (agent:Agent)-[r:BELONGS_TO]->(user:User)
+SET r.role = "primary_tutor"
+RETURN agent.name, user.name, r.role
+```
+
+#### Adding Properties
+```cypher
+// Add new property to node
+MATCH (concept:Concept {name: "Algebra"})
+SET concept.difficulty_level = "advanced"
+RETURN concept
+
+// Add property to relationship
+MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+SET r.effectiveness = 0.95
+RETURN agent.name, subject.name, r.effectiveness
+```
+
+### 4. Deleting Data
+
+#### Removing Nodes
+```cypher
+// Delete specific node
+MATCH (agent:Agent {name: "Old Tutor"})
+DELETE agent
+
+// Delete connected nodes
+MATCH (user:User {name: "John"})
+OPTIONAL MATCH (user)-[r]-()
+DELETE r, user
+```
+
+#### Removing Relationships
+```cypher
+// Delete specific relationship
+MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+WHERE agent.name = "Math Tutor"
+DELETE r
+
+// Delete all relationships of a type
+MATCH ()-[r:OLD_RELATIONSHIP]-()
+DELETE r
+```
+
+## Advanced Queries
+
+### 1. Path Finding
 
 ```cypher
-// Find a knowledge graph by name and count its components
+// Find shortest path between concepts
+MATCH path = shortestPath(
+    (start:Concept {name: "Algebra"})-[:RELATES_TO*]-(end:Concept {name: "Calculus"})
+)
+RETURN path
+
+// Find all paths between nodes
+MATCH path = (start:Agent)-[:KNOWS*1..3]-(end:Agent)
+WHERE start.name = "Math Tutor"
+RETURN path
+```
+
+### 2. Aggregation
+
+```cypher
+// Count agents by type
+MATCH (agent:Agent)
+RETURN agent.type, count(*) as count
+ORDER BY count DESC
+
+// Average effectiveness by subject
+MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+RETURN subject.name, avg(r.effectiveness) as avg_effectiveness
+```
+
+### 3. Conditional Queries
+
+```cypher
+// Find agents with specific capabilities
+MATCH (agent:Agent)
+WHERE "calculus" IN agent.capabilities
+RETURN agent.name, agent.type
+
+// Complex conditions
+MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+WHERE r.effectiveness > 0.8 AND agent.type = "LLM"
+RETURN agent.name, subject.name, r.effectiveness
+```
+
+## Best Practices
+
+1. **Use Clear Names**
+   - Use descriptive names for nodes and relationships
+   - Follow consistent naming conventions
+   - Use meaningful property names
+
+2. **Optimize Queries**
+   - Use indexes for frequently queried properties
+   - Limit the depth of path queries
+   - Use WHERE clauses to filter early
+
+3. **Security Considerations**
+   - Validate input data
+   - Use parameterized queries
+   - Implement proper access controls
+
+4. **Performance Tips**
+   - Use appropriate indexes
+   - Limit result sets
+   - Avoid unnecessary relationships
+
+## Common Errors and Solutions
+
+1. **Syntax Errors**
+   ```cypher
+   // Incorrect
+   MATCH (n) WHERE n.name = "Test"
+   
+   // Correct
+   MATCH (n)
+   WHERE n.name = "Test"
+   ```
+
+2. **Missing Nodes**
+   ```cypher
+   // Incorrect
+   CREATE (a)-[:RELATES_TO]->(b)
+   
+   // Correct
+   CREATE (a:Node {name: "A"})-[:RELATES_TO]->(b:Node {name: "B"})
+   ```
+
+3. **Relationship Direction**
+   ```cypher
+   // Incorrect
+   MATCH (a)-[:KNOWS]-(b)
+   
+   // Correct (if direction matters)
+   MATCH (a)-[:KNOWS]->(b)
+   ```
+
+## Resources for Learning More
+
+1. **Documentation**
+   - SafeAI Platform Guide
+   - Neo4j Documentation
+   - Cypher Reference Manual
+
+2. **Tools**
+   - SafeAI Query Editor
+   - Neo4j Browser
+   - Query Profiler
+
+3. **Community**
+   - SafeAI Forums
+   - Neo4j Community
+   - Stack Overflow
+
+## Practice Exercises
+
+1. **Basic Queries**
+   ```cypher
+   // Exercise 1: Create a new user and connect them to an agent
+   CREATE (user:User {name: "Alice"})
+   MATCH (agent:Agent {name: "Math Tutor"})
+   CREATE (user)-[:BELONGS_TO]->(agent)
+   
+   // Exercise 2: Find all agents teaching mathematics
+   MATCH (agent:Agent)-[:TEACHES]->(subject:Subject {name: "Mathematics"})
+   RETURN agent.name, agent.type
+   ```
+
+2. **Intermediate Queries**
+   ```cypher
+   // Exercise 3: Find the most effective tutors
+   MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+   WITH agent, avg(r.effectiveness) as avg_effectiveness
+   WHERE avg_effectiveness > 0.9
+   RETURN agent.name, avg_effectiveness
+   
+   // Exercise 4: Find prerequisite chains
+   MATCH path = (start:Concept)-[:PREREQUISITE_FOR*]->(end:Concept)
+   WHERE start.name = "Basic Math"
+   RETURN path
+   ```
+
+3. **Advanced Queries**
+   ```cypher
+   // Exercise 5: Find circular dependencies
+   MATCH path = (start:Concept)-[:PREREQUISITE_FOR*]->(end:Concept)
+   WHERE start = end
+   RETURN path
+   
+   // Exercise 6: Analyze learning paths
+   MATCH (user:User {name: "Alice"})-[:BELONGS_TO]->(agent:Agent)
+   MATCH path = (agent)-[:TEACHES*1..3]->(subject:Subject)
+   RETURN path
+   ```
+
+## Tips for Writing Efficient Queries
+
+1. **Use Indexes**
+   ```cypher
+   // Create index for frequently queried property
+   CREATE INDEX ON :Agent(name)
+   
+   // Use index in query
+   MATCH (agent:Agent)
+   WHERE agent.name STARTS WITH "Math"
+   RETURN agent
+   ```
+
+2. **Limit Results**
+   ```cypher
+   // Limit number of results
+   MATCH (agent:Agent)
+   RETURN agent.name
+   LIMIT 10
+   
+   // Skip results
+   MATCH (agent:Agent)
+   RETURN agent.name
+   SKIP 20 LIMIT 10
+   ```
+
+3. **Use WITH for Intermediate Results**
+   ```cypher
+   // Process intermediate results
+   MATCH (agent:Agent)-[r:TEACHES]->(subject:Subject)
+   WITH agent, count(*) as subject_count
+   WHERE subject_count > 2
+   RETURN agent.name, subject_count
+   ```
+
+## Security Best Practices
+
+1. **Input Validation**
+   ```cypher
+   // Use parameters instead of string concatenation
+   MATCH (agent:Agent)
+   WHERE agent.name = $name
+   RETURN agent
+   ```
+
+2. **Access Control**
+   ```cypher
+   // Check user permissions
+   MATCH (user:User {name: $username})-[:HAS_PERMISSION]->(permission:Permission)
+   WHERE permission.name = "READ_AGENTS"
+   RETURN count(*) > 0 as has_access
+   ```
+
+3. **Audit Logging**
+   ```cypher
+   // Log query execution
+   CREATE (log:AuditLog {
+    timestamp: datetime(),
+    user: $username,
+    query: $query,
+    result_count: $count
+   })
+   ```
+
+## Maintenance and Optimization
+
+1. **Regular Maintenance**
+   ```cypher
+   // Remove orphaned nodes
+   MATCH (n)
+   WHERE NOT (n)-[]-()
+   DELETE n
+   
+   // Clean up old relationships
+   MATCH ()-[r:OLD_RELATIONSHIP]-()
+   DELETE r
+   ```
+
+2. **Performance Optimization**
+   ```cypher
+   // Create appropriate indexes
+   CREATE INDEX ON :Agent(type)
+   CREATE INDEX ON :Subject(difficulty)
+   
+   // Remove unused indexes
+   DROP INDEX ON :Agent(unused_property)
+   ```
+
+3. **Data Validation**
+   ```cypher
+   // Check for invalid data
+   MATCH (agent:Agent)
+   WHERE agent.effectiveness < 0 OR agent.effectiveness > 1
+   RETURN agent.name, agent.effectiveness
+   ```
+
+## Query Patterns Reference
+
+## Overview
+
+This guide provides essential Cypher query patterns for working with the SafeAI Platform. Each pattern includes:
+- Use case description
+- Query template
+- Parameters
+- Example usage
+- Performance considerations
+
+## Knowledge Graph Queries
+
+### 1. Knowledge Graph Analysis
+
+#### Get Knowledge Graph Overview
+```cypher
 MATCH (kg:KnowledgeGraph {name: $kg_name})
 OPTIONAL MATCH (kg)-[:CONTAINS]->(component)
 RETURN kg,
@@ -51,28 +443,8 @@ RETURN kg,
        collect(DISTINCT labels(component)) as component_types;
 ```
 
-**What this does:**
-- `MATCH (kg:KnowledgeGraph {name: $kg_name})` finds a knowledge graph with the specified name
-- `OPTIONAL MATCH (kg)-[:CONTAINS]->(component)` finds all components contained in the knowledge graph
-- `count(DISTINCT component)` counts the unique components
-- `collect(DISTINCT labels(component))` gathers all the different types of components
-
-**Example usage:**
+#### List All Components
 ```cypher
-// Replace "Ethics_KG" with your knowledge graph name
-MATCH (kg:KnowledgeGraph {name: "Ethics_KG"})
-OPTIONAL MATCH (kg)-[:CONTAINS]->(component)
-RETURN kg,
-       count(DISTINCT component) as component_count,
-       collect(DISTINCT labels(component)) as component_types;
-```
-
-### Listing All Components in a Knowledge Graph
-
-To see all the individual components within a Knowledge Graph:
-
-```cypher
-// List all components in a knowledge graph with their details
 MATCH (kg:KnowledgeGraph {name: $kg_name})-[:CONTAINS]->(component)
 RETURN labels(component) as type,
        component.name as name,
@@ -80,27 +452,8 @@ RETURN labels(component) as type,
        component.created_at as created;
 ```
 
-**What this does:**
-- Finds the knowledge graph with the specified name
-- Follows all CONTAINS relationships to components
-- Returns the type, name, status, and creation date of each component
-
-**Example usage:**
+#### Find Resource Usage
 ```cypher
-// See all components in the Ethics Knowledge Graph
-MATCH (kg:KnowledgeGraph {name: "Ethics_KG"})-[:CONTAINS]->(component)
-RETURN labels(component) as type,
-       component.name as name,
-       component.status as status,
-       component.created_at as created;
-```
-
-### Understanding Resource Usage
-
-To monitor resource usage across your knowledge graph:
-
-```cypher
-// Calculate total resource requirements for a knowledge graph
 MATCH (kg:KnowledgeGraph {name: $kg_name})-[:CONTAINS]->(component)
 WHERE component.resource_limit_memory_mb IS NOT NULL
 RETURN sum(component.resource_limit_memory_mb) as total_memory_mb,
@@ -108,36 +461,12 @@ RETURN sum(component.resource_limit_memory_mb) as total_memory_mb,
        count(component) as component_count;
 ```
 
-**What this does:**
-- Finds components with memory resource limits defined
-- Calculates the total memory and CPU requirements
-- Counts the number of components with resource limits
+## Agent Queries
 
-**Example usage:**
+### 1. Agent Management
+
+#### Find Available Agents
 ```cypher
-// Check resource usage for CyberSecurity Knowledge Graph
-MATCH (kg:KnowledgeGraph {name: "CyberSecurity_KG"})-[:CONTAINS]->(component)
-WHERE component.resource_limit_memory_mb IS NOT NULL
-RETURN sum(component.resource_limit_memory_mb) as total_memory_mb,
-       sum(component.resource_limit_cpu_ms) as total_cpu_ms,
-       count(component) as component_count;
-```
-
-**Results explained:**
-- `total_memory_mb`: The total memory required by all components (in megabytes)
-- `total_cpu_ms`: The total CPU time required (in milliseconds)
-- `component_count`: Number of components included in the calculation
-
-## Working with Agents
-
-Agents are the workhorses of the SafeAI platform. These queries help you manage and understand them.
-
-### Finding Available Agents
-
-To see all active agents in the system:
-
-```cypher
-// List all active agents and their properties
 MATCH (a:Agent)
 WHERE a.status = 'active'
 RETURN a.name as name,
@@ -146,58 +475,18 @@ RETURN a.name as name,
        a.effectiveness_threshold as effectiveness;
 ```
 
-**What this does:**
-- Finds all nodes with the Agent label
-- Filters for only active agents
-- Returns key properties for each agent
-
-**Example usage:**
+#### Get Agent Performance Metrics
 ```cypher
-// Find all active agents
-MATCH (a:Agent)
-WHERE a.status = 'active'
-RETURN a.name as name,
-       a.category as category,
-       a.agent_type as type,
-       a.effectiveness_threshold as effectiveness;
-```
-
-### Checking Agent Performance
-
-This query helps you evaluate how well an agent is performing:
-
-```cypher
-// Calculate success rate for a specific agent
 MATCH (a:Agent {name: $agent_name})
-WHERE a.usage_count > 0
 RETURN a.name as name,
        a.usage_count as total_uses,
        a.success_count as successes,
-       toFloat(a.success_count) / a.usage_count as success_rate;
+       toFloat(a.success_count) / a.usage_count as success_rate
+WHERE a.usage_count > 0;
 ```
 
-**What this does:**
-- Finds an agent with the specified name
-- Checks if it has been used at least once
-- Calculates the success rate by dividing successful uses by total uses
-
-**Example usage:**
+#### Find Agent Dependencies
 ```cypher
-// Check performance of the vulnerability detection agent
-MATCH (a:Agent {name: "vulnerability_detection_agent"})
-WHERE a.usage_count > 0
-RETURN a.name as name,
-       a.usage_count as total_uses,
-       a.success_count as successes,
-       toFloat(a.success_count) / a.usage_count as success_rate;
-```
-
-### Understanding Agent Dependencies
-
-To see what other components an agent depends on:
-
-```cypher
-// Find all dependencies for a specific agent
 MATCH (a:Agent {name: $agent_name})-[r:DEPENDS_ON]->(dep)
 RETURN dep.name as dependency,
        r.dependency_type as type,
@@ -205,31 +494,33 @@ RETURN dep.name as dependency,
        r.max_version as max_version;
 ```
 
-**What this does:**
-- Finds an agent with the specified name
-- Follows all DEPENDS_ON relationships to other components
-- Returns information about each dependency and version requirements
+### 2. Agent Interactions
 
-**Example usage:**
+#### Get Agent Interaction Network
 ```cypher
-// What does the ethical_analysis_agent depend on?
-MATCH (a:Agent {name: "ethical_analysis_agent"})-[r:DEPENDS_ON]->(dep)
-RETURN dep.name as dependency,
-       r.dependency_type as type,
-       r.min_version as min_version,
-       r.max_version as max_version;
+MATCH (a1:Agent)-[r:INTERACTS_WITH]->(a2:Agent)
+RETURN a1.name as source,
+       a2.name as target,
+       r.interaction_type as type,
+       r.protocol as protocol;
 ```
 
-## Security Monitoring Queries
-
-SafeAI prioritizes security. These queries help you ensure your system remains secure.
-
-### Finding Nodes Without Security Validation
-
-This query helps identify potential security risks:
-
+#### Find High-Traffic Interactions
 ```cypher
-// Find nodes that may have security gaps
+MATCH (a1:Agent)-[r:INTERACTS_WITH]->(a2:Agent)
+WHERE r.rate_limit_rpm > 30
+RETURN a1.name as source,
+       a2.name as target,
+       r.rate_limit_rpm as rpm,
+       r.burst_limit as burst;
+```
+
+## Security Queries
+
+### 1. Security Auditing
+
+#### Find Nodes Without Security Validation
+```cypher
 MATCH (n)
 WHERE n.security_validation_enabled IS NULL
    OR n.security_validation_enabled = false
@@ -238,27 +529,8 @@ RETURN labels(n) as type,
        n.created_at as created;
 ```
 
-**What this does:**
-- Finds any node where security validation is not enabled
-- Returns the node type, name, and creation date
-
-**Example usage:**
+#### Get Security Audit Status
 ```cypher
-// Find security vulnerabilities in the system
-MATCH (n)
-WHERE n.security_validation_enabled IS NULL
-   OR n.security_validation_enabled = false
-RETURN labels(n) as type,
-       n.name as name,
-       n.created_at as created;
-```
-
-### Checking Security Audit Status
-
-To review when security audits were last performed:
-
-```cypher
-// Find relationships with security auditing enabled and their last audit date
 MATCH (n)-[r]->(m)
 WHERE r.security_audit_enabled = true
 RETURN type(r) as relationship,
@@ -268,137 +540,107 @@ RETURN type(r) as relationship,
        r.audit_interval_hours as interval;
 ```
 
-**What this does:**
-- Finds relationships with security auditing enabled
-- Returns information about each relationship and when it was last audited
+### 2. Permission Management
 
-**Example usage:**
+#### List Node Permissions
 ```cypher
-// Check security audit status across the system
+MATCH (kg:KnowledgeGraph)-[r:CONTAINS]->(n)
+RETURN kg.name as knowledge_graph,
+       n.name as node,
+       r.permission_level as permission;
+```
+
+#### Find Admin Access
+```cypher
 MATCH (n)-[r]->(m)
-WHERE r.security_audit_enabled = true
+WHERE r.permission_level = 'admin'
+RETURN type(r) as relationship,
+       n.name as source,
+       m.name as target;
+```
+
+## Performance Queries
+
+### 1. Resource Monitoring
+
+#### Get High Memory Usage
+```cypher
+MATCH (n)
+WHERE n.resource_limit_memory_mb > 512
+RETURN labels(n) as type,
+       n.name as name,
+       n.resource_limit_memory_mb as memory_limit;
+```
+
+#### Find Rate Limited Components
+```cypher
+MATCH (n)
+WHERE n.rate_limit_rpm IS NOT NULL
+RETURN labels(n) as type,
+       n.name as name,
+       n.rate_limit_rpm as rpm,
+       n.rate_limit_burst as burst;
+```
+
+### 2. Performance Analysis
+
+#### Get Slow Components
+```cypher
+MATCH (n)
+WHERE n.timeout_ms > 5000
+RETURN labels(n) as type,
+       n.name as name,
+       n.timeout_ms as timeout;
+```
+
+#### Find Retry Patterns
+```cypher
+MATCH (n)-[r]->(m)
+WHERE r.retry_count > 3
 RETURN type(r) as relationship,
        n.name as source,
        m.name as target,
-       r.last_audit as last_audit,
-       r.audit_interval_hours as interval;
+       r.retry_count as retries,
+       r.backoff_ms as backoff;
 ```
 
-## Performance Optimization Queries
+## Best Practices
 
-These queries help you identify and address performance bottlenecks.
+1. **Query Performance**
+   - Use appropriate indexes
+   - Filter early in the query
+   - Use OPTIONAL MATCH for nullable paths
+   - Limit result sets when possible
 
-### Finding High Memory Usage Components
+2. **Security**
+   - Always validate input parameters
+   - Check permissions before queries
+   - Use parameterized queries
+   - Audit sensitive operations
 
-To identify components that might be using too much memory:
+3. **Maintenance**
+   - Regular performance monitoring
+   - Clean up unused relationships
+   - Update metadata timestamps
+   - Monitor query patterns
 
-```cypher
-// Find components with high memory requirements
-MATCH (n)
-WHERE n.resource_limit_memory_mb > 512
-RETURN labels(n) as type,
-       n.name as name,
-       n.resource_limit_memory_mb as memory_limit;
-```
+4. **Error Handling**
+   - Validate input parameters
+   - Handle null cases
+   - Use appropriate error messages
+   - Implement retry logic
 
-**What this does:**
-- Finds nodes with memory limits above 512 MB
-- Returns the node type, name, and memory limit
+## Common Parameters
 
-**Example usage:**
-```cypher
-// Find memory-intensive components
-MATCH (n)
-WHERE n.resource_limit_memory_mb > 512
-RETURN labels(n) as type,
-       n.name as name,
-       n.resource_limit_memory_mb as memory_limit;
-```
+- `kg_name`: Knowledge Graph name
+- `agent_name`: Agent name
+- `component_name`: Component name
+- `type`: Type identifier
+- `status`: Status value
+- `permission`: Permission level
 
-### Identifying Rate-Limited Components
+## See Also
 
-Rate limiting protects your system from overload. This query helps you check rate limit settings:
-
-```cypher
-// Find components with rate limiting
-MATCH (n)
-WHERE n.rate_limit_rpm IS NOT NULL
-RETURN labels(n) as type,
-       n.name as name,
-       n.rate_limit_rpm as rpm,
-       n.rate_limit_burst as burst;
-```
-
-**What this does:**
-- Finds nodes with rate limits defined
-- Returns the node type, name, and rate limit details
-
-**Example usage:**
-```cypher
-// Check rate limiting across the platform
-MATCH (n)
-WHERE n.rate_limit_rpm IS NOT NULL
-RETURN labels(n) as type,
-       n.name as name,
-       n.rate_limit_rpm as rpm,
-       n.rate_limit_burst as burst;
-```
-
-## Using Parameters in Queries
-
-In the examples above, you'll notice parameters like `$kg_name` or `$agent_name`. These are placeholders that you replace with actual values when running the query.
-
-### In Neo4j Browser:
-
-You can set parameters in the Neo4j Browser using the `:param` command:
-
-```cypher
-:param kg_name => "Ethics_KG"
-```
-
-Then run your query:
-
-```cypher
-MATCH (kg:KnowledgeGraph {name: $kg_name})
-RETURN kg;
-```
-
-### In Application Code:
-
-When using the Neo4j drivers in your code, you pass parameters as an object:
-
-```javascript
-// JavaScript example
-session.run(
-  'MATCH (kg:KnowledgeGraph {name: $kg_name}) RETURN kg',
-  { kg_name: 'Ethics_KG' }
-);
-```
-
-## Best Practices for SafeAI Cypher Queries
-
-### 1. Query Performance
-
-- **Use Specific Labels**: Always specify node labels (`Agent`, `KnowledgeGraph`, etc.) to improve performance
-- **Filter Early**: Apply WHERE clauses as early as possible in your queries
-- **Use OPTIONAL MATCH**: When relationship existence is uncertain, use OPTIONAL MATCH to prevent query failure
-- **Limit Results**: For large result sets, use LIMIT to return a manageable number of records
-
-### 2. Security Best Practices
-
-- **Use Parameters**: Always use parameterized queries to prevent injection attacks
-- **Check Permissions**: Validate that the user has appropriate permissions before running sensitive queries
-- **Audit Sensitive Operations**: Log all operations that modify security settings or sensitive data
-- **Validate Input**: Check that input parameters meet expected format and constraints
-
-### 3. Learning Resources
-
-- [Neo4j Cypher Manual](https://neo4j.com/docs/cypher-manual/current/)
-- [Cypher Query Builder](https://neo4j.com/developer/cypher-query-builder/)
-- [SafeAI Cypher Examples](../cypher/)
-
-## Related Documents
-
-- [Creating Nodes](./nodes.md) - Detailed guide for creating different types of nodes
-- [Creating Relationships](./relationships.md) - How to establish connections between nodes
-- [Security Configuration](../security/configuration.md) - Security settings and best practices 
+- [Node Creation](./nodes.md)
+- [Relationship Creation](./relationships.md)
+- [Security Configuration](../security/configuration.md) 
