@@ -5,7 +5,7 @@ breadcrumb: [Home](../README.md) > [User Documentation](../docs/README.md) > [Us
 
 Welcome to the SafeAI User Guide. This comprehensive guide will help you understand and use all features of the SafeAI platform effectively, whether you're using the graphical user interface (GUI) or advanced technical features.
 
-![SafeAI Platform Overview](../assets/images/platform-overview.png)
+![SafeAI Platform Overview](../assets/images/platform-overview.svg)
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
