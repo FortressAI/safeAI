@@ -3,10 +3,9 @@
 breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [UI](../technical/ui/README.md) > [UI Workflows](../technical/ui/ui-workflows.md)
 ---
 
-
-
 ## Overview
 This document outlines the key user workflows and interaction patterns in the SafeAI platform, providing detailed guidance for implementation and user experience.
+
 ## Core Workflows
 
 ### Agent Management
@@ -147,6 +146,8 @@ const handleContentPublishing = async () => {
 ## User Experience Guidelines
 
 ### Navigation Patterns
+![Navigation Patterns](../images/ui-navigation-patterns.svg)
+
 1. **Breadcrumb Navigation**
    - Always show current location
    - Provide quick access to parent pages
@@ -163,6 +164,8 @@ const handleContentPublishing = async () => {
    - Maintain context
 
 ### Feedback Patterns
+![Feedback Patterns](../images/ui-feedback-patterns.svg)
+
 1. **Loading States**
    - Show progress indicators
    - Disable interactive elements
@@ -179,6 +182,8 @@ const handleContentPublishing = async () => {
    - Log errors for debugging
 
 ### Form Patterns
+![Form Patterns](../images/ui-form-patterns.svg)
+
 1. **Input Validation**
    - Validate in real-time
    - Show clear error messages
