@@ -1,7 +1,5 @@
 # SafeAI User Manual
 
-![SafeAI Logo](https://safeaicoin.com/images/logo.png)
-
 ## Introduction
 
 Welcome to the SafeAI User Manual. This comprehensive guide will walk you through all aspects of the SafeAI platform, focusing on the graphical user interface (GUI) as the primary way to interact with the system, while also covering the Cypher query language for advanced technical use.
@@ -11,19 +9,16 @@ SafeAI is a secure, transparent, and ethical AI platform built on Neo4j's graph 
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Dashboard](#dashboard)
-3. [Knowledge Graphs](#knowledge-graphs)
-4. [Agent Workshop](#agent-workshop)
-5. [Agent Browser](#agent-browser)
-6. [Security Center](#security-center)
-7. [Math ATP (Automated Theorem Proving)](#math-atp)
-8. [Math Knowledge Graph](#math-knowledge-graph)
-9. [ARC Prize](#arc-prize)
-10. [FreePress](#freepress)
-11. [Settings](#settings)
-12. [Blockchain Integration](#blockchain-integration)
-13. [Technical Reference (Cypher)](#technical-reference)
-14. [Troubleshooting](#troubleshooting)
+2. [Platform Overview](#platform-overview)
+3. [Dashboard](#dashboard)
+4. [Knowledge Graphs](#knowledge-graphs)
+5. [Agent Workshop](#agent-workshop)
+6. [Agent Browser](#agent-browser)
+7. [Security Center](#security-center)
+8. [Settings](#settings)
+9. [Blockchain Integration](#blockchain-integration)
+10. [Technical Reference (Cypher)](#technical-reference)
+11. [Troubleshooting](#troubleshooting)
 
 <a id="getting-started"></a>
 ## 1. Getting Started
@@ -37,7 +32,7 @@ SafeAI is a secure, transparent, and ethical AI platform built on Neo4j's graph 
 
 ### Account Setup
 
-1. Navigate to [console.safeAIcoin.com](https://console.safeAIcoin.com)
+1. Navigate to the SafeAI platform
 2. Click "Connect Wallet" in the upper right corner
 3. Select your Web3 wallet (e.g., MetaMask)
 4. Approve the connection request
@@ -52,8 +47,50 @@ The SafeAI interface consists of:
 - **Content Area**: Main workspace that changes based on selected section
 - **Status Bar**: System health and important notifications
 
+<a id="platform-overview"></a>
+## 2. Platform Overview
+
+### Core Features
+
+1. **Knowledge Graphs**
+   - Domain-specific knowledge bases
+   - Interactive visualization
+   - Advanced querying capabilities
+
+2. **AI Agents**
+   - Custom agent creation
+   - Agent management
+   - Performance monitoring
+
+3. **Security Features**
+   - Real-time monitoring
+   - Compliance checks
+   - Audit logging
+
+4. **Blockchain Integration**
+   - Wallet management
+   - Token operations
+   - Smart contract interaction
+
+### User Roles
+
+1. **Standard User**
+   - Access to basic features
+   - Agent creation and management
+   - Knowledge graph exploration
+
+2. **Developer**
+   - Advanced API access
+   - Custom agent development
+   - Integration capabilities
+
+3. **Domain Expert**
+   - Knowledge graph contribution
+   - Expert-level agent configuration
+   - Domain-specific tools
+
 <a id="dashboard"></a>
-## 2. Dashboard
+## 3. Dashboard
 
 The Dashboard provides an overview of your SafeAI ecosystem.
 
@@ -92,7 +129,7 @@ The Dashboard provides an overview of your SafeAI ecosystem.
 4. Save your layout with the "Save Layout" button
 
 <a id="knowledge-graphs"></a>
-## 3. Knowledge Graphs
+## 4. Knowledge Graphs
 
 The Knowledge Graph section allows you to explore and interact with different domain-specific knowledge graphs.
 
@@ -112,16 +149,6 @@ The Knowledge Graph section allows you to explore and interact with different do
    - Regulatory frameworks
    - Compliance requirements
    - Legal precedents
-
-4. **Math KG**
-   - Mathematical concepts
-   - Theorems and proofs
-   - Problem-solving strategies
-
-5. **FreePress KG**
-   - Content publishing patterns
-   - Distribution networks
-   - Influence analysis
 
 ### Using the Knowledge Graph Explorer
 
@@ -162,7 +189,7 @@ Advanced users can interact directly with knowledge graphs using Cypher:
 5. Save frequently used queries
 
 <a id="agent-workshop"></a>
-## 4. Agent Workshop
+## 5. Agent Workshop
 
 The Agent Workshop is where you create and configure AI agents.
 
@@ -194,10 +221,8 @@ The Agent Workshop is where you create and configure AI agents.
 4. Set monitoring preferences
 5. Complete deployment
 
-For detailed guidance, see the [Agent Workshop Guide](./gui/agent-workshop.md).
-
 <a id="agent-browser"></a>
-## 5. Agent Browser
+## 6. Agent Browser
 
 The Agent Browser allows you to manage and monitor all your agents.
 
@@ -227,7 +252,7 @@ The Agent Browser allows you to manage and monitor all your agents.
 5. Generate performance reports
 
 <a id="security-center"></a>
-## 6. Security Center
+## 7. Security Center
 
 The Security Center provides tools for monitoring and ensuring the security of your SafeAI deployment.
 
@@ -248,324 +273,145 @@ The Security Center provides tools for monitoring and ensuring the security of y
    - Compliance Check
    - Penetration Test
 3. Configure scan parameters
-4. Run scan and view results
-5. Implement recommended actions
+4. Review and approve scan
+5. Monitor scan progress
+6. Review results and recommendations
 
-### Security Policies
+### Security Reports
 
-1. View and manage security policies
-2. Configure policy parameters
-3. Apply policies to specific components
-4. Schedule policy enforcement
-5. Track policy compliance
-
-### Audit Logs
-
-1. View all system activity
-2. Filter by time, user, component, or action
-3. Export logs for external analysis
-4. Set up alerts for suspicious activities
-5. Generate compliance reports
-
-<a id="math-atp"></a>
-## 7. Math ATP (Automated Theorem Proving)
-
-The Math ATP section provides tools for automated theorem proving and mathematical reasoning.
-
-### Interface Overview
-
-1. **Theorem Editor**: Create and edit mathematical theorems
-2. **Proof Search**: Control and monitor proof search processes
-3. **Visualization**: Visualize proof steps and relationships
-4. **Knowledge Base**: Access existing axioms and theorems
-5. **Agent Selection**: Choose and configure ATP agents
-
-### Creating and Proving Theorems
-
-1. Enter a theorem in the Theorem Editor
-2. Select a formal language (First-Order Logic, etc.)
-3. Choose proof search strategy
-4. Select ATP agents to use
-5. Click "Start Proof" to begin
-6. View progress in real-time
-7. Examine the completed proof steps
-
-### Working with Proof Results
-
-1. View detailed proof steps
-2. Inspect the reasoning at each step
-3. Visualize the proof as a graph
-4. Save successful proofs to the knowledge base
-5. Export proofs in various formats
-
-### Managing Theorem Library
-
-1. Browse saved theorems
-2. Search by name, content, or tags
-3. Load saved theorems into the editor
-4. Organize theorems into collections
-5. Share theorems with other users
-
-<a id="math-knowledge-graph"></a>
-## 8. Math Knowledge Graph
-
-The Math Knowledge Graph provides a specialized environment for exploring mathematical concepts and relationships.
-
-### Exploring Mathematical Concepts
-
-1. Navigate the hierarchical organization of mathematical domains
-2. View relationships between concepts
-3. Explore theorems and their proofs
-4. Visualize concept dependencies
-5. Search for specific mathematical terms or symbols
-
-### Querying the Math KG
-
-1. Use specialized math query tools
-2. Find related concepts
-3. Discover proof dependencies
-4. Explore concept hierarchies
-5. Find applications of theorems
-
-### Contributing to the Math KG
-
-1. Submit new concepts
-2. Suggest relationships
-3. Provide proofs or examples
-4. Link to external resources
-5. Improve existing content
-
-<a id="arc-prize"></a>
-## 9. ARC Prize
-
-The ARC Prize section allows you to test agents on the Abstraction and Reasoning Corpus challenge.
-
-### Overview
-
-The ARC Prize is based on François Chollet's Abstraction and Reasoning Corpus, a benchmark for testing AI systems' ability to generalize and reason.
-
-### Running ARC Tests
-
-1. Select or upload ARC puzzles
-2. Choose agents to evaluate
-3. Configure test parameters
-4. Start the evaluation process
-5. Monitor progress in real-time
-
-### Analyzing Results
-
-1. View success rates by puzzle and agent
-2. Analyze solution patterns
-3. Compare agent performance
-4. Visualize reasoning processes
-5. Export results for further analysis
-
-### Improving Agents
-
-1. Identify weaknesses in agent performance
-2. Modify agent configurations
-3. Train on specific puzzle types
-4. Develop specialized reasoning capabilities
-5. Validate improvements through testing
-
-<a id="freepress"></a>
-## 10. FreePress
-
-FreePress is a decentralized news and content publishing platform built on blockchain technology.
-
-### User Roles
-
-1. **Reader**: Consume content and purchase licenses
-2. **Publisher**: Create and publish content for sale
-3. **Curator**: Organize and recommend content
-4. **Validator**: Help verify content authenticity
-
-### Publishing Content
-
-1. Register as a publisher (one-time process)
-2. Create a new article with title, content, and tags
-3. Set a price in SafeAI Coin (SAFE)
-4. Publish to the blockchain
-5. Share via the FreePress network
-
-### Reading Content
-
-1. Browse published articles
-2. Purchase licenses to read premium content
-3. Store articles in your personal library
-4. Rate and review content
-5. Support publishers through direct tips
-
-### Knowledge Graph Integration
-
-1. View content relationships in the FreePress Knowledge Graph
-2. Discover related content
-3. Identify influential publishers
-4. Analyze content trends
-5. Explore topic networks
+1. Generate comprehensive security reports
+2. Export findings in various formats
+3. Schedule automated reports
+4. Share reports with stakeholders
+5. Track security improvements over time
 
 <a id="settings"></a>
-## 11. Settings
+## 8. Settings
 
-The Settings section allows you to configure your SafeAI experience.
+The Settings section allows you to configure your SafeAI environment.
 
-### User Preferences
+### Account Settings
 
-1. Profile information
-2. Interface preferences (theme, language, layout)
-3. Notification settings
-4. Default views and filters
-5. Keyboard shortcuts
+1. Profile Information
+2. Notification Preferences
+3. Security Settings
+4. API Keys
+5. Billing Information
 
-### System Configuration
+### Platform Settings
 
-1. Resource allocation
-2. Integration settings
-3. Default policies
-4. Backup and recovery options
-5. Performance tuning
+1. Default Views
+2. Display Preferences
+3. Language Settings
+4. Time Zone
+5. Theme Selection
 
-### Wallet and Blockchain Settings
+### Integration Settings
 
-1. Wallet connections
-2. Transaction preferences
-3. Gas price settings
-4. Token management
-5. Contract interactions
-
-### API Access
-
-1. API key management
-2. Usage limits and quotas
-3. Authentication settings
-4. Webhook configuration
-5. Integration options
+1. Web3 Wallet Configuration
+2. External Service Connections
+3. API Endpoints
+4. Webhook Settings
+5. Authentication Methods
 
 <a id="blockchain-integration"></a>
-## 12. Blockchain Integration
+## 9. Blockchain Integration
 
-SafeAI integrates blockchain technology for secure, transparent operations. For detailed information, see the [Blockchain Integration Guide](./blockchain-integration.md).
-
-### Key Blockchain Features
-
-1. **SafeAI Coin (SAFE)**: Native utility token
-2. **Smart Contracts**: For licensing, governance, and billing
-3. **Transaction Verification**: Secure and transparent operations
-4. **Decentralized Storage**: For content and data
-5. **Governance Participation**: Vote on platform changes
+SafeAI integrates with blockchain technology for enhanced security and transparency.
 
 ### Wallet Management
 
-1. Connect your Web3 wallet
-2. View your SAFE token balance
-3. Send and receive tokens
-4. View transaction history
-5. Manage connected wallets
+1. Connect/Disconnect Wallets
+2. View Wallet Balance
+3. Transaction History
+4. Gas Settings
+5. Network Selection
+
+### Token Operations
+
+1. View Token Balance
+2. Transfer Tokens
+3. Stake Tokens
+4. View Rewards
+5. Transaction History
 
 ### Smart Contract Interaction
 
-1. View available contracts
-2. Execute contract functions
-3. View contract events
-4. Monitor contract state
-5. Deploy custom contracts (admin only)
+1. View Contract Status
+2. Execute Contract Functions
+3. View Contract Events
+4. Monitor Transactions
+5. Contract Verification
 
 <a id="technical-reference"></a>
-## 13. Technical Reference (Cypher)
+## 10. Technical Reference (Cypher)
 
-While the GUI is the primary interface, advanced users can leverage Cypher queries for direct interaction with the knowledge graphs.
+Advanced users can interact with SafeAI using Cypher queries.
 
-### Cypher Basics
+### Basic Queries
 
-```cypher
-// Basic node query
-MATCH (n:Person) 
-WHERE n.name = 'John' 
-RETURN n;
+1. Node Creation
+2. Relationship Creation
+3. Pattern Matching
+4. Property Updates
+5. Graph Traversal
 
-// Relationship query
-MATCH (a:Person)-[r:KNOWS]->(b:Person) 
-RETURN a, r, b;
+### Advanced Queries
 
-// Creating nodes
-CREATE (n:Person {name: 'Alice', age: 30}) 
-RETURN n;
+1. Complex Patterns
+2. Aggregation
+3. Path Finding
+4. Graph Algorithms
+5. Performance Optimization
 
-// Creating relationships
-MATCH (a:Person), (b:Person) 
-WHERE a.name = 'Alice' AND b.name = 'Bob' 
-CREATE (a)-[r:KNOWS {since: 2010}]->(b) 
-RETURN a, r, b;
-```
+### Best Practices
 
-For detailed Cypher documentation, see the [Cypher Reference Guide](./cypher/README.md).
-
-### SafeAI-specific Procedures
-
-```cypher
-// Create an agent
-CALL safeai.createAgent({
-  name: 'SecurityAgent',
-  description: 'Security monitoring agent',
-  capabilities: ['threat_detection', 'incident_response']
-}) YIELD agent
-RETURN agent;
-
-// Run security check
-CALL safeai.security.runSecurityCheck('data_access')
-YIELD result
-RETURN result;
-
-// Query ethics knowledge graph
-CALL safeai.kg.ethics.evaluateDecision({
-  decision: 'data_collection',
-  context: {purpose: 'marketing', data_type: 'personal'}
-}) YIELD result
-RETURN result;
-```
+1. Query Optimization
+2. Index Usage
+3. Memory Management
+4. Error Handling
+5. Security Considerations
 
 <a id="troubleshooting"></a>
-## 14. Troubleshooting
+## 11. Troubleshooting
 
-### Common Issues
+Common issues and their solutions.
 
-#### Connection Problems
+### Connection Issues
 
-**Issue**: Unable to connect to SafeAI platform  
-**Solution**:
-1. Check your internet connection
-2. Ensure your wallet is unlocked and connected
-3. Clear browser cache and cookies
-4. Try a different browser
+1. Wallet Connection Problems
+2. Network Connectivity
+3. API Errors
+4. Performance Issues
+5. Browser Compatibility
 
-#### Agent Failures
+### Agent Issues
 
-**Issue**: Agent fails to run or produces errors  
-**Solution**:
-1. Check agent logs for specific errors
-2. Verify knowledge graph access permissions
-3. Ensure sufficient resources are allocated
-4. Review agent configuration for inconsistencies
-5. Try rebuilding the agent from a template
+1. Agent Startup Problems
+2. Performance Degradation
+3. Resource Exhaustion
+4. Configuration Errors
+5. Integration Issues
 
-#### Performance Issues
+### Knowledge Graph Issues
 
-**Issue**: Slow interface or operation timeouts  
-**Solution**:
-1. Close unused browser tabs
-2. Reduce the complexity of visualizations
-3. Limit query result sizes
-4. Check your internet connection speed
-5. Update your browser to the latest version
+1. Query Performance
+2. Data Consistency
+3. Index Problems
+4. Memory Usage
+5. Backup and Recovery
 
-### Getting Help
+## Getting Help
 
-1. **In-app Help**: Click the "?" icon in any section
-2. **Documentation**: Access at [docs.safeAIcoin.com](https://docs.safeAIcoin.com)
-3. **Community Forum**: Visit [community.safeAIcoin.com](https://community.safeAIcoin.com)
-4. **Support Email**: Contact support@safeAIcoin.com
-5. **Live Chat**: Available during business hours
+If you need assistance:
+- Click the "Help" icon in any section
+- Visit our Community Forum
+- Contact support@safeai.com
+- Check our FAQ
 
-## Conclusion
+For more detailed information, refer to our comprehensive documentation.
 
-This manual provides an overview of the SafeAI platform's main features. For detailed documentation on specific components, refer to the specialized guides in the documentation directory. The SafeAI team regularly updates these resources to reflect new features and improvements. 
+---
+*Last updated: March 2024*
+
+Copyright © 2024 SafeAI. All rights reserved. 
