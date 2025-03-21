@@ -1,4 +1,7 @@
 # Agentic Knowledge Graph Architecture
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Architecture](../technical/architecture/README.md) > [Knowledge Graph Architecture](../technical/architecture/knowledge-graph-architecture.md)
+---
 
 ## Overview
 

@@ -1,4 +1,7 @@
 # SafeAI Blockchain Integration
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Architecture](../technical/architecture/README.md) > [Blockchain Integration](../technical/architecture/blockchain-integration.md)
+---
 
 ![SafeAI Blockchain](https://safeaicoin.com/images/blockchain-header.png)
 

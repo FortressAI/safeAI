@@ -1,4 +1,7 @@
 # SafeAI API Reference
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [API](../technical/api/README.md) > [API Reference](../technical/api/api-reference.md)
+---
 This document provides detailed information about the SafeAI platform's API endpoints, authentication, and usage.
 
 ## Table of Contents
