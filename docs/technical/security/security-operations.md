@@ -6,31 +6,9 @@ breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README
 This document outlines the security operations procedures for the SafeAI platform, including incident response, monitoring, and security maintenance.
 ## Security Operations
 ### Incident Response
-```mermaid
-graph TD
-    A[Incident Detection] -->|Alert| B[Initial Assessment]
-    B -->|Triage| C[Response Team]
-    C -->|Investigation| D[Root Cause]
-    D -->|Resolution| E[Recovery]
-    E -->|Review| F[Lessons Learned]
-    
-    G[Documentation] -->|Logs| B
-    G -->|Logs| C
-    G -->|Logs| D
-    G -->|Logs| E
-```
+![Incident Response Workflow](../images/ops-incident-response.svg)
 ### Security Monitoring
-```mermaid
-graph TD
-    A[Data Sources] -->|Logs| B[SIEM]
-    B -->|Analysis| C[Alert System]
-    C -->|Notification| D[Security Team]
-    D -->|Response| E[Incident Management]
-    
-    F[Reporting] -->|Metrics| B
-    F -->|Metrics| C
-    F -->|Metrics| D
-```
+![Security Monitoring Architecture](../images/ops-security-monitoring.svg)
 ## Incident Response
 ### Response Procedures
 1. **Detection**
