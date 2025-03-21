@@ -11,9 +11,10 @@ Welcome to SafeAI, a pioneering Neo4j plugin that transforms graph databases int
 5. [Built-in Knowledge Graphs](#built-in-knowledge-graphs)
 6. [Security and Compliance](#security-and-compliance)
 7. [Usage Examples](#usage-examples)
-8. [Development](#development)
-9. [Production Deployment](#production-deployment)
-10. [Troubleshooting](#troubleshooting)
+8. [SafeAI Management Console](#safeai-management-console)
+9. [Development](#development)
+10. [Production Deployment](#production-deployment)
+11. [Troubleshooting](#troubleshooting)
 
 ## Features
 
@@ -24,6 +25,7 @@ Welcome to SafeAI, a pioneering Neo4j plugin that transforms graph databases int
 - **Dynamic Agent Creation**: Support for both Groovy and LLM-based agents
 - **Transparent Reasoning**: Complete chain-of-thought logging and verification
 - **Production Ready**: Includes all necessary security and compliance features
+- **Web-based Management Console**: Modern UI for interacting with Knowledge Graphs and agents
 
 ## Security Framework
 
@@ -43,7 +45,7 @@ SafeAI implements a comprehensive security framework:
 - Neo4j 5.x or later
 - Java 17 or later
 - Docker and Docker Compose
-- Node.js 18.x or later (for blockchain integration)
+- Node.js 18.x or later (for blockchain integration and GUI)
 
 ### Quick Start
 
@@ -63,6 +65,13 @@ SafeAI implements a comprehensive security framework:
    ```bash
    cd safeAI-plugin
    ./deploy_neo4j.sh
+   ```
+
+4. Set up the Management Console:
+   ```bash
+   cd ../safeAI-gui
+   npm install
+   npm start
    ```
 
 ## Configuration
@@ -121,6 +130,8 @@ SafeAI comes with several built-in Knowledge Graphs:
 - **Ethics_KG**: Ethical decision-making principles
 - **LegalCompliance_KG**: Regulatory compliance patterns
 - **RiskManagement_KG**: Risk assessment and mitigation
+- **Math_KG**: Mathematical concepts, problems, and proofs
+- **FreePress**: Decentralized content publishing and consumption
 - And many more domain-specific KGs
 
 ## Security and Compliance
@@ -227,18 +238,62 @@ This will check the agent for:
 5. **Ethics Guidelines**: Include clear ethical guidelines and constraints
 6. **Resource Limits**: Specify resource usage limits and effectiveness thresholds
 
+## SafeAI Management Console
+
+The SafeAI Management Console provides a user-friendly web interface for interacting with the SafeAI ecosystem. It enables administrators, developers, and users to manage knowledge graphs, create and monitor agents, ensure ethical compliance, and leverage blockchain capabilities.
+
+### Key Features
+
+- **Dashboard**: Overview of system health, security status, and recent activities
+- **Knowledge Graph Management**: Interact with various domain-specific knowledge graphs
+  - **Ethics KG**: Evaluate agents against ethical frameworks
+  - **CyberSecurity KG**: Manage vulnerabilities and security incidents
+  - **Math KG**: Explore mathematical concepts, problems, and proofs
+  - **FreePress**: Publish and consume content in a decentralized manner
+- **Agent Workshop**: Create, monitor, and enhance AI agents
+- **Security Center**: Monitor threats, manage access control, and ensure compliance
+- **Blockchain Integration**: Deploy and interact with knowledge graph contracts
+- **IPFS Integration**: Store and retrieve content using decentralized storage
+
+### Getting Started with the Console
+
+1. Navigate to the GUI directory:
+   ```bash
+   cd safeAI-gui
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your settings
+   ```
+
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+5. Access the console at http://localhost:3000
+
+For full documentation on the Management Console, see [SafeAI Management Console User Manual](safeAI-gui/README.md).
+
 ## Development
 
 ### Building from Source
 
-     ```bash
+```bash
 cd safeAI-plugin
 mvn clean package
 ```
 
 ### Running Tests
 
-     ```bash
+```bash
 mvn test
 ```
 
@@ -247,42 +302,34 @@ mvn test
 1. Set up environment variables
 2. Configure security settings
 3. Run deployment script:
-     ```bash
-   ./deploy_neo4j.sh
+   ```bash
+   cd safeAI-plugin
+   ./deploy_production.sh
    ```
-4. Verify installation:
-     ```cypher
-   CALL safeai.debug.checkProductionReadiness()
+
+4. Deploy the Management Console:
+   ```bash
+   cd ../safeAI-gui
+   npm run build
+   # Deploy build files to your web server
    ```
+
+For detailed deployment instructions, including AWS deployment and blockchain node setup, refer to the [SafeAI Management Console User Manual](safeAI-gui/README.md).
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Configuration Issues**
-   - Ensure `plugin-config.properties` is in the Neo4j configuration directory
-   - Verify all required properties are set correctly
-   - Check Neo4j logs for configuration-related errors
+- **Plugin not loading**: Check Neo4j logs for errors
+- **Authentication failures**: Verify API keys and blockchain credentials
+- **Performance issues**: Check resource allocation and monitoring settings
+- **GUI connectivity problems**: Verify network settings and blockchain connection
 
-2. **Blockchain Connection Issues**
-   - Verify blockchain endpoint is accessible
-   - Check admin wallet key configuration
-   - Ensure blockchain network is running
-
-3. **Security Validation Failures**
-   - Review security validation output
-   - Ensure all required security KGs are loaded
-   - Check compliance requirements
-
-### Getting Help
-
-- Submit issues on GitHub
-- Check documentation in `/docs`
-- Contact support team
+For more troubleshooting information, see the [Troubleshooting Guide](docs/troubleshooting.md).
 
 ## License
 
-Copyright © 2024 FortressAI. All rights reserved.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contributing
 
