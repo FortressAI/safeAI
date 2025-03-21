@@ -1,4 +1,7 @@
 # SafeAI IPTO Technical Architecture
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Architecture](../technical/architecture/README.md) > [Technical Architecture](../technical/architecture/architecture.md)
+---
 This document outlines the technical architecture of the SafeAI Initial Public Token Offering (IPTO) platform.
 ## Table of Contents
 1. [Overview](#overview)
