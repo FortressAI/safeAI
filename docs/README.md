@@ -14,13 +14,13 @@ Welcome to the SafeAI documentation. This comprehensive guide will help you unde
 
 ### Developer Documentation
 - [Developer Journey](developer-journeys/developer-journey.md)
-- [Architecture Overview](technical/architecture.md)
-- [Technical Implementation Guide](technical/implementation-guide.md)
+- [Architecture Overview](technical/architecture/architecture.md)
+- [Technical Implementation Guide](technical/development/implementation-guide.md)
 - [Contributing Guide](technical/contributing-guide.md)
-- [API Reference](technical/api-reference.md)
-- [Smart Contract Audit](technical/smart-contract-audit.md)
-- [Testing Guide](technical/testing-guide.md)
-- [UI Implementation Guide](technical/ui-implementation.md)
+- [API Reference](technical/api/api-reference.md)
+- [Smart Contract Audit](technical/security/smart-contract-audit.md)
+- [Testing Guide](technical/testing/testing-guide.md)
+- [UI Implementation Guide](technical/ui/ui-implementation.md)
 - [Blockchain Integration](technical/blockchain-integration.md)
 
 ### Domain Expert Documentation
@@ -38,6 +38,10 @@ Welcome to the SafeAI documentation. This comprehensive guide will help you unde
 - [Legal Documentation](legal/)
 - [Governance](governance/)
 - [Compliance Guide](legal/compliance-guide.md)
+
+### Community
+- [Community Guidelines](community/guidelines.md)
+- [Community Resources](community/resources.md)
 
 ## Documentation Updates
 This documentation is regularly updated to reflect the latest features and improvements. Check back frequently for updates.

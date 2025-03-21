@@ -1,7 +1,5 @@
 # Getting Started with SafeAI
 
-![SafeAI Getting Started](https://safeaicoin.com/images/getting-started.png)
-
 ## Introduction
 
 Welcome to SafeAI! This guide will help you get started with the platform, from initial setup to your first interactions with AI agents and knowledge graphs.
@@ -25,7 +23,7 @@ Before you begin, ensure your system meets these requirements:
 
 ## Account Setup
 
-1. Visit [console.safeAIcoin.com](https://console.safeAIcoin.com)
+1. Visit the SafeAI platform
 2. Click "Connect Wallet" in the upper right corner
 3. Select your Web3 wallet (e.g., MetaMask)
 4. Approve the connection request
@@ -52,14 +50,14 @@ The Dashboard provides an overview of your SafeAI ecosystem:
 
 ### 2. Browse Available Agents
 
-Visit the [Agent Browser](agent-browser-guide.md) to:
+Visit the Agent Browser to:
 - Discover pre-built AI agents
 - Learn about their capabilities
 - Test agents in the sandbox environment
 
 ### 3. Explore Knowledge Graphs
 
-Navigate to [Knowledge Graphs](knowledge-graphs-guide.md) to:
+Navigate to Knowledge Graphs to:
 - View available knowledge domains
 - Explore relationships between concepts
 - Learn how to query the knowledge base
@@ -68,17 +66,17 @@ Navigate to [Knowledge Graphs](knowledge-graphs-guide.md) to:
 
 After completing these initial steps, you can:
 
-1. [Create Your First Agent](gui/agent-workshop.md)
-2. [Learn About Knowledge Graphs](knowledge-graphs-guide.md)
-3. [Explore Specialized Modules](user-manual.md#specialized-modules)
-4. [Join the Community](community-resources.md)
+1. Create Your First Agent
+2. Learn About Knowledge Graphs
+3. Explore Specialized Modules
+4. Join the Community
 
 ## Getting Help
 
 If you need assistance:
 - Click the "Help" icon in any section
-- Visit our [Community Forum](https://community.safeAIcoin.com)
-- Contact support@safeAIcoin.com
-- Check our [FAQ](faq.md)
+- Visit our Community Forum
+- Contact support@safeAI.com
+- Check our FAQ
 
-For more detailed information, refer to our comprehensive [User Manual](user-manual.md). 
+For more detailed information, refer to our comprehensive User Manual. 
