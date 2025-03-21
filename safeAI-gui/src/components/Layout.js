@@ -41,6 +41,9 @@ import CodeIcon from '@mui/icons-material/Code';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import FunctionsIcon from '@mui/icons-material/Functions';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import CalculateIcon from '@mui/icons-material/Calculate';
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 
 // Drawer width
 const drawerWidth = 260;
@@ -133,6 +136,12 @@ function Layout() {
       icon: <SettingsIcon />,
       description: 'Configure system settings'
     },
+    {
+      name: 'Ethics KG',
+      path: '/ethics-kg',
+      icon: <PsychologyIcon />,
+      description: 'Ethics Knowledge Graph Explorer'
+    }
   ];
   
   // Sample notifications with enhanced details

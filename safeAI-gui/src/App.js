@@ -17,6 +17,7 @@ import Settings from './pages/Settings';
 import ARCPrize from './pages/ARCPrize';
 import MathATP from './pages/MathATP';
 import MathKG from './pages/MathKG';
+import EthicsKG from './pages/EthicsKG';
 
 // Create a theme instance
 const theme = createTheme({
@@ -137,6 +138,7 @@ function App() {
               <Route path="security" element={<SecurityCenter />} />
               <Route path="knowledge-graphs" element={<KnowledgeGraphs />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="ethics-kg" element={<EthicsKG />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>
           </Routes>
