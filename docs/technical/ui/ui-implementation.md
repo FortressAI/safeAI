@@ -1,4 +1,7 @@
 # SafeAI UI Implementation Guide
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [UI](../technical/ui/README.md) > [UI Implementation Guide](../technical/ui/ui-implementation.md)
+---
 This guide provides detailed implementation examples and UI workflows for SafeAI's core components.
 
 ## Table of Contents

@@ -10,29 +10,7 @@ This document outlines the key user workflows and interaction patterns in the Sa
 ## Core Workflows
 
 ### Agent Management
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI
-    participant AgentService
-    participant Blockchain
-
-    User->>UI: Open Agent Dashboard
-    UI->>AgentService: Fetch Agent List
-    AgentService->>Blockchain: Query Agent Registry
-    Blockchain-->>AgentService: Return Agent Data
-    AgentService-->>UI: Update Agent List
-    UI-->>User: Display Agent Dashboard
-
-    User->>UI: Select Agent
-    UI->>UI: Show Agent Details
-    User->>UI: Update Agent Settings
-    UI->>AgentService: Validate Changes
-    AgentService->>Blockchain: Update Agent
-    Blockchain-->>AgentService: Confirm Update
-    AgentService-->>UI: Update UI State
-    UI-->>User: Show Success Message
-```
+![Agent Management Workflow](../images/ui-agent-management.svg)
 
 #### Implementation
 ```typescript

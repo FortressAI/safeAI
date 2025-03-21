@@ -1,0 +1,7 @@
+Unknown serde type: sequenceDiagram
+    participant User
+    participant UI
+    participant AgentService
+    participant Blockchain
+
+    User->>UI

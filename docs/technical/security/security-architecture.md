@@ -6,31 +6,9 @@ breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README
 This document outlines the security architecture of the SafeAI platform, including security controls, threat modeling, and security design principles.
 ## Security Controls
 ### Network Security
-```mermaid
-graph TD
-    A[Client] -->|HTTPS| B[Load Balancer]
-    B -->|WAF| C[API Gateway]
-    C -->|Internal Network| D[Application Servers]
-    D -->|Secure Connection| E[Database]
-    D -->|Secure Connection| F[Blockchain]
-    
-    G[Security Monitoring] -->|Logs| B
-    G -->|Logs| C
-    G -->|Logs| D
-    G -->|Alerts| H[Security Team]
-```
+![Network Security Architecture](../images/security-network.svg)
 ### Access Control
-```mermaid
-graph TD
-    A[User] -->|Authentication| B[Identity Provider]
-    B -->|JWT| C[API Gateway]
-    C -->|RBAC| D[Application]
-    D -->|Permissions| E[Resources]
-    
-    F[Audit Log] -->|Logs| B
-    F -->|Logs| C
-    F -->|Logs| D
-```
+![Access Control Architecture](../images/security-access-control.svg)
 ## Threat Modeling
 ### Threat Categories
 1. **Authentication Threats**

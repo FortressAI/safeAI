@@ -2,173 +2,115 @@
 ---
 breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [UI](../technical/ui/README.md)
 ---
-This directory contains comprehensive UI documentation for the SafeAI platform, including design system, component library, and user interface guidelines.
-      
-      
-## Directory Structure
-      
-      
-### Design System
-- [Design Overview](design-overview.md)
-- [Color System](color-system.md)
-- [Typography](typography.md)
-- [Spacing](spacing.md)
-      
-      
-### Component Library
-- [Component Overview](component-overview.md)
-- [Basic Components](basic-components.md)
-- [Complex Components](complex-components.md)
-- [Layout Components](layout-components.md)
-      
-      
-### UI Architecture
-- [Architecture Overview](architecture-overview.md)
-- [State Management](state-management.md)
-- [Routing](routing.md)
-- [Performance](performance.md)
-      
-      
-### Best Practices
-- [UI Guidelines](ui-guidelines.md)
-- [Accessibility](accessibility.md)
-- [Responsive Design](responsive-design.md)
-- [Animation](animation.md)
-      
-      
-## Getting Started
-      
-      
-### For Designers
-1. Review the [Design Overview](design-overview.md)
-2. Study the [Color System](color-system.md)
-3. Understand the [UI Guidelines](ui-guidelines.md)
-      
-      
-### For Frontend Developers
-1. Read the [Component Overview](component-overview.md)
-2. Learn about [State Management](state-management.md)
-3. Follow the [UI Guidelines](ui-guidelines.md)
-      
-      
-### For Accessibility
-1. Study the [Accessibility](accessibility.md) guide
-2. Review [WCAG Compliance](wcag-compliance.md)
-3. Understand [Screen Reader Support](screen-reader-support.md)
-      
-      
-## UI Standards
-      
-      
-### Design Principles
-- Consistency
-- Clarity
-- Efficiency
-- Accessibility
-      
-      
-### Component Standards
-- Component Structure
-- Props Interface
-- State Management
-- Event Handling
-      
-      
-### Style Guidelines
-- CSS Architecture
-- Naming Conventions
-- Code Organization
-- Documentation
-      
-      
-## Examples
-      
-      
-### Component Usage
-```typescript
-import { Button, Card, Text } from '@safeai/ui';
 
-const AgentCard = ({ agent }) => {
-  return (
-    <Card>
-      <Text variant="h2">{agent.name}</Text>
-      <Text variant="body">{agent.description}</Text>
-      <Button 
-        variant="primary"
-        onClick={() => handleAgentSelect(agent)}
-      >
-        Select Agent
-      </Button>
-    </Card>
-  );
+## Overview
+This directory contains comprehensive documentation for the SafeAI platform's user interface components, implementation guides, and best practices.
+
+## Directory Structure
+```
+ui/
+├── README.md                 # This file
+├── ui-implementation.md      # UI implementation guide
+├── ui-components.md         # UI component documentation
+├── ui-workflows.md          # UI workflow documentation
+└── ui-best-practices.md     # UI development best practices
+```
+
+## Getting Started
+
+### For UI Developers
+1. Review the [UI Implementation Guide](ui-implementation.md) for core concepts
+2. Study [UI Components](ui-components.md) for available components
+3. Follow [UI Best Practices](ui-best-practices.md) for development guidelines
+4. Reference [UI Workflows](ui-workflows.md) for user interaction patterns
+
+### For Frontend Engineers
+1. Start with the [UI Implementation Guide](ui-implementation.md)
+2. Review component architecture in [UI Components](ui-components.md)
+3. Understand user flows in [UI Workflows](ui-workflows.md)
+4. Follow guidelines in [UI Best Practices](ui-best-practices.md)
+
+### For Designers
+1. Review [UI Workflows](ui-workflows.md) for user interaction patterns
+2. Study [UI Components](ui-components.md) for available design elements
+3. Follow [UI Best Practices](ui-best-practices.md) for design guidelines
+4. Reference [UI Implementation Guide](ui-implementation.md) for technical constraints
+
+## UI Standards
+
+### Component Architecture
+```mermaid
+graph TD
+    A[UI Layer] --> B[Component Library]
+    B --> C[Core Components]
+    B --> D[Custom Components]
+    A --> E[State Management]
+    E --> F[Redux Store]
+    E --> G[Context API]
+```
+
+### Design System
+- Color Palette
+- Typography
+- Spacing
+- Component Variants
+- Animation Guidelines
+
+### Accessibility
+- WCAG 2.1 Compliance
+- Screen Reader Support
+- Keyboard Navigation
+- Color Contrast
+- Focus Management
+
+## Development Guidelines
+
+### Code Style
+```typescript
+// Component Structure
+import React from 'react';
+import { ComponentProps } from './types';
+
+export const Component: React.FC<ComponentProps> = ({
+  prop1,
+  prop2,
+  ...props
+}) => {
+  // Implementation
 };
 ```
-      
-      
+
 ### State Management
 ```typescript
-import { createStore } from '@safeai/store';
-
-const agentStore = createStore({
-  state: {
-    agents: [],
-    selectedAgent: null,
-    loading: false
-  },
-  actions: {
-    async fetchAgents() {
-      this.state.loading = true;
-      try {
-        const agents = await api.getAgents();
-        this.state.agents = agents;
-      } finally {
-        this.state.loading = false;
-      }
-    }
+// Redux Slice Example
+const uiSlice = createSlice({
+  name: 'ui',
+  initialState,
+  reducers: {
+    // Reducers
   }
 });
 ```
-      
-      
-## Best Practices
-      
-      
-### Component Design
-- Single Responsibility
-- Reusability
-- Maintainability
-- Testability
-      
-      
-### Performance
+
+### Performance Optimization
 - Code Splitting
 - Lazy Loading
-- Caching
-- Optimization
-      
-      
-### Accessibility
-- Semantic HTML
-- ARIA Attributes
-- Keyboard Navigation
-- Screen Reader Support
-      
-      
+- Memoization
+- Bundle Optimization
+- Image Optimization
+
 ## Support
-      
-      
-### UI Support
-- Join the [UI Discord](https://discord.gg/safeai-ui)
-- Contact ui@safeai.com
-- Review [UI Guidelines](ui-guidelines.md)
-      
-      
-### Documentation Issues
-- Report issues on GitHub
-- Suggest improvements via pull requests
-- Contact docs@safeai.com
-      
-      
+For UI-related questions or issues:
+- Create an issue in the UI repository
+- Contact the UI team at ui@safeai.com
+- Join the UI development channel in Slack
+
+## Contributing
+1. Follow the UI development guidelines
+2. Write tests for new components
+3. Update documentation
+4. Submit pull requests for review
+
 ---
-*Last updated: March 2024*
-Copyright © 2024 SafeAI. All rights reserved. 
+Last Updated: March 2024
+© 2024 SafeAI. All rights reserved. 
