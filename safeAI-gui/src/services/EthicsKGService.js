@@ -22,7 +22,10 @@ class EthicsKGService {
 
             // Initialize contract
             const contractAddress = process.env.REACT_APP_ETHICS_KG_CONTRACT_ADDRESS;
-            const contractABI = require('../contracts/EthicsKG.json').abi;
+            
+            // Import contract ABI from artifacts
+            // This will be available after running 'npm run compile'
+            const contractABI = require('../artifacts/contracts/EthicsKG.sol/EthicsKG.json').abi;
             this.contract = new this.web3.eth.Contract(contractABI, contractAddress);
             
             this.initialized = true;
