@@ -87,7 +87,7 @@ public class MainPlugin {
                     config.load(new FileInputStream(configPath));
                     return true;
                 }
-            } catch (IOException e) {
+        } catch (IOException e) {
                 logger.log(Level.WARNING, "Error reading configuration from " + configPath + ": " + e.getMessage(), e);
             }
         }
