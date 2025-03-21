@@ -1,336 +1,331 @@
 # SafeAI SDK Documentation
-This guide provides comprehensive documentation for the SafeAI Software Development Kit (SDK), enabling developers to integrate SafeAI functionality into their applications.
+
+## Overview
+The SafeAI SDK provides a comprehensive set of tools and libraries for integrating with the SafeAI platform.
+
 ## Table of Contents
 1. [Installation](#installation)
-2. [Quick Start](#quick-start)
-3. [Core Features](#core-features)
-4. [Advanced Usage](#advanced-usage)
+2. [Authentication](#authentication)
+3. [Core Components](#core-components)
+4. [API Reference](#api-reference)
 5. [Examples](#examples)
 6. [Best Practices](#best-practices)
-7. [Troubleshooting](#troubleshooting)
+
 ## Installation
-### Python
-```bash
-pip install safeai-sdk
-```
-### JavaScript/TypeScript
+
+### Prerequisites
+- Node.js v14 or higher
+- npm or yarn
+- SafeAI API key
+
+### Setup
 ```bash
 npm install @safeai/sdk
 # or
 yarn add @safeai/sdk
 ```
-### Java
-```xml
-<dependency>
-    <groupId>com.safeai</groupId>
-    <artifactId>safeai-sdk</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-## Quick Start
-### Python
-```python
-from safeai import SafeAI
 
-# Initialize the SDK
-safeai = SafeAI(api_key="your-api-key")
-
-# Create an agent
-agent = safeai.agents.create(
-    name="My Agent",
-    type="general",
-    configuration={
-        "model": "gpt-4",
-        "parameters": {"temperature": 0.7}
-    }
-)
-
-# Query the knowledge graph
-results = safeai.knowledge_graph.query(
-    "MATCH (n) WHERE n.type = 'concept' RETURN n"
-)
-
-# Publish content
-content = safeai.content.publish(
-    title="My Article",
-    content="Article content...",
-    license="MIT"
-)
-```
-### JavaScript
+### Configuration
 ```javascript
 import { SafeAI } from '@safeai/sdk';
 
-// Initialize the SDK
 const safeai = new SafeAI({
-    apiKey: 'your-api-key'
+  apiKey: 'your-api-key',
+  environment: 'production' // or 'development'
+});
+```
+
+## Authentication
+
+### API Keys
+```javascript
+// Generate API key
+const apiKey = await safeai.auth.generateApiKey({
+  name: 'My Application',
+  permissions: ['read', 'write']
 });
 
-// Create an agent
+// Revoke API key
+await safeai.auth.revokeApiKey(apiKey.id);
+```
+
+### OAuth Integration
+```javascript
+// Initialize OAuth flow
+const authUrl = safeai.auth.getOAuthUrl({
+  redirectUri: 'https://your-app.com/callback',
+  scopes: ['agent:read', 'content:write']
+});
+
+// Handle OAuth callback
+const tokens = await safeai.auth.handleOAuthCallback(code);
+```
+
+## Core Components
+
+### Agent Management
+```javascript
+// Create agent
 const agent = await safeai.agents.create({
-    name: 'My Agent',
-    type: 'general',
-    configuration: {
-        model: 'gpt-4',
-        parameters: { temperature: 0.7 }
-    }
+  name: 'My Agent',
+  type: 'prompt',
+  capabilities: ['text-generation', 'code-analysis']
 });
 
-// Query the knowledge graph
-const results = await safeai.knowledgeGraph.query(
-    'MATCH (n) WHERE n.type = "concept" RETURN n'
-);
+// Configure agent
+await agent.configure({
+  parameters: {
+    temperature: 0.7,
+    maxTokens: 1000
+  }
+});
+
+// Execute agent
+const result = await agent.execute({
+  input: 'Analyze this code...'
+});
+```
+
+### Knowledge Graph Operations
+```javascript
+// Create graph
+const graph = await safeai.graphs.create({
+  name: 'My Knowledge Graph',
+  schema: {
+    nodes: [...],
+    relationships: [...]
+  }
+});
+
+// Query graph
+const results = await graph.query(`
+  MATCH (n:Concept)
+  WHERE n.category = 'AI'
+  RETURN n
+`);
+
+// Update graph
+await graph.update({
+  nodes: [...],
+  relationships: [...]
+});
+```
+
+### Content Management
+```javascript
+// Create content
+const content = await safeai.content.create({
+  title: 'My Article',
+  body: 'Content...',
+  license: 'MIT'
+});
 
 // Publish content
-const content = await safeai.content.publish({
-    title: 'My Article',
-    content: 'Article content...',
-    license: 'MIT'
+await content.publish({
+  channels: ['web', 'api']
+});
+
+// Update content
+await content.update({
+  body: 'Updated content...'
 });
 ```
-## Core Features
-### Agent Management
-```python
-# List agents
-agents = safeai.agents.list()
 
-# Get agent details
-agent = safeai.agents.get(agent_id="agent-123")
+## API Reference
 
-# Update agent
-updated_agent = safeai.agents.update(
-    agent_id="agent-123",
-    configuration={"temperature": 0.8}
-)
+### Agents API
+```typescript
+interface AgentConfig {
+  name: string;
+  type: 'prompt' | 'script';
+  capabilities: string[];
+  parameters?: Record<string, any>;
+}
 
-# Delete agent
-safeai.agents.delete(agent_id="agent-123")
+interface AgentExecuteOptions {
+  input: string;
+  context?: Record<string, any>;
+  options?: Record<string, any>;
+}
 ```
-### Knowledge Graph Operations
-```python
-# Execute Cypher query
-results = safeai.knowledge_graph.query(
-    query="MATCH (n) RETURN n LIMIT 10",
-    parameters={"limit": 10}
-)
 
-# Get graph schema
-schema = safeai.knowledge_graph.get_schema()
+### Knowledge Graph API
+```typescript
+interface GraphSchema {
+  nodes: NodeDefinition[];
+  relationships: RelationshipDefinition[];
+}
 
-# Create node
-node = safeai.knowledge_graph.create_node(
-    labels=["Concept"],
-    properties={"name": "AI", "type": "technology"}
-)
-
-# Create relationship
-relationship = safeai.knowledge_graph.create_relationship(
-    start_node_id="node-1",
-    end_node_id="node-2",
-    type="RELATES_TO",
-    properties={"weight": 1.0}
-)
+interface QueryOptions {
+  timeout?: number;
+  limit?: number;
+  offset?: number;
+}
 ```
-### Content Management
-```python
-# Publish content
-content = safeai.content.publish(
-    title="My Article",
-    content="Article content...",
-    license="MIT",
-    visibility="public"
-)
 
-# Get content
-content = safeai.content.get(content_id="content-123")
-
-# Update content
-updated_content = safeai.content.update(
-    content_id="content-123",
-    content="Updated content..."
-)
-
-# Delete content
-safeai.content.delete(content_id="content-123")
+### Content API
+```typescript
+interface ContentOptions {
+  title: string;
+  body: string;
+  license: string;
+  metadata?: Record<string, any>;
+  tags?: string[];
+}
 ```
-## Advanced Usage
-### Event Handling
-```python
-# Subscribe to agent events
-safeai.agents.on("status_change", lambda event: print(f"Agent {event.agent_id} status changed to {event.status}"))
 
-# Subscribe to content events
-safeai.content.on("published", lambda event: print(f"Content {event.content_id} published"))
-```
-### Batch Operations
-```python
-# Batch create nodes
-nodes = safeai.knowledge_graph.batch_create_nodes([
-    {"labels": ["Concept"], "properties": {"name": "AI"}},
-    {"labels": ["Concept"], "properties": {"name": "ML"}}
-])
-
-# Batch create relationships
-relationships = safeai.knowledge_graph.batch_create_relationships([
-    {
-        "start_node_id": "node-1",
-        "end_node_id": "node-2",
-        "type": "RELATES_TO"
-    }
-])
-```
-### Error Handling
-```python
-try:
-    agent = safeai.agents.create(...)
-except SafeAIError as e:
-    print(f"Error creating agent: {e.message}")
-    if e.code == "RATE_LIMIT_EXCEEDED":
-        print("Please wait before trying again")
-```
 ## Examples
-### Complete Agent Workflow
-```python
-from safeai import SafeAI
 
-def main():
-    # Initialize SDK
-    safeai = SafeAI(api_key="your-api-key")
-    
-    try:
-        # Create agent
-        agent = safeai.agents.create(
-            name="Research Assistant",
-            type="research",
-            configuration={
-                "model": "gpt-4",
-                "parameters": {"temperature": 0.7}
-            }
-        )
-        
-        # Query knowledge graph
-        results = safeai.knowledge_graph.query(
-            "MATCH (n:Research) RETURN n LIMIT 5"
-        )
-        
-        # Process results
-        for node in results:
-            print(f"Found research: {node.properties['title']}")
-            
-        # Publish findings
-        content = safeai.content.publish(
-            title="Research Summary",
-            content="Summary of findings...",
-            license="MIT"
-        )
-        
-    except SafeAIError as e:
-        print(f"Error: {e.message}")
-    finally:
-        # Cleanup
-        safeai.agents.delete(agent.id)
+### Complete Agent Implementation
+```javascript
+import { SafeAI } from '@safeai/sdk';
 
-if __name__ == "__main__":
-    main()
+async function createAndExecuteAgent() {
+  const safeai = new SafeAI({
+    apiKey: process.env.SAFEAI_API_KEY
+  });
+
+  // Create agent
+  const agent = await safeai.agents.create({
+    name: 'Code Analysis Agent',
+    type: 'prompt',
+    capabilities: ['code-analysis', 'security-check']
+  });
+
+  // Configure agent
+  await agent.configure({
+    parameters: {
+      temperature: 0.7,
+      maxTokens: 2000,
+      securityLevel: 'high'
+    }
+  });
+
+  // Execute agent
+  const result = await agent.execute({
+    input: 'Analyze this code for security vulnerabilities...',
+    context: {
+      language: 'javascript',
+      framework: 'react'
+    }
+  });
+
+  return result;
+}
 ```
-### Content Publishing Workflow
-```python
-from safeai import SafeAI
 
-def publish_article():
-    safeai = SafeAI(api_key="your-api-key")
-    
-    try:
-        # Create content
-        content = safeai.content.publish(
-            title="AI Ethics Guide",
-            content="Content about AI ethics...",
-            license="MIT",
-            visibility="public"
-        )
-        
-        # Add to knowledge graph
-        node = safeai.knowledge_graph.create_node(
-            labels=["Article"],
-            properties={
-                "id": content.id,
-                "title": content.title,
-                "author": "Your Name"
-            }
-        )
-        
-        print(f"Published article: {content.id}")
-        return content.id
-        
-    except SafeAIError as e:
-        print(f"Error publishing article: {e.message}")
-        return None
+### Knowledge Graph Integration
+```javascript
+import { SafeAI } from '@safeai/sdk';
 
-if __name__ == "__main__":
-    article_id = publish_article()
+async function createAndQueryGraph() {
+  const safeai = new SafeAI({
+    apiKey: process.env.SAFEAI_API_KEY
+  });
+
+  // Create graph
+  const graph = await safeai.graphs.create({
+    name: 'AI Concepts Graph',
+    schema: {
+      nodes: [
+        {
+          type: 'Concept',
+          properties: ['name', 'description', 'category']
+        }
+      ],
+      relationships: [
+        {
+          type: 'RELATES_TO',
+          properties: ['strength', 'type']
+        }
+      ]
+    }
+  });
+
+  // Add data
+  await graph.update({
+    nodes: [
+      {
+        type: 'Concept',
+        properties: {
+          name: 'Machine Learning',
+          description: '...',
+          category: 'AI'
+        }
+      }
+    ]
+  });
+
+  // Query graph
+  const results = await graph.query(`
+    MATCH (n:Concept)
+    WHERE n.category = 'AI'
+    RETURN n.name, n.description
+  `);
+
+  return results;
+}
 ```
+
 ## Best Practices
-### API Key Management
-```python
-# Use environment variables
-import os
-from safeai import SafeAI
 
-api_key = os.getenv("SAFEAI_API_KEY")
-safeai = SafeAI(api_key=api_key)
-```
-### Rate Limiting
-```python
-from safeai import SafeAI, RateLimitError
-
-def create_agent_with_retry(safeai, max_retries=3):
-    for attempt in range(max_retries):
-        try:
-            return safeai.agents.create(...)
-        except RateLimitError:
-            if attempt == max_retries - 1:
-                raise
-            time.sleep(2 ** attempt)  # Exponential backoff
-```
 ### Error Handling
-```python
-from safeai import SafeAI, SafeAIError
-
-def safe_operation():
-    safeai = SafeAI(api_key="your-api-key")
-    
-    try:
-        result = safeai.some_operation()
-        return result
-    except SafeAIError as e:
-        if e.code == "NOT_FOUND":
-            print("Resource not found")
-        elif e.code == "UNAUTHORIZED":
-            print("Authentication failed")
-        else:
-            print(f"Unexpected error: {e.message}")
-        return None
+```javascript
+try {
+  const result = await safeai.agents.execute({
+    input: '...'
+  });
+} catch (error) {
+  if (error.code === 'RATE_LIMIT') {
+    // Handle rate limiting
+  } else if (error.code === 'AUTH_ERROR') {
+    // Handle authentication errors
+  }
+  // Handle other errors
+}
 ```
-## Troubleshooting
-### Common Issues
-1. **Authentication Errors**
-   - Verify API key is correct
-   - Check API key permissions
-   - Ensure API key is active
-2. **Rate Limiting**
-   - Implement exponential backoff
-   - Monitor rate limit headers
-   - Consider upgrading tier
-3. **Network Issues**
-   - Check internet connection
-   - Verify API endpoint
-   - Check firewall settings
-### Getting Help
-1. Check [API Status](https://status.safeAIcoin.com)
-2. Join [Developer Discord](https://discord.gg/safeai)
-3. Contact support@safeAIcoin.com
-## Support
-For SDK support:
-1. Visit [SDK Documentation](https://docs.safeAIcoin.com/sdk)
-2. Join [Developer Community](https://community.safeAIcoin.com)
-3. Contact sdk-support@safeAIcoin.com 
+
+### Rate Limiting
+```javascript
+// Implement exponential backoff
+async function executeWithRetry(operation, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (error.code === 'RATE_LIMIT') {
+        await new Promise(resolve => 
+          setTimeout(resolve, Math.pow(2, i) * 1000)
+        );
+        continue;
+      }
+      throw error;
+    }
+  }
+}
+```
+
+### Security
+```javascript
+// Use environment variables for sensitive data
+const safeai = new SafeAI({
+  apiKey: process.env.SAFEAI_API_KEY,
+  environment: process.env.NODE_ENV
+});
+
+// Implement request signing
+const signedRequest = safeai.auth.signRequest({
+  method: 'POST',
+  path: '/api/v1/agents',
+  body: {...}
+});
+```
+
+## Resources
+- [API Reference](../technical/api-reference.md)
+- [Architecture Overview](../technical/architecture.md)
+- [Contributing Guide](../technical/contributing-guide.md)
+- [Support Documentation](../support/README.md)
+
+---
+© 2024 SafeAI. All rights reserved. 

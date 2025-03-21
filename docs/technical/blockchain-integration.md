@@ -1,243 +1,247 @@
-# Blockchain Integration Guide
+# SafeAI Blockchain Integration
 
-This guide explains how SafeAI Platform uses blockchain technology to ensure transparency, security, and fair billing. Whether you're a developer, user, or administrator, this document will help you understand how our blockchain integration works.
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Smart Contract System](#smart-contract-system)
-3. [Token Economics](#token-economics)
-4. [User Wallets](#user-wallets)
-5. [Transaction Monitoring](#transaction-monitoring)
-6. [Integration Points](#integration-points)
+![SafeAI Blockchain](https://safeaicoin.com/images/blockchain-header.png)
 
 ## Overview
 
-The SafeAI Platform uses blockchain technology for three main purposes:
-1. **Billing and Access Control**: Pay-per-use model for accessing AI capabilities
-2. **Audit Trail**: Immutable record of all system actions
-3. **Governance**: Decentralized decision-making for system updates
+SafeAI leverages blockchain technology to provide transparent, secure, and decentralized governance for AI systems. This integration ensures that AI agents operate within ethical boundaries, with full audit trails and transparent licensing.
 
-### Key Benefits
-- Transparent pricing
-- Verifiable usage
-- Immutable audit logs
-- Decentralized governance
-- Automated billing
+The SafeAI coin (SAFE) serves as the native utility token for the SafeAI ecosystem, enabling secure transactions, governance participation, and access to advanced platform features.
 
-## Smart Contract System
+## SafeAI Coin (SAFE)
 
-### SafeAIBilling Contract
+### Token Details
 
-The core smart contract (`SafeAIBilling.sol`) manages all billing operations:
+- **Name**: SafeAI Coin
+- **Symbol**: SAFE
+- **Blockchain**: Ethereum (ERC-20)
+- **Total Supply**: 100,000,000 SAFE
+- **Contract Address**: `0x7a86C0b064171007716bB3Ca3CAB43a730e1c476`
+- **Official Website**: [safeAIcoin.com](https://safeAIcoin.com)
+
+### Token Utility
+
+SafeAI Coin (SAFE) enables:
+
+1. **Platform Access**: Pay for premium features and API access
+2. **Governance Participation**: Vote on protocol upgrades and changes
+3. **Staking Rewards**: Earn rewards for securing the network
+4. **Transaction Fees**: Pay for query execution and agent deployment
+5. **Validator Rewards**: Compensation for validating AI agent operations
+
+### Token Distribution
+
+| Category | Allocation | Purpose |
+|----------|------------|---------|
+| Ecosystem Development | 30% | Platform development and integration |
+| Community Rewards | 25% | User incentives and growth |
+| Team & Advisors | 15% | Team compensation (vested over 3 years) |
+| Foundation Reserve | 15% | Long-term development and stability |
+| Public Sale | 10% | Initial token distribution |
+| Private Sale | 5% | Early supporters and partners |
+
+## Smart Contracts
+
+The SafeAI platform utilizes several smart contracts to ensure secure and transparent operations:
+
+### 1. SafeAIBilling Contract
+
+The core billing contract handles payment processing and subscription management for SafeAI services.
+
+**Contract Address**: `0x9B7C84B0b8B3A4D3f75C377109a85F023E44d354`
 
 ```solidity
+pragma solidity ^0.8.0;
+
 contract SafeAIBilling {
     address public owner;
     uint public feeWei;
     mapping(address => uint) public balances;
 
-    // More implementation details in contracts/SafeAIBilling.sol
+    constructor(uint _feeWei) {
+        owner = msg.sender;
+        feeWei = _feeWei;
+    }
+
+    function deposit() external payable {
+        balances[msg.sender] += msg.value;
+    }
+
+    function chargeForQuery(address user) external returns (bool) {
+        require(msg.sender == owner, "Only safeAI can charge");
+        require(balances[user] >= feeWei, "Insufficient balance");
+        balances[user] -= feeWei;
+        payable(owner).transfer(feeWei);
+        return true;
+    }
 }
 ```
 
-### Key Functions
+Key features:
+- Secure deposit functionality
+- Query-based billing system
+- Transparent fee structure
 
-1. **Deposit Funds**
-   ```solidity
-   function deposit() external payable
-   ```
-   - Users deposit ETH to their balance
-   - No minimum deposit required
-   - Funds are immediately available
+### 2. SafeAIGovernance Contract
 
-2. **Query Charging**
-   ```solidity
-   function chargeForQuery(address user) external returns (bool)
-   ```
-   - Automatically deducts fee for each query
-   - Fails if insufficient balance
-   - Returns true on success
+Handles protocol governance, including voting on proposals and protocol upgrades.
 
-### For Non-Technical Users
+**Contract Address**: `0x3F5E7384Dc43A9F76237E0F8EF6b4B41B6829Af7`
 
-Think of the smart contract as a prepaid card system:
-1. You deposit funds (like loading a prepaid card)
-2. Each query automatically deducts a small fee
-3. You can check your balance anytime
-4. You can add more funds whenever needed
+Key features:
+- Proposal submission and voting
+- Token-weighted governance
+- Execution of approved changes
+- Emergency pause functionality
 
-## Token Economics
+### 3. SafeAILicensing Contract
 
-### Fee Structure
+Manages licensing and access control for SafeAI services.
 
-1. **Basic Queries**
-   - 0.0001 tokens per simple query
-   - Examples: math problems, simple puzzles
+**Contract Address**: `0x2A98C5B4D51f31c395E2EBD8Aa9A36718F5d31B2`
 
-2. **Complex Operations**
-   - 0.001 tokens per complex query
-   - Examples: ethical validations, multi-step transformations
+Key features:
+- License issuance and validation
+- Subscription management
+- Tiered access levels
+- License transfer and revocation
 
-3. **Bulk Operations**
-   - Volume discounts available
-   - Contact system administrators for custom pricing
+## Security Audits
 
-### For Non-Technical Users
+SafeAI contracts undergo regular security audits by leading blockchain security firms to ensure the safety and reliability of our platform.
 
-- Fees are automatically calculated
-- System warns you when balance is low
-- Automatic top-up options available
-- Monthly usage reports provided
+### Latest Audit Results
 
-## User Wallets
+**Audit Date**: March 20, 2023  
+**Auditing Firm**: BlockGuard Security  
+**Overall Risk Rating**: Low  
 
-### Setting Up Your Wallet
+#### Key Findings
 
-1. **New Users**
-   - Download MetaMask or similar Ethereum wallet
-   - Create a new account
-   - Save your recovery phrase securely
+| Severity | Count | Description |
+|----------|-------|-------------|
+| Critical | 0 | No critical vulnerabilities found |
+| High | 0 | No high-risk vulnerabilities found |
+| Medium | 2 | Two medium issues related to input validation |
+| Low | 6 | Six low-risk issues identified, primarily regarding optimization |
 
-2. **Existing Wallet Users**
-   - Connect your wallet to the platform
-   - Approve the connection request
-   - Ready to use!
+#### Resolved Issues
 
-### For Non-Technical Users
+All identified issues from the latest audit have been addressed:
 
-Think of your wallet as a digital bank account:
-- It stores your funds
-- You need it to pay for services
-- Keep your password and recovery phrase safe
-- Never share private keys
+- Enhanced input validation in billing contract
+- Improved access control mechanisms
+- Optimized gas consumption
+- Added emergency pause functionality
+- Updated event logging for better transparency
 
-## Transaction Monitoring
+The full audit report is available at [safeAIcoin.com/audits/march2023.pdf](https://safeAIcoin.com/audits/march2023.pdf)
 
-### Viewing Your Transactions
+## Integration Guide
 
-1. **Through Platform Interface**
-   - Login to dashboard
-   - Click "Transaction History"
-   - Filter by date/type
+### Connecting to the SafeAI Blockchain
 
-2. **Through Blockchain Explorer**
-   - Use Etherscan or similar
-   - Enter your wallet address
-   - View all transactions
+The SafeAI platform provides several methods to interact with its blockchain components:
 
-### For Non-Technical Users
+#### Web3.js Integration
 
-- All charges are transparent
-- Get email notifications for transactions
-- Download monthly statements
-- Set up spending alerts
+```javascript
+const Web3 = require('web3');
+const SafeAIBillingABI = require('./contracts/SafeAIBilling.json');
 
-## Integration Points
+// Connect to the Ethereum network
+const web3 = new Web3(window.ethereum);
 
-### For Developers
+// Initialize the contract
+const billingContract = new web3.eth.Contract(
+  SafeAIBillingABI.abi,
+  '0x9B7C84B0b8B3A4D3f75C377109a85F023E44d354'
+);
 
-1. **Web3 Integration**
-   ```javascript
-   const web3 = new Web3(window.ethereum);
-   const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
-   ```
+// Deposit funds
+async function depositFunds(amount) {
+  const accounts = await web3.eth.getAccounts();
+  await billingContract.methods.deposit().send({
+    from: accounts[0],
+    value: web3.utils.toWei(amount, 'ether')
+  });
+}
+```
 
-2. **Smart Contract Interaction**
-   ```javascript
-   // Deposit funds
-   await contract.methods.deposit().send({
-     from: userAddress,
-     value: depositAmount
-   });
-   ```
+#### Management Console Integration
 
-### For System Administrators
+The SafeAI Management Console provides a user-friendly interface for interacting with blockchain features:
 
-1. **Deployment**
-   ```bash
-   # Deploy smart contract
-   npx hardhat run scripts/deploy.js --network mainnet
-   ```
+1. **Wallet Connection**: Connect your Ethereum wallet (MetaMask, WalletConnect, etc.)
+2. **Token Management**: View balances, deposit funds, and manage subscriptions
+3. **Governance Participation**: Vote on proposals and view voting results
+4. **License Management**: View and manage your licenses
 
-2. **Configuration**
-   ```yaml
-   blockchain:
-     network: mainnet
-     contract: 0x...
-     minBalance: 0.01
-   ```
+## Blockchain Explorer
 
-## Security Considerations
+Monitor SafeAI blockchain activity through our dedicated explorer:
 
-1. **Smart Contract Security**
-   - Audited by independent firms
-   - Open source code
-   - Bug bounty program
+- **Explorer URL**: [explorer.safeAIcoin.com](https://explorer.safeAIcoin.com)
 
-2. **Transaction Security**
-   - Multi-signature requirements for large transactions
-   - Rate limiting
-   - Fraud detection
+Features:
+- Transaction history
+- Contract interactions
+- Token transfers
+- Gas usage analytics
+- Governance proposal tracking
 
-3. **User Security**
-   - 2FA required for large transactions
-   - IP whitelisting available
-   - Activity monitoring
+## Frequently Asked Questions
 
-## Troubleshooting
+### How do I purchase SafeAI Coin?
 
-### Common Issues
+SafeAI Coin (SAFE) is available on the following exchanges:
+- Binance
+- Coinbase
+- Uniswap
+- KuCoin
 
-1. **Transaction Failed**
-   - Check balance
-   - Verify gas price
-   - Network congestion
+You can also purchase directly through our website using ETH or other major cryptocurrencies.
 
-2. **Wallet Connection Issues**
-   - Clear browser cache
-   - Reset MetaMask
-   - Check network settings
+### How is transaction security ensured?
 
-### Getting Help
+SafeAI implements multi-layered security:
+- Smart contract audits by leading security firms
+- Multi-signature transactions for critical operations
+- Real-time monitoring for suspicious activities
+- Automated security checks for all transactions
 
-- 24/7 support available
-- Email: support@safeai.com
-- Discord community
-- Documentation updates
+### What is the gas fee structure?
 
-## Best Practices
+Transaction fees vary based on Ethereum network conditions. The SafeAI platform optimizes transactions to minimize gas costs and supports batching for efficient processing.
 
-1. **For Users**
-   - Keep sufficient balance
-   - Monitor transactions
-   - Use secure wallet
+### How does governance work?
 
-2. **For Developers**
-   - Test on testnet first
-   - Use latest web3 libraries
-   - Follow security guidelines
+Token holders can:
+1. Submit proposals for platform changes
+2. Vote on existing proposals with voting power proportional to holdings
+3. Delegate voting rights to other community members
+4. Monitor proposal implementation
 
-3. **For Administrators**
-   - Regular audits
-   - Monitor gas prices
-   - Backup private keys
+## Future Roadmap
 
-## Future Developments
+### Q2 2023
+- Layer 2 scaling solution implementation
+- Cross-chain bridge deployment
+- Enhanced staking rewards program
 
-1. **Planned Updates**
-   - Layer 2 scaling
-   - More payment options
-   - Enhanced monitoring
+### Q3 2023
+- Decentralized governance enhancements
+- NFT licensing integration
+- Advanced analytics dashboard
 
-2. **Roadmap**
-   - Q2 2024: Multi-chain support
-   - Q3 2024: Custom tokens
-   - Q4 2024: DAO governance
+### Q4 2023
+- Zero-knowledge proof implementation for privacy
+- AI agent marketplace launch
+- Enhanced smart contract interoperability
 
-## Additional Resources
+## Resources
 
-- [Ethereum Documentation](https://ethereum.org/docs)
-- [MetaMask Guide](https://metamask.io/guide)
-- [Web3.js Documentation](https://web3js.readthedocs.io)
-- [OpenZeppelin Contracts](https://openzeppelin.com/contracts) 
+- [SafeAI Whitepaper](https://safeAIcoin.com/whitepaper.pdf)
+- [Economic Model](https://safeAIcoin.com/economics.pdf)
+- [GitHub Repository](https://github.com/FortressAI/safeAI-contracts)
+- [Developer Documentation](https://docs.safeAIcoin.com/developers) 

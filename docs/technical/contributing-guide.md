@@ -1,181 +1,188 @@
 # Contributing to SafeAI
-Thank you for your interest in contributing to SafeAI! This guide will help you get started with contributing to our platform.
+This guide explains how to contribute to the SafeAI platform.
 ## Table of Contents
 1. [Getting Started](#getting-started)
 2. [Development Setup](#development-setup)
-3. [Code Style](#code-style)
-4. [Testing](#testing)
-5. [Documentation](#documentation)
-6. [Pull Requests](#pull-requests)
-7. [Community Guidelines](#community-guidelines)
-8. [Resources](#resources)
+3. [Code Standards](#code-standards)
+4. [Pull Request Process](#pull-request-process)
+5. [Release Process](#release-process)
+6. [Community Guidelines](#community-guidelines)
 ## Getting Started
 ### Prerequisites
 - Git
-- Node.js (v16 or higher)
-- Python (v3.8 or higher)
-- Docker (optional)
-### Fork and Clone
-1. Fork the [SafeAI repository](https://github.com/safeai/safeai)
-2. Clone your fork:
-```bash
-git clone https://github.com/YOUR_USERNAME/safeai.git
-cd safeai
-```
-3. Add the upstream remote:
-```bash
-git remote add upstream https://github.com/safeai/safeai.git
-```
+- Node.js v14 or higher
+- Python 3.8 or higher
+- Docker
+- SafeAI account
+### Initial Setup
+1. Fork the repository
+2. Clone your fork
+3. Set up development environment
+4. Install dependencies
 ## Development Setup
-### Environment Setup
-1. Create a virtual environment:
+### Local Development
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
+# Clone repository
+git clone https://github.com/your-username/safeai.git
+cd safeai
+
+# Install dependencies
 npm install
-```
-3. Set up environment variables:
-```bash
+pip install -r requirements.txt
+
+# Set up environment variables
 cp .env.example .env
-# Edit .env with your configuration
-```
-### Running Locally
-1. Start the development server:
-```bash
+
+# Start development servers
 npm run dev
 python manage.py runserver
 ```
-2. Access the platform at `http://localhost:3000`
-## Code Style
-### Python
-We follow PEP 8 guidelines. Use `black` for formatting:
+### Docker Development
 ```bash
-black .
-```
-### JavaScript/TypeScript
-We use ESLint and Prettier. Format your code:
-```bash
-npm run format
-```
-### General Guidelines
-1. Use meaningful variable and function names
-2. Write clear, concise comments
-3. Keep functions focused and small
-4. Follow the DRY principle
-5. Use consistent indentation
-## Testing
-### Running Tests
-```bash
-# Python tests
-pytest
+# Build development containers
+docker-compose -f docker-compose.dev.yml build
 
-# JavaScript tests
-npm test
+# Start development environment
+docker-compose -f docker-compose.dev.yml up
+
+# Run tests
+docker-compose -f docker-compose.dev.yml run test
 ```
-### Writing Tests
-1. Write unit tests for new features
-2. Include integration tests for API endpoints
-3. Test edge cases and error conditions
-4. Maintain test coverage above 80%
-### Test Structure
+## Code Standards
+### JavaScript/TypeScript
+```typescript
+// Follow TypeScript best practices
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// Use meaningful variable names
+const userCount: number = 0;
+
+// Use async/await for asynchronous operations
+async function fetchUser(id: string): Promise<User> {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error;
+  }
+}
+```
+### Python
 ```python
-def test_feature():
-    # Arrange
-    setup_test_data()
-    
-    # Act
-    result = feature_function()
-    
-    # Assert
-    assert result == expected_value
+# Follow PEP 8 style guide
+from typing import List, Optional
+
+class User:
+    def __init__(self, id: str, name: str, email: str) -> None:
+        self.id = id
+        self.name = name
+        self.email = email
+
+    def get_role(self) -> str:
+        return self.role
 ```
-## Documentation
-### Code Documentation
-1. Document all public APIs
-2. Include type hints
-3. Write clear docstrings
-4. Update README files
-### Example
-```python
-def process_data(data: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Process input data and return formatted results.
-    
-    Args:
-        data: Dictionary containing input data
-        
-    Returns:
-        List of processed data dictionaries
-        
-    Raises:
-        ValueError: If input data is invalid
-    """
-    # Implementation
+### Documentation
+```typescript
+/**
+ * Fetches a user by ID from the API
+ * @param {string} id - The user's unique identifier
+ * @returns {Promise<User>} The user object
+ * @throws {Error} If the user is not found
+ */
+async function fetchUser(id: string): Promise<User> {
+  // Implementation
+}
 ```
-## Pull Requests
-### Creating a PR
-1. Create a new branch:
+## Pull Request Process
+### Creating a Pull Request
+1. Create a new branch
 ```bash
 git checkout -b feature/your-feature-name
 ```
 2. Make your changes
-3. Commit your changes:
-```bash
-git commit -m "feat: add new feature"
+3. Write tests
+4. Update documentation
+5. Submit pull request
+### Pull Request Template
+```markdown
+## Description
+[Describe your changes]
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
+
+## Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
+- [ ] Manual testing completed
+
+## Documentation
+- [ ] README updated
+- [ ] API documentation updated
+- [ ] Code comments added/updated
+
+## Checklist
+- [ ] Code follows style guide
+- [ ] Tests pass
+- [ ] Documentation is complete
+- [ ] Changelog updated
 ```
-4. Push to your fork:
+## Release Process
+### Version Management
 ```bash
-git push origin feature/your-feature-name
+# Update version
+npm version patch  # or minor or major
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
 ```
-5. Create a Pull Request on GitHub
-### PR Guidelines
-1. Use clear, descriptive titles
-2. Include a detailed description
-3. Reference related issues
-4. Add tests for new features
-5. Update documentation
-6. Ensure CI checks pass
-### Commit Messages
-Follow conventional commits:
-- `feat:` New features
-- `fix:` Bug fixes
-- `docs:` Documentation changes
-- `style:` Code style changes
-- `refactor:` Code refactoring
-- `test:` Test updates
-- `chore:` Maintenance tasks
+### Release Checklist
+1. Update version numbers
+2. Update changelog
+3. Run full test suite
+4. Build release artifacts
+5. Create release notes
+6. Deploy to staging
+7. Deploy to production
 ## Community Guidelines
+### Code of Conduct
+1. Be respectful
+2. Be inclusive
+3. Be constructive
+4. Be professional
 ### Communication
-1. Be respectful and professional
-2. Use inclusive language
-3. Provide constructive feedback
-4. Follow the code of conduct
-### Getting Help
-1. Check existing documentation
-2. Search closed issues
-3. Ask in the community forum
-4. Join our Discord server
+- Use GitHub Issues for bugs
+- Use GitHub Discussions for questions
+- Join Discord for community chat
+### Review Process
+1. Code review
+2. Documentation review
+3. Test review
+4. Security review
 ## Resources
+### Development Tools
+- [VS Code](https://code.visualstudio.com/)
+- [GitHub Desktop](https://desktop.github.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
 ### Documentation
-- [API Documentation](api-reference.md)
-- [SDK Guide](sdk-documentation.md)
-- [Architecture Overview](architecture.md)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Python Documentation](https://docs.python.org/)
+- [React Documentation](https://reactjs.org/docs)
 ### Community
 - [Discord Server](https://discord.gg/safeai)
-- [Community Forum](https://community.safeAIcoin.com)
-- [Blog](https://blog.safeAIcoin.com)
-### Tools
-- [Issue Tracker](https://github.com/safeai/safeai/issues)
-- [Project Board](https://github.com/safeai/safeai/projects)
-- [CI/CD Pipeline](https://github.com/safeai/safeai/actions)
+- [GitHub Discussions](https://github.com/safeai/safeai/discussions)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/safeai)
 ## Support
 For contribution support:
-1. Join our [Developer Discord](https://discord.gg/safeai)
-2. Contact contribute@safeAIcoin.com
-3. Check our [Contributor FAQ](contributor-faq.md)
-## License
-By contributing to SafeAI, you agree that your contributions will be licensed under the project's [MIT License](LICENSE). 
+1. Check [FAQ](../support/faq.md)
+2. Join [Discord](https://discord.gg/safeai)
+3. Contact contribute@safeAIcoin.com
+---
+© 2024 SafeAI. All rights reserved. 

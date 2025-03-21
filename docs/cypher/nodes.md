@@ -1,345 +1,489 @@
 # Creating Nodes in SafeAI: A Beginner's Guide
+## Introduction
 
-## What Are Nodes?
+Nodes are the fundamental building blocks of your SafeAI knowledge graphs. Think of them as containers that hold information about different entities in your system, such as AI agents, users, concepts, and more.
 
-In a graph database like Neo4j, **nodes** are the fundamental building blocks that represent entities in your data. Think of nodes as the "nouns" in your data model - they represent things like:
+## Basic Node Concepts
 
-- Knowledge Graphs
-- AI Agents
-- Concepts
-- Capabilities
-- Security Components
-- Wallet/Blockchain identities
+### What is a Node?
+A node is like a record in a traditional database, but with some key differences:
+- It can have multiple labels (types)
+- It can have any number of properties
+- It can connect to other nodes through relationships
+- It's part of a graph structure
 
-Each node can have:
-- **Labels**: Categories that identify the type of node (like `Agent` or `KnowledgeGraph`)
-- **Properties**: Key-value pairs that store information about the node
-- **Relationships**: Connections to other nodes (covered in [relationships.md](./relationships.md))
+### Node Structure
+A basic node consists of:
+1. **Labels**: Categories or types (like `Agent`, `User`, `Concept`)
+2. **Properties**: Key-value pairs that store information
+3. **Relationships**: Connections to other nodes
 
-## Why Nodes Matter in SafeAI
+## Creating Basic Nodes
 
-The SafeAI platform uses nodes to create a flexible, interconnected structure that can:
-
-1. **Represent complex knowledge**: Organize domain-specific knowledge in a way that AI agents can understand
-2. **Define intelligent agents**: Create agents with specific capabilities and permissions
-3. **Establish security boundaries**: Control what different components can access
-4. **Track performance**: Monitor the effectiveness of different parts of the system
-5. **Enable governance**: Support transparent, auditable AI operations
-
-## Understanding Node Creation
-
-Before creating nodes, it's helpful to understand the pattern:
-
+### 1. Simple Node Creation
 ```cypher
-CREATE (variable:Label {
-    property1: value1,
-    property2: value2,
-    // more properties...
+// Create a basic agent node
+CREATE (agent:Agent {
+    name: "Math Tutor",
+    type: "LLM",
+    status: "active"
 })
 ```
 
-Where:
-- `variable` is a temporary reference to the node
-- `:Label` assigns a category to the node
-- The curly braces `{ }` contain properties
-
-## Creating Your First Knowledge Graph Node
-
-The Knowledge Graph is the foundation of the SafeAI platform. Let's create one step by step:
-
+### 2. Multiple Labels
 ```cypher
-// Create a new Knowledge Graph
-CREATE (kg:KnowledgeGraph {
-  name: "economics_kg",               // Required: Unique identifier
-  domain: "economics",                // Required: Knowledge domain
-  description: "Knowledge graph for economic analysis and decision-making",  // Required: Description
-  
-  // Security Configuration
-  input_validation_enabled: true,     // Validates inputs to prevent attacks
-  input_max_length: 10000,            // Maximum size of inputs
-  input_allowed_chars: "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",  // Allowed characters
-  input_timeout_ms: 30000,            // Timeout in milliseconds
-  
-  // Resource Limits
-  resource_limit_memory_mb: 1024,     // Maximum memory usage (MB)
-  resource_limit_cpu_ms: 60000,       // Maximum CPU time (ms)
-  resource_limit_disk_mb: 100,        // Maximum disk usage (MB)
-  rate_limit_requests_per_min: 60,    // Maximum requests per minute
-  rate_limit_burst: 10,               // Maximum burst of requests
-  
-  // Metadata
-  created_at: datetime(),             // Creation timestamp
-  updated_at: datetime(),             // Last update timestamp
-  version: "1.0"                      // Version number
+// Create a node with multiple labels
+CREATE (agent:Agent:LLM {
+    name: "Science Expert",
+    capabilities: ["physics", "chemistry"]
 })
-RETURN kg;  // Returns the newly created node
 ```
 
-Let's break this down:
-
-### Essential Fields:
-- **name**: A unique identifier (use lowercase with underscores)
-- **domain**: The knowledge area this graph covers
-- **description**: A detailed explanation of the graph's purpose
-
-### Security Settings:
-- **input_validation_enabled**: When true, all inputs will be checked for security issues
-- **input_max_length**: Prevents overly large inputs
-- **input_allowed_chars**: A regular expression defining safe characters (prevents injection attacks)
-- **input_timeout_ms**: Maximum time an operation can take
-
-### Resource Controls:
-- **resource_limit_memory_mb**: Prevents memory exhaustion
-- **resource_limit_cpu_ms**: Prevents CPU overuse
-- **rate_limit_requests_per_min**: Controls how many requests can be processed
-
-### Metadata:
-- **created_at**: When this node was created (using Neo4j's `datetime()` function)
-- **updated_at**: When this node was last modified
-- **version**: For tracking changes over time
-
-## Creating Different Types of Nodes
-
-### 1. Creating an Engine Node
-
-Engines provide processing capabilities for knowledge graphs:
-
+### 3. Multiple Nodes at Once
 ```cypher
-// Create a domain-specific processing engine
-CREATE (e:Engine {
-  name: "economics_analysis_engine",  // Required: Unique identifier
-  domain: "economics",                // Required: Must match parent KG
-  engine_type: "analysis",            // Required: Type of engine
-  
-  // Capabilities
-  analysis_types: ["predictive", "descriptive", "prescriptive"],  // Supported analysis types
-  data_sources: ["structured", "unstructured", "time_series"],    // Supported data types
-  
-  // Performance Settings
-  accuracy_threshold: 0.95,           // Minimum acceptable accuracy
-  response_time_ms: 500,              // Target response time
-  batch_size: 100,                    // Number of items processed together
-  
-  // Security
-  security_validation_enabled: true,  // Validates operations
-  security_audit_enabled: true,       // Enables security auditing
-  
-  // Metadata
-  created_at: datetime(),             // Creation timestamp
-  status: "active"                    // Current status
+// Create several nodes in one query
+CREATE 
+    (math:Concept {name: "Mathematics"}),
+    (physics:Concept {name: "Physics"}),
+    (chemistry:Concept {name: "Chemistry"})
+```
+
+## Common Node Types
+
+### 1. Agent Nodes
+```cypher
+// Create an AI agent
+CREATE (agent:Agent {
+    name: "Tutor Bot",
+    type: "LLM",
+    capabilities: ["teaching", "assessment"],
+    status: "active",
+    created_at: datetime()
 })
-RETURN e;
 ```
 
-Key aspects of an Engine node:
-- The domain should match its parent Knowledge Graph
-- engine_type categorizes what the engine does
-- Analysis types and data sources define capabilities
-- Performance settings help monitor and optimize
-
-### 2. Creating an Agent Node
-
-Agents are the active components that perform tasks in the SafeAI platform:
-
+### 2. User Nodes
 ```cypher
-// Create an agent node
-CREATE (a:Agent {
-  name: "economic_forecasting_agent",  // Required: Unique identifier
-  category: "forecasting",             // Required: Agent category
-  agent_type: "llm",                   // Required: "script" or "llm"
-  description: "Predicts economic indicators using historical data",  // Required: Description
-  
-  // Performance Metrics
-  effectiveness_threshold: 0.90,       // Minimum acceptable effectiveness
-  usage_count: 0,                      // Times the agent has been used
-  success_count: 0,                    // Successful operations
-  
-  // Security Features
-  security_input_validation: true,     // Validates inputs
-  security_resource_monitoring: true,  // Monitors resource usage
-  security_output_validation: true,    // Validates outputs
-  
-  // Resource Management
-  memory_limit_mb: 256,                // Maximum memory usage
-  cpu_limit_ms: 15000,                 // Maximum CPU time
-  rate_limit_rpm: 20,                  // Requests per minute
-  
-  // Metadata
-  created_at: datetime(),              // Creation timestamp
-  status: "active",                    // Current status
-  version: "1.0"                       // Version number
+// Create a user
+CREATE (user:User {
+    username: "john_doe",
+    email: "john@example.com",
+    role: "student",
+    created_at: datetime()
 })
-RETURN a;
 ```
 
-Important aspects of Agent nodes:
-- `agent_type` can be "script" (code-based) or "llm" (language model)
-- Performance metrics track how well the agent performs
-- Security features protect against misuse
-- Resource management prevents overuse of system resources
-
-### 3. Creating a Wallet Node
-
-Wallet nodes manage blockchain integration for the platform:
-
+### 3. Concept Nodes
 ```cypher
-// Create a wallet node for transaction management
-CREATE (w:Wallet {
-  wallet_id: "main_treasury",         // Required: Unique identifier
-  blockchain_address: "0x1234567890abcdef1234567890abcdef12345678",  // Required: Blockchain address
-  
-  // Security Features
-  security_transaction_validation: true,        // Validates transactions
-  security_key_rotation_hours: 24,              // How often keys rotate
-  security_audit_trail: true,                   // Records all transactions
-  security_smart_contract_verification: true,   // Verifies contract code
-  
-  // Transaction Limits
-  daily_limit_wei: 1000000000000000000,         // 1 ETH in wei
-  transaction_limit_wei: 100000000000000000,    // 0.1 ETH in wei
-  
-  // Metadata
-  created_at: datetime(),                       // Creation timestamp
-  last_rotation: datetime(),                    // Last key rotation
-  status: "active"                              // Current status
+// Create a concept
+CREATE (concept:Concept {
+    name: "Algebra",
+    description: "Study of mathematical symbols",
+    difficulty: "intermediate",
+    prerequisites: ["basic_math"]
 })
-RETURN w;
 ```
 
-Key aspects of Wallet nodes:
-- The wallet_id is an internal identifier
-- blockchain_address is the public address on the blockchain
-- Security features protect cryptocurrency assets
-- Transaction limits prevent catastrophic loss
-
-## Working with Existing Nodes
-
-### Finding a Node by Name
-
-To find a node with a specific name:
-
+### 4. Document Nodes
 ```cypher
-// Find a knowledge graph named "economics_kg"
-MATCH (kg:KnowledgeGraph {name: "economics_kg"})
-RETURN kg;
+// Create a document
+CREATE (doc:Document {
+    title: "Math Guide",
+    content: "Introduction to mathematics...",
+    author: "John Doe",
+    created_at: datetime()
+})
 ```
 
-### Updating Node Properties
+## Node Properties
 
-To change properties on an existing node:
-
+### 1. Basic Properties
 ```cypher
-// Update the description of an agent
-MATCH (a:Agent {name: "economic_forecasting_agent"})
-SET a.description = "Updated forecasting model with improved accuracy",
-    a.updated_at = datetime(),
-    a.version = "1.1"
-RETURN a;
+// Create node with basic properties
+CREATE (agent:Agent {
+    name: "Helper Bot",
+    status: "active",
+    version: "1.0"
+})
 ```
 
-### Deleting a Node
-
-To remove a node (only if it has no dependencies):
-
+### 2. Complex Properties
 ```cypher
-// Delete an agent that is no longer needed
-MATCH (a:Agent {name: "old_forecasting_agent"})
-WHERE NOT EXISTS((a)<-[:DEPENDS_ON]-())  // Ensure nothing depends on this
-DELETE a;
+// Create node with arrays and nested properties
+CREATE (agent:Agent {
+    name: "Multi-Subject Tutor",
+    subjects: ["math", "science", "history"],
+    settings: {
+        difficulty: "adaptive",
+        language: "English",
+        timezone: "UTC"
+    }
+})
 ```
 
-## Best Practices for Node Creation
+### 3. Dynamic Properties
+```cypher
+// Create node with computed properties
+CREATE (agent:Agent {
+    name: "Dynamic Tutor",
+    created_at: datetime(),
+    last_active: datetime(),
+    status: "active"
+})
+```
+
+## Node Validation
+
+### 1. Required Properties
+```cypher
+// Create node with required properties
+CREATE (agent:Agent {
+    name: "Required Tutor",
+    type: "LLM",
+    status: "active"
+})
+WHERE agent.name IS NOT NULL
+AND agent.type IS NOT NULL
+```
+
+### 2. Property Types
+```cypher
+// Create node with typed properties
+CREATE (agent:Agent {
+    name: "Typed Tutor",
+    age: 1,  // Integer
+    rating: 4.5,  // Float
+    is_active: true,  // Boolean
+    created_at: datetime(),  // DateTime
+    tags: ["math", "tutor"]  // Array
+})
+```
+
+## Node Relationships
+
+### 1. Creating Connected Nodes
+```cypher
+// Create nodes with relationships
+CREATE (tutor:Agent {
+    name: "Math Expert"
+})-[:TEACHES]->(subject:Subject {
+    name: "Mathematics"
+})
+```
+
+### 2. Multiple Relationships
+```cypher
+// Create nodes with multiple relationships
+CREATE (tutor:Agent {
+    name: "Science Tutor"
+})-[:TEACHES]->(math:Subject {
+    name: "Mathematics"
+}),
+(tutor)-[:TEACHES]->(physics:Subject {
+    name: "Physics"
+})
+```
+
+## Node Updates
+
+### 1. Adding Properties
+```cypher
+// Add new properties to existing node
+MATCH (agent:Agent {name: "Math Tutor"})
+SET agent.new_property = "value"
+RETURN agent
+```
+
+### 2. Updating Properties
+```cypher
+// Update existing properties
+MATCH (agent:Agent {name: "Math Tutor"})
+SET agent.status = "inactive"
+RETURN agent
+```
+
+### 3. Removing Properties
+```cypher
+// Remove properties from node
+MATCH (agent:Agent {name: "Math Tutor"})
+REMOVE agent.old_property
+RETURN agent
+```
+
+## Node Deletion
+
+### 1. Delete Single Node
+```cypher
+// Delete a specific node
+MATCH (agent:Agent {name: "Old Tutor"})
+DELETE agent
+```
+
+### 2. Delete Connected Nodes
+```cypher
+// Delete node and its relationships
+MATCH (agent:Agent {name: "Old Tutor"})
+OPTIONAL MATCH (agent)-[r]-()
+DELETE r, agent
+```
+
+## Best Practices
 
 ### 1. Naming Conventions
+- Use clear, descriptive names
+- Follow consistent patterns
+- Use appropriate labels
+- Avoid special characters
 
-- Use `snake_case` for all property names (e.g., `resource_limit_memory_mb`)
-- Keep node names lowercase with underscores
-- Use descriptive names that reflect purpose
-- Be consistent with naming patterns
+### 2. Property Management
+- Use meaningful property names
+- Keep properties atomic
+- Use appropriate data types
+- Document property purposes
 
-### 2. Security Considerations
+### 3. Performance
+- Use indexes for frequently queried properties
+- Limit property count
+- Use appropriate data types
+- Regular maintenance
 
-- Always enable security validation for all nodes
-- Set appropriate resource limits
-- Configure input validation
-- Enable audit logging for sensitive operations
+### 4. Security
+- Validate input data
+- Implement access controls
+- Audit sensitive operations
+- Regular security checks
 
-### 3. Performance Tips
+## Common Errors and Solutions
 
-- Add only the properties you need
-- Set reasonable resource limits
-- Create indexes for frequently queried properties
-- Monitor performance regularly
-
-### 4. Maintenance Best Practices
-
-- Document all custom node types
-- Perform regular security audits
-- Clean up unused nodes
-- Keep metadata (like version and updated_at) current
-
-## Error Handling and Validation
-
-Always check for existing nodes before creating new ones:
-
+### 1. Duplicate Nodes
 ```cypher
-// Check if a node exists before creating it
-MATCH (a:Agent {name: "economic_forecasting_agent"})
-WITH count(a) as exists
-RETURN CASE 
-    WHEN exists > 0 THEN "Agent already exists"
-    ELSE "Agent does not exist"
-END as result;
+// Avoid duplicate nodes
+MERGE (agent:Agent {name: "Unique Tutor"})
+ON CREATE SET agent.created_at = datetime()
+ON MATCH SET agent.last_updated = datetime()
 ```
 
-For more complex validation, you can create a procedure that:
-1. Checks if a node with the name already exists
-2. Validates all required properties
-3. Creates the node only if validation passes
-
-## Connecting Nodes
-
-After creating nodes, you'll want to connect them. For example, to add an agent to a knowledge graph:
-
+### 2. Missing Properties
 ```cypher
-// Connect an agent to a knowledge graph
-MATCH (kg:KnowledgeGraph {name: "economics_kg"})
-MATCH (a:Agent {name: "economic_forecasting_agent"})
-CREATE (kg)-[r:CONTAINS {
-    created_at: datetime(),
-    permission_level: "write"
-}]->(a)
-RETURN type(r), kg.name, a.name;
+// Handle missing properties
+MATCH (agent:Agent)
+WHERE agent.name IS NULL
+SET agent.name = "Unnamed Agent"
 ```
 
-To learn more about relationships, see the [Relationship Creation Guide](./relationships.md).
+### 3. Invalid Properties
+```cypher
+// Validate property values
+MATCH (agent:Agent)
+WHERE agent.status NOT IN ["active", "inactive", "suspended"]
+SET agent.status = "inactive"
+```
 
-## Next Steps
+## Examples by Use Case
 
-Now that you understand how to create nodes in the SafeAI platform, you might want to:
+### 1. Educational System
+```cypher
+// Create educational nodes
+CREATE 
+    (course:Course {
+        name: "Advanced Mathematics",
+        level: "advanced",
+        credits: 3
+    }),
+    (instructor:Instructor {
+        name: "Dr. Smith",
+        department: "Mathematics"
+    }),
+    (student:Student {
+        name: "Alice Johnson",
+        grade_level: "senior"
+    })
+```
 
-1. Learn about [creating relationships](./relationships.md) between nodes
-2. Explore [common query patterns](./queries.md) for working with your data
-3. Understand [security configuration](../security/configuration.md) for your nodes
+### 2. AI Agent System
+```cypher
+// Create AI agent nodes
+CREATE 
+    (agent:Agent {
+        name: "AI Tutor",
+        type: "LLM",
+        capabilities: ["teaching", "assessment"],
+        model: "GPT-4"
+    }),
+    (knowledge:Knowledge {
+        domain: "mathematics",
+        level: "expert",
+        last_updated: datetime()
+    })
+```
 
-## Troubleshooting
+### 3. Security System
+```cypher
+// Create security nodes
+CREATE 
+    (user:User {
+        username: "secure_user",
+        role: "admin",
+        last_login: datetime()
+    }),
+    (permission:Permission {
+        name: "manage_agents",
+        level: "high",
+        granted_at: datetime()
+    })
+```
 
-### Common Issues
+## Maintenance and Optimization
 
-1. **"Already exists" errors**: Node names must be unique within their label. Use `MERGE` instead of `CREATE` to avoid duplicates:
-   ```cypher
-   MERGE (kg:KnowledgeGraph {name: "economics_kg"})
-   ON CREATE SET kg.created_at = datetime()
-   RETURN kg;
-   ```
+### 1. Regular Maintenance
+```cypher
+// Clean up orphaned nodes
+MATCH (n)
+WHERE NOT (n)-[]-()
+DELETE n
 
-2. **Missing required properties**: Always include all required properties when creating nodes
-3. **Type conversion errors**: Ensure property values match their expected types (strings, numbers, booleans, etc.)
-4. **Security validation failures**: Check that property values meet security requirements
+// Update timestamps
+MATCH (n)
+SET n.last_updated = datetime()
+```
 
-### Getting Help
+### 2. Performance Optimization
+```cypher
+// Create indexes
+CREATE INDEX ON :Agent(name)
+CREATE INDEX ON :User(username)
 
-For more assistance:
-- Review the [Neo4j Cypher documentation](https://neo4j.com/docs/cypher-manual/current/)
-- Check the [SafeAI community forums](https://github.com/FortressAI/safeAI/discussions)
-- Use the SafeAI Management Console's built-in help 
+// Remove unused indexes
+DROP INDEX ON :Agent(unused_property)
+```
+
+### 3. Data Validation
+```cypher
+// Validate data integrity
+MATCH (agent:Agent)
+WHERE agent.effectiveness < 0 OR agent.effectiveness > 1
+SET agent.effectiveness = 0.5
+```
+
+## Resources for Learning More
+
+### 1. Documentation
+- SafeAI Platform Guide
+- Neo4j Documentation
+- Cypher Reference Manual
+
+### 2. Tools
+- SafeAI Node Editor
+- Neo4j Browser
+- Query Profiler
+
+### 3. Community
+- SafeAI Forums
+- Neo4j Community
+- Stack Overflow
+
+## Practice Exercises
+
+### 1. Basic Node Creation
+```cypher
+// Exercise 1: Create a new user
+CREATE (user:User {
+    username: "practice_user",
+    email: "practice@example.com",
+    role: "student"
+})
+
+// Exercise 2: Create a concept
+CREATE (concept:Concept {
+    name: "Practice Concept",
+    description: "For learning purposes",
+    difficulty: "beginner"
+})
+```
+
+### 2. Advanced Node Creation
+```cypher
+// Exercise 3: Create connected nodes
+CREATE (tutor:Agent {
+    name: "Practice Tutor"
+})-[:TEACHES]->(subject:Subject {
+    name: "Practice Subject"
+})
+
+// Exercise 4: Create nodes with complex properties
+CREATE (agent:Agent {
+    name: "Complex Tutor",
+    settings: {
+        difficulty: "adaptive",
+        subjects: ["math", "science"],
+        schedule: {
+            timezone: "UTC",
+            availability: ["morning", "evening"]
+        }
+    }
+})
+```
+
+## Tips for Writing Efficient Node Creation
+
+### 1. Use MERGE for Unique Nodes
+```cypher
+// Create unique nodes
+MERGE (agent:Agent {name: "Unique Tutor"})
+ON CREATE SET agent.created_at = datetime()
+ON MATCH SET agent.last_updated = datetime()
+```
+
+### 2. Batch Node Creation
+```cypher
+// Create multiple nodes efficiently
+CREATE 
+    (a:Agent {name: "Agent A"}),
+    (b:Agent {name: "Agent B"}),
+    (c:Agent {name: "Agent C"})
+```
+
+### 3. Use WITH for Complex Operations
+```cypher
+// Process nodes in batches
+MATCH (agent:Agent)
+WITH agent
+LIMIT 100
+SET agent.processed = true
+```
+
+## Security Best Practices
+
+### 1. Input Validation
+```cypher
+// Validate input before creation
+CREATE (agent:Agent {
+    name: $name,
+    type: $type
+})
+WHERE $name IS NOT NULL
+AND $type IN ["LLM", "Script"]
+```
+
+### 2. Access Control
+```cypher
+// Check permissions before creation
+MATCH (user:User {username: $username})
+WHERE user.role = "admin"
+CREATE (agent:Agent {
+    name: $name,
+    created_by: $username
+})
+```
+
+### 3. Audit Logging
+```cypher
+// Log node creation
+CREATE (log:AuditLog {
+    timestamp: datetime(),
+    user: $username,
+    action: "create_node",
+    node_type: "Agent",
+    node_name: $name
+})
+``` 
