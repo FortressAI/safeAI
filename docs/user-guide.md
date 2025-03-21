@@ -3,7 +3,7 @@
 breadcrumb: [Home](../README.md) > [User Documentation](../docs/README.md) > [User Guide](../docs/user-guide.md)
 ---
 
-Welcome to the SafeAI User Guide. This comprehensive guide will help you understand and use all features of the SafeAI platform effectively.
+Welcome to the SafeAI User Guide. This comprehensive guide will help you understand and use all features of the SafeAI platform effectively, whether you're using the graphical user interface (GUI) or advanced technical features.
 
 ![SafeAI Platform Overview](../assets/images/platform-overview.png)
 
@@ -18,10 +18,11 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 
 ## Getting Started
 
-### Prerequisites
+### System Requirements
+- Modern web browser (Chrome, Firefox, Safari, Edge)
 - Web3 wallet (MetaMask recommended)
-- Modern web browser
 - Internet connection
+- Minimum screen resolution: 1280x720
 - Basic understanding of blockchain concepts
 
 ### Initial Setup
@@ -42,6 +43,7 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
    - Set up API keys
    - Configure notification preferences
    - Set default settings
+   - Customize your workspace
 
 ## Platform Overview
 
@@ -63,6 +65,11 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
    - Context-sensitive tools
    - Status indicators
 
+4. **Status Bar**
+   - System health
+   - Important notifications
+   - Quick actions
+
 ### Key Features
 1. **Agent Management**
    - Create and configure agents
@@ -81,6 +88,12 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
    - Manage licenses
    - Track publishing status
    - Monitor analytics
+
+4. **Security Features**
+   - Real-time monitoring
+   - Compliance checks
+   - Audit logging
+   - Access control
 
 ## Core Features
 
