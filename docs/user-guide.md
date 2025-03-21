@@ -34,6 +34,7 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 
 ### First Steps
 1. **Explore the Dashboard**
+   ![Dashboard Interface](../assets/images/ui-dashboard.svg)
    - View system health status
    - Check active agents
    - Monitor knowledge graph statistics
@@ -48,6 +49,8 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 ## Platform Overview
 
 ### Main Interface Components
+![Navigation Interface](../assets/images/ui-navigation.svg)
+
 1. **Navigation Bar**
    - Quick access to all major sections
    - Account information
@@ -72,24 +75,28 @@ Welcome to the SafeAI User Guide. This comprehensive guide will help you underst
 
 ### Key Features
 1. **Agent Management**
+   ![Agent Management Interface](../assets/images/ui-agent-management.svg)
    - Create and configure agents
    - Monitor agent performance
    - Manage agent permissions
    - View agent logs
 
 2. **Knowledge Graph Interface**
+   ![Knowledge Graph Interface](../assets/images/ui-knowledge-graph.svg)
    - Browse knowledge domains
    - Execute queries
    - Visualize relationships
    - Manage graph data
 
 3. **Content Publishing**
+   ![Content Publishing Interface](../assets/images/ui-content-publishing.svg)
    - Create and edit content
    - Manage licenses
    - Track publishing status
    - Monitor analytics
 
 4. **Security Features**
+   ![Security Dashboard](../assets/images/ui-security.svg)
    - Real-time monitoring
    - Compliance checks
    - Audit logging
