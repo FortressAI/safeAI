@@ -17,6 +17,8 @@ This guide provides detailed implementation examples and UI workflows for SafeAI
 ## UI Architecture Overview
 
 ### Component Structure
+![UI Architecture](../images/ui-architecture.svg)
+
 ```typescript
 // Main UI Component Structure
 interface SafeAIUI {
@@ -36,6 +38,8 @@ interface SafeAIUI {
 ```
 
 ### State Management
+![State Management](../images/ui-state-management.svg)
+
 ```typescript
 // Redux Store Structure
 interface SafeAIState {
@@ -63,6 +67,8 @@ interface SafeAIState {
 ## Agentic Knowledge Graph Implementation
 
 ### UI Components
+![Knowledge Graph Components](../images/ui-knowledge-graph.svg)
+
 ```typescript
 // Knowledge Graph Viewer Component
 const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({
@@ -134,6 +140,8 @@ const AgenticKGImplementation: React.FC = () => {
 ## ARC Prize Integration
 
 ### UI Components
+![ARC Prize Components](../images/ui-arc-prize.svg)
+
 ```typescript
 // ARC Prize Dashboard
 const ARCPrizeDashboard: React.FC<ARCPrizeProps> = ({
@@ -251,10 +259,6 @@ const FreePressImplementation: React.FC = () => {
         content={content}
         onPublish={handlePublish}
         onSave={handleSave}
-      />
-      <ContentPreview
-        content={content}
-        license={license}
       />
       <BlockchainMonitor
         contentId={content?.id}
