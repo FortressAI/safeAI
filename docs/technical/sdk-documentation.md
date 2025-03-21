@@ -1,5 +1,7 @@
 # SafeAI SDK Documentation
-
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [SDK Documentation](../technical/sdk-documentation.md)
+---
 ## Overview
 The SafeAI SDK provides a comprehensive set of tools and libraries for integrating with the SafeAI platform.
 

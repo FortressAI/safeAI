@@ -1,4 +1,7 @@
 # SafeAI Style Guide
+---
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [Style Guide](../technical/style-guide.md)
+---
 This guide provides comprehensive style guidelines for developing on the SafeAI platform.
 ## Table of Contents
 1. [Code Style](#code-style)
