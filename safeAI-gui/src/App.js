@@ -18,6 +18,7 @@ import ARCPrize from './pages/ARCPrize';
 import MathATP from './pages/MathATP';
 import MathKG from './pages/MathKG';
 import EthicsKG from './pages/EthicsKG';
+import FreePress from './pages/FreePress';
 
 // Create a theme instance
 const theme = createTheme({
@@ -139,6 +140,7 @@ function App() {
               <Route path="knowledge-graphs" element={<KnowledgeGraphs />} />
               <Route path="settings" element={<Settings />} />
               <Route path="ethics-kg" element={<EthicsKG />} />
+              <Route path="free-press" element={<FreePress />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Route>
           </Routes>
