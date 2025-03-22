@@ -97,8 +97,47 @@
       IconButton, Icon, Button, Stepper, Step, StepLabel, StepContent,
       Paper, Alert, CircularProgress, Divider, Chip, Dialog, DialogTitle,
       DialogContent, DialogActions, TextField, List, ListItem, ListItemIcon,
-      ListItemText, LinearProgress
+      ListItemText, LinearProgress, createTheme, ThemeProvider, CssBaseline
     } = MaterialUI;
+
+    // Create theme configuration
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#2196f3',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
+        },
+      },
+    });
 
     // Real ARC tasks with proper evaluation criteria
     const arcTasks = {

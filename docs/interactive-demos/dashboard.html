@@ -104,7 +104,7 @@
     const { 
       Box, Typography, Grid, Paper, List, ListItem, ListItemIcon, 
       ListItemText, Icon, LinearProgress, Tooltip, Alert,
-      useTheme, ThemeProvider, createTheme, CssBaseline, AppBar, Toolbar, IconButton, Container, Card, CardHeader, CardContent, Avatar, Button
+      useTheme, ThemeProvider, createTheme, CssBaseline, AppBar, Toolbar, IconButton, Container, Card, CardHeader, CardContent, Avatar, Button, CircularProgress, Divider, Chip
     } = MaterialUI;
 
     // Material icon names
@@ -224,19 +224,41 @@
       },
     ];
 
-    // Custom theme
+    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#3f51b5',
+          main: '#2196f3',
         },
         secondary: {
           main: '#f50057',
         },
         background: {
           default: '#121212',
-          paper: '#1e1e1e',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
         },
       },
     });
