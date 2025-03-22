@@ -71,10 +71,10 @@
         icon: ICONS.SCHOOL,
         color: "#2196f3",
         items: [
-          { title: "Getting Started Guide", link: "getting-started.md" },
-          { title: "Basic Concepts", link: "basic-concepts.md" },
-          { title: "User Guide", link: "user-guide.md" },
-          { title: "User Journeys", link: "user-journeys/" }
+          { title: "Getting Started Guide", link: "getting-started.html" },
+          { title: "Basic Concepts", link: "basic-concepts.html" },
+          { title: "User Guide", link: "user-guide.html" },
+          { title: "User Journeys", link: "user-journeys/index.html" }
         ]
       },
       {
@@ -82,9 +82,9 @@
         icon: ICONS.CODE,
         color: "#4caf50",
         items: [
-          { title: "Developer Journey", link: "developer-journeys/developer-journey.md" },
-          { title: "Technical Documentation", link: "technical/" },
-          { title: "Knowledge Graph Implementation", link: "KnowledgeGraph_Implementation_Guide.md" }
+          { title: "Developer Journey", link: "developer-journeys/developer-journey.html" },
+          { title: "Technical Documentation", link: "technical/index.html" },
+          { title: "Knowledge Graph Implementation", link: "knowledge-graph-implementation.html" }
         ]
       },
       {
@@ -92,49 +92,53 @@
         icon: ICONS.PSYCHOLOGY,
         color: "#ff9800",
         items: [
-          { title: "Domain Expert Journey", link: "domain-expert-journeys/domain-expert-journey.md" },
-          { title: "Domain-Specific Guides", link: "domains/" },
-          { title: "Integration Guides", link: "integration/" }
+          { title: "Domain Expert Journey", link: "domain-expert-journeys/domain-expert-journey.html" },
+          { title: "Domain-Specific Guides", link: "domains/index.html" },
+          { title: "Integration Guides", link: "integration/index.html" }
         ]
       },
       {
         title: "Support and Resources",
         icon: ICONS.HELP,
-        color: "#673ab7",
+        color: "#e91e63",
         items: [
-          { title: "FAQ", link: "faq.md" },
-          { title: "Troubleshooting Guide", link: "support/troubleshooting.md" },
-          { title: "Contact Information", link: "support/contact.md" }
+          { title: "FAQ", link: "faq.html" },
+          { title: "Troubleshooting Guide", link: "support/troubleshooting.html" },
+          { title: "Contact Information", link: "support/contact.html" }
         ]
       },
       {
         title: "Legal and Compliance",
         icon: ICONS.GAVEL,
-        color: "#795548",
+        color: "#9c27b0",
         items: [
-          { title: "Legal Documentation", link: "legal/" },
-          { title: "Governance", link: "governance/" },
-          { title: "Compliance Guide", link: "legal/compliance-guide.md" }
+          { title: "Terms of Service", link: "legal/terms.html" },
+          { title: "Privacy Policy", link: "legal/privacy.html" },
+          { title: "Compliance Guide", link: "legal/compliance-guide.html" }
         ]
       },
       {
         title: "Community",
         icon: ICONS.PEOPLE,
-        color: "#e91e63",
+        color: "#607d8b",
         items: [
-          { title: "Community Guidelines", link: "community/guidelines.md" },
-          { title: "Community Resources", link: "community/resources.md" }
+          { title: "Community Guidelines", link: "community/guidelines.html" },
+          { title: "Community Resources", link: "community/resources.html" }
         ]
       },
       {
         title: "Interactive Demos",
-        icon: ICONS.DEVICES,
-        color: "#009688",
+        icon: ICONS.PLAY_ARROW,
+        color: "#00bcd4",
         items: [
-          { title: "Interactive Demos Index", link: "interactive-demos/index.html", isPrimary: true },
           { title: "Dashboard Demo", link: "interactive-demos/dashboard.html" },
-          { title: "Agent Browser Demo", link: "interactive-demos/agent-browser.html" },
-          { title: "Agent Workshop Demo", link: "interactive-demos/agent-workshop.html" }
+          { title: "Agent Browser", link: "interactive-demos/agent-browser.html" },
+          { title: "Agent Workshop", link: "interactive-demos/agent-workshop.html" },
+          { title: "Knowledge Graphs", link: "interactive-demos/knowledge-graphs.html" },
+          { title: "Security Center", link: "interactive-demos/security-center.html" },
+          { title: "ARC Prize Challenge", link: "interactive-demos/arc-prize.html" },
+          { title: "Math ATP", link: "interactive-demos/mathatp.html" },
+          { title: "Free Press", link: "interactive-demos/freepress.html" }
         ]
       }
     ];
@@ -262,15 +266,24 @@
                 ))}
               </Grid>
               
-              <Box sx={{ textAlign: 'center', mt: 6, mb: 2, pt: 4, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                <Typography variant="body2" color="text.secondary">
-                  Last updated: March 2024
+              <Box 
+                sx={{ 
+                  textAlign: 'center', 
+                  mt: 6, 
+                  pt: 2,
+                  borderTop: '1px solid rgba(255,255,255,0.1)',
+                  fontSize: '0.875rem', 
+                  color: 'text.secondary' 
+                }}
+              >
+                <Typography variant="body2" display="block" gutterBottom>
+                  SafeAI Documentation Portal • {new Date().getFullYear()} • All Rights Reserved
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Copyright © 2024 SafeAI. All rights reserved.
+                <Typography variant="body2" display="block" gutterBottom>
+                  Last updated: {new Date().toLocaleDateString()}
                 </Typography>
-                <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
-                  <a href="README.md">View Documentation README</a>
+                <Typography variant="body2" display="block" gutterBottom>
+                  <a href="index.html">Documentation Home</a>
                 </Typography>
               </Box>
             </Container>
