@@ -94,13 +94,122 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
-      IconButton, Button, Stepper, Step, StepLabel, StepContent,
-      Paper, Alert, CircularProgress, Divider, Chip, Dialog, DialogTitle,
-      DialogContent, DialogActions, TextField, List, ListItem, ListItemIcon,
-      ListItemText, LinearProgress, Stack, FormControl,
-      useTheme, ThemeProvider, createTheme, CssBaseline
+      Box, 
+      Typography, 
+      Button, 
+      Card, 
+      CardContent, 
+      Grid, 
+      Divider, 
+      AppBar, 
+      Toolbar, 
+      IconButton, 
+      Avatar, 
+      Chip, 
+      Paper, 
+      Tooltip, 
+      LinearProgress, 
+      TextField, 
+      Dialog, 
+      DialogTitle, 
+      DialogContent, 
+      DialogActions, 
+      List, 
+      ListItem, 
+      ListItemText, 
+      ListItemIcon, 
+      Container, 
+      CircularProgress, 
+      Alert, 
+      Stack, 
+      FormControl,
+      useTheme,
+      ThemeProvider,
+      createTheme,
+      CssBaseline
     } = MaterialUI;
+
+    // Define theme before using it
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#4f46e5',
+          light: '#818cf8',
+          dark: '#3730a3',
+        },
+        secondary: {
+          main: '#10b981',
+          light: '#34d399',
+          dark: '#059669',
+        },
+        background: {
+          default: '#0f172a',
+          paper: '#1e293b',
+        },
+      },
+      typography: {
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        h1: {
+          fontSize: '2.5rem',
+          fontWeight: 700,
+        },
+        h2: {
+          fontSize: '2rem',
+          fontWeight: 600,
+        },
+        h3: {
+          fontSize: '1.75rem',
+          fontWeight: 600,
+        },
+        h4: {
+          fontSize: '1.5rem',
+          fontWeight: 500,
+        },
+        h5: {
+          fontSize: '1.25rem',
+          fontWeight: 500,
+        },
+        h6: {
+          fontSize: '1rem',
+          fontWeight: 500,
+        },
+        body1: {
+          fontSize: '1rem',
+          lineHeight: 1.5,
+        },
+        body2: {
+          fontSize: '0.875rem',
+          lineHeight: 1.43,
+        },
+      },
+      components: {
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: 'none',
+              borderRadius: 8,
+              padding: '8px 16px',
+            },
+          },
+        },
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              borderRadius: 12,
+              backgroundImage: 'none',
+            },
+          },
+        },
+        MuiPaper: {
+          styleOverrides: {
+            root: {
+              backgroundImage: 'none',
+            },
+          },
+        },
+      },
+    });
 
     // Real ARC tasks with proper evaluation criteria
     const arcTasks = {
