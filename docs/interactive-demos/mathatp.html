@@ -92,10 +92,12 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, 
-      Divider, LinearProgress, TextField, Paper, IconButton, Tooltip,
-      List, ListItem, ListItemText, ListItemIcon, Chip, Alert,
-      useTheme, ThemeProvider, createTheme, CssBaseline
+      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
+      IconButton, Icon, Button, Stepper, Step, StepLabel, StepContent,
+      Paper, Alert, CircularProgress, Divider, Chip, Dialog, DialogTitle,
+      DialogContent, DialogActions, TextField, FormControl, InputLabel,
+      Select, MenuItem, Tabs, Tab, List, ListItem, ListItemIcon,
+      ListItemText, LinearProgress, Tooltip, Avatar, useTheme, alpha
     } = MaterialUI;
 
     // Custom theme
@@ -125,418 +127,339 @@
       SAVE: "save"
     };
 
-    // Sample theorems and equations
+    // Sample theorem data
     const sampleTheorems = [
       {
-        name: "Pythagorean Theorem",
-        statement: "a^2 + b^2 = c^2",
-        description: "In a right triangle, the square of the hypotenuse equals the sum of squares of other sides",
-        proof: [
-          { step: "Consider a right triangle with sides a, b, and hypotenuse c", type: "given" },
-          { step: "Draw squares on each side", type: "construction" },
-          { step: "Area of square on hypotenuse = c²", type: "calculation" },
-          { step: "Area of squares on other sides = a² + b²", type: "calculation" },
-          { step: "By geometric proof, c² = a² + b²", type: "conclusion" }
-        ]
+        id: 1,
+        name: 'Pythagorean Theorem',
+        formalLanguage: 'first_order_logic',
+        statement: '∀a,b,c∈ℝ: a² + b² = c²',
+        references: ['Euclid Elements', 'Modern Algebra'],
+        status: 'proven',
+        confidence: 0.98
       },
       {
-        name: "Quadratic Formula",
-        statement: "x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}",
-        description: "Solution to the quadratic equation ax² + bx + c = 0",
-        proof: [
-          { step: "Start with ax² + bx + c = 0", type: "given" },
-          { step: "Divide by a: x² + (b/a)x + c/a = 0", type: "algebra" },
-          { step: "Complete the square", type: "algebra" },
-          { step: "Solve for x", type: "algebra" },
-          { step: "x = (-b ± √(b²-4ac))/(2a)", type: "conclusion" }
-        ]
+        id: 2,
+        name: 'Fermat\'s Last Theorem',
+        formalLanguage: 'first_order_logic',
+        statement: '∀n>2: ∄x,y,z∈ℤ: xⁿ + yⁿ = zⁿ',
+        references: ['Number Theory', 'Algebraic Geometry'],
+        status: 'proven',
+        confidence: 0.99
       }
     ];
 
-    // Theorem Card Component
-    function TheoremCard({ theorem, selected, onSelect }) {
-      return (
-        <Card 
-          className="demo-section"
-          sx={{ 
-            cursor: 'pointer',
-            bgcolor: selected ? 'primary.dark' : 'background.paper',
-            '&:hover': { bgcolor: 'primary.dark' }
-          }}
-          onClick={() => onSelect(theorem)}
-        >
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              {theorem.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              {theorem.description}
-            </Typography>
-            <Box className="math-display" dangerouslySetInnerHTML={{ __html: renderMath(theorem.statement) }} />
-          </CardContent>
-        </Card>
-      );
-    }
+    // Sample ATP agents
+    const atpAgents = [
+      {
+        name: 'E-Prover',
+        description: 'First-order theorem prover',
+        capabilities: ['first_order_logic', 'equality_reasoning'],
+        performance: 0.95
+      },
+      {
+        name: 'Vampire',
+        description: 'High-performance theorem prover',
+        capabilities: ['first_order_logic', 'higher_order_logic'],
+        performance: 0.92
+      },
+      {
+        name: 'Z3',
+        description: 'SMT solver and theorem prover',
+        capabilities: ['smt', 'first_order_logic', 'higher_order_logic'],
+        performance: 0.88
+      }
+    ];
 
-    // Proof Step Component
-    function ProofStep({ step, status }) {
-      return (
-        <Box className={`proof-step ${status}`}>
-          <Typography variant="body2">
-            {step.step}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {step.type}
-          </Typography>
-        </Box>
-      );
-    }
-
-    // Solution Step Component
-    function SolutionStep({ step }) {
-      return (
-        <Box className={`solution-step ${step.type}`}>
-          <Typography variant="body2">
-            {step.step}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {step.type}
-          </Typography>
-        </Box>
-      );
-    }
-
-    // Main MathATP Component
-    function MathATPTutorial() {
-      const [tabValue, setTabValue] = React.useState(0);
-      const [selectedTheorem, setSelectedTheorem] = React.useState(null);
-      const [equation, setEquation] = React.useState("");
+    function MathATP() {
+      const theme = useTheme();
+      const [activeTab, setActiveTab] = React.useState(0);
+      const [theorem, setTheorem] = React.useState({
+        name: '',
+        formalLanguage: 'first_order_logic',
+        statement: '',
+        references: []
+      });
+      const [validationStatus, setValidationStatus] = React.useState(null);
+      const [isProving, setIsProving] = React.useState(false);
+      const [searchStrategy, setSearchStrategy] = React.useState('heuristic');
       const [proofSteps, setProofSteps] = React.useState([]);
-      const [isProcessing, setIsProcessing] = React.useState(false);
-      const [error, setError] = React.useState(null);
-      const [progress, setProgress] = React.useState(0);
-      const [equationToSolve, setEquationToSolve] = React.useState("");
-      const [solution, setSolution] = React.useState(null);
+      const [visualizationData, setVisualizationData] = React.useState({ nodes: [], links: [] });
+      const [selectedAgents, setSelectedAgents] = React.useState([]);
+      const [proofResults, setProofResults] = React.useState([]);
+      const [savedTheorems, setSavedTheorems] = React.useState(sampleTheorems);
+      const [proofHistory, setProofHistory] = React.useState([]);
+      const [isHistoryOpen, setIsHistoryOpen] = React.useState(false);
+      const [isSavedTheoremsOpen, setIsSavedTheoremsOpen] = React.useState(false);
+      const [knowledgeBase, setKnowledgeBase] = React.useState({
+        axioms: [],
+        theorems: []
+      });
+      const [problemStatement, setProblemStatement] = React.useState('');
+      const [result, setResult] = React.useState(null);
+      const [logs, setLogs] = React.useState([]);
 
-      const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
-        setError(null);
-      };
-
-      const handleTheoremSelect = (theorem) => {
-        setSelectedTheorem(theorem);
-        setEquation(theorem.statement);
-        setProofSteps([]);
-        setProgress(0);
-      };
-
-      const handleEquationChange = (event) => {
-        setEquation(event.target.value);
-        setError(null);
-      };
-
-      const generateProof = async () => {
-        if (!equation) {
-          setError("Please enter a mathematical statement");
-          return;
-        }
-
-        setIsProcessing(true);
-        setProgress(0);
-        setProofSteps([]);
-
-        // Simulate proof generation
-        const steps = [
-          "Validating mathematical statement...",
-          "Applying relevant theorems...",
-          "Constructing proof sequence...",
-          "Verifying each step...",
-          "Generating final proof..."
-        ];
-
-        for (let i = 0; i < steps.length; i++) {
-          setProofSteps(prev => [...prev, { step: steps[i], status: "processing" }]);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setProgress((i + 1) * 20);
-        }
-
-        // Final proof steps
-        setProofSteps(prev => [
-          ...prev,
-          { step: "Statement is valid", status: "success" },
-          { step: "Proof is complete", status: "success" }
+      const startProving = async () => {
+        setIsProving(true);
+        setLogs(prev => [...prev, { timestamp: new Date(), level: 'info', message: 'Starting proof search...' }]);
+        
+        // Simulate proof search
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        setProofSteps([
+          { step: 1, description: 'Loading axioms', status: 'complete' },
+          { step: 2, description: 'Applying inference rules', status: 'complete' },
+          { step: 3, description: 'Searching for contradictions', status: 'complete' }
         ]);
-
-        setIsProcessing(false);
-        setProgress(100);
-      };
-
-      const solveEquation = async () => {
-        if (!equationToSolve) {
-          setError("Please enter an equation to solve");
-          return;
-        }
-
-        setIsProcessing(true);
-        setProgress(0);
-        setSolution(null);
-
-        // Simulate equation solving steps
-        const steps = [
-          "Parsing equation...",
-          "Identifying variables and constants...",
-          "Applying algebraic rules...",
-          "Solving for unknown...",
-          "Verifying solution..."
-        ];
-
-        for (let i = 0; i < steps.length; i++) {
-          setProofSteps(prev => [...prev, { step: steps[i], status: "processing" }]);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setProgress((i + 1) * 20);
-        }
-
-        // Example solution
-        setSolution({
-          steps: [
-            { step: "Original equation: " + equationToSolve, type: "given" },
-            { step: "Isolate variable terms", type: "algebra" },
-            { step: "Combine like terms", type: "algebra" },
-            { step: "Solve for variable", type: "algebra" },
-            { step: "x = 4", type: "solution" }
-          ]
+        
+        setResult({
+          success: true,
+          confidence: 0.95,
+          proof: 'Proof found in 2.3 seconds',
+          steps: 12
         });
-
-        setIsProcessing(false);
-        setProgress(100);
+        
+        setIsProving(false);
+        setLogs(prev => [...prev, { timestamp: new Date(), level: 'success', message: 'Proof completed successfully' }]);
       };
 
-      const handleEquationToSolveChange = (event) => {
-        setEquationToSolve(event.target.value);
-        setError(null);
-      };
-
-      const renderMath = (math) => {
-        try {
-          return katex.renderToString(math, { displayMode: true });
-        } catch (err) {
-          return math;
-        }
+      const stopProof = () => {
+        setIsProving(false);
+        setLogs(prev => [...prev, { timestamp: new Date(), level: 'warning', message: 'Proof search stopped' }]);
       };
 
       return (
-        <Box sx={{ p: 3 }}>
-          <Typography variant="h4" gutterBottom>
-            MathATP - Interactive Tutorial
-          </Typography>
+        <Box>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <Icon>functions</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Mathematical Theorem Prover
+              </Typography>
+              <Button color="inherit" href="index.html">
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="Overview" />
-            <Tab label="Theorem Proving" />
-            <Tab label="Equation Solving" />
-            <Tab label="Code Examples" />
-          </Tabs>
-
-          <Box className="tab-content">
-            {tabValue === 0 && (
+          <Container maxWidth="lg" sx={{ mt: 4 }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
               <Box>
-                <Typography variant="h6" gutterBottom>
-                  What is MathATP?
+                <Typography variant="h4" gutterBottom>
+                  Mathematical Theorem Prover
                 </Typography>
-                <Typography paragraph>
-                  MathATP is a cutting-edge system for automated theorem proving and advanced mathematical problem-solving. 
-                  It assists in generating proofs, solving equations, and verifying complex mathematical statements using state-of-the-art algorithms.
+                <Typography variant="subtitle1" color="text.secondary">
+                  Automated theorem proving for mathematical statements
                 </Typography>
-
-                <Grid container spacing={2}>
-                  {['Automated Theorem Proving', 'Complex Equation Solving', 'Interactive Proof Generation', 'Real-time Validation'].map((feature, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card className="demo-section">
-                        <CardContent>
-                          <Typography variant="h6" color="primary">{feature}</Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
               </Box>
-            )}
-
-            {tabValue === 1 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Theorem Proving
-                </Typography>
-                <Typography paragraph>
-                  Select a theorem or enter your own mathematical statement to generate a proof.
-                </Typography>
-
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <Paper className="demo-section">
-                      <Typography variant="subtitle1" gutterBottom>
-                        Sample Theorems
-                      </Typography>
-                      <List>
-                        {sampleTheorems.map((theorem, index) => (
-                          <ListItem 
-                            button 
-                            key={index}
-                            selected={selectedTheorem?.name === theorem.name}
-                            onClick={() => handleTheoremSelect(theorem)}
-                          >
-                            <ListItemText
-                              primary={theorem.name}
-                              secondary={theorem.description}
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Paper>
-                  </Grid>
-
-                  <Grid item xs={12} md={8}>
-                    <Paper className="demo-section">
-                      <Typography variant="subtitle1" gutterBottom>
-                        Enter Mathematical Statement
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={3}
-                        value={equation}
-                        onChange={handleEquationChange}
-                        placeholder="Enter a mathematical statement..."
-                        variant="outlined"
-                        sx={{ mb: 2 }}
-                      />
-                      <Button
-                        variant="contained"
-                        onClick={generateProof}
-                        disabled={isProcessing}
-                        startIcon={<Icon>{ICONS.REFRESH}</Icon>}
-                      >
-                        Generate Proof
-                      </Button>
-
-                      {isProcessing && (
-                        <Box sx={{ mt: 2 }}>
-                          <LinearProgress variant="determinate" value={progress} />
-                          <Typography variant="body2" color="text.secondary" align="right">
-                            {progress}%
-                          </Typography>
-                        </Box>
-                      )}
-
-                      {proofSteps.length > 0 && (
-                        <Box sx={{ mt: 2 }}>
-                          <Typography variant="subtitle1" gutterBottom>
-                            Proof Steps
-                          </Typography>
-                          {proofSteps.map((step, index) => (
-                            <ProofStep key={index} step={step} status={step.status} />
-                          ))}
-                        </Box>
-                      )}
-                    </Paper>
-                  </Grid>
-                </Grid>
+              <Box display="flex" gap={2}>
+                <Tooltip title="Refresh">
+                  <IconButton onClick={() => window.location.reload()}>
+                    <Icon>refresh</Icon>
+                  </IconButton>
+                </Tooltip>
+                <Button
+                  variant="contained"
+                  onClick={startProving}
+                  disabled={isProving || !problemStatement.trim()}
+                  startIcon={<Icon>play_arrow</Icon>}
+                  sx={{
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    '&:hover': {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+                    },
+                  }}
+                >
+                  Prove Theorem
+                </Button>
               </Box>
-            )}
+            </Box>
 
-            {tabValue === 2 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Equation Solving
-                </Typography>
-                <Typography paragraph>
-                  Enter an equation to solve step by step.
-                </Typography>
-
-                <Paper className="demo-section">
-                  <TextField
-                    fullWidth
-                    value={equationToSolve}
-                    onChange={handleEquationToSolveChange}
-                    placeholder="Enter an equation (e.g., 2x + 5 = 13)"
-                    variant="outlined"
-                    sx={{ mb: 2 }}
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <CardHeader
+                    title="ATP Configuration"
+                    avatar={
+                      <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: theme.palette.primary.main }}>
+                        <Icon>settings</Icon>
+                      </Avatar>
+                    }
                   />
-                  <Button
-                    variant="contained"
-                    onClick={solveEquation}
-                    disabled={isProcessing}
-                    startIcon={<Icon>{ICONS.REFRESH}</Icon>}
-                  >
-                    Solve Equation
-                  </Button>
+                  <CardContent>
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel>Search Strategy</InputLabel>
+                      <Select
+                        value={searchStrategy}
+                        onChange={(e) => setSearchStrategy(e.target.value)}
+                      >
+                        <MenuItem value="depth-first">Depth-First Search</MenuItem>
+                        <MenuItem value="breadth-first">Breadth-First Search</MenuItem>
+                        <MenuItem value="heuristic">Heuristic Search</MenuItem>
+                      </Select>
+                    </FormControl>
+                    
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel>ATP Agents</InputLabel>
+                      <Select
+                        multiple
+                        value={selectedAgents}
+                        onChange={(e) => setSelectedAgents(e.target.value)}
+                        renderValue={(selected) => (
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                      >
+                        {atpAgents.map((agent) => (
+                          <MenuItem key={agent.name} value={agent.name}>
+                            {agent.name} - {agent.description}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </CardContent>
+                </Card>
 
-                  {isProcessing && (
-                    <Box sx={{ mt: 2 }}>
-                      <LinearProgress variant="determinate" value={progress} />
-                      <Typography variant="body2" color="text.secondary" align="right">
-                        {progress}%
-                      </Typography>
-                    </Box>
-                  )}
-
-                  {solution && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Solution Steps
-                      </Typography>
-                      {solution.steps.map((step, index) => (
-                        <SolutionStep key={index} step={step} />
+                <Card sx={{ mt: 3 }}>
+                  <CardHeader
+                    title="Saved Theorems"
+                    avatar={
+                      <Avatar sx={{ bgcolor: alpha(theme.palette.success.main, 0.1), color: theme.palette.success.main }}>
+                        <Icon>bookmark</Icon>
+                      </Avatar>
+                    }
+                  />
+                  <CardContent>
+                    <List>
+                      {savedTheorems.map((theorem) => (
+                        <ListItem key={theorem.id}>
+                          <ListItemIcon>
+                            <Icon color="success">check_circle</Icon>
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={theorem.name}
+                            secondary={theorem.statement}
+                          />
+                        </ListItem>
                       ))}
-                    </Box>
-                  )}
-                </Paper>
-              </Box>
-            )}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-            {tabValue === 3 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Code Examples
-                </Typography>
-                <Typography paragraph>
-                  Example code snippets demonstrating how to use MathATP in your applications.
-                </Typography>
-
-                <Paper className="demo-section">
-                  <Typography variant="subtitle1" gutterBottom>
-                    Theorem Proving
-                  </Typography>
-                  <Box className="code-block">
-                    {`// Example: Prove a mathematical statement
-const theorem = {
-  statement: "a^2 + b^2 = c^2",
-  conditions: ["a, b, c are sides of a right triangle"]
-};
-
-const proof = await mathATP.prove(theorem);
-console.log(proof.steps);`}
-                  </Box>
-
-                  <Typography variant="subtitle1" gutterBottom sx={{ mt: 3 }}>
-                    Equation Solving
-                  </Typography>
-                  <Box className="code-block">
-                    {`// Example: Solve a quadratic equation
-const equation = "2x^2 + 5x - 3 = 0";
-const solution = await mathATP.solve(equation);
-console.log(solution.steps);`}
-                  </Box>
-                </Paper>
-              </Box>
-            )}
-          </Box>
+              <Grid item xs={12} md={8}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.1)} 0%, ${alpha(theme.palette.warning.main, 0.05)} 100%)`,
+                    border: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <CardHeader
+                    title="Theorem Editor"
+                    avatar={
+                      <Avatar sx={{ bgcolor: alpha(theme.palette.warning.main, 0.1), color: theme.palette.warning.main }}>
+                        <Icon>edit</Icon>
+                      </Avatar>
+                    }
+                  />
+                  <CardContent>
+                    <TextField
+                      fullWidth
+                      label="Theorem Name"
+                      value={theorem.name}
+                      onChange={(e) => setTheorem(prev => ({ ...prev, name: e.target.value }))}
+                      sx={{ mb: 2 }}
+                    />
+                    
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel>Formal Language</InputLabel>
+                      <Select
+                        value={theorem.formalLanguage}
+                        onChange={(e) => setTheorem(prev => ({ ...prev, formalLanguage: e.target.value }))}
+                      >
+                        <MenuItem value="first_order_logic">First-Order Logic</MenuItem>
+                        <MenuItem value="higher_order_logic">Higher-Order Logic</MenuItem>
+                        <MenuItem value="type_theory">Type Theory</MenuItem>
+                      </Select>
+                    </FormControl>
+                    
+                    <TextField
+                      fullWidth
+                      label="Theorem Statement"
+                      multiline
+                      rows={4}
+                      value={theorem.statement}
+                      onChange={(e) => setTheorem(prev => ({ ...prev, statement: e.target.value }))}
+                      sx={{ mb: 2 }}
+                    />
+                    
+                    {isProving && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="subtitle2" gutterBottom>
+                          Proof Progress
+                        </Typography>
+                        <LinearProgress />
+                        <List>
+                          {proofSteps.map((step, index) => (
+                            <ListItem key={index}>
+                              <ListItemIcon>
+                                <Icon color={step.status === 'complete' ? 'success' : 'warning'}>
+                                  {step.status === 'complete' ? 'check_circle' : 'schedule'}
+                                </Icon>
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={`Step ${step.step}`}
+                                secondary={step.description}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Box>
+                    )}
+                    
+                    {result && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="subtitle2" gutterBottom>
+                          Proof Result
+                        </Typography>
+                        <Alert severity={result.success ? 'success' : 'error'}>
+                          {result.proof}
+                        </Alert>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                          Confidence: {(result.confidence * 100).toFixed(1)}%
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Steps: {result.steps}
+                        </Typography>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Container>
         </Box>
       );
     }
@@ -546,7 +469,7 @@ console.log(solution.steps);`}
     root.render(
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <MathATPTutorial />
+        <MathATP />
       </ThemeProvider>
     );
   </script>
