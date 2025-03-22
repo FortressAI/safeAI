@@ -138,6 +138,54 @@
     .search-box::placeholder {
       color: rgba(255, 255, 255, 0.5);
     }
+
+    .instructions-section {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .instructions-section h2 {
+      color: #4CAF50;
+      margin-top: 0;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature-card {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    .feature-card h4 {
+      color: #4CAF50;
+      margin: 0 0 10px 0;
+    }
+
+    .keyboard-shortcut {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      margin: 0 2px;
+    }
+
+    .tip {
+      background: rgba(33, 150, 243, 0.1);
+      border-left: 4px solid #2196F3;
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -151,6 +199,64 @@
       List, ListItem, ListItemText, ListItemIcon,
       CircularProgress, Alert, Slider
     } = MaterialUI;
+
+    function Instructions() {
+      return (
+        <div className="instructions-section">
+          <h2>Interactive Knowledge Graph Explorer</h2>
+          <p>
+            Explore and analyze relationships between AI agents, systems, and interfaces in this interactive visualization.
+            Use the tools and features below to gain insights into the knowledge graph structure.
+          </p>
+
+          <div className="feature-list">
+            <div className="feature-card">
+              <h4>Navigation</h4>
+              <ul>
+                <li><span className="keyboard-shortcut">Scroll</span> to zoom in/out</li>
+                <li><span className="keyboard-shortcut">Click + Drag</span> to pan</li>
+                <li><span className="keyboard-shortcut">Double Click</span> to center view</li>
+              </ul>
+            </div>
+
+            <div className="feature-card">
+              <h4>Node Interaction</h4>
+              <ul>
+                <li>Click a node to view details</li>
+                <li>Hover to highlight connections</li>
+                <li>Drag nodes to rearrange</li>
+              </ul>
+            </div>
+
+            <div className="feature-card">
+              <h4>Relationship Types</h4>
+              <ul>
+                <li>Green: Dependencies</li>
+                <li>Blue: Interactions</li>
+                <li>Yellow: Monitoring</li>
+                <li>Red: Protection</li>
+                <li>Purple: Connections</li>
+              </ul>
+            </div>
+
+            <div className="feature-card">
+              <h4>Analysis Tools</h4>
+              <ul>
+                <li>Search nodes by name</li>
+                <li>Filter by relationship type</li>
+                <li>View node metrics</li>
+                <li>Export graph data</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="tip">
+            <strong>Pro Tip:</strong> Use the controls panel in the top-right corner to adjust physics simulation,
+            toggle labels, and reset the view. The relationship panel on the left shows all available connection types.
+          </div>
+        </div>
+      );
+    }
 
     // Main component
     function KnowledgeGraphs() {
@@ -276,307 +382,47 @@
       };
 
       return (
-        <Box className="demo-container">
-          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h4" gutterBottom>
             Knowledge Graphs
           </Typography>
-          
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange}
-            className="demo-tabs"
-          >
-            <Tab label="Overview" />
-            <Tab label="Interactive Graph" />
-            <Tab label="Statistics" />
-            <Tab label="Documentation" />
-          </Tabs>
-          
-          {/* Overview Tab */}
-          {tabValue === 0 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Welcome to Knowledge Graphs</Typography>
-                <Typography variant="body1" paragraph>
-                  Explore the interconnected knowledge graph of the SafeAI system. 
-                  Visualize relationships between agents, system components, and knowledge bases.
-                </Typography>
-                
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Interactive Visualization</Typography>
-                        <Typography variant="body2">
-                          Drag nodes, zoom in/out, and explore relationships
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Node Categories</Typography>
-                        <Typography variant="body2">
-                          Different types of nodes represent various system components
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Relationship Types</Typography>
-                        <Typography variant="body2">
-                          Various connection types show different interactions
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Interactive Graph Tab */}
-          {tabValue === 1 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <div className="graph-container" id="graph">
-                  <div class="controls-panel">
-                    <input type="text" class="search-box" placeholder="Search nodes..." />
-                    <button id="zoomIn">Zoom In</button>
-                    <button id="zoomOut">Zoom Out</button>
-                    <button id="centerGraph">Center Graph</button>
-                    <button id="togglePhysics">Toggle Physics</button>
-                  </div>
+          <Typography variant="subtitle1" gutterBottom>
+            Explore and analyze knowledge relationships with interactive visualization
+          </Typography>
 
-                  <div className="relationship-panel">
-                    <h3>Relationship Types</h3>
-                    <div className="relationship-type">
-                      <div className="relationship-color" style="background: #4CAF50;"></div>
-                      <span>Depends On</span>
-                    </div>
-                    <div className="relationship-type">
-                      <div className="relationship-color" style="background: #2196F3;"></div>
-                      <span>Interacts With</span>
-                    </div>
-                    <div className="relationship-type">
-                      <div className="relationship-color" style="background: #FFC107;"></div>
-                      <span>Monitors</span>
-                    </div>
-                    <div className="relationship-type">
-                      <div className="relationship-color" style="background: #F44336;"></div>
-                      <span>Protects</span>
-                    </div>
-                  </div>
+          <Instructions />
 
-                  <div className="node-details" id="nodeDetails"></div>
-                </div>
-              </div>
+          <div className="graph-container" ref={setGraphContainer}>
+            <div class="controls-panel">
+              <input type="text" class="search-box" placeholder="Search nodes..." />
+              <button id="zoomIn">Zoom In</button>
+              <button id="zoomOut">Zoom Out</button>
+              <button id="centerGraph">Center Graph</button>
+              <button id="togglePhysics">Toggle Physics</button>
             </div>
-          )}
-          
-          {/* Statistics Tab */}
-          {tabValue === 2 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Graph Statistics</Typography>
-                <Typography variant="body1" paragraph>
-                  Detailed statistics about the knowledge graph structure and relationships.
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Node Distribution</Typography>
-                        <Box sx={{ mt: 2 }}>
-                          {Object.entries(
-                            [
-                              { type: 'agent', count: 3 },
-                              { type: 'system', count: 3 },
-                              { type: 'interface', count: 2 }
-                            ].reduce((acc, node) => {
-                              acc[node.type] = (acc[node.type] || 0) + node.count;
-                              return acc;
-                            }, {})
-                          ).map(([type, count]) => (
-                            <Box key={type} sx={{ mb: 1 }}>
-                              <Typography variant="body2">
-                                {type.charAt(0).toUpperCase() + type.slice(1)}: {count}
-                              </Typography>
-                              <LinearProgress 
-                                variant="determinate" 
-                                value={(count / 8) * 100}
-                                sx={{ height: 8, borderRadius: 4 }}
-                              />
-                            </Box>
-                          ))}
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Connection Types</Typography>
-                        <Box sx={{ mt: 2 }}>
-                          {Object.entries(
-                            [
-                              { type: 'depends', count: 2 },
-                              { type: 'interacts', count: 1 },
-                              { type: 'monitors', count: 1 },
-                              { type: 'protects', count: 2 },
-                              { type: 'connects', count: 1 }
-                            ].reduce((acc, link) => {
-                              acc[link.type] = (acc[link.type] || 0) + link.count;
-                              return acc;
-                            }, {})
-                          ).map(([type, count]) => (
-                            <Box key={type} sx={{ mb: 1 }}>
-                              <Typography variant="body2">
-                                {type.charAt(0).toUpperCase() + type.slice(1)}: {count}
-                              </Typography>
-                              <LinearProgress 
-                                variant="determinate" 
-                                value={(count / 8) * 100}
-                                sx={{ height: 8, borderRadius: 4 }}
-                              />
-                            </Box>
-                          ))}
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Documentation Tab */}
-          {tabValue === 3 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Knowledge Graph Documentation</Typography>
-                <Typography variant="body1" paragraph>
-                  Learn about the knowledge graph structure and how to interact with it.
-                </Typography>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Node Types:</Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>person</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Agents"
-                      secondary="AI agents that perform specific tasks"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>computer</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="System Components"
-                      secondary="Core system infrastructure components"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>school</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Knowledge Bases"
-                      secondary="Collections of domain-specific knowledge"
-                    />
-                  </ListItem>
-                </List>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Connection Types:</Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>link</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Accesses"
-                      secondary="Agent accessing a system component"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>security</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Protected By"
-                      secondary="Security relationship between components"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>settings</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Enforces"
-                      secondary="Policy enforcement relationship"
-                    />
-                  </ListItem>
-                </List>
-              </div>
-            </div>
-          )}
 
-          {/* Node Details Dialog */}
-          <Dialog 
-            open={!!selectedNode} 
-            onClose={() => setSelectedNode(null)}
-            maxWidth="sm"
-            fullWidth
-          >
-            {selectedNode && (
-              <>
-                <DialogTitle>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <div 
-                      className="legend-color" 
-                      style={{ 
-                        backgroundColor: selectedNode.type === 'agent' ? '#4caf50' :
-                                       selectedNode.type === 'system' ? '#2196f3' :
-                                       selectedNode.type === 'interface' ? '#ffc107' :
-                                       '#f44336'
-                      }}
-                    />
-                    <Typography variant="h6">{selectedNode.name}</Typography>
-                  </Box>
-                </DialogTitle>
-                <DialogContent>
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle1" gutterBottom>Details</Typography>
-                    <Typography variant="body2">Type: {selectedNode.type}</Typography>
-                    <Typography variant="body2">Connections: {getNodeConnections(selectedNode).length}</Typography>
-                    
-                    <Typography variant="subtitle1" sx={{ mt: 2 }} gutterBottom>Connections</Typography>
-                    <List>
-                      {getNodeConnections(selectedNode).map((link, idx) => (
-                        <ListItem key={idx}>
-                          <ListItemText
-                            primary={`${link.source.name} - ${link.target.name}`}
-                            secondary={`${link.type} (${link.value})`}
-                          />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setSelectedNode(null)}>Close</Button>
-                </DialogActions>
-              </>
-            )}
-          </Dialog>
+            <div className="relationship-panel">
+              <h3>Relationship Types</h3>
+              <div className="relationship-type">
+                <div className="relationship-color" style="background: #4CAF50;"></div>
+                <span>Depends On</span>
+              </div>
+              <div className="relationship-type">
+                <div className="relationship-color" style="background: #2196F3;"></div>
+                <span>Interacts With</span>
+              </div>
+              <div className="relationship-type">
+                <div className="relationship-color" style="background: #FFC107;"></div>
+                <span>Monitors</span>
+              </div>
+              <div className="relationship-type">
+                <div className="relationship-color" style="background: #F44336;"></div>
+                <span>Protects</span>
+              </div>
+            </div>
+
+            <div className="node-details" id="nodeDetails"></div>
+          </div>
         </Box>
       );
     }

@@ -140,6 +140,62 @@
     .status-active { background-color: #4CAF50; }
     .status-inactive { background-color: #F44336; }
     .status-maintenance { background-color: #FFC107; }
+
+    .instructions-section {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(33, 150, 243, 0.2);
+    }
+
+    .instructions-section h2 {
+      color: #2196f3;
+      margin-top: 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    .feature-box h4 {
+      color: #2196f3;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-box h4 i {
+      font-size: 20px;
+    }
+
+    .metric-example {
+      display: inline-block;
+      background: rgba(76, 175, 80, 0.1);
+      color: #4CAF50;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      margin: 2px;
+    }
+
+    .tip {
+      background: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #FFC107;
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -224,6 +280,64 @@
       }
     ];
 
+    function Instructions() {
+      return (
+        <div className="instructions-section">
+          <h2>Welcome to the Agent Browser</h2>
+          <p>
+            Explore and monitor AI agents in the SafeAI ecosystem. This interactive browser allows you to view agent details,
+            track performance metrics, and analyze resource usage in real-time.
+          </p>
+
+          <div className="features-grid">
+            <div className="feature-box">
+              <h4><i className="material-icons">search</i>Search & Filter</h4>
+              <ul>
+                <li>Use the search bar to find agents by name or capability</li>
+                <li>Filter agents by domain using the category chips</li>
+                <li>View active, inactive, and maintenance status</li>
+              </ul>
+            </div>
+
+            <div className="feature-box">
+              <h4><i className="material-icons">analytics</i>Performance Metrics</h4>
+              <ul>
+                <li>Tasks completed: <span className="metric-example">1,247</span></li>
+                <li>Success rate: <span className="metric-example">98.5%</span></li>
+                <li>Response time: <span className="metric-example">0.8s</span></li>
+                <li>Uptime: <span className="metric-example">99.9%</span></li>
+              </ul>
+            </div>
+
+            <div className="feature-box">
+              <h4><i className="material-icons">memory</i>Resource Monitoring</h4>
+              <ul>
+                <li>Real-time CPU usage tracking</li>
+                <li>Memory consumption analysis</li>
+                <li>Network bandwidth monitoring</li>
+                <li>Historical performance data</li>
+              </ul>
+            </div>
+
+            <div className="feature-box">
+              <h4><i className="material-icons">settings</i>Agent Management</h4>
+              <ul>
+                <li>View detailed agent capabilities</li>
+                <li>Check version information</li>
+                <li>Monitor agent status</li>
+                <li>Access activity logs</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="tip">
+            <strong>Pro Tip:</strong> Click on any agent card to view detailed metrics, resource usage graphs,
+            and historical performance data. Use the search bar to quickly find agents by their capabilities.
+          </div>
+        </div>
+      );
+    }
+
     // Main component
     function AgentBrowser() {
       const [tabValue, setTabValue] = React.useState(0);
@@ -263,11 +377,38 @@
       const domains = ['all', ...new Set(agents.map(agent => agent.domain))];
 
       return (
-        <Box className="demo-container">
-          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h4" gutterBottom>
             Agent Browser
           </Typography>
-          
+          <Typography variant="subtitle1" gutterBottom>
+            Browse, search, and manage AI agents in the SafeAI ecosystem
+          </Typography>
+
+          <Instructions />
+
+          <div className="search-controls">
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search agents..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="search-bar"
+            />
+            
+            <div className="filter-chips">
+              {domains.map(domain => (
+                <Chip
+                  key={domain}
+                  label={domain.charAt(0).toUpperCase() + domain.slice(1)}
+                  onClick={() => handleDomainFilter(domain)}
+                  color={selectedDomain === domain ? 'primary' : 'default'}
+                />
+              ))}
+            </div>
+          </div>
+
           <Tabs 
             value={tabValue} 
             onChange={handleTabChange}
@@ -330,26 +471,6 @@
           {tabValue === 1 && (
             <div className="demo-tab-content">
               <div className="demo-section">
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Search agents..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="search-bar"
-                />
-                
-                <div className="filter-chips">
-                  {domains.map(domain => (
-                    <Chip
-                      key={domain}
-                      label={domain.charAt(0).toUpperCase() + domain.slice(1)}
-                      onClick={() => handleDomainFilter(domain)}
-                      color={selectedDomain === domain ? 'primary' : 'default'}
-                    />
-                  ))}
-                </div>
-
                 <div className="agent-grid">
                   {filteredAgents.map(agent => (
                     <Card 

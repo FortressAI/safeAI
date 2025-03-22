@@ -54,6 +54,21 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
+    .source {
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 5px;
+      word-break: break-all;
+    }
+
+    .result-header {
+      margin-bottom: 15px;
+    }
+
+    .result-header h3 {
+      margin: 0 0 5px 0;
+    }
+    
     .progress-bar {
       height: 8px;
       background-color: rgba(255, 255, 255, 0.1);
@@ -88,12 +103,103 @@
     .log-info { color: #4CAF50; }
     .log-warn { color: #FFC107; }
     .log-error { color: #F44336; }
+
+    .instructions-section {
+      background: linear-gradient(135deg, rgba(25, 118, 210, 0.1) 0%, rgba(25, 118, 210, 0.05) 100%);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(25, 118, 210, 0.2);
+    }
+
+    .instructions-section h2 {
+      color: #2196f3;
+      margin-top: 0;
+    }
+
+    .step {
+      margin: 15px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .step:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #2196f3;
+      border-radius: 50%;
+    }
+
+    .tip {
+      background: rgba(76, 175, 80, 0.1);
+      border-left: 4px solid #4CAF50;
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+
+    .example {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>ARC Prize Challenge</h1>
     <p class="subtitle">Test AI agents against Abstract Reasoning Corpus challenges</p>
+
+    <div class="instructions-section">
+      <h2>How to Use This Demo</h2>
+      <p>The ARC Prize Challenge demo allows you to test AI agents against the Abstract Reasoning Corpus, a collection of visual reasoning tasks. Follow these steps to get started:</p>
+      
+      <div class="step">
+        <h3>1. Set Up Training Data</h3>
+        <p>Enter the URL for your training data directory. This should point to a collection of ARC training puzzles in JSON format.</p>
+        <div class="example">Example: https://arc-data.domain.com/training/</div>
+        <div class="tip">Tip: Training data typically includes puzzle pairs with known solutions to help the AI learn patterns.</div>
+      </div>
+
+      <div class="step">
+        <h3>2. Configure Evaluation Data</h3>
+        <p>Enter the URL for your evaluation data directory. This contains the test puzzles that will assess your AI's performance.</p>
+        <div class="example">Example: https://arc-data.domain.com/evaluation/</div>
+        <div class="tip">Tip: Evaluation puzzles are separate from training puzzles and test the AI's ability to generalize.</div>
+      </div>
+
+      <div class="step">
+        <h3>3. Start Processing</h3>
+        <p>Click the "Start Processing" button to begin. The demo will:</p>
+        <ul>
+          <li>First process the training phase (50 puzzles)</li>
+          <li>Automatically transition to the evaluation phase</li>
+          <li>Display results in real-time as puzzles are solved</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <h3>4. Interpret Results</h3>
+        <p>Each result card shows:</p>
+        <ul>
+          <li><strong>Input Grid:</strong> The initial puzzle state</li>
+          <li><strong>Expected Output:</strong> The correct solution</li>
+          <li><strong>Prediction:</strong> Your AI's attempted solution</li>
+          <li><strong>Score:</strong> Accuracy of the prediction (0-100)</li>
+          <li><strong>Agents:</strong> AI components used in solving</li>
+        </ul>
+      </div>
+
+      <div class="tip">
+        <strong>Pro Tip:</strong> Monitor the logs section below for real-time updates on the processing status and any potential issues.
+      </div>
+    </div>
 
     <div class="phase-card">
       <h2>Training Phase</h2>
@@ -149,6 +255,8 @@
         this.totalItems = 100;
         this.results = [];
         this.logs = [];
+        this.trainingUrl = '';
+        this.evalUrl = '';
         
         this.initializeEventListeners();
       }
@@ -156,15 +264,32 @@
       initializeEventListeners() {
         document.getElementById('start-btn').addEventListener('click', () => this.startProcessing());
         document.getElementById('stop-btn').addEventListener('click', () => this.stopProcessing());
+        
+        // Add URL input listeners
+        document.getElementById('training-dir').addEventListener('change', (e) => {
+          this.trainingUrl = e.target.value;
+          this.addLog('info', `Training URL set to: ${this.trainingUrl}`);
+        });
+        
+        document.getElementById('eval-dir').addEventListener('change', (e) => {
+          this.evalUrl = e.target.value;
+          this.addLog('info', `Evaluation URL set to: ${this.evalUrl}`);
+        });
       }
 
       startProcessing() {
+        if (!this.trainingUrl || !this.evalUrl) {
+          this.addLog('error', 'Please set both Training and Evaluation URLs before starting.');
+          return;
+        }
+
         this.isProcessing = true;
         this.currentItem = 0;
         this.updateUI();
-        this.addLog('info', 'Starting processing...');
+        this.addLog('info', `Starting processing with Training URL: ${this.trainingUrl}`);
+        this.addLog('info', `Evaluation URL: ${this.evalUrl}`);
         
-        // Simulate processing
+        // Simulate processing with URLs
         this.processingInterval = setInterval(() => this.processNextItem(), 1000);
       }
 
@@ -178,21 +303,30 @@
       processNextItem() {
         this.currentItem++;
         
-        // Simulate puzzle solving
+        // Simulate puzzle solving with URL context
+        const currentUrl = this.currentPhase === 'training' ? this.trainingUrl : this.evalUrl;
+        
         if (Math.random() > 0.7) {
           this.addResult({
-            puzzleId: `Puzzle-${this.currentItem}`,
+            puzzleId: `${this.currentPhase}-${this.currentItem}`,
             score: Math.random() * 100,
             input: this.generateRandomGrid(),
             output: this.generateRandomGrid(),
             prediction: this.generateRandomGrid(),
-            agents: ['Pattern Recognition', 'Spatial Reasoning']
+            agents: ['Pattern Recognition', 'Spatial Reasoning'],
+            source: currentUrl
           });
+        }
+
+        // Switch phases if needed
+        if (this.currentItem === this.totalItems / 2) {
+          this.currentPhase = 'evaluation';
+          this.addLog('info', `Switching to evaluation phase with URL: ${this.evalUrl}`);
         }
 
         if (this.currentItem >= this.totalItems) {
           this.stopProcessing();
-          this.addLog('info', 'Processing completed.');
+          this.addLog('info', 'Processing completed for both phases.');
         }
 
         this.updateUI();
@@ -248,6 +382,7 @@
             <div class="result-header">
               <h3>${result.puzzleId}</h3>
               <span class="score">Score: ${result.score.toFixed(2)}</span>
+              <div class="source">Source: ${result.source}</div>
             </div>
             <div class="puzzle-display">
               ${this.renderGrid(result.input, 'Input')}
