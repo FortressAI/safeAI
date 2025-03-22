@@ -43,6 +43,21 @@ Welcome to the SafeAI documentation. This comprehensive guide will help you unde
 - [Community Guidelines](community/guidelines.md)
 - [Community Resources](community/resources.md)
 
+## Interactive Demos
+
+Explore our interactive demos to learn more about the SafeAI system in a hands-on way:
+
+- [Dashboard Interactive Demo](interactive-demos/dashboard.html)
+- [Agent Browser Demo](interactive-demos/agent-browser.html)
+- [Agent Workshop Demo](interactive-demos/agent-workshop.html)
+- [ARC Prize Challenge Demo](interactive-demos/arc-prize.html)
+- [MathATP Demo](interactive-demos/mathatp.html)
+- [FreePress Demo](interactive-demos/freepress.html)
+- [Knowledge Graphs Demo](interactive-demos/knowledge-graphs.html)
+- [Security Center Demo](interactive-demos/security-center.html)
+
+Visit our [Interactive Demos Index](interactive-demos/index.html) for a complete listing.
+
 ## Documentation Updates
 This documentation is regularly updated to reflect the latest features and improvements. Check back frequently for updates.
 
