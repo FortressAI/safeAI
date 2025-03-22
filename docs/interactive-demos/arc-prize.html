@@ -71,16 +71,16 @@
       Box, Typography, Button, TextField, Card, CardContent, 
       Tabs, Tab, CircularProgress, Grid, Divider, 
       Chip, Paper, IconButton, Tooltip, LinearProgress,
-      alpha
+      alpha, Icon
     } = MaterialUI;
 
-    // Import Material Icons
-    const { 
-      PlayArrow: PlayArrowIcon, 
-      Stop: StopIcon, 
-      Refresh: RefreshIcon,
-      Info: InfoIcon
-    } = MaterialIcons;
+    // Material icon names
+    const ICONS = {
+      PLAY_ARROW: "play_arrow",
+      STOP: "stop",
+      REFRESH: "refresh",
+      INFO: "info"
+    };
 
     // Sample puzzle data
     const samplePuzzleData = {
@@ -426,16 +426,19 @@
                   <Box display="flex" gap={2}>
                     <Tooltip title="Refresh data">
                       <IconButton>
-                        <RefreshIcon />
+                        <Icon>refresh</Icon>
                       </IconButton>
                     </Tooltip>
                     <Button
                       variant="contained"
                       onClick={startProcessing}
                       disabled={isProcessing}
-                      startIcon={<PlayArrowIcon />}
+                      startIcon={<Icon>play_arrow</Icon>}
                       sx={{
                         background: `linear-gradient(135deg, #0074D9 0%, #0063B1 100%)`,
+                        '&:hover': {
+                          background: `linear-gradient(135deg, #0063B1 0%, #0074D9 100%)`,
+                        },
                       }}
                     >
                       Start Processing
@@ -514,7 +517,7 @@
                         variant="contained"
                         color="error"
                         onClick={stopProcessing}
-                        startIcon={<StopIcon />}
+                        startIcon={<Icon>stop</Icon>}
                       >
                         Stop Processing
                       </Button>
