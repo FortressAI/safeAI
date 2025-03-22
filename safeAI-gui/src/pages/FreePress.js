@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Box,
     Button,
@@ -14,18 +14,29 @@ import {
     Typography,
     CircularProgress,
     Snackbar,
-    Alert
+    Alert,
+    useTheme,
+    alpha,
+    IconButton,
+    Tooltip,
+    Divider
 } from '@mui/material';
+import {
+    Person as PersonIcon,
+    CloudUpload as CloudUploadIcon,
+    Refresh as RefreshIcon
+} from '@mui/icons-material';
 import { ForceGraph2D } from 'react-force-graph';
 import FreePressService from '../services/FreePressService';
-import IPFSService from '../services/IPFSService';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FreePress = () => {
+    const theme = useTheme();
     const [isInitialized, setIsInitialized] = useState(false);
     const [isPublisher, setIsPublisher] = useState(false);
     const [publisherInfo, setPublisherInfo] = useState(null);
     const [articles, setArticles] = useState([]);
-    const [userLicenses, setUserLicenses] = useState([]);
+    const [licenses, setLicenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [graphData, setGraphData] = useState({ nodes: [], links: [] });
@@ -50,58 +61,13 @@ const FreePress = () => {
         severity: 'info'
     });
 
-    useEffect(() => {
-        initializeServices();
-    }, []);
-
-    const initializeServices = async () => {
-        try {
-            await FreePressService.initialize();
-            setIsInitialized(true);
-            await loadData();
-        } catch (error) {
-            console.error('Initialization error:', error);
-            setError(error.message);
-        }
-    };
-
-    const loadData = async () => {
-        try {
-            setLoading(true);
-            const account = FreePressService.account;
-            
-            // Check if user is a publisher
-            const publisher = await FreePressService.getPublisherInfo(account);
-            setIsPublisher(publisher.isRegistered);
-            setPublisherInfo(publisher);
-            
-            // Load articles and licenses
-            if (publisher.isRegistered) {
-                const publisherArticles = await FreePressService.getPublisherArticles(account);
-                setArticles(publisherArticles);
-            }
-            
-            const licenses = await FreePressService.getUserLicenses(account);
-            setUserLicenses(licenses);
-            
-            // Build graph data
-            buildGraphData(publisher.isRegistered ? articles : [], licenses);
-            
-            setLoading(false);
-        } catch (error) {
-            console.error('Error loading data:', error);
-            setError(error.message);
-            setLoading(false);
-        }
-    };
-
-    const buildGraphData = (articles, licenses) => {
+    const buildGraphData = useCallback((currentArticles, licenses) => {
         const nodes = [];
         const links = [];
         const account = FreePressService.account;
 
         // Add publisher node if registered
-        if (isPublisher) {
+        if (isPublisher && publisherInfo) {
             nodes.push({
                 id: account,
                 label: publisherInfo.name,
@@ -110,7 +76,7 @@ const FreePress = () => {
         }
 
         // Add article nodes and links
-        articles.forEach(article => {
+        currentArticles.forEach(article => {
             nodes.push({
                 id: article.articleId,
                 label: article.title,
@@ -140,7 +106,53 @@ const FreePress = () => {
         });
 
         setGraphData({ nodes, links });
-    };
+    }, [isPublisher, publisherInfo]);
+
+    const loadData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const account = FreePressService.account;
+            
+            // Check if user is a publisher
+            const publisher = await FreePressService.getPublisherInfo(account);
+            setIsPublisher(publisher.isRegistered);
+            setPublisherInfo(publisher);
+            
+            // Load articles and licenses
+            let publisherArticles = [];
+            if (publisher.isRegistered) {
+                publisherArticles = await FreePressService.getPublisherArticles(account);
+                setArticles(publisherArticles);
+            }
+            
+            const userLicenses = await FreePressService.getUserLicenses(account);
+            setLicenses(userLicenses);
+            
+            // Build graph data
+            buildGraphData(publisherArticles, userLicenses);
+            
+            setLoading(false);
+        } catch (error) {
+            console.error('Error loading data:', error);
+            setError(error.message);
+            setLoading(false);
+        }
+    }, [buildGraphData]);
+
+    const initializeServices = useCallback(async () => {
+        try {
+            await FreePressService.initialize();
+            setIsInitialized(true);
+            await loadData();
+        } catch (error) {
+            console.error('Initialization error:', error);
+            setError(error.message);
+        }
+    }, [loadData]);
+
+    useEffect(() => {
+        initializeServices();
+    }, [initializeServices]);
 
     const handlePublishArticle = async () => {
         try {
@@ -148,7 +160,7 @@ const FreePress = () => {
             const { title, content, price, tags } = articleForm;
             const tagArray = tags.split(',').map(tag => tag.trim());
             
-            const result = await FreePressService.publishArticle(
+            await FreePressService.publishArticle(
                 content,
                 parseFloat(price),
                 title,
@@ -202,30 +214,6 @@ const FreePress = () => {
         }
     };
 
-    const handlePurchaseLicense = async (articleId) => {
-        try {
-            setLoading(true);
-            await FreePressService.purchaseLicense(articleId);
-            
-            setSnackbar({
-                open: true,
-                message: 'License purchased successfully!',
-                severity: 'success'
-            });
-            
-            await loadData();
-        } catch (error) {
-            console.error('Error purchasing license:', error);
-            setSnackbar({
-                open: true,
-                message: 'Error purchasing license: ' + error.message,
-                severity: 'error'
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (!isInitialized) {
         return (
             <Container>
@@ -261,181 +249,236 @@ const FreePress = () => {
     }
 
     return (
-        <Container maxWidth="lg">
-            <Box my={4}>
-                <Typography variant="h4" gutterBottom>
-                    FreePress - Decentralized News Platform
-                </Typography>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
+            <Container maxWidth="xl" sx={{ p: 3 }}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+                    <Box>
+                        <Typography variant="h4" component="h1" gutterBottom>
+                            Decentralized Free Press
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            Publish and access censorship-resistant articles
+                        </Typography>
+                    </Box>
+                    <Box display="flex" gap={2}>
+                        {isInitialized && (
+                            <>
+                                <Tooltip title="Refresh data">
+                                    <IconButton onClick={loadData}>
+                                        <RefreshIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                {isPublisher ? (
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<CloudUploadIcon />}
+                                        onClick={() => setPublishDialogOpen(true)}
+                                        sx={{
+                                            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                                            '&:hover': {
+                                                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+                                            },
+                                        }}
+                                    >
+                                        Publish Article
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<PersonIcon />}
+                                        onClick={() => setRegisterDialogOpen(true)}
+                                        sx={{
+                                            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                                            '&:hover': {
+                                                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+                                            },
+                                        }}
+                                    >
+                                        Register as Publisher
+                                    </Button>
+                                )}
+                            </>
+                        )}
+                    </Box>
+                </Box>
 
-                {!isPublisher && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setRegisterDialogOpen(true)}
-                        sx={{ mb: 2 }}
-                    >
-                        Register as Publisher
-                    </Button>
+                {loading && (
+                    <Box display="flex" flexDirection="column" alignItems="center" my={8}>
+                        <CircularProgress size={60} />
+                        <Typography variant="h6" sx={{ mt: 2 }}>
+                            Loading Free Press data...
+                        </Typography>
+                    </Box>
                 )}
 
-                {isPublisher && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setPublishDialogOpen(true)}
-                        sx={{ mb: 2 }}
-                    >
-                        Publish Article
-                    </Button>
+                {error && (
+                    <Alert severity="error" sx={{ mb: 4 }}>
+                        {error}
+                    </Alert>
                 )}
 
-                <Grid container spacing={3}>
-                    {/* Knowledge Graph Visualization */}
-                    <Grid item xs={12}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    Knowledge Graph
-                                </Typography>
-                                <Box height="500px">
-                                    <ForceGraph2D
-                                        graphData={graphData}
-                                        nodeLabel="label"
-                                        nodeAutoColorBy="type"
-                                        linkDirectionalParticles={2}
-                                    />
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-
-                    {/* Articles List */}
-                    <Grid item xs={12} md={6}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    Your Articles
-                                </Typography>
-                                {articles.map((article) => (
-                                    <Card key={article.articleId} sx={{ mb: 2 }}>
+                {!loading && !error && (
+                    <AnimatePresence mode="wait">
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} lg={8}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Card
+                                        sx={{
+                                            height: '600px',
+                                            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                                            backdropFilter: 'blur(10px)',
+                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                                            borderRadius: 2,
+                                        }}
+                                    >
                                         <CardContent>
-                                            <Typography variant="h6">{article.title}</Typography>
-                                            <Typography variant="body2" color="textSecondary">
-                                                Price: {FreePressService.weiToEther(article.price)} ETH
+                                            <Typography variant="h6" gutterBottom>
+                                                Article Network Graph
                                             </Typography>
-                                            <Typography variant="body2">
-                                                Tags: {article.tags.join(', ')}
-                                            </Typography>
+                                            <Divider sx={{ mb: 2 }} />
+                                            <Box sx={{ height: 500 }}>
+                                                <ForceGraph2D
+                                                    graphData={graphData}
+                                                    nodeLabel="label"
+                                                    nodeAutoColorBy="type"
+                                                    linkDirectionalParticles={2}
+                                                />
+                                            </Box>
                                         </CardContent>
                                     </Card>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                                </motion.div>
+                            </Grid>
 
-                    {/* Licenses List */}
-                    <Grid item xs={12} md={6}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6" gutterBottom>
-                                    Your Licenses
-                                </Typography>
-                                {userLicenses.map((license) => (
-                                    <Card key={license.articleId} sx={{ mb: 2 }}>
+                            <Grid item xs={12} lg={4}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.1 }}
+                                >
+                                    <Card
+                                        sx={{
+                                            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                                            backdropFilter: 'blur(10px)',
+                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                                            borderRadius: 2,
+                                        }}
+                                    >
                                         <CardContent>
-                                            <Typography variant="h6">{license.title}</Typography>
-                                            <Typography variant="body2">
-                                                Publisher: {license.publisher}
+                                            <Typography variant="h6" gutterBottom>
+                                                Latest Articles
                                             </Typography>
+                                            <Divider sx={{ mb: 2 }} />
+                                            {articles.map((article) => (
+                                                <Card key={article.articleId} sx={{ mb: 2 }}>
+                                                    <CardContent>
+                                                        <Typography variant="h6">{article.title}</Typography>
+                                                        <Typography variant="body2" color="textSecondary">
+                                                            Price: {FreePressService.weiToEther(article.price)} ETH
+                                                        </Typography>
+                                                        <Typography variant="body2">
+                                                            Tags: {article.tags.join(', ')}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
                                         </CardContent>
                                     </Card>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-            </Box>
+                                </motion.div>
+                            </Grid>
+                        </Grid>
+                    </AnimatePresence>
+                )}
 
-            {/* Publish Article Dialog */}
-            <Dialog open={publishDialogOpen} onClose={() => setPublishDialogOpen(false)}>
-                <DialogTitle>Publish Article</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Title"
-                        fullWidth
-                        value={articleForm.title}
-                        onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Content"
-                        fullWidth
-                        multiline
-                        rows={4}
-                        value={articleForm.content}
-                        onChange={(e) => setArticleForm({ ...articleForm, content: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Price (ETH)"
-                        fullWidth
-                        type="number"
-                        value={articleForm.price}
-                        onChange={(e) => setArticleForm({ ...articleForm, price: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Tags (comma-separated)"
-                        fullWidth
-                        value={articleForm.tags}
-                        onChange={(e) => setArticleForm({ ...articleForm, tags: e.target.value })}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setPublishDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handlePublishArticle} color="primary">
-                        Publish
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {/* Publish Article Dialog */}
+                <Dialog open={publishDialogOpen} onClose={() => setPublishDialogOpen(false)}>
+                    <DialogTitle>Publish Article</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Title"
+                            fullWidth
+                            value={articleForm.title}
+                            onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Content"
+                            fullWidth
+                            multiline
+                            rows={4}
+                            value={articleForm.content}
+                            onChange={(e) => setArticleForm({ ...articleForm, content: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Price (ETH)"
+                            fullWidth
+                            type="number"
+                            value={articleForm.price}
+                            onChange={(e) => setArticleForm({ ...articleForm, price: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Tags (comma-separated)"
+                            fullWidth
+                            value={articleForm.tags}
+                            onChange={(e) => setArticleForm({ ...articleForm, tags: e.target.value })}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setPublishDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={handlePublishArticle} color="primary">
+                            Publish
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-            {/* Register Publisher Dialog */}
-            <Dialog open={registerDialogOpen} onClose={() => setRegisterDialogOpen(false)}>
-                <DialogTitle>Register as Publisher</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Publisher Name"
-                        fullWidth
-                        value={publisherName}
-                        onChange={(e) => setPublisherName(e.target.value)}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setRegisterDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleRegisterPublisher} color="primary">
-                        Register
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {/* Register Publisher Dialog */}
+                <Dialog open={registerDialogOpen} onClose={() => setRegisterDialogOpen(false)}>
+                    <DialogTitle>Register as Publisher</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Publisher Name"
+                            fullWidth
+                            value={publisherName}
+                            onChange={(e) => setPublisherName(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setRegisterDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={handleRegisterPublisher} color="primary">
+                            Register
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-            {/* Snackbar for notifications */}
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={6000}
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-            >
-                <Alert
+                {/* Snackbar for notifications */}
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={6000}
                     onClose={() => setSnackbar({ ...snackbar, open: false })}
-                    severity={snackbar.severity}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
-        </Container>
+                    <Alert
+                        onClose={() => setSnackbar({ ...snackbar, open: false })}
+                        severity={snackbar.severity}
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
+            </Container>
+        </motion.div>
     );
 };
 

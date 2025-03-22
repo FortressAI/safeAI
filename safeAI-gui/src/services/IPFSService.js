@@ -119,4 +119,6 @@ class IPFSService {
     }
 }
 
-export default new IPFSService(); 
+// Create an instance and export it
+const ipfsServiceInstance = new IPFSService();
+export default ipfsServiceInstance; 
