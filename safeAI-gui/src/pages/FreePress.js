@@ -36,7 +36,7 @@ const FreePress = () => {
     const [isPublisher, setIsPublisher] = useState(false);
     const [publisherInfo, setPublisherInfo] = useState(null);
     const [articles, setArticles] = useState([]);
-    const [licenses, setLicenses] = useState([]);
+    const [_licenses, setLicenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [graphData, setGraphData] = useState({ nodes: [], links: [] });
@@ -61,7 +61,7 @@ const FreePress = () => {
         severity: 'info'
     });
 
-    const buildGraphData = useCallback((currentArticles, licenses) => {
+    const buildGraphData = useCallback((currentArticles, _licenses) => {
         const nodes = [];
         const links = [];
         const account = FreePressService.account;
@@ -90,7 +90,7 @@ const FreePress = () => {
         });
 
         // Add license links
-        licenses.forEach(license => {
+        _licenses.forEach(license => {
             if (!nodes.some(n => n.id === license.articleId)) {
                 nodes.push({
                     id: license.articleId,
