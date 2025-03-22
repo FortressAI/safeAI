@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <!-- Material-UI Icons CDN -->
+  <script src="https://unpkg.com/@mui/icons-material@5.0.0/umd/material-ui-icons.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .section-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, Card, CardContent, CardActionArea, 
+      Grid, AppBar, Toolbar, IconButton, Button, Divider, Paper,
+      useTheme, ThemeProvider, createTheme, CssBaseline
+    } = MaterialUI;
+
+    // Import Material Icons
+    const {
+      Menu: MenuIcon,
+      School: SchoolIcon,
+      Code: CodeIcon,
+      Psychology: PsychologyIcon,
+      Help: HelpIcon,
+      Gavel: GavelIcon,
+      People: PeopleIcon,
+      Devices: DevicesIcon,
+      PlayArrow: PlayArrowIcon,
+      GitHub: GitHubIcon
+    } = MaterialIcons;
+
+    // Define documentation sections
+    const sections = [
+      {
+        title: "User Documentation",
+        icon: <SchoolIcon />,
+        color: "#2196f3",
+        items: [
+          { title: "Getting Started Guide", link: "getting-started.md" },
+          { title: "Basic Concepts", link: "basic-concepts.md" },
+          { title: "User Guide", link: "user-guide.md" },
+          { title: "User Journeys", link: "user-journeys/" }
+        ]
+      },
+      {
+        title: "Developer Documentation",
+        icon: <CodeIcon />,
+        color: "#4caf50",
+        items: [
+          { title: "Developer Journey", link: "developer-journeys/developer-journey.md" },
+          { title: "Technical Documentation", link: "technical/" },
+          { title: "Knowledge Graph Implementation", link: "KnowledgeGraph_Implementation_Guide.md" }
+        ]
+      },
+      {
+        title: "Domain Expert Documentation",
+        icon: <PsychologyIcon />,
+        color: "#ff9800",
+        items: [
+          { title: "Domain Expert Journey", link: "domain-expert-journeys/domain-expert-journey.md" },
+          { title: "Domain-Specific Guides", link: "domains/" },
+          { title: "Integration Guides", link: "integration/" }
+        ]
+      },
+      {
+        title: "Support and Resources",
+        icon: <HelpIcon />,
+        color: "#673ab7",
+        items: [
+          { title: "FAQ", link: "faq.md" },
+          { title: "Troubleshooting Guide", link: "support/troubleshooting.md" },
+          { title: "Contact Information", link: "support/contact.md" }
+        ]
+      },
+      {
+        title: "Legal and Compliance",
+        icon: <GavelIcon />,
+        color: "#795548",
+        items: [
+          { title: "Legal Documentation", link: "legal/" },
+          { title: "Governance", link: "governance/" },
+          { title: "Compliance Guide", link: "legal/compliance-guide.md" }
+        ]
+      },
+      {
+        title: "Community",
+        icon: <PeopleIcon />,
+        color: "#e91e63",
+        items: [
+          { title: "Community Guidelines", link: "community/guidelines.md" },
+          { title: "Community Resources", link: "community/resources.md" }
+        ]
+      },
+      {
+        title: "Interactive Demos",
+        icon: <DevicesIcon />,
+        color: "#009688",
+        items: [
+          { title: "Interactive Demos Index", link: "interactive-demos/index.html", isPrimary: true },
+          { title: "Dashboard Demo", link: "interactive-demos/dashboard.html" },
+          { title: "Agent Browser Demo", link: "interactive-demos/agent-browser.html" },
+          { title: "Agent Workshop Demo", link: "interactive-demos/agent-workshop.html" }
+        ]
+      }
+    ];
+
+    // Custom theme
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#3f51b5',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
+
+    function DocHome() {
+      return (
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Box>
+            <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+              <Toolbar>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  SafeAI Documentation
+                </Typography>
+                <Button 
+                  variant="outlined" 
+                  color="inherit" 
+                  startIcon={<PlayArrowIcon />}
+                  href="interactive-demos/index.html"
+                  sx={{ mr: 2 }}
+                >
+                  Interactive Demos
+                </Button>
+                <Button 
+                  variant="text" 
+                  color="inherit" 
+                  startIcon={<GitHubIcon />}
+                  href="https://github.com/FortressAI/safeAI"
+                >
+                  GitHub
+                </Button>
+              </Toolbar>
+            </AppBar>
+            
+            <Container>
+              <Box sx={{ textAlign: 'center', mb: 6 }}>
+                <Typography variant="h3" component="h1" gutterBottom>
+                  SafeAI Documentation
+                </Typography>
+                <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
+                  Comprehensive guides and resources for the SafeAI platform
+                </Typography>
+              </Box>
+              
+              <Grid container spacing={4}>
+                {sections.map((section, index) => (
+                  <Grid item xs={12} md={6} lg={4} key={index}>
+                    <Card 
+                      className="section-card"
+                      sx={{ 
+                        backgroundColor: 'rgba(255,255,255,0.05)',
+                        border: `1px solid rgba(255,255,255,0.1)`,
+                        borderRadius: 2
+                      }}
+                    >
+                      <CardContent>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Box sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            backgroundColor: section.color,
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                            mr: 2
+                          }}>
+                            {section.icon}
+                          </Box>
+                          <Typography variant="h5">
+                            {section.title}
+                          </Typography>
+                        </Box>
+                        
+                        <Divider sx={{ my: 2 }} />
+                        
+                        <Box sx={{ mt: 2 }}>
+                          {section.items.map((item, itemIdx) => (
+                            <Button 
+                              key={itemIdx}
+                              variant={item.isPrimary ? "contained" : "text"}
+                              color={item.isPrimary ? "primary" : "inherit"}
+                              fullWidth
+                              href={item.link}
+                              sx={{ 
+                                justifyContent: 'flex-start', 
+                                textAlign: 'left', 
+                                mb: 1,
+                                backgroundColor: item.isPrimary ? `${section.color}` : 'transparent'
+                              }}
+                            >
+                              {item.title}
+                            </Button>
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              
+              <Box sx={{ textAlign: 'center', mt: 6, mb: 2, pt: 4, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Last updated: March 2024
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Copyright © 2024 SafeAI. All rights reserved.
+                </Typography>
+                <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
+                  <a href="README.md">View Documentation README</a>
+                </Typography>
+              </Box>
+            </Container>
+          </Box>
+        </ThemeProvider>
+      );
+    }
+
+    ReactDOM.render(<DocHome />, document.getElementById('root'));
+  </script>
+</body>
+</html> 
