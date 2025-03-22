@@ -96,7 +96,8 @@
       Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
       IconButton, Icon, Button, Stepper, Step, StepLabel, StepContent,
       Paper, Alert, CircularProgress, Divider, Chip, Dialog, DialogTitle,
-      DialogContent, DialogActions, TextField
+      DialogContent, DialogActions, TextField, List, ListItem, ListItemIcon,
+      ListItemText, LinearProgress
     } = MaterialUI;
 
     // Real ARC tasks with proper evaluation criteria
@@ -227,506 +228,263 @@ def validateOutput(output) {
 }
 `;
 
-    function ARCPrizeChallenge() {
-      const [activePhase, setActivePhase] = React.useState(0);
-      const [selectedTask, setSelectedTask] = React.useState(null);
-      const [agentCode, setAgentCode] = React.useState(agentTemplate);
-      const [isSubmitting, setIsSubmitting] = React.useState(false);
-      const [evaluationResults, setEvaluationResults] = React.useState(null);
-      const [agentMetrics, setAgentMetrics] = React.useState({
-        evaluationScore: 0,
-        testingScore: "Locked",
-        finalScore: "Locked",
-        performance: {
-          singleAgents: new Map(),
-          combinations: new Map(),
-          puzzlePatterns: new Map()
-        }
+    function ARCPrize() {
+      const [phaseUrls, setPhaseUrls] = React.useState({
+        evaluation: '',
+        testing: '',
+        final: ''
       });
-      const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-      const [agentName, setAgentName] = React.useState("");
-      const [logs, setLogs] = React.useState([]);
-      const editorRef = React.useRef(null);
+      const [processing, setProcessing] = React.useState(false);
+      const [currentPhase, setCurrentPhase] = React.useState('evaluation');
+      const [progress, setProgress] = React.useState({
+        evaluation: 0,
+        testing: 0,
+        final: 0
+      });
+      const [results, setResults] = React.useState({
+        evaluation: null,
+        testing: null,
+        final: null
+      });
+      const [error, setError] = React.useState(null);
 
-      // Add logging functionality
-      const addLog = (level, message) => {
-        const timestamp = new Date().toISOString();
-        setLogs(prev => [...prev, { timestamp, level, message }]);
+      const handleUrlChange = (phase, url) => {
+        setPhaseUrls(prev => ({
+          ...prev,
+          [phase]: url
+        }));
       };
 
-      // Validate Groovy code
-      const validateGroovyCode = (code) => {
-        const requiredElements = [
-          'def generateCandidate',
-          'return [candidate:',
-          'metadata:',
-          'method:',
-          'chain_of_thought:',
-          'confidence:'
-        ];
-        
-        const hasAllElements = requiredElements.every(element => code.includes(element));
-        if (!hasAllElements) {
-          throw new Error('Invalid Groovy agent code: missing required elements');
+      const processPuzzles = async (phase) => {
+        if (!phaseUrls[phase]) {
+          setError(`Please provide a valid URL for the ${phase} phase puzzles`);
+          return;
         }
-        
-        return true;
-      };
 
-      // Track agent performance
-      const trackAgentPerformance = (agentName, success, confidence) => {
-        setAgentMetrics(prev => {
-          const performance = {...prev.performance};
-          if (!performance.singleAgents.has(agentName)) {
-            performance.singleAgents.set(agentName, {
-              successes: 0,
-              attempts: 0,
-              successRate: 0,
-              avgConfidence: 0
-            });
-          }
-          
-          const stats = performance.singleAgents.get(agentName);
-          stats.attempts++;
-          if (success) stats.successes++;
-          stats.successRate = stats.successes / stats.attempts;
-          stats.avgConfidence = (stats.avgConfidence * (stats.attempts - 1) + confidence) / stats.attempts;
-          
-          return {
-            ...prev,
-            performance
-          };
-        });
-      };
-
-      const handleSubmitAgent = async () => {
-        setIsSubmitting(true);
-        addLog('info', `Submitting agent: ${agentName}`);
+        setProcessing(true);
+        setError(null);
         
         try {
-          // Validate code
-          validateGroovyCode(agentCode);
-          addLog('info', 'Code validation successful');
-          
-          // Simulate evaluation
+          // Simulate processing puzzles from URL
           await new Promise(resolve => setTimeout(resolve, 2000));
           
-          const success = Math.random() > 0.3;
-          const confidence = Math.random() * 0.5 + 0.5;
+          // Simulate results
+          const puzzleCount = phase === 'evaluation' ? 10 : phase === 'testing' ? 15 : 20;
+          let processedCount = 0;
           
-          // Track performance
-          trackAgentPerformance(agentName, success, confidence);
+          for (let i = 0; i < puzzleCount; i++) {
+            processedCount++;
+            setProgress(prev => ({
+              ...prev,
+              [phase]: (processedCount / puzzleCount) * 100
+            }));
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
           
-          const results = {
-            success,
-            score: Math.floor(confidence * 100),
-            feedback: [
-              "Pattern recognition methodology validated",
-              "Transformation rules properly extracted",
-              "Edge cases handled appropriately"
-            ],
-            errors: success ? [] : ["Some test cases failed"],
-            recommendations: [
-              "Consider agent combinations for better performance",
-              "Add more comprehensive error handling",
-              "Improve confidence scoring"
-            ]
-          };
-          
-          setEvaluationResults(results);
-          setAgentMetrics(prev => ({
+          setResults(prev => ({
             ...prev,
-            evaluationScore: Math.max(prev.evaluationScore, results.score)
+            [phase]: {
+              totalPuzzles: puzzleCount,
+              solved: Math.floor(puzzleCount * 0.8),
+              score: phase === 'evaluation' ? 85 : phase === 'testing' ? 78 : 0
+            }
           }));
-          
-          addLog('info', `Evaluation complete: ${results.score}%`);
-          
-        } catch (error) {
-          addLog('error', `Submission failed: ${error.message}`);
-          setEvaluationResults({
-            success: false,
-            score: 0,
-            feedback: [],
-            errors: [error.message],
-            recommendations: ["Fix code validation issues"]
-          });
+
+          if (phase === 'evaluation' && results.evaluation?.score >= 80) {
+            setCurrentPhase('testing');
+          } else if (phase === 'testing' && results.testing?.score >= 90) {
+            setCurrentPhase('final');
+          }
+        } catch (err) {
+          setError(`Error processing ${phase} phase puzzles: ${err.message}`);
+        } finally {
+          setProcessing(false);
         }
-        
-        setIsSubmitting(false);
-        setShowSubmitDialog(false);
-      };
-
-      const phases = [
-        {
-          label: "Evaluation Phase",
-          description: "Submit and test your AI agent on public evaluation tasks. Iterate and improve your solution based on feedback.",
-          tasks: arcTasks.evaluation,
-          status: "Active"
-        },
-        {
-          label: "Testing Phase",
-          description: "Your agent will be tested on a hidden set of more complex reasoning tasks to validate generalization ability.",
-          tasks: arcTasks.testing,
-          status: "Locked",
-          requiredScore: 80
-        },
-        {
-          label: "Final Phase",
-          description: "Top performing agents compete on the final hidden dataset to determine the ultimate winners.",
-          tasks: arcTasks.final,
-          status: "Locked",
-          requiredScore: 90
-        }
-      ];
-
-      const handleTaskSelect = (task) => {
-        setSelectedTask(task);
-        setEvaluationResults(null);
-      };
-
-      const renderGrid = (grid) => {
-        if (!grid) return null;
-        
-        const colors = ["#000000", "#ffffff", "#2196f3"];
-        
-        return (
-          <div 
-            className="arc-grid" 
-            style={{ 
-              gridTemplateColumns: `repeat(${grid[0].length}, 24px)` 
-            }}
-          >
-            {grid.map((row, i) => 
-              row.map((cell, j) => (
-                <div
-                  key={`${i}-${j}`}
-                  className="arc-cell"
-                  style={{ backgroundColor: colors[cell] }}
-                />
-              ))
-            )}
-          </div>
-        );
-      };
-
-      const canProgressToPhase = (phaseIndex) => {
-        if (phaseIndex === 0) return true;
-        const prevPhase = phases[phaseIndex - 1];
-        return agentMetrics.evaluationScore >= prevPhase.requiredScore;
       };
 
       return (
         <Box>
           <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
                 <Icon>psychology</Icon>
               </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                ARC Prize Challenge
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                ARC Prize Competition
               </Typography>
               <Button color="inherit" href="index.html">
                 Back to Demos
               </Button>
             </Toolbar>
           </AppBar>
-          
+
           <Container maxWidth="lg" sx={{ mt: 4 }}>
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" gutterBottom>
-                Abstraction and Reasoning Corpus Challenge
-              </Typography>
-              <Typography variant="body1" color="text.secondary" paragraph>
-                The ARC Prize challenges AI systems to solve novel visual reasoning tasks that test for abstract thinking and generalization.
-                Agents must discover patterns and apply transformations without being explicitly programmed for each task.
-              </Typography>
-              <Alert severity="info" sx={{ mt: 2 }}>
-                This is an official competition demo for testing and evaluating AI agents on ARC tasks.
-                Visit <a href="https://arc-prize.org" target="_blank" rel="noopener">arc-prize.org</a> for full competition details.
-              </Alert>
-            </Box>
+            <Alert severity="info" sx={{ mb: 3 }}>
+              This is an official competition demo for testing and evaluating AI agents on ARC tasks. Visit{' '}
+              <a href="https://arc-prize.org" target="_blank" rel="noopener">arc-prize.org</a> for full competition details.
+            </Alert>
 
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <Paper sx={{ p: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Competition Progress
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Evaluation Score
-                    </Typography>
-                    <Typography variant="h4" color="primary">
-                      {agentMetrics.evaluationScore}%
-                    </Typography>
-                    
-                    <Divider sx={{ my: 2 }} />
-                    
-                    <Typography variant="subtitle2" gutterBottom>
-                      Testing Score
-                    </Typography>
-                    <Typography variant="h4" color="text.secondary">
-                      {agentMetrics.testingScore}
-                    </Typography>
-                    
-                    <Divider sx={{ my: 2 }} />
-                    
-                    <Typography variant="subtitle2" gutterBottom>
-                      Final Score
-                    </Typography>
-                    <Typography variant="h4" color="text.secondary">
-                      {agentMetrics.finalScore}
-                    </Typography>
-                  </Box>
-                </Paper>
-
-                {selectedTask && (
-                  <Paper sx={{ p: 2, mt: 2 }}>
+                <Card>
+                  <CardContent>
                     <Typography variant="h6" gutterBottom>
-                      Evaluation Criteria
+                      Competition Progress
                     </Typography>
-                    <Box component="ul" sx={{ pl: 2 }}>
-                      {selectedTask.criteria?.map((criterion, index) => (
-                        <Box component="li" key={index} sx={{ mb: 1 }}>
-                          <Typography variant="body2" color="text.secondary">
-                            {criterion}
-                          </Typography>
-                        </Box>
-                      ))}
+                    
+                    <Box sx={{ mb: 3 }}>
+                      <Typography variant="subtitle1">
+                        Evaluation Score
+                      </Typography>
+                      <Typography variant="h3" color="primary">
+                        {results.evaluation ? `${results.evaluation.score}%` : '0%'}
+                      </Typography>
+                      {results.evaluation && (
+                        <Typography variant="body2" color="text.secondary">
+                          Solved {results.evaluation.solved} of {results.evaluation.totalPuzzles} puzzles
+                        </Typography>
+                      )}
                     </Box>
-                  </Paper>
-                )}
-              </Grid>
-              
-              <Grid item xs={12} md={8}>
-                <Paper className="phase-stepper">
-                  <Stepper activeStep={activePhase} orientation="vertical">
-                    {phases.map((phase, index) => (
-                      <Step key={phase.label}>
-                        <StepLabel>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            {phase.label}
-                            <Chip 
-                              label={phase.status} 
-                              color={phase.status === "Active" ? "success" : "default"}
-                              size="small"
-                            />
-                            {phase.requiredScore && (
-                              <Chip
-                                label={`Required: ${phase.requiredScore}%`}
-                                color={canProgressToPhase(index) ? "success" : "error"}
-                                size="small"
-                                variant="outlined"
-                              />
-                            )}
-                          </Box>
-                        </StepLabel>
-                        <StepContent>
-                          <Typography color="text.secondary" paragraph>
-                            {phase.description}
-                          </Typography>
-                          
-                          <Grid container spacing={2}>
-                            {phase.tasks.map(task => (
-                              <Grid item xs={12} key={task.id}>
-                                <Card className="phase-card">
-                                  <CardContent>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                                      <Typography variant="subtitle1">
-                                        {task.name}
-                                      </Typography>
-                                      <Chip 
-                                        label={task.difficulty}
-                                        color={
-                                          task.difficulty === "Basic" ? "success" :
-                                          task.difficulty === "Intermediate" ? "warning" :
-                                          task.difficulty === "Advanced" ? "error" : "default"
-                                        }
-                                        size="small"
-                                      />
-                                    </Box>
-                                    
-                                    <Typography variant="body2" color="text.secondary" paragraph>
-                                      {task.description}
-                                    </Typography>
-                                    
-                                    {task.input && task.output && (
-                                      <Grid container spacing={2}>
-                                        <Grid item xs={6}>
-                                          <Typography variant="caption" color="text.secondary">
-                                            Input
-                                          </Typography>
-                                          {renderGrid(task.input)}
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                          <Typography variant="caption" color="text.secondary">
-                                            Expected Output
-                                          </Typography>
-                                          {renderGrid(task.output)}
-                                        </Grid>
-                                      </Grid>
-                                    )}
-                                    
-                                    {task.status === "Locked" ? (
-                                      <Alert severity="warning" sx={{ mt: 2 }}>
-                                        This task will be unlocked in the {phase.label}
-                                      </Alert>
-                                    ) : (
-                                      <Button
-                                        variant="contained"
-                                        sx={{ mt: 2 }}
-                                        onClick={() => handleTaskSelect(task)}
-                                      >
-                                        Select Task
-                                      </Button>
-                                    )}
-                                  </CardContent>
-                                </Card>
-                              </Grid>
-                            ))}
-                          </Grid>
-                        </StepContent>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </Paper>
 
-                {selectedTask && (
-                  <Paper sx={{ p: 2, mt: 3 }}>
-                    <Typography variant="h6" gutterBottom>
-                      Agent Submission
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" paragraph>
-                      Implement your agent using the template below. Your agent should analyze the input grid and predict the correct transformation.
-                    </Typography>
-                    
-                    <div id="code-editor" className="code-editor"></div>
-                    
-                    <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                    <Box sx={{ mb: 3 }}>
+                      <Typography variant="subtitle1">
+                        Testing Score
+                      </Typography>
+                      <Typography variant="h3" color={results.testing ? 'primary' : 'text.secondary'}>
+                        {results.testing ? `${results.testing.score}%` : 'Locked'}
+                      </Typography>
+                      {results.testing && (
+                        <Typography variant="body2" color="text.secondary">
+                          Solved {results.testing.solved} of {results.testing.totalPuzzles} puzzles
+                        </Typography>
+                      )}
+                    </Box>
+
+                    <Box>
+                      <Typography variant="subtitle1">
+                        Final Score
+                      </Typography>
+                      <Typography variant="h3" color={results.final ? 'primary' : 'text.secondary'}>
+                        {results.final ? `${results.final.score}%` : 'Locked'}
+                      </Typography>
+                      {results.final && (
+                        <Typography variant="body2" color="text.secondary">
+                          Solved {results.final.solved} of {results.final.totalPuzzles} puzzles
+                        </Typography>
+                      )}
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={12} md={8}>
+                <Card>
+                  <CardContent>
+                    <Box sx={{ mb: 4 }}>
+                      <Typography variant="h6" gutterBottom>
+                        Evaluation Phase {currentPhase === 'evaluation' && <span className="badge success">Active</span>}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" paragraph>
+                        Submit and test your AI agent on public evaluation tasks. Iterate and improve your solution based on feedback.
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        label="Evaluation Puzzles URL"
+                        value={phaseUrls.evaluation}
+                        onChange={(e) => handleUrlChange('evaluation', e.target.value)}
+                        disabled={currentPhase !== 'evaluation' || processing}
+                        sx={{ mb: 2 }}
+                      />
+                      {progress.evaluation > 0 && progress.evaluation < 100 && (
+                        <LinearProgress variant="determinate" value={progress.evaluation} sx={{ mb: 2 }} />
+                      )}
                       <Button
                         variant="contained"
-                        color="primary"
-                        onClick={() => setShowSubmitDialog(true)}
-                        disabled={isSubmitting}
+                        onClick={() => processPuzzles('evaluation')}
+                        disabled={currentPhase !== 'evaluation' || processing || !phaseUrls.evaluation}
+                        startIcon={processing ? <CircularProgress size={20} /> : <Icon>play_arrow</Icon>}
                       >
-                        {isSubmitting ? <CircularProgress size={24} /> : "Submit Agent"}
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          editorRef.current.setValue(agentTemplate);
-                          setAgentCode(agentTemplate);
-                        }}
-                      >
-                        Reset Code
+                        Process Evaluation Puzzles
                       </Button>
                     </Box>
 
-                    {evaluationResults && (
-                      <Paper className="result-panel">
-                        <Typography variant="h6" gutterBottom>
-                          Evaluation Results
-                        </Typography>
-                        
-                        <Box sx={{ mb: 2 }}>
-                          <Typography variant="subtitle2" gutterBottom>
-                            Score
-                          </Typography>
-                          <Typography variant="h4" color={evaluationResults.score >= 80 ? "success" : "error"}>
-                            {evaluationResults.score}%
-                          </Typography>
-                        </Box>
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Typography variant="subtitle2" gutterBottom>
-                          Feedback
-                        </Typography>
-                        <Box component="ul" sx={{ pl: 2 }}>
-                          {evaluationResults.feedback.map((item, index) => (
-                            <Box component="li" key={index}>
-                              <Typography variant="body2" color="success.main">
-                                {item}
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                        
-                        {evaluationResults.errors.length > 0 && (
-                          <>
-                            <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
-                              Errors
-                            </Typography>
-                            <Box component="ul" sx={{ pl: 2 }}>
-                              {evaluationResults.errors.map((error, index) => (
-                                <Box component="li" key={index}>
-                                  <Typography variant="body2" color="error">
-                                    {error}
-                                  </Typography>
-                                </Box>
-                              ))}
-                            </Box>
-                          </>
-                        )}
-                        
-                        <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
-                          Recommendations
-                        </Typography>
-                        <Box component="ul" sx={{ pl: 2 }}>
-                          {evaluationResults.recommendations.map((rec, index) => (
-                            <Box component="li" key={index}>
-                              <Typography variant="body2" color="text.secondary">
-                                {rec}
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                      </Paper>
+                    <Box sx={{ mb: 4 }}>
+                      <Typography variant="h6" gutterBottom>
+                        Testing Phase {currentPhase === 'testing' && <span className="badge success">Active</span>}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" paragraph>
+                        Test your agent on hidden test cases. Requires 80% score in evaluation phase.
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        label="Testing Puzzles URL"
+                        value={phaseUrls.testing}
+                        onChange={(e) => handleUrlChange('testing', e.target.value)}
+                        disabled={currentPhase !== 'testing' || processing}
+                        sx={{ mb: 2 }}
+                      />
+                      {progress.testing > 0 && progress.testing < 100 && (
+                        <LinearProgress variant="determinate" value={progress.testing} sx={{ mb: 2 }} />
+                      )}
+                      <Button
+                        variant="contained"
+                        onClick={() => processPuzzles('testing')}
+                        disabled={currentPhase !== 'testing' || processing || !phaseUrls.testing}
+                        startIcon={processing ? <CircularProgress size={20} /> : <Icon>play_arrow</Icon>}
+                      >
+                        Process Testing Puzzles
+                      </Button>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="h6" gutterBottom>
+                        Final Phase {currentPhase === 'final' && <span className="badge success">Active</span>}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" paragraph>
+                        Submit your agent for final evaluation. Requires 90% score in testing phase.
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        label="Final Puzzles URL"
+                        value={phaseUrls.final}
+                        onChange={(e) => handleUrlChange('final', e.target.value)}
+                        disabled={currentPhase !== 'final' || processing}
+                        sx={{ mb: 2 }}
+                      />
+                      {progress.final > 0 && progress.final < 100 && (
+                        <LinearProgress variant="determinate" value={progress.final} sx={{ mb: 2 }} />
+                      )}
+                      <Button
+                        variant="contained"
+                        onClick={() => processPuzzles('final')}
+                        disabled={currentPhase !== 'final' || processing || !phaseUrls.final}
+                        startIcon={processing ? <CircularProgress size={20} /> : <Icon>play_arrow</Icon>}
+                      >
+                        Process Final Puzzles
+                      </Button>
+                    </Box>
+
+                    {error && (
+                      <Alert severity="error" sx={{ mt: 3 }}>
+                        {error}
+                      </Alert>
                     )}
-                  </Paper>
-                )}
+                  </CardContent>
+                </Card>
               </Grid>
             </Grid>
           </Container>
-
-          <Dialog open={showSubmitDialog} onClose={() => setShowSubmitDialog(false)}>
-            <DialogTitle>Submit Agent</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Agent Name"
-                fullWidth
-                variant="outlined"
-                value={agentName}
-                onChange={(e) => setAgentName(e.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowSubmitDialog(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleSubmitAgent}
-                variant="contained"
-                disabled={!agentName}
-              >
-                Submit
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Box>
       );
     }
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<ARCPrizeChallenge />);
+    root.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <ARCPrize />
+      </ThemeProvider>
+    );
   </script>
 </body>
 </html> 
