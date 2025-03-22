@@ -2,21 +2,11 @@ import React, { useState } from 'react';
 import {
   Box,
   Typography,
-  Paper,
   TextField,
   Button,
   Grid,
-  CircularProgress,
-  Alert,
   Card,
   CardContent,
-  CardHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   useTheme,
   alpha,
   IconButton,
@@ -27,11 +17,8 @@ import {
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
-import StorageIcon from '@mui/icons-material/Storage';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import InfoIcon from '@mui/icons-material/Info';
-import DownloadIcon from '@mui/icons-material/Download';
-import ARCStatusCard from '../components/arc/ARCStatusCard';
 import ARCPuzzleDisplay from '../components/arc/ARCPuzzleDisplay';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -56,7 +43,7 @@ const log = (level, message, data = null) => {
 
   // In a production environment, you might want to send logs to a server
   if (process.env.NODE_ENV === 'production') {
-    axios.post('/api/arc/logs', logEntry).catch(err => {
+    axios.post('/api/arc/logs', logEntry).catch(_err => {
       // Handle logging error silently
     });
   }
@@ -124,7 +111,7 @@ const loadAgentDefinitions = async () => {
 };
 
 // Fetch puzzles from a directory
-const fetchPuzzlesFromDirectory = async (directoryUrl) => {
+const _fetchPuzzlesFromDirectory = async (directoryUrl) => {
   log(LogLevel.INFO, 'Fetching puzzles from directory', { url: directoryUrl });
   
   try {
@@ -153,7 +140,7 @@ const fetchPuzzlesFromDirectory = async (directoryUrl) => {
 };
 
 // Fetch puzzle data from URL
-const fetchPuzzleData = async (puzzleUrl) => {
+const _fetchPuzzleData = async (puzzleUrl) => {
   log(LogLevel.INFO, 'Fetching puzzle data', { url: puzzleUrl });
   
   try {
@@ -254,7 +241,7 @@ const AgentPerformanceTracker = {
   combinations: new Map(),
   puzzlePatterns: new Map(),
   
-  trackSingleAgent: function(agentName, success, puzzleId, confidence) {
+  trackSingleAgent: function(agentName, success, _puzzleId, confidence) {
     if (!this.singleAgents.has(agentName)) {
       this.singleAgents.set(agentName, {
         successes: 0,
@@ -274,15 +261,15 @@ const AgentPerformanceTracker = {
     
     if (success) {
       stats.successes++;
-      stats.successfulPuzzles.add(puzzleId);
-      this.updatePatterns(agentName, puzzleId);
+      stats.successfulPuzzles.add(_puzzleId);
+      this.updatePatterns(agentName, _puzzleId);
     }
     
     stats.successRate = (stats.successes / stats.attempts) * 100;
     stats.avgConfidence = ((stats.avgConfidence * (stats.attempts - 1)) + confidence) / stats.attempts;
   },
   
-  trackCombination: function(agents, success, puzzleId, confidence) {
+  trackCombination: function(agents, success, _puzzleId, confidence) {
     const key = agents.sort().join('+');
     if (!this.combinations.has(key)) {
       this.combinations.set(key, {
@@ -304,8 +291,8 @@ const AgentPerformanceTracker = {
     
     if (success) {
       stats.successes++;
-      stats.successfulPuzzles.add(puzzleId);
-      this.updateSynergy(agents, puzzleId);
+      stats.successfulPuzzles.add(_puzzleId);
+      this.updateSynergy(agents, _puzzleId);
     }
     
     stats.successRate = (stats.successes / stats.attempts) * 100;
@@ -325,7 +312,7 @@ const AgentPerformanceTracker = {
     patternStats.successes++;
   },
   
-  updateSynergy: function(agents, puzzleId) {
+  updateSynergy: function(agents, _puzzleId) {
     const key = agents.sort().join('+');
     const stats = this.combinations.get(key);
     
@@ -512,7 +499,7 @@ const processCombinations = async (successfulResults, puzzleData, maxAgents = 3)
 };
 
 // Modify processPuzzleWithAgents function
-const processPuzzleWithAgents = async (puzzleData, phase) => {
+const _processPuzzleWithAgents = async (puzzleData, phase) => {
   log(LogLevel.INFO, 'Processing puzzle with agents', { phase });
   
   try {
@@ -677,10 +664,10 @@ function ARCPrize() {
   const [trainingDirectory, setTrainingDirectory] = useState('');
   const [evaluationDirectory, setEvaluationDirectory] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentStage, setCurrentStage] = useState('Training');
+  const [currentStage, _setCurrentStage] = useState('Training');
   const [currentItem, setCurrentItem] = useState(0);
   const [totalItems, setTotalItems] = useState(100);
-  const [successfulResults, setSuccessfulResults] = useState([]);
+  const [successfulResults, _setSuccessfulResults] = useState([]);
   const [logs, setLogs] = useState([]);
 
   // Handle directory changes
