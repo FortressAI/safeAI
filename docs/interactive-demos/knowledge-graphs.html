@@ -192,28 +192,47 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Button, Card, CardContent, 
-      Tabs, Tab, Grid, Divider, 
-      IconButton, Tooltip, LinearProgress,
-      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
-      List, ListItem, ListItemText, ListItemIcon,
-      CircularProgress, Alert, Slider, Icon, Chip,
-      useTheme, ThemeProvider, createTheme, CssBaseline
+      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
+      IconButton, Icon, Button, CircularProgress, Divider, Chip, Avatar,
+      List, ListItem, ListItemIcon, ListItemText, LinearProgress,
+      createTheme, ThemeProvider, CssBaseline
     } = MaterialUI;
 
-    // Custom theme
+    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#3f51b5',
+          main: '#2196f3',
         },
         secondary: {
           main: '#f50057',
         },
         background: {
           default: '#121212',
-          paper: '#1e1e1e',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
         },
       },
     });
