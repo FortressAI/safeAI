@@ -12,59 +12,35 @@
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
   <!-- CodeMirror for code editing -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    .workshop-container {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 20px;
-      height: calc(100vh - 64px);
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
     }
-    
-    .sidebar {
-      background-color: rgba(255, 255, 255, 0.05);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .main-content {
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .code-editor {
-      height: 400px;
+    .workshop-card {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
+      border-radius: 12px;
+      padding: 20px;
       margin-bottom: 20px;
     }
-    
-    .preview-panel {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    
-    .agent-card {
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .agent-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    .agent-card.selected {
-      border: 2px solid #2196f3;
+    .CodeMirror {
+      height: 300px;
+      border-radius: 8px;
+      margin: 16px 0;
     }
   </style>
 </head>
@@ -72,300 +48,170 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
-      IconButton, Icon, Button, TextField, Select, MenuItem, FormControl,
-      InputLabel, Chip, Stack, Divider, Alert
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
-    // Sample agent templates
-    const agentTemplates = [
-      {
-        id: 'basic-agent',
-        name: 'Basic Agent',
-        description: 'A simple agent that can perform basic tasks',
-        code: `class BasicAgent {
-  constructor() {
-    this.name = 'Basic Agent';
-    this.capabilities = ['task1', 'task2'];
-  }
-  
-  async executeTask(task) {
-    // Task execution logic
-    return 'Task completed';
-  }
-}`
-      },
-      {
-        id: 'knowledge-agent',
-        name: 'Knowledge Agent',
-        description: 'An agent that can access and process knowledge graphs',
-        code: `class KnowledgeAgent {
-  constructor() {
-    this.name = 'Knowledge Agent';
-    this.knowledgeBase = new Map();
-  }
-  
-  async queryKnowledge(query) {
-    // Knowledge query logic
-    return 'Query result';
-  }
-}`
-      },
-      {
-        id: 'security-agent',
-        name: 'Security Agent',
-        description: 'An agent focused on security monitoring and enforcement',
-        code: `class SecurityAgent {
-  constructor() {
-    this.name = 'Security Agent';
-    this.securityLevel = 'high';
-  }
-  
-  async monitorSecurity() {
-    // Security monitoring logic
-    return 'Security status';
-  }
-}`
-      }
-    ];
-
-    function AgentWorkshop() {
-      const [selectedTemplate, setSelectedTemplate] = React.useState(null);
-      const [agentName, setAgentName] = React.useState('');
-      const [agentCode, setAgentCode] = React.useState('');
-      const [previewResult, setPreviewResult] = React.useState(null);
-      const [error, setError] = React.useState(null);
-      const [success, setSuccess] = React.useState(null);
-      
-      const editorRef = React.useRef(null);
-      
-      React.useEffect(() => {
-        if (editorRef.current) {
-          const editor = CodeMirror(editorRef.current, {
-            value: '',
-            mode: 'javascript',
-            theme: 'monokai',
-            lineNumbers: true,
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            indentUnit: 4,
-            tabSize: 4,
-            lineWrapping: true
-          });
-          
-          editor.on('change', (cm) => {
-            setAgentCode(cm.getValue());
-          });
-        }
-      }, []);
-      
-      const handleTemplateSelect = (template) => {
-        setSelectedTemplate(template);
-        setAgentName(template.name);
-        setAgentCode(template.code);
-        if (editorRef.current) {
-          const editor = editorRef.current.CodeMirror;
-          if (editor) {
-            editor.setValue(template.code);
-          }
-        }
-      };
-      
-      const handleSave = async () => {
-        try {
-          // Simulate saving the agent
-          setSuccess('Agent saved successfully!');
-          setTimeout(() => setSuccess(null), 3000);
-        } catch (err) {
-          setError('Failed to save agent: ' + err.message);
-          setTimeout(() => setError(null), 3000);
-        }
-      };
-      
-      const handlePreview = async () => {
-        try {
-          // Simulate previewing the agent
-          setPreviewResult({
-            status: 'success',
-            message: 'Agent preview successful',
-            output: 'Sample output from agent execution'
-          });
-        } catch (err) {
-          setPreviewResult({
-            status: 'error',
-            message: 'Preview failed: ' + err.message
-          });
-        }
-      };
-      
-      return (
-        <Box>
-          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <Icon>build</Icon>
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Agent Workshop
-              </Typography>
-              <Button color="inherit" href="index.html">
-                Back to Demos
-              </Button>
-            </Toolbar>
-          </AppBar>
-          
-          <Container maxWidth={false} sx={{ mt: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <Card className="sidebar">
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Agent Templates
-                    </Typography>
-                    <Stack spacing={2}>
-                      {agentTemplates.map((template) => (
-                        <Card
-                          key={template.id}
-                          className={`agent-card ${selectedTemplate?.id === template.id ? 'selected' : ''}`}
-                          onClick={() => handleTemplateSelect(template)}
-                        >
-                          <CardContent>
-                            <Typography variant="subtitle1">
-                              {template.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {template.description}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Grid>
-              
-              <Grid item xs={12} md={8}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Agent Configuration
-                    </Typography>
-                    
-                    {error && (
-                      <Alert severity="error" sx={{ mb: 2 }}>
-                        {error}
-                      </Alert>
-                    )}
-                    
-                    {success && (
-                      <Alert severity="success" sx={{ mb: 2 }}>
-                        {success}
-                      </Alert>
-                    )}
-                    
-                    <FormControl fullWidth sx={{ mb: 2 }}>
-                      <TextField
-                        label="Agent Name"
-                        value={agentName}
-                        onChange={(e) => setAgentName(e.target.value)}
-                        fullWidth
-                      />
-                    </FormControl>
-                    
-                    <Typography variant="subtitle1" gutterBottom>
-                      Agent Code
-                    </Typography>
-                    <div ref={editorRef} className="code-editor" />
-                    
-                    <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSave}
-                        startIcon={<Icon>save</Icon>}
-                      >
-                        Save Agent
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={handlePreview}
-                        startIcon={<Icon>preview</Icon>}
-                      >
-                        Preview
-                      </Button>
-                    </Stack>
-                    
-                    {previewResult && (
-                      <Card className="preview-panel">
-                        <CardContent>
-                          <Typography variant="subtitle1" gutterBottom>
-                            Preview Result
-                          </Typography>
-                          <Alert severity={previewResult.status}>
-                            {previewResult.message}
-                          </Alert>
-                          {previewResult.output && (
-                            <Typography variant="body2" sx={{ mt: 2 }}>
-                              {previewResult.output}
-                            </Typography>
-                          )}
-                        </CardContent>
-                      </Card>
-                    )}
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
-      );
-    }
-
-    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#2196f3',
+          main: '#90caf9',
         },
         secondary: {
-          main: '#f50057',
+          main: '#f48fb1',
         },
         background: {
           default: '#121212',
-          paper: 'rgba(255, 255, 255, 0.05)',
-        },
-      },
-      components: {
-        MuiCard: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              borderRadius: 8,
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            },
-          },
-        },
-        MuiAppBar: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            },
-          },
+          paper: '#1e1e1e',
         },
       },
     });
+
+    function AgentWorkshop() {
+      const [code, setCode] = React.useState(`// Example agent configuration
+const agentConfig = {
+  name: "MathSolver",
+  capabilities: ["arithmetic", "algebra", "calculus"],
+  safetyConstraints: {
+    maxComplexity: "high",
+    allowedOperations: ["addition", "subtraction", "multiplication", "division"]
+  }
+};
+
+// Agent behavior definition
+function solveMathProblem(problem) {
+  // Implementation here
+  return result;
+}`);
+
+      const [editor, setEditor] = React.useState(null);
+      const editorRef = React.useRef(null);
+
+      React.useEffect(() => {
+        if (editorRef.current && !editor) {
+          const newEditor = CodeMirror(editorRef.current, {
+            value: code,
+            mode: "javascript",
+            theme: "monokai",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            lineWrapping: true,
+          });
+
+          newEditor.on("change", (cm) => {
+            setCode(cm.getValue());
+          });
+
+          setEditor(newEditor);
+        }
+      }, [editorRef.current]);
+
+      const handleRunCode = () => {
+        try {
+          // In a real implementation, this would be sent to a backend service
+          console.log("Running code:", code);
+          alert("Code executed successfully!");
+        } catch (error) {
+          console.error("Error running code:", error);
+          alert("Error executing code: " + error.message);
+        }
+      };
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">code</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Agent Workshop
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" gutterBottom>
+                Agent Configuration
+              </Typography>
+              <Card className="workshop-card">
+                <CardContent>
+                  <div ref={editorRef} />
+                  <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                    <Button
+                      variant="contained"
+                      onClick={handleRunCode}
+                      startIcon={<span className="material-icons">play_arrow</span>}
+                    >
+                      Run Code
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => editor?.setValue(code)}
+                      startIcon={<span className="material-icons">refresh</span>}
+                    >
+                      Reset
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" gutterBottom>
+                Agent Preview
+              </Typography>
+              <Card className="workshop-card">
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                      <span className="material-icons">smart_toy</span>
+                    </Avatar>
+                    <Typography variant="h6">MathSolver Agent</Typography>
+                  </Box>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <span className="material-icons">extension</span>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Capabilities" 
+                        secondary="arithmetic, algebra, calculus"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <span className="material-icons">security</span>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Safety Constraints" 
+                        secondary="maxComplexity: high, allowedOperations: basic arithmetic"
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+      );
+    }
 
     // Render the app with ThemeProvider
     ReactDOM.render(
