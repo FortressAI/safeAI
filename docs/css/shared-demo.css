@@ -1,0 +1,205 @@
+/* Base styles for all interactive demos */
+:root {
+  --primary-color: #2196f3;
+  --secondary-color: #f50057;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --text-primary: rgba(255, 255, 255, 0.87);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --background-dark: #121212;
+  --card-background: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Layout */
+.demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Cards and Sections */
+.demo-section {
+  margin-bottom: 40px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.demo-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Interactive Elements */
+.interactive-element {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.interactive-element:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Code Blocks */
+.code-block {
+  background: var(--surface-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: auto;
+  color: var(--text-primary);
+}
+
+/* Tabs */
+.demo-tabs {
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-tab-content {
+  padding: 20px 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Status Indicators */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-active { background-color: var(--secondary-color); }
+.status-inactive { background-color: var(--error-color); }
+.status-warning { background-color: var(--warning-color); }
+
+/* Tooltips */
+.tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 960px) {
+  .demo-container {
+    padding: 20px;
+  }
+  
+  .demo-section {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .demo-container {
+    padding: 16px;
+  }
+  
+  .demo-section {
+    padding: 12px;
+  }
+  
+  .code-block {
+    font-size: 12px;
+  }
+}
+
+/* Loading States */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error States */
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--error-color);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Success States */
+.success-message {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+} 
