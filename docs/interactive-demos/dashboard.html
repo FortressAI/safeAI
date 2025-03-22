@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Interactive Demo</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
@@ -103,7 +103,8 @@
   <script type="text/babel">
     const { 
       Box, Typography, Grid, Paper, List, ListItem, ListItemIcon, 
-      ListItemText, Icon, LinearProgress, Tooltip, Alert
+      ListItemText, Icon, LinearProgress, Tooltip, Alert,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
     // Material icon names
@@ -163,6 +164,23 @@
         status: 'healthy'
       }
     ];
+
+    // Custom theme
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#3f51b5',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
 
     // Metric Card Component
     function MetricCard({ label, value, trend, icon }) {
@@ -250,87 +268,53 @@
       };
 
       const initializeCharts = () => {
-        // Agent Activity Chart
-        const activityChart = document.getElementById('activityChart');
-        if (activityChart) {
-          Plotly.newPlot(activityChart, [{
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Ethics Agent',
-            x: activityData.map(d => d.time),
-            y: activityData.map(d => d.ethics),
-            line: { color: '#4CAF50' }
-          }, {
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Math Agent',
-            x: activityData.map(d => d.time),
-            y: activityData.map(d => d.math),
-            line: { color: '#2196F3' }
-          }, {
-            type: 'scatter',
-            mode: 'lines',
-            name: 'ARC Agent',
-            x: activityData.map(d => d.time),
-            y: activityData.map(d => d.arc),
-            line: { color: '#FFC107' }
-          }, {
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Security Agent',
-            x: activityData.map(d => d.time),
-            y: activityData.map(d => d.security),
-            line: { color: '#F44336' }
-          }], {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#fff' },
-            showlegend: true,
-            legend: { font: { color: '#fff' } }
-          });
-        }
+        // Activity Chart
+        const activityTrace = {
+          x: activityData.map(d => d.time),
+          y: activityData.map(d => d.ethics),
+          name: 'Ethics',
+          type: 'scatter',
+          mode: 'lines+markers',
+          line: { color: '#4CAF50' }
+        };
 
-        // System Resources Chart
-        const resourceChart = document.getElementById('resourceChart');
-        if (resourceChart) {
-          Plotly.newPlot(resourceChart, [{
-            type: 'scatter',
-            mode: 'lines',
-            name: 'CPU',
-            x: resourceData.map(d => d.time),
-            y: resourceData.map(d => d.cpu),
-            line: { color: '#4CAF50' }
-          }, {
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Memory',
-            x: resourceData.map(d => d.time),
-            y: resourceData.map(d => d.memory),
-            line: { color: '#2196F3' }
-          }, {
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Network',
-            x: resourceData.map(d => d.time),
-            y: resourceData.map(d => d.network),
-            line: { color: '#FFC107' }
-          }], {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#fff' },
-            showlegend: true,
-            legend: { font: { color: '#fff' } }
-          });
-        }
+        const activityLayout = {
+          title: 'Agent Activity',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#fff' },
+          showlegend: true,
+          legend: { font: { color: '#fff' } }
+        };
+
+        Plotly.newPlot('activityChart', [activityTrace], activityLayout);
+
+        // Resource Chart
+        const resourceTrace = {
+          x: resourceData.map(d => d.time),
+          y: resourceData.map(d => d.cpu),
+          name: 'CPU Usage',
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#2196F3' }
+        };
+
+        const resourceLayout = {
+          title: 'System Resources',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#fff' },
+          showlegend: true,
+          legend: { font: { color: '#fff' } }
+        };
+
+        Plotly.newPlot('resourceChart', [resourceTrace], resourceLayout);
       };
 
       return (
         <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom>
-            Dashboard
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" paragraph>
-            Real-time monitoring of SafeAI system performance
+            SafeAI Dashboard
           </Typography>
 
           {error && (
@@ -340,7 +324,7 @@
           )}
 
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} md={3}>
               <MetricCard
                 label="Active Agents"
                 value={metrics.activeAgents}
@@ -348,70 +332,68 @@
                 icon={ICONS.SMART_TOY}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} md={3}>
               <MetricCard
                 label="System Load"
                 value={`${metrics.systemLoad}%`}
-                trend="Normal range"
+                trend="Stable"
                 icon={ICONS.SPEED}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} md={3}>
               <MetricCard
                 label="Response Time"
                 value={`${metrics.responseTime}s`}
-                trend="-0.1s from average"
+                trend="-0.1s from last hour"
                 icon={ICONS.TIMER}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} md={3}>
               <MetricCard
                 label="Success Rate"
                 value={`${metrics.successRate}%`}
-                trend="Above target"
+                trend="+0.1% from last hour"
                 icon={ICONS.CHECK_CIRCLE}
               />
             </Grid>
-          </Grid>
 
-          <Grid container spacing={3} sx={{ mt: 2 }}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={8}>
               <Paper className="chart-container">
-                <Typography variant="h6" gutterBottom>
-                  Agent Activity
-                </Typography>
-                <div id="activityChart" style={{ height: '100%' }} />
+                <div id="activityChart"></div>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className="chart-container">
+
+            <Grid item xs={12} md={4}>
+              <Paper className="activity-list">
                 <Typography variant="h6" gutterBottom>
-                  System Resources
+                  Recent Activity
                 </Typography>
-                <div id="resourceChart" style={{ height: '100%' }} />
+                <List>
+                  {recentActivity.map(activity => (
+                    <ActivityItem key={activity.id} activity={activity} />
+                  ))}
+                </List>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Paper className="chart-container">
+                <div id="resourceChart"></div>
               </Paper>
             </Grid>
           </Grid>
-
-          <Paper className="activity-list" sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Recent Activity
-            </Typography>
-            <List>
-              {recentActivity.map(activity => (
-                <ActivityItem key={activity.id} activity={activity} />
-              ))}
-            </List>
-          </Paper>
-
-          {isLoading && (
-            <LinearProgress sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} />
-          )}
         </Box>
       );
     }
 
-    ReactDOM.render(<Dashboard />, document.getElementById('root'));
+    // Render the application with theme provider
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Dashboard />
+      </ThemeProvider>
+    );
   </script>
 </body>
 </html> 

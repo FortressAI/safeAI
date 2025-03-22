@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MathATP - Interactive Tutorial</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
@@ -18,11 +18,74 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { margin: 0; padding: 0; font-family: Roboto, sans-serif; background-color: #121212; color: #fff; }
-    #root { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .tutorial-section { margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; background-color: rgba(255,255,255,0.05); }
-    .code-block { background-color: #1e1e1e; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 14px; margin: 10px 0; overflow-x: auto; color: #e6e6e6; }
-    .tab-content { padding: 15px 0; }
+    .tutorial-section {
+      margin-bottom: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: rgba(255,255,255,0.05);
+    }
+    
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      overflow-x: auto;
+      color: #e6e6e6;
+    }
+    
+    .tab-content {
+      padding: 15px 0;
+    }
+    
+    .proof-step {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      background-color: rgba(255,255,255,0.05);
+    }
+    
+    .proof-step.processing {
+      border-left: 4px solid #FFC107;
+    }
+    
+    .proof-step.success {
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .proof-step.error {
+      border-left: 4px solid #F44336;
+    }
+    
+    .math-display {
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    .solution-step {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      background-color: rgba(255,255,255,0.05);
+    }
+    
+    .solution-step.given {
+      border-left: 4px solid #2196F3;
+    }
+    
+    .solution-step.algebra {
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .solution-step.solution {
+      border-left: 4px solid #F44336;
+    }
   </style>
 </head>
 <body>
@@ -31,8 +94,26 @@
     const { 
       Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, 
       Divider, LinearProgress, TextField, Paper, IconButton, Tooltip,
-      List, ListItem, ListItemText, ListItemIcon, Chip, Alert
+      List, ListItem, ListItemText, ListItemIcon, Chip, Alert,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
+
+    // Custom theme
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#3f51b5',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
 
     // Material icon names
     const ICONS = {
@@ -72,6 +153,60 @@
       }
     ];
 
+    // Theorem Card Component
+    function TheoremCard({ theorem, selected, onSelect }) {
+      return (
+        <Card 
+          className="demo-section"
+          sx={{ 
+            cursor: 'pointer',
+            bgcolor: selected ? 'primary.dark' : 'background.paper',
+            '&:hover': { bgcolor: 'primary.dark' }
+          }}
+          onClick={() => onSelect(theorem)}
+        >
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              {theorem.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" paragraph>
+              {theorem.description}
+            </Typography>
+            <Box className="math-display" dangerouslySetInnerHTML={{ __html: renderMath(theorem.statement) }} />
+          </CardContent>
+        </Card>
+      );
+    }
+
+    // Proof Step Component
+    function ProofStep({ step, status }) {
+      return (
+        <Box className={`proof-step ${status}`}>
+          <Typography variant="body2">
+            {step.step}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {step.type}
+          </Typography>
+        </Box>
+      );
+    }
+
+    // Solution Step Component
+    function SolutionStep({ step }) {
+      return (
+        <Box className={`solution-step ${step.type}`}>
+          <Typography variant="body2">
+            {step.step}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {step.type}
+          </Typography>
+        </Box>
+      );
+    }
+
+    // Main MathATP Component
     function MathATPTutorial() {
       const [tabValue, setTabValue] = React.useState(0);
       const [selectedTheorem, setSelectedTheorem] = React.useState(null);
@@ -82,7 +217,6 @@
       const [progress, setProgress] = React.useState(0);
       const [equationToSolve, setEquationToSolve] = React.useState("");
       const [solution, setSolution] = React.useState(null);
-      const [currentStep, setCurrentStep] = React.useState(0);
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -191,10 +325,17 @@
       };
 
       return (
-        <Box>
+        <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom>
             MathATP - Interactive Tutorial
           </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Tabs value={tabValue} onChange={handleTabChange}>
             <Tab label="Overview" />
             <Tab label="Theorem Proving" />
@@ -250,10 +391,7 @@
                             selected={selectedTheorem?.name === theorem.name}
                             onClick={() => handleTheoremSelect(theorem)}
                           >
-                            <ListItemIcon>
-                              <Icon>{ICONS.INFO}</Icon>
-                            </ListItemIcon>
-                            <ListItemText 
+                            <ListItemText
                               primary={theorem.name}
                               secondary={theorem.description}
                             />
@@ -265,69 +403,48 @@
 
                   <Grid item xs={12} md={8}>
                     <Paper className="demo-section">
+                      <Typography variant="subtitle1" gutterBottom>
+                        Enter Mathematical Statement
+                      </Typography>
                       <TextField
                         fullWidth
-                        label="Enter Mathematical Statement"
-                        value={equation}
-                        onChange={handleEquationChange}
                         multiline
                         rows={3}
+                        value={equation}
+                        onChange={handleEquationChange}
+                        placeholder="Enter a mathematical statement..."
+                        variant="outlined"
                         sx={{ mb: 2 }}
                       />
-                      {equation && (
-                        <Box sx={{ mb: 2 }}>
-                          <Typography variant="subtitle2" gutterBottom>
-                            Preview:
-                          </Typography>
-                          <div dangerouslySetInnerHTML={{ __html: renderMath(equation) }} />
-                        </Box>
-                      )}
                       <Button
                         variant="contained"
                         onClick={generateProof}
-                        disabled={isProcessing || !equation}
-                        startIcon={<Icon>{isProcessing ? ICONS.REFRESH : ICONS.CHECK}</Icon>}
+                        disabled={isProcessing}
+                        startIcon={<Icon>{ICONS.REFRESH}</Icon>}
                       >
-                        {isProcessing ? "Generating Proof..." : "Generate Proof"}
+                        Generate Proof
                       </Button>
-                    </Paper>
 
-                    {error && (
-                      <Alert severity="error" sx={{ mt: 2 }}>
-                        {error}
-                      </Alert>
-                    )}
+                      {isProcessing && (
+                        <Box sx={{ mt: 2 }}>
+                          <LinearProgress variant="determinate" value={progress} />
+                          <Typography variant="body2" color="text.secondary" align="right">
+                            {progress}%
+                          </Typography>
+                        </Box>
+                      )}
 
-                    {isProcessing && (
-                      <Box sx={{ mt: 2 }}>
-                        <LinearProgress variant="determinate" value={progress} />
-                        <Typography variant="caption" color="text.secondary">
-                          Progress: {progress}%
-                        </Typography>
-                      </Box>
-                    )}
-
-                    {proofSteps.length > 0 && (
-                      <Paper className="demo-section" sx={{ mt: 2 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Proof Steps
-                        </Typography>
-                        <List>
+                      {proofSteps.length > 0 && (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            Proof Steps
+                          </Typography>
                           {proofSteps.map((step, index) => (
-                            <ListItem key={index}>
-                              <ListItemIcon>
-                                <Icon>
-                                  {step.status === "success" ? ICONS.CHECK :
-                                   step.status === "error" ? ICONS.ERROR :
-                                   ICONS.INFO}
-                                </Icon>
-                              </ListItemIcon>
-                              <ListItemText primary={step.step} />
-                            </ListItem>
+                            <ProofStep key={index} step={step} status={step.status} />
                           ))}
-                        </List>
-                      </Paper>
-                    )}
+                        </Box>
+                      )}
+                    </Paper>
                   </Grid>
                 </Grid>
               </Box>
@@ -339,66 +456,45 @@
                   Equation Solving
                 </Typography>
                 <Typography paragraph>
-                  Enter an equation to solve it step by step.
+                  Enter an equation to solve step by step.
                 </Typography>
 
                 <Paper className="demo-section">
                   <TextField
                     fullWidth
-                    label="Enter Equation"
-                    placeholder="e.g., 2x + 5 = 13"
                     value={equationToSolve}
                     onChange={handleEquationToSolveChange}
+                    placeholder="Enter an equation (e.g., 2x + 5 = 13)"
+                    variant="outlined"
                     sx={{ mb: 2 }}
                   />
                   <Button
                     variant="contained"
                     onClick={solveEquation}
-                    disabled={isProcessing || !equationToSolve}
-                    startIcon={<Icon>{isProcessing ? ICONS.REFRESH : ICONS.CHECK}</Icon>}
-                    sx={{ mb: 2 }}
+                    disabled={isProcessing}
+                    startIcon={<Icon>{ICONS.REFRESH}</Icon>}
                   >
-                    {isProcessing ? "Solving..." : "Solve Equation"}
+                    Solve Equation
                   </Button>
 
-                  {error && (
-                    <Alert severity="error" sx={{ mb: 2 }}>
-                      {error}
-                    </Alert>
-                  )}
-
                   {isProcessing && (
-                    <Box sx={{ mb: 2 }}>
+                    <Box sx={{ mt: 2 }}>
                       <LinearProgress variant="determinate" value={progress} />
-                      <Typography variant="caption" color="text.secondary">
-                        Progress: {progress}%
+                      <Typography variant="body2" color="text.secondary" align="right">
+                        {progress}%
                       </Typography>
                     </Box>
                   )}
 
                   {solution && (
-                    <Paper className="demo-section" sx={{ mt: 2 }}>
+                    <Box sx={{ mt: 2 }}>
                       <Typography variant="subtitle1" gutterBottom>
                         Solution Steps
                       </Typography>
-                      <List>
-                        {solution.steps.map((step, index) => (
-                          <ListItem key={index}>
-                            <ListItemIcon>
-                              <Icon>
-                                {step.type === "solution" ? ICONS.CHECK :
-                                 step.type === "error" ? ICONS.ERROR :
-                                 ICONS.INFO}
-                              </Icon>
-                            </ListItemIcon>
-                            <ListItemText 
-                              primary={step.step}
-                              secondary={step.type.charAt(0).toUpperCase() + step.type.slice(1)}
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Paper>
+                      {solution.steps.map((step, index) => (
+                        <SolutionStep key={index} step={step} />
+                      ))}
+                    </Box>
                   )}
                 </Paper>
               </Box>
@@ -410,28 +506,33 @@
                   Code Examples
                 </Typography>
                 <Typography paragraph>
-                  Here's an example of how to use the MathATP API:
+                  Example code snippets demonstrating how to use MathATP in your applications.
                 </Typography>
 
                 <Paper className="demo-section">
-                  <pre className="code-block">
-{`// Example: Generate a proof for the Pythagorean theorem
+                  <Typography variant="subtitle1" gutterBottom>
+                    Theorem Proving
+                  </Typography>
+                  <Box className="code-block">
+                    {`// Example: Prove a mathematical statement
 const theorem = {
-  name: "Pythagorean Theorem",
   statement: "a^2 + b^2 = c^2",
-  context: "right triangle"
+  conditions: ["a, b, c are sides of a right triangle"]
 };
 
-const proof = await mathATP.generateProof(theorem);
-console.log(proof.steps);  // Array of proof steps
-console.log(proof.isValid);  // true/false
+const proof = await mathATP.prove(theorem);
+console.log(proof.steps);`}
+                  </Box>
 
-// Example: Solve a quadratic equation
-const equation = "x^2 + 5x + 6 = 0";
-const solution = await mathATP.solveEquation(equation);
-console.log(solution.roots);  // [-2, -3]
-console.log(solution.steps);  // Step-by-step solution`}
-                  </pre>
+                  <Typography variant="subtitle1" gutterBottom sx={{ mt: 3 }}>
+                    Equation Solving
+                  </Typography>
+                  <Box className="code-block">
+                    {`// Example: Solve a quadratic equation
+const equation = "2x^2 + 5x - 3 = 0";
+const solution = await mathATP.solve(equation);
+console.log(solution.steps);`}
+                  </Box>
                 </Paper>
               </Box>
             )}
@@ -440,7 +541,14 @@ console.log(solution.steps);  // Step-by-step solution`}
       );
     }
 
-    ReactDOM.render(<MathATPTutorial />, document.getElementById('root'));
+    // Render the application with theme provider
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <MathATPTutorial />
+      </ThemeProvider>
+    );
   </script>
 </body>
 </html> 
