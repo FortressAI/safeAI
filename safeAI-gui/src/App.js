@@ -25,53 +25,53 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#4f46e5', // Modern indigo
-      light: '#818cf8',
-      dark: '#4338ca',
+      main: '#2196f3', // Match interactive demo blue
+      light: '#64b5f6',
+      dark: '#1976d2',
     },
     secondary: {
-      main: '#10b981', // Modern emerald
-      light: '#34d399',
-      dark: '#059669',
+      main: '#4caf50', // Match interactive demo green
+      light: '#81c784',
+      dark: '#388e3c',
     },
     background: {
-      default: '#0f172a', // Dark slate
-      paper: '#1e293b',   // Slightly lighter slate
+      default: '#121212', // Exactly match the interactive demo background
+      paper: '#1e1e1e',   // Slightly lighter for UI elements
     },
     text: {
-      primary: '#f1f5f9',
-      secondary: '#94a3b8',
+      primary: '#ffffff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
     },
     error: {
       main: '#ef4444',
     },
     warning: {
-      main: '#f59e0b',
+      main: '#ff9800', // Match interactive demo orange
     },
     success: {
-      main: '#10b981',
+      main: '#4caf50', // Match interactive demo green
     },
     info: {
-      main: '#3b82f6',
+      main: '#2196f3', // Match interactive demo blue
     },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', // Match interactive demo font
     h1: {
-      fontWeight: 800,
-      letterSpacing: '-0.025em',
+      fontWeight: 500,
+      letterSpacing: '-0.01em',
     },
     h2: {
-      fontWeight: 700,
-      letterSpacing: '-0.025em',
+      fontWeight: 500,
+      letterSpacing: '-0.01em',
     },
     h3: {
-      fontWeight: 600,
-      letterSpacing: '-0.025em',
+      fontWeight: 500,
+      letterSpacing: '-0.01em',
     },
     h4: {
-      fontWeight: 600,
-      letterSpacing: '-0.025em',
+      fontWeight: 500,
+      letterSpacing: '-0.01em',
     },
     h5: {
       fontWeight: 500,
@@ -82,14 +82,13 @@ const theme = createTheme({
     button: {
       textTransform: 'none',
       fontWeight: 500,
-      letterSpacing: '0.025em',
     },
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+          backgroundColor: 'rgba(0,0,0,0.5)', // Match interactive demo AppBar
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
@@ -99,14 +98,14 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 8,
+          backgroundColor: 'rgba(255,255,255,0.05)', // Match interactive demo cards
+          border: '1px solid rgba(255,255,255,0.1)',
           boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
           transition: 'all 0.3s ease',
           '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            transform: 'translateY(-8px)', // Match interactive demo hover effect
+            boxShadow: '0 12px 20px rgba(0, 0, 0, 0.3)',
           },
         },
       },
@@ -117,15 +116,11 @@ const theme = createTheme({
           borderRadius: 8,
           padding: '8px 16px',
           transition: 'all 0.3s ease',
-          '&:hover': {
-            transform: 'translateY(-1px)',
-          },
         },
         contained: {
-          background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-          boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)',
+          boxShadow: '0 4px 6px -1px rgba(33, 150, 243, 0.2)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #4338ca 0%, #3730a3 100%)',
+            boxShadow: '0 6px 8px -1px rgba(33, 150, 243, 0.3)',
           },
         },
         outlined: {
@@ -140,14 +135,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+          backgroundColor: 'rgba(255,255,255,0.05)', // Match interactive demo papers
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+          backgroundColor: '#121212', // Match interactive demo background
           borderRight: '1px solid rgba(255, 255, 255, 0.1)',
         },
       },
@@ -167,7 +162,7 @@ const theme = createTheme({
     MuiAvatar: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+          backgroundColor: props => props.color || '#2196f3', // Make avatars use colors like in demos
         },
       },
     },
@@ -176,9 +171,6 @@ const theme = createTheme({
         root: {
           borderRadius: 6,
           fontWeight: 500,
-        },
-        filled: {
-          background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
         },
       },
     },

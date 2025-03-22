@@ -1,11 +1,11 @@
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #121212;
-  color: #e0e0e0;
-  overflow-x: hidden;
+  color: #fff;
 }
 
 code {
@@ -34,27 +34,26 @@ code {
 
 /* Selection styling */
 ::selection {
-  background-color: rgba(67, 160, 71, 0.3);
+  background-color: rgba(33, 150, 243, 0.3);
   color: white;
 }
 
-/* Scrollbar styling - professional dark theme */
+/* Scrollbar styling to match interactive demos */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
-  transition: all 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -67,14 +66,14 @@ code {
   background: transparent;
 }
 
-/* Professional Card Hover Effect */
+/* Card Hover Effect matching interactive demos */
 .MuiCard-root {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .MuiCard-root:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Subtle animation for buttons */
@@ -100,9 +99,10 @@ code {
   transform: translateY(100%);
 }
 
-/* Dashboard card effects */
+/* Dashboard card effects similar to interactive demos */
 .dashboard-stat-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -117,12 +117,12 @@ code {
 
 /* Focus improvements for accessibility */
 :focus {
-  outline: 2px solid rgba(67, 160, 71, 0.5);
+  outline: 2px solid rgba(33, 150, 243, 0.5);
   outline-offset: 2px;
 }
 
-/* Subtle text shadow for headings */
+/* Typography adjustments to match interactive demos */
 h1, h2, h3, h4, h5, h6, .MuiTypography-h1, .MuiTypography-h2, 
 .MuiTypography-h3, .MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6 {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
 } 
