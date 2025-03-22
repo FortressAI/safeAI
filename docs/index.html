@@ -11,8 +11,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <!-- Material-UI Icons CDN -->
-  <script src="https://unpkg.com/@mui/icons-material@5.0.0/umd/material-ui-icons.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <style>
@@ -49,28 +47,28 @@
     const { 
       Box, Typography, Container, Card, CardContent, CardActionArea, 
       Grid, AppBar, Toolbar, IconButton, Button, Divider, Paper,
-      useTheme, ThemeProvider, createTheme, CssBaseline
+      useTheme, ThemeProvider, createTheme, CssBaseline, Icon
     } = MaterialUI;
 
-    // Import Material Icons
-    const {
-      Menu: MenuIcon,
-      School: SchoolIcon,
-      Code: CodeIcon,
-      Psychology: PsychologyIcon,
-      Help: HelpIcon,
-      Gavel: GavelIcon,
-      People: PeopleIcon,
-      Devices: DevicesIcon,
-      PlayArrow: PlayArrowIcon,
-      GitHub: GitHubIcon
-    } = MaterialIcons;
+    // Material Icons using icon font classes
+    const ICONS = {
+      MENU: "menu",
+      SCHOOL: "school",
+      CODE: "code",
+      PSYCHOLOGY: "psychology",
+      HELP: "help",
+      GAVEL: "gavel",
+      PEOPLE: "people",
+      DEVICES: "devices",
+      PLAY_ARROW: "play_arrow",
+      GITHUB: "code" // Using code as fallback since GitHub icon isn't in standard set
+    };
 
     // Define documentation sections
     const sections = [
       {
         title: "User Documentation",
-        icon: <SchoolIcon />,
+        icon: ICONS.SCHOOL,
         color: "#2196f3",
         items: [
           { title: "Getting Started Guide", link: "getting-started.md" },
@@ -81,7 +79,7 @@
       },
       {
         title: "Developer Documentation",
-        icon: <CodeIcon />,
+        icon: ICONS.CODE,
         color: "#4caf50",
         items: [
           { title: "Developer Journey", link: "developer-journeys/developer-journey.md" },
@@ -91,7 +89,7 @@
       },
       {
         title: "Domain Expert Documentation",
-        icon: <PsychologyIcon />,
+        icon: ICONS.PSYCHOLOGY,
         color: "#ff9800",
         items: [
           { title: "Domain Expert Journey", link: "domain-expert-journeys/domain-expert-journey.md" },
@@ -101,7 +99,7 @@
       },
       {
         title: "Support and Resources",
-        icon: <HelpIcon />,
+        icon: ICONS.HELP,
         color: "#673ab7",
         items: [
           { title: "FAQ", link: "faq.md" },
@@ -111,7 +109,7 @@
       },
       {
         title: "Legal and Compliance",
-        icon: <GavelIcon />,
+        icon: ICONS.GAVEL,
         color: "#795548",
         items: [
           { title: "Legal Documentation", link: "legal/" },
@@ -121,7 +119,7 @@
       },
       {
         title: "Community",
-        icon: <PeopleIcon />,
+        icon: ICONS.PEOPLE,
         color: "#e91e63",
         items: [
           { title: "Community Guidelines", link: "community/guidelines.md" },
@@ -130,7 +128,7 @@
       },
       {
         title: "Interactive Demos",
-        icon: <DevicesIcon />,
+        icon: ICONS.DEVICES,
         color: "#009688",
         items: [
           { title: "Interactive Demos Index", link: "interactive-demos/index.html", isPrimary: true },
@@ -172,7 +170,7 @@
                   aria-label="menu"
                   sx={{ mr: 2 }}
                 >
-                  <MenuIcon />
+                  <Icon>menu</Icon>
                 </IconButton>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                   SafeAI Documentation
@@ -180,7 +178,7 @@
                 <Button 
                   variant="outlined" 
                   color="inherit" 
-                  startIcon={<PlayArrowIcon />}
+                  startIcon={<Icon>play_arrow</Icon>}
                   href="interactive-demos/index.html"
                   sx={{ mr: 2 }}
                 >
@@ -189,7 +187,7 @@
                 <Button 
                   variant="text" 
                   color="inherit" 
-                  startIcon={<GitHubIcon />}
+                  startIcon={<Icon>code</Icon>}
                   href="https://github.com/FortressAI/safeAI"
                 >
                   GitHub
@@ -230,7 +228,7 @@
                             borderRadius: '50%',
                             mr: 2
                           }}>
-                            {section.icon}
+                            <Icon>{section.icon}</Icon>
                           </Box>
                           <Typography variant="h5">
                             {section.title}
