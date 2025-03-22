@@ -1,262 +1,499 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import LinearProgress from '@mui/material/LinearProgress';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import SchemaIcon from '@mui/icons-material/Schema';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import SecurityIcon from '@mui/icons-material/Security';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
+import {
+  Grid,
+  Paper,
+  Typography,
+  Box,
+  LinearProgress,
+  IconButton,
+  Tooltip,
+  useTheme,
+  alpha,
+  Card,
+  CardContent,
+  CardHeader,
+  Avatar,
+  Chip,
+  Divider,
+} from '@mui/material';
+import {
+  TrendingUp as TrendingUpIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Storage as StorageIcon,
+  SmartToy as SmartToyIcon,
+  Warning as WarningIcon,
+  CheckCircle as CheckCircleIcon,
+  Error as ErrorIcon,
+  Info as InfoIcon,
+  Refresh as RefreshIcon,
+  MoreVert as MoreVertIcon,
+} from '@mui/icons-material';
+import { motion } from 'framer-motion';
 
-// Sample data - in a real app, this would come from API calls
-const systemHealth = [
-  { name: 'Neo4j Database', status: 'healthy', value: 100 },
-  { name: 'Knowledge Graphs', status: 'healthy', value: 100 },
-  { name: 'Agent Service', status: 'warning', value: 75 },
-  { name: 'Blockchain Connection', status: 'healthy', value: 90 },
-];
+// Sample data - replace with actual API calls
+const systemHealth = {
+  cpu: 45,
+  memory: 60,
+  storage: 75,
+  network: 85,
+  status: 'healthy',
+  lastUpdated: '2 minutes ago',
+};
 
 const securityStatus = {
-  score: 85,
-  lastCheck: '2023-10-15 08:30:45',
-  issues: [
-    { severity: 'warning', message: 'Agent security capabilities need updating' },
-    { severity: 'info', message: 'Blockchain integration verified' },
-  ]
+  threats: 0,
+  vulnerabilities: 2,
+  compliance: 98,
+  lastScan: '1 hour ago',
+};
+
+const knowledgeGraphs = [
+  { name: 'Mathematics', size: '2.5GB', nodes: '1.2M', edges: '3.5M' },
+  { name: 'Ethics', size: '1.8GB', nodes: '850K', edges: '2.1M' },
+  { name: 'Physics', size: '3.1GB', nodes: '1.5M', edges: '4.2M' },
+];
+
+const agents = [
+  { name: 'Math Solver', status: 'active', tasks: 12, performance: 95 },
+  { name: 'Ethics Analyzer', status: 'idle', tasks: 0, performance: 92 },
+  { name: 'Security Monitor', status: 'active', tasks: 8, performance: 98 },
+];
+
+const complianceStats = {
+  gdpr: 100,
+  hipaa: 98,
+  pci: 100,
+  iso27001: 95,
 };
 
 const recentActivity = [
-  { type: 'kg', text: 'CyberSecurity_KG updated', time: '10 minutes ago' },
-  { type: 'agent', text: 'New SecurityAnalyzer agent created', time: '1 hour ago' },
-  { type: 'security', text: 'Security validation completed', time: '2 hours ago' },
-  { type: 'agent', text: 'Compliance agent executed', time: '3 hours ago' },
+  {
+    id: 1,
+    type: 'success',
+    message: 'New theorem proved in Mathematics KG',
+    time: '5 minutes ago',
+    icon: <CheckCircleIcon />,
+  },
+  {
+    id: 2,
+    type: 'warning',
+    message: 'Security scan completed - 2 vulnerabilities found',
+    time: '1 hour ago',
+    icon: <WarningIcon />,
+  },
+  {
+    id: 3,
+    type: 'info',
+    message: 'New agent deployed: Ethics Analyzer v2.0',
+    time: '2 hours ago',
+    icon: <InfoIcon />,
+  },
 ];
 
-function StatusIcon({ status }) {
-  if (status === 'healthy') return <CheckCircleIcon color="success" />;
-  if (status === 'warning') return <WarningIcon color="warning" />;
-  return <ErrorIcon color="error" />;
-}
+const StatusIcon = ({ status }) => {
+  const theme = useTheme();
+  const icons = {
+    healthy: <CheckCircleIcon sx={{ color: theme.palette.success.main }} />,
+    warning: <WarningIcon sx={{ color: theme.palette.warning.main }} />,
+    error: <ErrorIcon sx={{ color: theme.palette.error.main }} />,
+  };
+  return icons[status] || icons.healthy;
+};
+
+const MetricCard = ({ title, value, icon, color, trend }) => {
+  const theme = useTheme();
+  return (
+    <Card
+      sx={{
+        height: '100%',
+        background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
+        border: `1px solid ${alpha(color, 0.2)}`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: `0 8px 16px ${alpha(color, 0.2)}`,
+        },
+      }}
+    >
+      <CardContent sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Avatar
+            sx={{
+              bgcolor: alpha(color, 0.1),
+              color: color,
+              mr: 2,
+              width: 48,
+              height: 48,
+            }}
+          >
+            {icon}
+          </Avatar>
+          <Box>
+            <Typography variant="h4" component="div" sx={{ fontWeight: 600 }}>
+              {value}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+              {title}
+            </Typography>
+          </Box>
+        </Box>
+        {trend && (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <TrendingUpIcon sx={{ color: theme.palette.success.main, mr: 0.5 }} />
+            <Typography variant="body2" color="success.main">
+              {trend}
+            </Typography>
+          </Box>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+const ActivityItem = ({ activity }) => {
+  const theme = useTheme();
+  const colors = {
+    success: theme.palette.success.main,
+    warning: theme.palette.warning.main,
+    error: theme.palette.error.main,
+    info: theme.palette.info.main,
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        p: 2,
+        borderRadius: 2,
+        mb: 1,
+        background: `linear-gradient(135deg, ${alpha(colors[activity.type], 0.1)} 0%, ${alpha(colors[activity.type], 0.05)} 100%)`,
+        border: `1px solid ${alpha(colors[activity.type], 0.2)}`,
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateX(4px)',
+          background: `linear-gradient(135deg, ${alpha(colors[activity.type], 0.15)} 0%, ${alpha(colors[activity.type], 0.1)} 100%)`,
+        },
+      }}
+    >
+      <Avatar
+        sx={{
+          bgcolor: alpha(colors[activity.type], 0.1),
+          color: colors[activity.type],
+          mr: 2,
+          width: 40,
+          height: 40,
+        }}
+      >
+        {activity.icon}
+      </Avatar>
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+          {activity.message}
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          {activity.time}
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 
 function Dashboard() {
+  const theme = useTheme();
+
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
-      
-      <Grid container spacing={3}>
-        {/* System Health */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={2} sx={{ p: 2, height: '100%' }}>
-            <Typography variant="h6" gutterBottom>
-              System Health
-            </Typography>
-            {systemHealth.map((item) => (
-              <Box key={item.name} sx={{ mt: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="body2">{item.name}</Typography>
-                  <StatusIcon status={item.status} />
-                </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={item.value} 
-                  color={item.status === 'healthy' ? 'success' : item.status === 'warning' ? 'warning' : 'error'}
-                  sx={{ height: 8, borderRadius: 5 }}
-                />
-              </Box>
-            ))}
-            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-              <Button variant="outlined" size="small">View Details</Button>
-            </Box>
-          </Paper>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+            Dashboard
+          </Typography>
+          <Typography color="text.secondary">
+            Welcome back! Here's what's happening with your system.
+          </Typography>
+        </Box>
+        <Tooltip title="Refresh data">
+          <IconButton>
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      {/* System Health */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} md={6} lg={3}>
+          <MetricCard
+            title="CPU Usage"
+            value={`${systemHealth.cpu}%`}
+            icon={<SpeedIcon />}
+            color={theme.palette.primary.main}
+            trend="+2.5% from last hour"
+          />
         </Grid>
-        
-        {/* Security Status */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={2} sx={{ p: 2, height: '100%' }}>
-            <Typography variant="h6" gutterBottom>
-              Security Status
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Box sx={{ position: 'relative', display: 'inline-flex', mr: 2 }}>
-                <Box
-                  sx={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: '50%',
-                    border: '10px solid #eee',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: -10,
-                      left: -10,
-                      width: 120,
-                      height: 120,
-                      borderRadius: '50%',
-                      border: '10px solid',
-                      borderColor: securityStatus.score > 80 ? 'success.main' : securityStatus.score > 60 ? 'warning.main' : 'error.main',
-                      borderTopColor: 'transparent',
-                      borderRightColor: 'transparent',
-                      transform: `rotate(${securityStatus.score * 3.6}deg)`,
-                    }
-                  }}
-                >
-                  <Typography variant="h4">{securityStatus.score}</Typography>
-                </Box>
-              </Box>
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Last check: {securityStatus.lastCheck}
-                </Typography>
-                {securityStatus.issues.map((issue, index) => (
-                  <Box key={index} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                    {issue.severity === 'warning' ? (
-                      <WarningIcon fontSize="small" color="warning" sx={{ mr: 1 }} />
-                    ) : (
-                      <CheckCircleIcon fontSize="small" color="success" sx={{ mr: 1 }} />
-                    )}
-                    <Typography variant="body2">
-                      {issue.message}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button variant="outlined" size="small">Run Validation</Button>
-              <Button variant="contained" color="primary" size="small">Security Center</Button>
-            </Box>
-          </Paper>
+        <Grid item xs={12} md={6} lg={3}>
+          <MetricCard
+            title="Memory Usage"
+            value={`${systemHealth.memory}%`}
+            icon={<StorageIcon />}
+            color={theme.palette.success.main}
+            trend="-1.2% from last hour"
+          />
         </Grid>
-        
-        {/* Knowledge Graph Stats */}
-        <Grid item xs={12} md={4}>
-          <Card elevation={2}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                  <SchemaIcon />
-                </Avatar>
-                <Typography variant="h6">
-                  Knowledge Graphs
-                </Typography>
-              </Box>
-              <Typography variant="h3" component="div" align="center" sx={{ my: 2 }}>
-                8
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                5 Domain-specific KGs, 3 Custom KGs
-              </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Button variant="text" fullWidth>
-                View Knowledge Graphs
-              </Button>
-            </CardContent>
-          </Card>
+        <Grid item xs={12} md={6} lg={3}>
+          <MetricCard
+            title="Storage Usage"
+            value={`${systemHealth.storage}%`}
+            icon={<StorageIcon />}
+            color={theme.palette.warning.main}
+            trend="+5.3% from last week"
+          />
         </Grid>
-        
-        {/* Agent Stats */}
-        <Grid item xs={12} md={4}>
-          <Card elevation={2}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: 'secondary.main', mr: 2 }}>
-                  <SmartToyIcon />
-                </Avatar>
-                <Typography variant="h6">
-                  Agents
-                </Typography>
-              </Box>
-              <Typography variant="h3" component="div" align="center" sx={{ my: 2 }}>
-                12
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                5 LLM-based, 7 Groovy Script
-              </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Button variant="text" fullWidth>
-                Agent Workshop
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        {/* Compliance Stats */}
-        <Grid item xs={12} md={4}>
-          <Card elevation={2}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: 'success.main', mr: 2 }}>
-                  <SecurityIcon />
-                </Avatar>
-                <Typography variant="h6">
-                  Compliance
-                </Typography>
-              </Box>
-              <Typography variant="h3" component="div" align="center" sx={{ my: 2 }}>
-                96%
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                21/22 compliance requirements met
-              </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Button variant="text" fullWidth>
-                Compliance Report
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        {/* Recent Activity */}
-        <Grid item xs={12}>
-          <Paper elevation={2} sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Recent Activity
-            </Typography>
-            <List>
-              {recentActivity.map((activity, index) => (
-                <ListItem key={index} divider={index < recentActivity.length - 1}>
-                  <ListItemAvatar>
-                    <Avatar sx={{ 
-                      bgcolor: activity.type === 'kg' ? 'primary.main' : 
-                              activity.type === 'agent' ? 'secondary.main' : 'success.main' 
-                    }}>
-                      {activity.type === 'kg' ? <SchemaIcon /> : 
-                       activity.type === 'agent' ? <SmartToyIcon /> : <SecurityIcon />}
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText 
-                    primary={activity.text} 
-                    secondary={activity.time}
-                  />
-                </ListItem>
-              ))}
-            </List>
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-              <Button variant="text">View All Activity</Button>
-            </Box>
-          </Paper>
+        <Grid item xs={12} md={6} lg={3}>
+          <MetricCard
+            title="Network Usage"
+            value={`${systemHealth.network}%`}
+            icon={<SpeedIcon />}
+            color={theme.palette.info.main}
+            trend="+8.1% from last hour"
+          />
         </Grid>
       </Grid>
-    </div>
+
+      {/* Security Status */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} md={8}>
+          <Card
+            sx={{
+              height: '100%',
+              background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            <CardHeader
+              title="Security Status"
+              avatar={
+                <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: theme.palette.primary.main }}>
+                  <SecurityIcon />
+                </Avatar>
+              }
+              action={
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+            />
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Active Threats
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                      {securityStatus.threats}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Vulnerabilities
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                      {securityStatus.vulnerabilities}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Compliance Score
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box sx={{ flexGrow: 1, mr: 1 }}>
+                        <LinearProgress
+                          variant="determinate"
+                          value={securityStatus.compliance}
+                          sx={{
+                            height: 8,
+                            borderRadius: 4,
+                            bgcolor: alpha(theme.palette.primary.main, 0.1),
+                            '& .MuiLinearProgress-bar': {
+                              borderRadius: 4,
+                              background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {securityStatus.compliance}%
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card
+            sx={{
+              height: '100%',
+              background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)} 0%, ${alpha(theme.palette.success.main, 0.05)} 100%)`,
+              border: `1px solid ${alpha(theme.palette.success.main, 0.2)}`,
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            <CardHeader
+              title="Recent Activity"
+              avatar={
+                <Avatar sx={{ bgcolor: alpha(theme.palette.success.main, 0.1), color: theme.palette.success.main }}>
+                  <InfoIcon />
+                </Avatar>
+              }
+            />
+            <CardContent>
+              {recentActivity.map((activity) => (
+                <ActivityItem key={activity.id} activity={activity} />
+              ))}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Knowledge Graphs & Agents */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card
+            sx={{
+              height: '100%',
+              background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.1)} 0%, ${alpha(theme.palette.warning.main, 0.05)} 100%)`,
+              border: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            <CardHeader
+              title="Knowledge Graphs"
+              avatar={
+                <Avatar sx={{ bgcolor: alpha(theme.palette.warning.main, 0.1), color: theme.palette.warning.main }}>
+                  <StorageIcon />
+                </Avatar>
+              }
+            />
+            <CardContent>
+              {knowledgeGraphs.map((graph) => (
+                <Box
+                  key={graph.name}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 2,
+                    borderRadius: 2,
+                    mb: 1,
+                    background: alpha(theme.palette.common.white, 0.05),
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      background: alpha(theme.palette.common.white, 0.1),
+                    },
+                  }}
+                >
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {graph.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {graph.nodes} nodes • {graph.edges} edges
+                    </Typography>
+                  </Box>
+                  <Chip
+                    label={graph.size}
+                    size="small"
+                    sx={{
+                      bgcolor: alpha(theme.palette.warning.main, 0.1),
+                      color: theme.palette.warning.main,
+                    }}
+                  />
+                </Box>
+              ))}
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card
+            sx={{
+              height: '100%',
+              background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)} 0%, ${alpha(theme.palette.info.main, 0.05)} 100%)`,
+              border: `1px solid ${alpha(theme.palette.info.main, 0.2)}`,
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            }}
+          >
+            <CardHeader
+              title="Active Agents"
+              avatar={
+                <Avatar sx={{ bgcolor: alpha(theme.palette.info.main, 0.1), color: theme.palette.info.main }}>
+                  <SmartToyIcon />
+                </Avatar>
+              }
+            />
+            <CardContent>
+              {agents.map((agent) => (
+                <Box
+                  key={agent.name}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 2,
+                    borderRadius: 2,
+                    mb: 1,
+                    background: alpha(theme.palette.common.white, 0.05),
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      background: alpha(theme.palette.common.white, 0.1),
+                    },
+                  }}
+                >
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {agent.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {agent.tasks} active tasks
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Chip
+                      label={agent.status}
+                      size="small"
+                      sx={{
+                        bgcolor: agent.status === 'active'
+                          ? alpha(theme.palette.success.main, 0.1)
+                          : alpha(theme.palette.grey[500], 0.1),
+                        color: agent.status === 'active'
+                          ? theme.palette.success.main
+                          : theme.palette.grey[500],
+                      }}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      {agent.performance}%
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

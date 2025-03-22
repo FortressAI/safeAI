@@ -29,23 +29,32 @@ import {
   Tooltip,
   Menu,
   MenuItem,
+  useTheme,
+  Badge,
+  alpha,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CategoryIcon from '@mui/icons-material/Category';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SecurityIcon from '@mui/icons-material/Security';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import CodeIcon from '@mui/icons-material/Code';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import InfoIcon from '@mui/icons-material/Info';
+import {
+  Search as SearchIcon,
+  Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  PlayArrow as PlayIcon,
+  Stop as StopIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Refresh as RefreshIcon,
+  FilterList as FilterIcon,
+  Sort as SortIcon,
+  SmartToy as SmartToyIcon,
+  Code as CodeIcon,
+  Psychology as PsychologyIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Storage as StorageIcon,
+  Memory as MemoryIcon,
+  NetworkCheck as NetworkIcon,
+  Star as StarIcon,
+} from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Sample agent data
 const sampleAgents = [
@@ -144,6 +153,7 @@ function TabPanel(props) {
 }
 
 function AgentBrowser() {
+  const theme = useTheme();
   const [agents, setAgents] = useState(sampleAgents);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -214,13 +224,33 @@ function AgentBrowser() {
   };
   
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Agent Browser
-      </Typography>
-      
-      {/* Search and Filter Bar */}
-      <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+            Agent Browser
+          </Typography>
+          <Typography color="text.secondary">
+            Browse and manage your AI agents
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          sx={{
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+            '&:hover': {
+              background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+            },
+          }}
+        >
+          Create New Agent
+        </Button>
+      </Box>
+
+      {/* Search and Filters */}
+      <Box sx={{ mb: 4 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
             <TextField
@@ -237,294 +267,146 @@ function AgentBrowser() {
               }}
             />
           </Grid>
-          
-          <Grid item xs={6} md={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <CategoryIcon color="action" sx={{ mr: 1 }} />
-              <TextField
-                select
-                fullWidth
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                label="Category"
-                variant="outlined"
-              >
-                {agentCategories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Grid>
-          
-          <Grid item xs={6} md={3}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Grid item xs={12} md={6}>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
               <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-                href="#/agent-workshop"
+                variant="outlined"
+                startIcon={<FilterIcon />}
+                sx={{
+                  borderColor: alpha(theme.palette.common.white, 0.1),
+                  '&:hover': {
+                    borderColor: alpha(theme.palette.common.white, 0.2),
+                  },
+                }}
               >
-                Create New Agent
+                Filters
               </Button>
+              <Button
+                variant="outlined"
+                startIcon={<SortIcon />}
+                sx={{
+                  borderColor: alpha(theme.palette.common.white, 0.1),
+                  '&:hover': {
+                    borderColor: alpha(theme.palette.common.white, 0.2),
+                  },
+                }}
+              >
+                Sort
+              </Button>
+              <IconButton>
+                <RefreshIcon />
+              </IconButton>
             </Box>
           </Grid>
         </Grid>
-      </Paper>
-      
-      {/* Tabs */}
-      <Paper elevation={2}>
+      </Box>
+
+      {/* Agent Types Tabs */}
+      <Box sx={{ borderBottom: 1, borderColor: alpha(theme.palette.common.white, 0.1), mb: 4 }}>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons="auto"
-          textColor="primary"
-          indicatorColor="primary"
+          sx={{
+            '& .MuiTabs-indicator': {
+              background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
+            },
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontWeight: 500,
+            },
+          }}
         >
-          <Tab icon={<SmartToyIcon />} label="All Agents" />
-          <Tab icon={<StarIcon />} label="Favorites" />
-          <Tab icon={<CodeIcon />} label="Script Agents" />
-          <Tab icon={<PsychologyIcon />} label="LLM Agents" />
-        </Tabs>
-        
-        {/* All Agents Tab */}
-        <TabPanel value={tabValue} index={0}>
-          <AgentGrid agents={getTabAgents()} 
-                    handleOpenAgentDetail={handleOpenAgentDetail}
-                    handleMenuOpen={handleMenuOpen} />
-        </TabPanel>
-        
-        {/* Favorites Tab */}
-        <TabPanel value={tabValue} index={1}>
-          <AgentGrid agents={getTabAgents()} 
-                    handleOpenAgentDetail={handleOpenAgentDetail}
-                    handleMenuOpen={handleMenuOpen} />
-        </TabPanel>
-        
-        {/* Script Agents Tab */}
-        <TabPanel value={tabValue} index={2}>
-          <AgentGrid agents={getTabAgents()} 
-                    handleOpenAgentDetail={handleOpenAgentDetail}
-                    handleMenuOpen={handleMenuOpen} />
-        </TabPanel>
-        
-        {/* LLM Agents Tab */}
-        <TabPanel value={tabValue} index={3}>
-          <AgentGrid agents={getTabAgents()} 
-                    handleOpenAgentDetail={handleOpenAgentDetail}
-                    handleMenuOpen={handleMenuOpen} />
-        </TabPanel>
-      </Paper>
-      
-      {/* Agent Detail Dialog */}
-      {selectedAgent && (
-        <Dialog
-          open={openAgentDetail}
-          onClose={handleCloseAgentDetail}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {selectedAgent.type === 'script' ? (
-                <CodeIcon color="primary" sx={{ mr: 1 }} />
-              ) : (
-                <PsychologyIcon color="primary" sx={{ mr: 1 }} />
-              )}
-              {selectedAgent.name}
-              {selectedAgent.favorite && (
-                <StarIcon color="warning" sx={{ ml: 1 }} fontSize="small" />
-              )}
-            </Box>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
-                <Typography variant="h6" gutterBottom>
-                  Description
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  {selectedAgent.description}
-                </Typography>
-                
-                <Typography variant="h6" gutterBottom>
-                  Capabilities
-                </Typography>
-                <Box sx={{ mb: 3 }}>
-                  {selectedAgent.capabilities.map((capability) => (
-                    <Chip
-                      key={capability}
-                      label={capability.replace('_', ' ')}
-                      sx={{ mr: 1, mb: 1 }}
-                    />
-                  ))}
-                </Box>
-                
-                <Typography variant="h6" gutterBottom>
-                  Recent Activities
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <PlayArrowIcon color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Agent execution completed successfully"
-                      secondary={`Last run: ${selectedAgent.lastRun}`}
-                    />
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem>
-                    <ListItemIcon>
-                      <EditIcon color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Agent configuration updated"
-                      secondary="2023-10-10 09:45:18"
-                    />
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem>
-                    <ListItemIcon>
-                      <VerifiedUserIcon color="primary" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Security validation passed"
-                      secondary="2023-10-08 14:20:33"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Agent Details
-                  </Typography>
-                  <List dense>
-                    <ListItem>
-                      <ListItemText primary="ID" secondary={selectedAgent.id} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Category" secondary={selectedAgent.category} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Type" secondary={selectedAgent.type === 'script' ? 'Script Agent' : 'LLM Agent'} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText 
-                        primary="Security Level" 
-                        secondary={
-                          <Chip
-                            size="small"
-                            label={selectedAgent.securityLevel.toUpperCase()}
-                            color={
-                              selectedAgent.securityLevel === 'high'
-                                ? 'success'
-                                : selectedAgent.securityLevel === 'medium'
-                                ? 'warning'
-                                : 'error'
-                            }
-                          />
-                        } 
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Last Run" secondary={selectedAgent.lastRun} />
-                    </ListItem>
-                  </List>
-                </Paper>
-                
-                <Typography variant="h6" gutterBottom>
-                  Actions
-                </Typography>
-                <Button
-                  fullWidth
-                  variant="contained"
+          <Tab
+            value="all"
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                All Agents
+                <Badge
+                  badgeContent={filteredAgents.length}
                   color="primary"
-                  startIcon={<PlayArrowIcon />}
-                  sx={{ mb: 2 }}
-                >
-                  Run Agent
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<EditIcon />}
-                  sx={{ mb: 2 }}
-                >
-                  Edit Agent
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="warning"
-                  startIcon={selectedAgent.favorite ? <StarBorderIcon /> : <StarIcon />}
-                  sx={{ mb: 2 }}
-                  onClick={() => handleToggleFavorite(selectedAgent.id)}
-                >
-                  {selectedAgent.favorite ? 'Remove from Favorites' : 'Add to Favorites'}
-                </Button>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseAgentDetail}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      
-      {/* Agent Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={() => {
-          const agent = agents.find(a => a.id === menuAgentId);
-          handleOpenAgentDetail(agent);
-          handleMenuClose();
-        }}>
-          <ListItemIcon>
-            <InfoIcon fontSize="small" />
-          </ListItemIcon>
-          View Details
-        </MenuItem>
-        <MenuItem onClick={() => handleToggleFavorite(menuAgentId)}>
-          <ListItemIcon>
-            {agents.find(a => a.id === menuAgentId)?.favorite 
-              ? <StarBorderIcon fontSize="small" />
-              : <StarIcon fontSize="small" />
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    },
+                  }}
+                />
+              </Box>
             }
-          </ListItemIcon>
-          {agents.find(a => a.id === menuAgentId)?.favorite 
-            ? 'Remove from Favorites' 
-            : 'Add to Favorites'
-          }
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <PlayArrowIcon fontSize="small" />
-          </ListItemIcon>
-          Run Agent
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-          Edit Agent
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <DeleteIcon fontSize="small" color="error" />
-          </ListItemIcon>
-          <Typography color="error">Delete Agent</Typography>
-        </MenuItem>
-      </Menu>
-    </div>
+          />
+          <Tab
+            value="favorites"
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                Favorites
+                <Badge
+                  badgeContent={filteredAgents.filter(a => a.favorite).length}
+                  color="primary"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    },
+                  }}
+                />
+              </Box>
+            }
+          />
+          <Tab
+            value="script"
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                Script Agents
+                <Badge
+                  badgeContent={filteredAgents.filter(a => a.type === 'script').length}
+                  color="primary"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    },
+                  }}
+                />
+              </Box>
+            }
+          />
+          <Tab
+            value="llm"
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                LLM Agents
+                <Badge
+                  badgeContent={filteredAgents.filter(a => a.type === 'llm').length}
+                  color="primary"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    },
+                  }}
+                />
+              </Box>
+            }
+          />
+        </Tabs>
+      </Box>
+
+      {/* Agent Grid */}
+      <Grid container spacing={3}>
+        <AnimatePresence>
+          {filteredAgents.map((agent) => (
+            <Grid item xs={12} md={6} lg={4} key={agent.id}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <AgentCard agent={agent} />
+              </motion.div>
+            </Grid>
+          ))}
+        </AnimatePresence>
+      </Grid>
+    </Box>
   );
 }
 
@@ -623,7 +505,7 @@ function AgentGrid({ agents, handleOpenAgentDetail, handleMenuOpen }) {
                 <Box>
                   <Tooltip title="Run Agent">
                     <IconButton size="small" color="primary">
-                      <PlayArrowIcon />
+                      <PlayIcon />
                     </IconButton>
                   </Tooltip>
                   <IconButton
@@ -657,5 +539,290 @@ function AgentGrid({ agents, handleOpenAgentDetail, handleMenuOpen }) {
     </Grid>
   );
 }
+
+const MetricCard = ({ title, value, icon, color }) => {
+  const theme = useTheme();
+  return (
+    <Card
+      sx={{
+        height: '100%',
+        background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
+        border: `1px solid ${alpha(color, 0.2)}`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: `0 8px 16px ${alpha(color, 0.2)}`,
+        },
+      }}
+    >
+      <CardContent sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+          <Avatar
+            sx={{
+              bgcolor: alpha(color, 0.1),
+              color: color,
+              mr: 1,
+              width: 32,
+              height: 32,
+            }}
+          >
+            {icon}
+          </Avatar>
+          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+            {value}
+          </Typography>
+        </Box>
+        <Typography color="text.secondary" variant="body2">
+          {title}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+};
+
+const AgentCard = ({ agent }) => {
+  const theme = useTheme();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const getAgentIcon = (type) => {
+    switch (type) {
+      case 'llm':
+        return <CodeIcon />;
+      case 'ethics':
+        return <PsychologyIcon />;
+      case 'security':
+        return <SecurityIcon />;
+      default:
+        return <SmartToyIcon />;
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return theme.palette.success.main;
+      case 'idle':
+        return theme.palette.grey[500];
+      case 'error':
+        return theme.palette.error.main;
+      default:
+        return theme.palette.grey[500];
+    }
+  };
+
+  return (
+    <Card
+      sx={{
+        height: '100%',
+        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
+        border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.2)}`,
+        },
+      }}
+    >
+      <CardContent>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              sx={{
+                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                color: theme.palette.primary.main,
+                mr: 2,
+                width: 48,
+                height: 48,
+              }}
+            >
+              {getAgentIcon(agent.type)}
+            </Avatar>
+            <Box>
+              <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+                {agent.name}
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                {agent.description}
+              </Typography>
+            </Box>
+          </Box>
+          <IconButton onClick={handleDialogOpen}>
+            <MoreVertIcon />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+          <Chip
+            label={agent.status}
+            size="small"
+            sx={{
+              bgcolor: alpha(getStatusColor(agent.status), 0.1),
+              color: getStatusColor(agent.status),
+            }}
+          />
+          <Chip
+            label={`${agent.performance}% Performance`}
+            size="small"
+            sx={{
+              bgcolor: alpha(theme.palette.info.main, 0.1),
+              color: theme.palette.info.main,
+            }}
+          />
+        </Box>
+
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={6}>
+            <MetricCard
+              title="CPU Usage"
+              value={`${agent.metrics.cpu}%`}
+              icon={<SpeedIcon />}
+              color={theme.palette.primary.main}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <MetricCard
+              title="Memory Usage"
+              value={`${agent.metrics.memory}%`}
+              icon={<MemoryIcon />}
+              color={theme.palette.success.main}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <MetricCard
+              title="Storage Usage"
+              value={`${agent.metrics.storage}%`}
+              icon={<StorageIcon />}
+              color={theme.palette.warning.main}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <MetricCard
+              title="Network Usage"
+              value={`${agent.metrics.network}%`}
+              icon={<NetworkIcon />}
+              color={theme.palette.info.main}
+            />
+          </Grid>
+        </Grid>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="caption" color="text.secondary">
+            Last active: {agent.lastActive}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Tooltip title={agent.status === 'active' ? 'Stop Agent' : 'Start Agent'}>
+              <IconButton
+                size="small"
+                sx={{
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  color: theme.palette.primary.main,
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette.primary.main, 0.2),
+                  },
+                }}
+              >
+                {agent.status === 'active' ? <StopIcon /> : <PlayIcon />}
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+      </CardContent>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleDialogClose}
+        PaperProps={{
+          sx: {
+            mt: 1.5,
+            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.paper, 0.95)} 100%)`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+          }
+        }}
+      >
+        <MenuItem onClick={handleDialogOpen}>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Edit Agent</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleDialogClose}>
+          <ListItemIcon>
+            <DeleteIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Delete Agent</ListItemText>
+        </MenuItem>
+      </Menu>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        PaperProps={{
+          sx: {
+            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.paper, 0.95)} 100%)`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+          }
+        }}
+      >
+        <DialogTitle>Edit Agent</DialogTitle>
+        <DialogContent>
+          <Box sx={{ pt: 2 }}>
+            <TextField
+              fullWidth
+              label="Agent Name"
+              defaultValue={agent.name}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              defaultValue={agent.description}
+              multiline
+              rows={3}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Type"
+              defaultValue={agent.type}
+              sx={{ mb: 2 }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button variant="contained" onClick={handleDialogClose}>
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Card>
+  );
+};
 
 export default AgentBrowser; 

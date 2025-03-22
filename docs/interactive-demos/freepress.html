@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreePress - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { margin: 0; padding: 0; font-family: Roboto, sans-serif; background-color: #121212; color: #fff; }
+    #root { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .tutorial-section { margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; background-color: rgba(255,255,255,0.05); }
+    .code-block { background-color: #1e1e1e; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 14px; margin: 10px 0; overflow-x: auto; color: #e6e6e6; }
+    .tab-content { padding: 15px 0; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, Divider, TextField, LinearProgress } = MaterialUI;
+
+    function FreePressTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+      const [articleText, setArticleText] = React.useState("");
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            FreePress - Interactive Tutorial
+          </Typography>
+          <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 3 }}>
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+          
+          {/* Overview Tab */}
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What is FreePress?</Typography>
+                <Typography variant="body1" paragraph>
+                  FreePress is an intuitive content management and publishing tool designed for seamless news and article creation in the SafeAI ecosystem. 
+                  It enables users to craft, edit, and publish high-quality content with real-time previews and interactive components to aid learning and experimentation.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <Grid container spacing={2}>
+                  {['Interactive Article Editor', 'Real-time Preview', 'Multimedia Integration', 'Comment & Feedback System'].map((feature, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{feature}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Components Tab */}
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>FreePress Components</Typography>
+                <Typography variant="body1" paragraph>
+                  FreePress is built with several integrated components that work together to provide a smooth publishing experience:
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Article Editor:</Typography>
+                <Typography variant="body2" paragraph>
+                  A rich text editor that offers formatting tools, live spell-check, and multimedia embedding capabilities.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Live Preview:</Typography>
+                <Typography variant="body2" paragraph>
+                  Provides real-time visualization of article content, ensuring that formatting and layout are as expected.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Feedback System:</Typography>
+                <Typography variant="body2" paragraph>
+                  Allows users to receive comments and suggestions on their articles, promoting interactive learning.
+                </Typography>
+              </div>
+            </div>
+          )}
+          
+          {/* Live Demo Tab */}
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>FreePress Live Demo</Typography>
+                <Typography variant="body1" paragraph>
+                  Experiment with a live article editor below. Type your article to see how free-form content is managed and previewed in real time.
+                </Typography>
+                <TextField
+                  label="Write your article here..."
+                  multiline
+                  rows={6}
+                  fullWidth
+                  variant="outlined"
+                  value={articleText}
+                  onChange={(e) => setArticleText(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <Typography variant="h6" gutterBottom>Live Preview:</Typography>
+                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', p: 2 }}>
+                  <CardContent>
+                    {articleText ? (
+                      <Typography variant="body1">{articleText}</Typography>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">Your live preview will appear here as you type.</Typography>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          {/* Code Examples Tab */}
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>FreePress Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Below is an example snippet demonstrating the implementation of a simple article editor component:
+                </Typography>
+                <div className="code-block">
+{`import React, { useState } from 'react';
+import { TextField, Card, CardContent, Typography } from '@mui/material';
+
+const ArticleEditor = () => {
+  const [content, setContent] = useState('');
+
+  return (
+    <div>
+      <TextField
+        label="Write your article..."
+        multiline
+        rows={6}
+        fullWidth
+        variant="outlined"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <Card style={{ marginTop: 20, backgroundColor: '#1e1e1e' }}>
+        <CardContent>
+          {content ? (
+            <Typography variant="body1" style={{ color: '#fff' }}>{content}</Typography>
+          ) : (
+            <Typography variant="body2" color="textSecondary">Live preview will appear here.</Typography>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default ArticleEditor;`}
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<FreePressTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

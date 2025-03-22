@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Center - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .tutorial-section {
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      overflow-x: auto;
+      color: #e6e6e6;
+    }
+    .tab-content {
+      padding: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Tabs, Tab, Grid, Divider, 
+      Avatar, Chip, Paper, IconButton, Tooltip,
+      List, ListItem, ListItemText, ListItemIcon,
+      Alert, AlertTitle, LinearProgress
+    } = MaterialUI;
+
+    // Sample security data
+    const securityData = {
+      threatLevel: 'Low',
+      lastScan: '2023-11-15 14:30',
+      vulnerabilities: [
+        { id: 1, severity: 'High', description: 'Outdated agent authentication protocol', status: 'Open' },
+        { id: 2, severity: 'Medium', description: 'Knowledge graph access control issue', status: 'Open' },
+        { id: 3, severity: 'Low', description: 'Weak password policy', status: 'Fixed' }
+      ],
+      complianceScore: 85,
+      complianceItems: [
+        { id: 1, standard: 'GDPR', score: 92, status: 'Compliant' },
+        { id: 2, standard: 'HIPAA', score: 78, status: 'Action Required' },
+        { id: 3, standard: 'ISO 27001', score: 85, status: 'Compliant' }
+      ]
+    };
+
+    // Main tutorial component
+    function SecurityCenterTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+      const [selectedVulnerability, setSelectedVulnerability] = React.useState(null);
+      const [scanInProgress, setScanInProgress] = React.useState(false);
+      const [scanProgress, setScanProgress] = React.useState(0);
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      const handleScanClick = () => {
+        setScanInProgress(true);
+        setScanProgress(0);
+        
+        const interval = setInterval(() => {
+          setScanProgress(prev => {
+            if (prev >= 100) {
+              clearInterval(interval);
+              setScanInProgress(false);
+              return 100;
+            }
+            return prev + 5;
+          });
+        }, 300);
+      };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            Security Center - Interactive Tutorial
+          </Typography>
+          
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange}
+            sx={{ mb: 3 }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+          
+          {/* Overview Tab */}
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What is the Security Center?</Typography>
+                <Typography variant="body1" paragraph>
+                  The Security Center is a comprehensive dashboard that helps you monitor and manage the security
+                  of your SafeAI system. It provides tools for vulnerability scanning, compliance checking, 
+                  and implementing security policies to ensure your AI agents operate within safe boundaries.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <Grid container spacing={2}>
+                  {['Vulnerability Scanning', 'Compliance Monitoring', 'Access Control', 'Security Policies'].map((item, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{item}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Components Tab */}
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Security Center Components</Typography>
+                <Typography variant="body1" paragraph>
+                  The Security Center consists of several key components for monitoring and managing security.
+                </Typography>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Threat Dashboard:</Typography>
+                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Avatar sx={{ bgcolor: '#4caf50', mr: 2 }}>L</Avatar>
+                      <Box>
+                        <Typography variant="subtitle1">Current Threat Level</Typography>
+                        <Typography variant="h5" color="#4caf50">Low</Typography>
+                      </Box>
+                    </Box>
+                    <Alert severity="info" sx={{ mb: 2 }}>
+                      <AlertTitle>System Status</AlertTitle>
+                      No active threats detected. Last scan completed on November 15, 2023.
+                    </Alert>
+                    <Button variant="contained" size="small">Run New Scan</Button>
+                  </CardContent>
+                </Card>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Vulnerability Manager:</Typography>
+                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>Active Vulnerabilities</Typography>
+                    <List>
+                      <ListItem>
+                        <Avatar sx={{ bgcolor: '#f44336', mr: 2, width: 24, height: 24, fontSize: 12 }}>H</Avatar>
+                        <ListItemText 
+                          primary="Outdated agent authentication protocol"
+                          secondary="High severity - Open"
+                        />
+                        <Button size="small" variant="outlined">Fix</Button>
+                      </ListItem>
+                      <Divider sx={{ my: 1 }} />
+                      <ListItem>
+                        <Avatar sx={{ bgcolor: '#ff9800', mr: 2, width: 24, height: 24, fontSize: 12 }}>M</Avatar>
+                        <ListItemText 
+                          primary="Knowledge graph access control issue"
+                          secondary="Medium severity - Open"
+                        />
+                        <Button size="small" variant="outlined">Fix</Button>
+                      </ListItem>
+                    </List>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          {/* Live Demo Tab */}
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>
+                  Security Center Live Demo
+                </Typography>
+                <Box sx={{ mb: 4 }}>
+                  <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <Box>
+                          <Typography variant="h6" gutterBottom>Security Overview</Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                            <Avatar 
+                              sx={{ 
+                                bgcolor: securityData.threatLevel === 'Low' ? '#4caf50' : 
+                                         securityData.threatLevel === 'Medium' ? '#ff9800' : '#f44336',
+                                mr: 2
+                              }}
+                            >
+                              {securityData.threatLevel.charAt(0)}
+                            </Avatar>
+                            <Box>
+                              <Typography variant="body2" color="text.secondary">Current Threat Level</Typography>
+                              <Typography variant="h6">{securityData.threatLevel}</Typography>
+                            </Box>
+                          </Box>
+                          <Typography variant="body2" color="text.secondary">
+                            Last scan: {securityData.lastScan}
+                          </Typography>
+                        </Box>
+                        <Button 
+                          variant="contained" 
+                          color="primary"
+                          onClick={handleScanClick}
+                          disabled={scanInProgress}
+                        >
+                          {scanInProgress ? 'Scanning...' : 'Run Security Scan'}
+                        </Button>
+                      </Box>
+                      
+                      {scanInProgress && (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="body2" color="text.secondary" gutterBottom>
+                            Scan in progress: {scanProgress}%
+                          </Typography>
+                          <LinearProgress 
+                            variant="determinate" 
+                            value={scanProgress} 
+                            sx={{ height: 8, borderRadius: 4 }}
+                          />
+                        </Box>
+                      )}
+                      
+                      <Divider sx={{ my: 2 }} />
+                      
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="subtitle1" gutterBottom>Vulnerabilities</Typography>
+                          <Paper sx={{ bgcolor: 'rgba(0,0,0,0.3)', p: 2 }}>
+                            <List sx={{ p: 0 }}>
+                              {securityData.vulnerabilities.map(vuln => (
+                                <ListItem 
+                                  key={vuln.id}
+                                  sx={{ 
+                                    mb: 1, 
+                                    bgcolor: 'rgba(0,0,0,0.2)', 
+                                    borderRadius: 1,
+                                    border: `1px solid ${
+                                      vuln.severity === 'High' ? 'rgba(244,67,54,0.5)' :
+                                      vuln.severity === 'Medium' ? 'rgba(255,152,0,0.5)' :
+                                      'rgba(76,175,80,0.5)'
+                                    }`
+                                  }}
+                                >
+                                  <Avatar 
+                                    sx={{ 
+                                      bgcolor: vuln.severity === 'High' ? '#f44336' : 
+                                               vuln.severity === 'Medium' ? '#ff9800' : '#4caf50',
+                                      mr: 2,
+                                      width: 32,
+                                      height: 32,
+                                      fontSize: 14
+                                    }}
+                                  >
+                                    {vuln.severity.charAt(0)}
+                                  </Avatar>
+                                  <ListItemText 
+                                    primary={vuln.description}
+                                    secondary={`${vuln.severity} severity - ${vuln.status}`}
+                                  />
+                                  {vuln.status === 'Open' && (
+                                    <Button size="small" variant="outlined">Fix</Button>
+                                  )}
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="subtitle1" gutterBottom>Compliance</Typography>
+                          <Paper sx={{ bgcolor: 'rgba(0,0,0,0.3)', p: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                              <Typography variant="body2" sx={{ flexGrow: 1 }}>Overall Compliance Score:</Typography>
+                              <Chip 
+                                label={`${securityData.complianceScore}%`}
+                                color={securityData.complianceScore >= 80 ? "success" : "warning"}
+                              />
+                            </Box>
+                            <List sx={{ p: 0 }}>
+                              {securityData.complianceItems.map(item => (
+                                <ListItem 
+                                  key={item.id}
+                                  sx={{ 
+                                    mb: 1, 
+                                    bgcolor: 'rgba(0,0,0,0.2)', 
+                                    borderRadius: 1
+                                  }}
+                                >
+                                  <ListItemText 
+                                    primary={item.standard}
+                                    secondary={`Score: ${item.score}% - ${item.status}`}
+                                  />
+                                  <Chip 
+                                    label={item.status}
+                                    color={item.status === 'Compliant' ? "success" : "warning"}
+                                    size="small"
+                                  />
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </div>
+            </div>
+          )}
+          
+          {/* Code Examples Tab */}
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Let's look at some of the key code examples from the Security Center.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Security Scanner Component:</Typography>
+                <div className="code-block">
+                  {`import React, { useState } from 'react';
+import { Box, Button, LinearProgress, Typography, Alert } from '@mui/material';
+import axios from 'axios';
+
+const SecurityScanner = () => {
+  const [scanning, setScanning] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+  
+  const runScan = async () => {
+    try {
+      setScanning(true);
+      setProgress(0);
+      setResults(null);
+      setError(null);
+      
+      // Start the scan
+      const scanResponse = await axios.post('/api/security/scan/start');
+      const scanId = scanResponse.data.scanId;
+      
+      // Poll for progress updates
+      const progressInterval = setInterval(async () => {
+        try {
+          const progressResponse = await axios.get(\`/api/security/scan/\${scanId}/progress\`);
+          const { progress, completed } = progressResponse.data;
+          
+          setProgress(progress);
+          
+          if (completed) {
+            clearInterval(progressInterval);
+            
+            // Get final results
+            const resultsResponse = await axios.get(\`/api/security/scan/\${scanId}/results\`);
+            setResults(resultsResponse.data);
+            setScanning(false);
+          }
+        } catch (err) {
+          clearInterval(progressInterval);
+          setError('Error checking scan progress: ' + err.message);
+          setScanning(false);
+        }
+      }, 1000);
+    } catch (err) {
+      setError('Error starting security scan: ' + err.message);
+      setScanning(false);
+    }
+  };
+  
+  return (
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6">Security Scanner</Typography>
+        <Button 
+          variant="contained" 
+          onClick={runScan} 
+          disabled={scanning}
+        >
+          {scanning ? 'Scanning...' : 'Run Security Scan'}
+        </Button>
+      </Box>
+      
+      {scanning && (
+        <Box sx={{ mt: 2, mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <Typography variant="body2" sx={{ mr: 1 }}>
+              Scan progress:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {progress}%
+            </Typography>
+          </Box>
+          <LinearProgress variant="determinate" value={progress} />
+        </Box>
+      )}
+      
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
+      
+      {results && (
+        <Box sx={{ mt: 3 }}>
+          <Alert 
+            severity={
+              results.threatLevel === 'High' ? 'error' :
+              results.threatLevel === 'Medium' ? 'warning' : 'success'
+            }
+          >
+            Scan completed. Threat level: {results.threatLevel}
+          </Alert>
+          
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Vulnerabilities found: {results.vulnerabilities.length}
+          </Typography>
+          
+          {/* Render vulnerability list here */}
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+export default SecurityScanner;`}
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<SecurityCenterTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

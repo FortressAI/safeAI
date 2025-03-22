@@ -26,19 +26,60 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Avatar,
+  useTheme,
+  alpha,
+  InputAdornment,
+  TextField,
+  ListItemSecondaryAction,
+  Switch,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  LinearProgress,
+  Badge,
+  FormControlLabel,
 } from '@mui/material';
-import SecurityIcon from '@mui/icons-material/Security';
+import {
+  Search as SearchIcon,
+  Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  PlayArrow as PlayIcon,
+  Stop as StopIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Refresh as RefreshIcon,
+  FilterList as FilterIcon,
+  Sort as SortIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Storage as StorageIcon,
+  Memory as MemoryIcon,
+  NetworkCheck as NetworkIcon,
+  Star as StarIcon,
+  Save as SaveIcon,
+  Build as BuildIcon,
+  TestTube as TestIcon,
+  Settings as SettingsIcon,
+  Warning as WarningIcon,
+  CheckCircle as CheckIcon,
+  Error as ErrorIcon,
+  Shield as ShieldIcon,
+  Lock as LockIcon,
+  Key as KeyIcon,
+  BugReport as BugIcon,
+} from '@mui/icons-material';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import GavelIcon from '@mui/icons-material/Gavel';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import InfoIcon from '@mui/icons-material/Info';
-import ErrorIcon from '@mui/icons-material/Error';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SchemaIcon from '@mui/icons-material/Schema';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Sample Security Check Results
 const securityChecks = [
@@ -70,6 +111,94 @@ const complianceRequirements = [
   { id: 2, name: 'HIPAA Compliance', status: 'compliant', details: 'Medical data handling meets requirements' },
   { id: 3, name: 'NIST Cybersecurity', status: 'partial', details: 'Some security controls need updates' },
   { id: 4, name: 'SOC 2 Type II', status: 'compliant', details: 'Access controls and monitoring in place' },
+];
+
+const securityMetrics = [
+  {
+    name: 'System Security',
+    value: 98,
+    icon: <ShieldIcon />,
+    color: '#4CAF50',
+    details: 'All security measures are up to date and functioning correctly',
+  },
+  {
+    name: 'Access Control',
+    value: 95,
+    icon: <LockIcon />,
+    color: '#2196F3',
+    details: 'Access controls are properly configured and monitored',
+  },
+  {
+    name: 'Encryption',
+    value: 100,
+    icon: <KeyIcon />,
+    color: '#9C27B0',
+    details: 'All data is properly encrypted using industry-standard protocols',
+  },
+  {
+    name: 'Threat Detection',
+    value: 92,
+    icon: <BugIcon />,
+    color: '#FF9800',
+    details: 'Advanced threat detection systems are active and monitoring',
+  },
+];
+
+const recentThreats = [
+  {
+    id: 1,
+    type: 'Malware',
+    severity: 'high',
+    status: 'blocked',
+    timestamp: '2 minutes ago',
+    source: 'Unknown',
+    description: 'Attempted malware injection detected and blocked',
+  },
+  {
+    id: 2,
+    type: 'DDoS',
+    severity: 'medium',
+    status: 'mitigated',
+    timestamp: '15 minutes ago',
+    source: 'IP: 192.168.1.100',
+    description: 'DDoS attack detected and mitigated',
+  },
+  {
+    id: 3,
+    type: 'Phishing',
+    severity: 'low',
+    status: 'blocked',
+    timestamp: '1 hour ago',
+    source: 'Email',
+    description: 'Phishing attempt detected and blocked',
+  },
+];
+
+const securitySettings = [
+  {
+    id: 'firewall',
+    name: 'Firewall Protection',
+    description: 'Enable network firewall protection',
+    enabled: true,
+  },
+  {
+    id: 'encryption',
+    name: 'Data Encryption',
+    description: 'Enable end-to-end encryption for all data',
+    enabled: true,
+  },
+  {
+    id: 'monitoring',
+    name: 'Real-time Monitoring',
+    description: 'Enable real-time security monitoring',
+    enabled: true,
+  },
+  {
+    id: 'backup',
+    name: 'Automatic Backup',
+    description: 'Enable automatic data backup',
+    enabled: false,
+  },
 ];
 
 function TabPanel(props) {
@@ -176,7 +305,7 @@ function SecurityCenter() {
                     <Button
                       variant="contained"
                       color="primary"
-                      startIcon={<PlayArrowIcon />}
+                      startIcon={<PlayIcon />}
                       onClick={handleRunValidation}
                       disabled={loading}
                     >
@@ -268,7 +397,7 @@ function SecurityCenter() {
                             <TableCell>
                               {check.status === 'passed' ? (
                                 <Chip 
-                                  icon={<CheckCircleIcon />} 
+                                  icon={<CheckIcon />} 
                                   label="Passed" 
                                   color="success" 
                                   size="small" 
@@ -415,7 +544,7 @@ function SecurityCenter() {
                         <TableCell>
                           {req.status === 'compliant' ? (
                             <Chip 
-                              icon={<CheckCircleIcon />} 
+                              icon={<CheckIcon />} 
                               label="Compliant" 
                               color="success" 
                               size="small" 
