@@ -11,273 +11,161 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: Roboto, sans-serif; 
+    body {
+      margin: 0;
+      padding: 0;
       background-color: #121212;
-      color: #fff;
-    }
-    #root { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 20px;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
     }
     .demo-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
     }
     .demo-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-    }
-    .status-badge {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-    }
-    .status-complete {
-      background-color: #4caf50;
-      color: white;
-    }
-    .status-incomplete {
-      background-color: #ff9800;
-      color: white;
+      transform: translateY(-4px);
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
-      Box, Typography, Container, Card, CardContent, CardActionArea, Grid,
-      AppBar, Toolbar, IconButton, Avatar, Icon, Chip, Tooltip, createTheme, ThemeProvider, CssBaseline
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
-    // Material icon names
-    const ICONS = {
-      MENU: "menu",
-      DASHBOARD: "dashboard", 
-      SMART_TOY: "smart_toy",
-      BUILD: "build",
-      PSYCHOLOGY: "psychology",
-      SECURITY: "security",
-      STORAGE: "storage",
-      SETTINGS: "settings",
-      FUNCTIONS: "functions",
-      ARTICLE: "article"
-    };
-
-    // Demo data with status
-    const demos = [
-      {
-        title: "Dashboard",
-        description: "Overview of system health, security, knowledge graphs, and active agents",
-        icon: ICONS.DASHBOARD,
-        color: "#2196f3",
-        url: "dashboard.html",
-        status: "complete"
-      },
-      {
-        title: "Agent Browser",
-        description: "Browse, search, and manage AI agents in the SafeAI ecosystem",
-        icon: ICONS.SMART_TOY,
-        color: "#4caf50",
-        url: "agent-browser.html",
-        status: "complete"
-      },
-      {
-        title: "Knowledge Graphs",
-        description: "Explore and analyze knowledge relationships with interactive visualization",
-        icon: ICONS.STORAGE,
-        color: "#9c27b0",
-        url: "knowledge-graphs.html",
-        status: "complete"
-      },
-      {
-        title: "Agent Workshop",
-        description: "Create, train, and test AI agents with knowledge graph integration",
-        icon: ICONS.BUILD,
-        color: "#ff9800",
-        url: "agent-workshop.html",
-        status: "complete"
-      },
-      {
-        title: "Math ATP",
-        description: "Automated theorem proving and mathematical reasoning",
-        icon: ICONS.FUNCTIONS,
-        color: "#00bcd4",
-        url: "mathatp.html",
-        status: "complete"
-      },
-      {
-        title: "Security Center",
-        description: "Monitor and manage security policies and agent behavior",
-        icon: ICONS.SECURITY,
-        color: "#f44336",
-        url: "security-center.html",
-        status: "complete"
-      },
-      {
-        title: "Free Press",
-        description: "Explore AI-powered journalism and content analysis",
-        icon: ICONS.ARTICLE,
-        color: "#795548",
-        url: "freepress.html",
-        status: "complete"
-      },
-      {
-        title: "ARC Prize Challenge",
-        description: "Test AI agents against Abstract Reasoning Corpus challenges",
-        icon: ICONS.PSYCHOLOGY,
-        color: "#e91e63",
-        url: "arc-prize.html",
-        status: "complete"
-      }
-    ];
-
-    function DemoIndex() {
-      return (
-        <Box>
-          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <Icon>menu</Icon>
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                SafeAI Interactive Demos
-              </Typography>
-              <Chip 
-                label={`${demos.filter(d => d.status === "complete").length}/${demos.length} Complete`}
-                color="primary"
-                variant="outlined"
-              />
-            </Toolbar>
-          </AppBar>
-          
-          <Container>
-            <Box sx={{ textAlign: 'center', mb: 6 }}>
-              <Typography variant="h3" component="h1" gutterBottom>
-                SafeAI Interactive Tutorials
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-                Explore the SafeAI application through these interactive demos of each component
-              </Typography>
-            </Box>
-            
-            <Grid container spacing={4}>
-              {demos.map((demo, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card 
-                    className="demo-card"
-                    sx={{ 
-                      height: '100%', 
-                      backgroundColor: 'rgba(255,255,255,0.05)',
-                      border: `1px solid rgba(255,255,255,0.1)`,
-                      borderRadius: 2,
-                      position: 'relative'
-                    }}
-                  >
-                    <CardActionArea 
-                      sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
-                      href={demo.url}
-                    >
-                      <CardContent sx={{ width: '100%' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                          <Avatar sx={{ backgroundColor: demo.color, mr: 2 }}>
-                            <Icon>{demo.icon}</Icon>
-                          </Avatar>
-                          <Typography variant="h5" component="div">
-                            {demo.title}
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2" color="text.secondary" paragraph>
-                          {demo.description}
-                        </Typography>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                          <Typography variant="caption" color={demo.color}>
-                            Click to launch demo
-                          </Typography>
-                          <Tooltip title={demo.status === "complete" ? "Demo is complete" : "Demo is under development"}>
-                            <Chip 
-                              label={demo.status === "complete" ? "Complete" : "In Progress"}
-                              size="small"
-                              color={demo.status === "complete" ? "success" : "warning"}
-                            />
-                          </Tooltip>
-                        </Box>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-            
-            <Box sx={{ textAlign: 'center', mt: 6, mb: 2, color: 'text.secondary' }}>
-              <Typography variant="body2">
-                These interactive demos are for educational purposes only.
-              </Typography>
-              <Typography variant="body2">
-                Explore the full SafeAI application for complete functionality.
-              </Typography>
-            </Box>
-          </Container>
-        </Box>
-      );
-    }
-
-    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#2196f3',
+          main: '#90caf9',
         },
         secondary: {
-          main: '#f50057',
+          main: '#f48fb1',
         },
         background: {
           default: '#121212',
-          paper: 'rgba(255, 255, 255, 0.05)',
-        },
-      },
-      components: {
-        MuiCard: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              borderRadius: 8,
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            },
-          },
-        },
-        MuiAppBar: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            },
-          },
+          paper: '#1e1e1e',
         },
       },
     });
+
+    function DemoIndex() {
+      const demos = [
+        {
+          id: 'agent-browser',
+          title: 'Agent Browser',
+          description: 'Browse and interact with AI agents',
+          icon: 'smart_toy',
+          link: 'agent-browser.html'
+        },
+        {
+          id: 'arc-prize',
+          title: 'ARC Prize',
+          description: 'Participate in the ARC Prize Challenge',
+          icon: 'emoji_events',
+          link: 'arc-prize.html'
+        },
+        {
+          id: 'knowledge-graphs',
+          title: 'Knowledge Graphs',
+          description: 'Explore and query knowledge graphs',
+          icon: 'account_tree',
+          link: 'knowledge-graphs.html'
+        },
+        {
+          id: 'dashboard',
+          title: 'Dashboard',
+          description: 'View system metrics and analytics',
+          icon: 'dashboard',
+          link: 'dashboard.html'
+        },
+        {
+          id: 'mathatp',
+          title: 'Math ATP',
+          description: 'Mathematical theorem proving',
+          icon: 'functions',
+          link: 'mathatp.html'
+        },
+        {
+          id: 'freepress',
+          title: 'FreePress',
+          description: 'Content moderation and analysis',
+          icon: 'newspaper',
+          link: 'freepress.html'
+        },
+        {
+          id: 'security-center',
+          title: 'Security Center',
+          description: 'Monitor and manage security settings',
+          icon: 'security',
+          link: 'security-center.html'
+        },
+        {
+          id: 'agent-workshop',
+          title: 'Agent Workshop',
+          description: 'Create and customize AI agents',
+          icon: 'code',
+          link: 'agent-workshop.html'
+        }
+      ];
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">apps</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                SafeAI Interactive Demos
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          <Grid container spacing={3}>
+            {demos.map((demo) => (
+              <Grid item xs={12} sm={6} md={4} key={demo.id}>
+                <Card 
+                  className="demo-card"
+                  onClick={() => window.location.href = demo.link}
+                >
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                        <span className="material-icons">{demo.icon}</span>
+                      </Avatar>
+                      <Typography variant="h6">{demo.title}</Typography>
+                    </Box>
+                    <Typography color="text.secondary">
+                      {demo.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      );
+    }
 
     // Render the app with ThemeProvider
     ReactDOM.render(

@@ -11,6 +11,8 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- D3.js for visualizations -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <!-- Force-Graph library -->
@@ -192,10 +194,13 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
-      IconButton, Icon, Button, CircularProgress, Divider, Chip, Avatar,
-      List, ListItem, ListItemIcon, ListItemText, LinearProgress,
-      createTheme, ThemeProvider, CssBaseline
+      Box, Typography, Button, Card, CardContent, 
+      Tabs, Tab, Grid, Divider, AppBar, Toolbar,
+      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
     // Create theme configuration
@@ -559,6 +564,24 @@
 
       return (
         <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">account_tree</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Knowledge Graphs
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+
           <Typography variant="h4" gutterBottom>
             Knowledge Graph Explorer
           </Typography>

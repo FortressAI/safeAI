@@ -11,405 +11,224 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
-  <!-- Chart.js for visualizations -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    .security-container {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      gap: 20px;
-      height: calc(100vh - 64px);
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
     }
-    
-    .sidebar {
-      background-color: rgba(255, 255, 255, 0.05);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .main-content {
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .metric-card {
-      background-color: rgba(255, 255, 255, 0.05);
+    .security-card {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      padding: 16px;
-      margin-bottom: 16px;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
-    
-    .metric-value {
+    .threat-level {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .threat-icon {
       font-size: 24px;
-      font-weight: 500;
-      margin: 8px 0;
     }
-    
-    .metric-label {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
-    }
-    
-    .chart-container {
-      height: 300px;
-      margin: 20px 0;
-    }
-    
-    .alert-list {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    
-    .alert-item {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .alert-item:last-child {
-      border-bottom: none;
-    }
-    
-    .alert-critical {
-      border-left: 4px solid #f44336;
-    }
-    
-    .alert-warning {
-      border-left: 4px solid #ff9800;
-    }
-    
-    .alert-info {
-      border-left: 4px solid #2196f3;
-    }
+    .threat-high { color: #f44336; }
+    .threat-medium { color: #ff9800; }
+    .threat-low { color: #4caf50; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
-      IconButton, Icon, Button, TextField, Select, MenuItem, FormControl,
-      InputLabel, Chip, Stack, Divider, Alert, List, ListItem, ListItemText,
-      ListItemIcon, Switch, FormControlLabel, Paper
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
-    // Sample security metrics
-    const securityMetrics = {
-      activeAgents: 42,
-      securityScore: 92,
-      threatsDetected: 3,
-      policyViolations: 1,
-      lastUpdate: new Date().toISOString()
-    };
-
-    // Sample security alerts
-    const securityAlerts = [
-      {
-        id: 1,
-        type: 'critical',
-        title: 'Unauthorized Access Attempt',
-        description: 'Multiple failed login attempts detected from IP 192.168.1.100',
-        timestamp: '2024-03-22T14:30:00Z',
-        status: 'active'
-      },
-      {
-        id: 2,
-        type: 'warning',
-        title: 'Policy Violation',
-        description: 'Agent "MathSolver" attempted to access restricted knowledge graph',
-        timestamp: '2024-03-22T14:25:00Z',
-        status: 'resolved'
-      },
-      {
-        id: 3,
-        type: 'info',
-        title: 'System Update',
-        description: 'Security policies updated to version 2.1.0',
-        timestamp: '2024-03-22T14:20:00Z',
-        status: 'completed'
-      }
-    ];
-
-    // Sample security policies
-    const securityPolicies = [
-      {
-        id: 1,
-        name: 'Access Control',
-        description: 'Restrict agent access to sensitive knowledge graphs',
-        enabled: true
-      },
-      {
-        id: 2,
-        name: 'Rate Limiting',
-        description: 'Limit API requests per agent',
-        enabled: true
-      },
-      {
-        id: 3,
-        name: 'Audit Logging',
-        description: 'Log all agent actions and decisions',
-        enabled: true
-      },
-      {
-        id: 4,
-        name: 'Content Filtering',
-        description: 'Filter potentially harmful content',
-        enabled: false
-      }
-    ];
-
-    function SecurityCenter() {
-      const [selectedPolicy, setSelectedPolicy] = React.useState(null);
-      const [chartData, setChartData] = React.useState(null);
-      const chartRef = React.useRef(null);
-
-      React.useEffect(() => {
-        // Initialize chart
-        if (chartRef.current) {
-          const ctx = chartRef.current.getContext('2d');
-          const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: ['1h', '2h', '3h', '4h', '5h', '6h'],
-              datasets: [{
-                label: 'Security Score',
-                data: [85, 88, 90, 92, 91, 92],
-                borderColor: '#2196f3',
-                tension: 0.4
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  max: 100,
-                  grid: {
-                    color: 'rgba(255, 255, 255, 0.1)'
-                  },
-                  ticks: {
-                    color: 'rgba(255, 255, 255, 0.7)'
-                  }
-                },
-                x: {
-                  grid: {
-                    color: 'rgba(255, 255, 255, 0.1)'
-                  },
-                  ticks: {
-                    color: 'rgba(255, 255, 255, 0.7)'
-                  }
-                }
-              }
-            }
-          });
-          setChartData(chart);
-        }
-      }, []);
-
-      const handlePolicyToggle = (policyId) => {
-        // Simulate policy toggle
-        console.log(`Toggling policy ${policyId}`);
-      };
-
-      const getAlertColor = (type) => {
-        switch (type) {
-          case 'critical': return '#f44336';
-          case 'warning': return '#ff9800';
-          case 'info': return '#2196f3';
-          default: return '#757575';
-        }
-      };
-
-      return (
-        <Box>
-          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <Icon>security</Icon>
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Security Center
-              </Typography>
-              <Button color="inherit" href="index.html">
-                Back to Demos
-              </Button>
-            </Toolbar>
-          </AppBar>
-          
-          <Container maxWidth={false} sx={{ mt: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={3}>
-                <Card className="sidebar">
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Security Metrics
-                    </Typography>
-                    <Stack spacing={2}>
-                      <div className="metric-card">
-                        <Typography className="metric-label">Active Agents</Typography>
-                        <Typography className="metric-value">{securityMetrics.activeAgents}</Typography>
-                      </div>
-                      <div className="metric-card">
-                        <Typography className="metric-label">Security Score</Typography>
-                        <Typography className="metric-value">{securityMetrics.securityScore}%</Typography>
-                      </div>
-                      <div className="metric-card">
-                        <Typography className="metric-label">Threats Detected</Typography>
-                        <Typography className="metric-value">{securityMetrics.threatsDetected}</Typography>
-                      </div>
-                      <div className="metric-card">
-                        <Typography className="metric-label">Policy Violations</Typography>
-                        <Typography className="metric-value">{securityMetrics.policyViolations}</Typography>
-                      </div>
-                    </Stack>
-                    
-                    <Divider sx={{ my: 3 }} />
-                    
-                    <Typography variant="h6" gutterBottom>
-                      Security Policies
-                    </Typography>
-                    <Stack spacing={2}>
-                      {securityPolicies.map((policy) => (
-                        <Card key={policy.id} sx={{ bgcolor: 'rgba(255,255,255,0.05)' }}>
-                          <CardContent>
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  checked={policy.enabled}
-                                  onChange={() => handlePolicyToggle(policy.id)}
-                                />
-                              }
-                              label={
-                                <Box>
-                                  <Typography variant="subtitle2">{policy.name}</Typography>
-                                  <Typography variant="caption" color="text.secondary">
-                                    {policy.description}
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Grid>
-              
-              <Grid item xs={12} md={9}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Security Score Trend
-                    </Typography>
-                    <div className="chart-container">
-                      <canvas ref={chartRef} />
-                    </div>
-                    
-                    <Divider sx={{ my: 3 }} />
-                    
-                    <Typography variant="h6" gutterBottom>
-                      Recent Alerts
-                    </Typography>
-                    <div className="alert-list">
-                      {securityAlerts.map((alert) => (
-                        <Paper
-                          key={alert.id}
-                          className={`alert-item alert-${alert.type}`}
-                          sx={{ mb: 1 }}
-                        >
-                          <ListItem>
-                            <ListItemIcon>
-                              <Icon sx={{ color: getAlertColor(alert.type) }}>
-                                {alert.type === 'critical' ? 'error' :
-                                 alert.type === 'warning' ? 'warning' : 'info'}
-                              </Icon>
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={alert.title}
-                              secondary={
-                                <Box>
-                                  <Typography variant="body2" color="text.secondary">
-                                    {alert.description}
-                                  </Typography>
-                                  <Typography variant="caption" color="text.secondary">
-                                    {new Date(alert.timestamp).toLocaleString()}
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                            <Chip
-                              label={alert.status}
-                              size="small"
-                              color={alert.status === 'active' ? 'error' : 'success'}
-                            />
-                          </ListItem>
-                        </Paper>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
-      );
-    }
-
-    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#2196f3',
+          main: '#90caf9',
         },
         secondary: {
-          main: '#f50057',
+          main: '#f48fb1',
         },
         background: {
           default: '#121212',
-          paper: 'rgba(255, 255, 255, 0.05)',
-        },
-      },
-      components: {
-        MuiCard: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              borderRadius: 8,
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            },
-          },
-        },
-        MuiAppBar: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            },
-          },
+          paper: '#1e1e1e',
         },
       },
     });
+
+    function SecurityCenter() {
+      const [selectedThreat, setSelectedThreat] = React.useState(null);
+      const [isAnalyzing, setIsAnalyzing] = React.useState(false);
+      const [analysisResult, setAnalysisResult] = React.useState(null);
+      const theme = useTheme();
+
+      const threats = [
+        {
+          id: 1,
+          title: 'Potential Data Breach',
+          description: 'Unusual network activity detected in the database server',
+          level: 'high',
+          timestamp: '2024-03-20 14:30',
+        },
+        {
+          id: 2,
+          title: 'Suspicious Login Attempts',
+          description: 'Multiple failed login attempts from unknown IP addresses',
+          level: 'medium',
+          timestamp: '2024-03-20 13:15',
+        },
+        {
+          id: 3,
+          title: 'Outdated Security Patches',
+          description: 'System requires security updates for critical vulnerabilities',
+          level: 'low',
+          timestamp: '2024-03-20 12:00',
+        },
+      ];
+
+      const handleThreatClick = (threat) => {
+        setSelectedThreat(threat);
+        setIsAnalyzing(true);
+        // Simulate analysis
+        setTimeout(() => {
+          setAnalysisResult({
+            risk: Math.random() * 100,
+            recommendations: [
+              'Implement additional network monitoring',
+              'Update security protocols',
+              'Conduct security audit',
+            ],
+          });
+          setIsAnalyzing(false);
+        }, 2000);
+      };
+
+      const getThreatIcon = (level) => {
+        switch (level) {
+          case 'high': return 'warning';
+          case 'medium': return 'error';
+          case 'low': return 'info';
+          default: return 'security';
+        }
+      };
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">security</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Security Center
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h5" gutterBottom>
+                Active Threats
+              </Typography>
+              {threats.map((threat) => (
+                <Card 
+                  key={threat.id} 
+                  className="security-card"
+                  onClick={() => handleThreatClick(threat)}
+                  sx={{ cursor: 'pointer', '&:hover': { opacity: 0.8 } }}
+                >
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <span className={`material-icons threat-icon threat-${threat.level}`}>
+                        {getThreatIcon(threat.level)}
+                      </span>
+                      <Typography variant="h6" sx={{ ml: 1 }}>
+                        {threat.title}
+                      </Typography>
+                    </Box>
+                    <Typography color="text.secondary">
+                      {threat.description}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                      {threat.timestamp}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              {selectedThreat && (
+                <Box>
+                  <Typography variant="h5" gutterBottom>
+                    Threat Analysis
+                  </Typography>
+                  <Card className="security-card">
+                    <CardContent>
+                      {isAnalyzing ? (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}>
+                          <CircularProgress />
+                          <Typography sx={{ mt: 2 }}>Analyzing threat...</Typography>
+                        </Box>
+                      ) : analysisResult ? (
+                        <Box>
+                          <Typography variant="h6" gutterBottom>
+                            Risk Level: {analysisResult.risk.toFixed(1)}%
+                          </Typography>
+                          <LinearProgress 
+                            variant="determinate" 
+                            value={analysisResult.risk} 
+                            sx={{ mb: 3 }}
+                          />
+                          <Typography variant="h6" gutterBottom>
+                            Recommendations:
+                          </Typography>
+                          <List>
+                            {analysisResult.recommendations.map((rec, index) => (
+                              <ListItem key={index}>
+                                <ListItemIcon>
+                                  <span className="material-icons">check_circle</span>
+                                </ListItemIcon>
+                                <ListItemText primary={rec} />
+                              </ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                </Box>
+              )}
+            </Grid>
+          </Grid>
+        </Box>
+      );
+    }
 
     // Render the app with ThemeProvider
     ReactDOM.render(

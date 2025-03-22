@@ -203,11 +203,11 @@
   <script type="text/babel">
     const { 
       Box, Typography, Button, Card, CardContent, 
-      Tabs, Tab, Grid, Divider, 
+      Tabs, Tab, Grid, Divider, AppBar, Toolbar,
       Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress,
       TextField, Dialog, DialogTitle, DialogContent, DialogActions,
-      List, ListItem, ListItemText, ListItemIcon, 
-      CircularProgress, Alert,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
       useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
@@ -342,7 +342,7 @@
     }
 
     // Agent Details Dialog Component
-    function AgentDetailsDialog({ agent, open, onClose }) {
+    function AgentDetailsDialog({ agent, open, onClose, closeIcon }) {
       if (!agent) return null;
 
       return (
@@ -419,7 +419,7 @@
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose}>{closeIcon || 'Close'}</Button>
           </DialogActions>
         </Dialog>
       );
@@ -517,9 +517,23 @@
 
       return (
         <Box sx={{ p: 3 }}>
-          <Typography variant="h4" gutterBottom>
-            Agent Browser
-          </Typography>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">info</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Agent Browser
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
 
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -535,6 +549,9 @@
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-bar"
+              InputProps={{
+                startAdornment: <span className="material-icons" style={{ marginRight: 8, color: 'rgba(255, 255, 255, 0.7)' }}>search</span>
+              }}
             />
           </Box>
 
@@ -576,6 +593,7 @@
             agent={selectedAgent}
             open={!!selectedAgent}
             onClose={() => setSelectedAgent(null)}
+            closeIcon={<span className="material-icons">close</span>}
           />
         </Box>
       );

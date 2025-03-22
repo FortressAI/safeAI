@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Press - SafeAI Interactive Demos</title>
+  <title>FreePress - SafeAI Interactive Demos</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -13,6 +13,7 @@
   <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
   <!-- Chart.js for visualizations -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
@@ -91,10 +92,13 @@
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
-      IconButton, Icon, Button, TextField, Select, MenuItem, FormControl,
-      InputLabel, Chip, Stack, Divider, Alert, List, ListItem, ListItemText,
-      ListItemIcon, Paper, Tabs, Tab
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
     // Sample articles
@@ -237,22 +241,20 @@
       );
 
       return (
-        <Box>
-          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
             <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <Icon>article</Icon>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">newspaper</span>
               </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Free Press
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                FreePress
               </Typography>
-              <Button color="inherit" href="index.html">
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
                 Back to Demos
               </Button>
             </Toolbar>
