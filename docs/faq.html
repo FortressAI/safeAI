@@ -10,9 +10,11 @@
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="css/shared-demo.css" />
   <style>
     body { 
       margin: 0; 
@@ -50,13 +52,52 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
-      Box, Typography, Container, AppBar, Toolbar, 
-      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
-      ListItemIcon, Icon, Accordion, AccordionSummary, AccordionDetails,
-      Chip, TextField, InputAdornment
+      Box, Typography, Container, Card, CardContent, 
+      Grid, AppBar, Toolbar, IconButton, Button, 
+      Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Chip, Alert, Accordion, AccordionSummary,
+      AccordionDetails, useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
+
+    // Create theme configuration
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#2196f3',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
+        },
+      },
+    });
 
     // Material icon names
     const ICONS = {
@@ -376,8 +417,14 @@
       );
     }
 
-    // Render the application
-    ReactDOM.render(<FAQ />, document.getElementById('root'));
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <FAQ />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
   </script>
 </body>
 </html> 
