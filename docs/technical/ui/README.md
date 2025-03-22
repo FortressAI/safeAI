@@ -1,90 +1,112 @@
-# UI Documentation
+# SafeAI UI Technical Documentation
 ---
-breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [UI](../technical/ui/README.md)
+breadcrumb: [Home](../README.md) > [Technical Documentation](../technical/README.md) > [UI Documentation](../technical/ui/README.md)
 ---
 
 ## Overview
-This directory contains comprehensive documentation for the SafeAI platform's user interface components, implementation guides, and best practices.
+The SafeAI UI is built using modern web technologies and follows best practices for accessibility, performance, and maintainability. This documentation provides comprehensive details about the UI architecture, components, and development guidelines.
 
 ## Directory Structure
-```
-ui/
-├── README.md                 # This file
-├── ui-implementation.md      # UI implementation guide
-├── ui-components.md         # UI component documentation
-├── ui-workflows.md          # UI workflow documentation
-└── ui-best-practices.md     # UI development best practices
-```
 
-## Getting Started
+### Core Components
+- [UI Architecture](ui-architecture.md)
+- [Component Library](component-library.md)
+- [Design System](design-system.md)
+- [State Management](state-management.md)
+- [Routing](routing.md)
 
-### For UI Developers
-1. Review the [UI Implementation Guide](ui-implementation.md) for core concepts
-2. Study [UI Components](ui-components.md) for available components
-3. Follow [UI Best Practices](ui-best-practices.md) for development guidelines
-4. Reference [UI Workflows](ui-workflows.md) for user interaction patterns
+### Features
+- [Agent Management Interface](agent-management.md)
+- [Knowledge Graph Explorer](knowledge-graph-explorer.md)
+- [Content Publishing](content-publishing.md)
+- [Security Dashboard](security-dashboard.md)
+- [Token Management](token-management.md)
 
-### For Frontend Engineers
-1. Start with the [UI Implementation Guide](ui-implementation.md)
-2. Review component architecture in [UI Components](ui-components.md)
-3. Understand user flows in [UI Workflows](ui-workflows.md)
-4. Follow guidelines in [UI Best Practices](ui-best-practices.md)
+### Specialized Interfaces
+- [Math ATP Interface](math-atp-interface.md)
+- [ARC Prize Interface](arc-prize-interface.md)
+- [FreePress Editor](freepress-editor.md)
 
-### For Designers
-1. Review [UI Workflows](ui-workflows.md) for user interaction patterns
-2. Study [UI Components](ui-components.md) for available design elements
-3. Follow [UI Best Practices](ui-best-practices.md) for design guidelines
-4. Reference [UI Implementation Guide](ui-implementation.md) for technical constraints
+## Technology Stack
 
-## UI Standards
+### Frontend Framework
+- React 18 with TypeScript
+- Redux Toolkit for state management
+- React Router for navigation
+- Styled Components for styling
+- Web3.js for blockchain integration
 
-### Component Architecture
-```mermaid
-graph TD
-    A[UI Layer] --> B[Component Library]
-    B --> C[Core Components]
-    B --> D[Custom Components]
-    A --> E[State Management]
-    E --> F[Redux Store]
-    E --> G[Context API]
-```
+### Development Tools
+- Vite for build tooling
+- ESLint for code linting
+- Prettier for code formatting
+- Jest for unit testing
+- Cypress for E2E testing
 
-### Design System
-- Color Palette
-- Typography
-- Spacing
-- Component Variants
-- Animation Guidelines
+### Design Tools
+- Figma for design files
+- Storybook for component documentation
+- Chromatic for visual testing
 
-### Accessibility
-- WCAG 2.1 Compliance
-- Screen Reader Support
-- Keyboard Navigation
-- Color Contrast
-- Focus Management
+## Component Architecture
 
-## Development Guidelines
-
-### Code Style
+### Base Components
 ```typescript
-// Component Structure
-import React from 'react';
-import { ComponentProps } from './types';
+// Example base component structure
+interface BaseComponentProps {
+  className?: string;
+  children?: React.ReactNode;
+  // ... other common props
+}
 
-export const Component: React.FC<ComponentProps> = ({
-  prop1,
-  prop2,
+const BaseComponent: React.FC<BaseComponentProps> = ({
+  className,
+  children,
   ...props
 }) => {
   // Implementation
 };
 ```
 
-### State Management
+### Layout Components
 ```typescript
-// Redux Slice Example
-const uiSlice = createSlice({
-  name: 'ui',
+// Example layout component
+interface LayoutProps {
+  header?: React.ReactNode;
+  sidebar?: React.ReactNode;
+  main: React.ReactNode;
+  footer?: React.ReactNode;
+}
+```
+
+### Feature Components
+```typescript
+// Example feature component
+interface FeatureComponentProps {
+  data: FeatureData;
+  onAction: (action: FeatureAction) => void;
+  // ... feature-specific props
+}
+```
+
+## State Management
+
+### Redux Store Structure
+```typescript
+interface RootState {
+  agents: AgentState;
+  knowledgeGraph: KnowledgeGraphState;
+  content: ContentState;
+  security: SecurityState;
+  ui: UIState;
+}
+```
+
+### State Slices
+```typescript
+// Example state slice
+const agentSlice = createSlice({
+  name: 'agents',
   initialState,
   reducers: {
     // Reducers
@@ -92,25 +114,182 @@ const uiSlice = createSlice({
 });
 ```
 
-### Performance Optimization
-- Code Splitting
-- Lazy Loading
-- Memoization
-- Bundle Optimization
-- Image Optimization
+## Routing
 
-## Support
-For UI-related questions or issues:
-- Create an issue in the UI repository
-- Contact the UI team at ui@safeai.com
-- Join the UI development channel in Slack
+### Route Structure
+```typescript
+const routes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: 'agents',
+        element: <AgentManagement />
+      },
+      // ... other routes
+    ]
+  }
+];
+```
+
+## Performance Optimization
+
+### Code Splitting
+```typescript
+// Example lazy loading
+const AgentManagement = lazy(() => import('./pages/AgentManagement'));
+```
+
+### Memoization
+```typescript
+// Example memoized component
+const MemoizedComponent = memo(Component, (prevProps, nextProps) => {
+  // Custom comparison logic
+});
+```
+
+## Accessibility
+
+### ARIA Implementation
+```typescript
+// Example accessible component
+const AccessibleButton: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  ...props
+}) => (
+  <button
+    aria-label={label}
+    onClick={onClick}
+    {...props}
+  />
+);
+```
+
+### Keyboard Navigation
+```typescript
+// Example keyboard navigation
+const useKeyboardNavigation = (options: KeyboardOptions) => {
+  // Implementation
+};
+```
+
+## Testing
+
+### Unit Tests
+```typescript
+// Example component test
+describe('Component', () => {
+  it('should render correctly', () => {
+    // Test implementation
+  });
+});
+```
+
+### Integration Tests
+```typescript
+// Example integration test
+describe('Feature Integration', () => {
+  it('should handle user interactions', () => {
+    // Test implementation
+  });
+});
+```
+
+## Development Guidelines
+
+### Code Style
+- Use functional components with hooks
+- Implement proper TypeScript types
+- Follow atomic design principles
+- Maintain consistent naming conventions
+
+### Component Organization
+- Group related components
+- Use index files for exports
+- Maintain clear component hierarchy
+- Document component props
+
+### State Management
+- Use Redux for global state
+- Implement proper error handling
+- Follow immutable state patterns
+- Use selectors for data access
+
+### Performance
+- Implement proper memoization
+- Use lazy loading for routes
+- Optimize bundle size
+- Monitor performance metrics
+
+## Deployment
+
+### Build Process
+```bash
+# Example build commands
+npm run build
+npm run test
+npm run lint
+```
+
+### Environment Configuration
+```typescript
+// Example environment config
+interface EnvironmentConfig {
+  apiUrl: string;
+  blockchainUrl: string;
+  // ... other config
+}
+```
+
+## Monitoring
+
+### Error Tracking
+```typescript
+// Example error boundary
+class ErrorBoundary extends React.Component {
+  // Implementation
+}
+```
+
+### Performance Monitoring
+```typescript
+// Example performance tracking
+const usePerformanceTracking = (componentName: string) => {
+  // Implementation
+};
+```
 
 ## Contributing
-1. Follow the UI development guidelines
-2. Write tests for new components
-3. Update documentation
-4. Submit pull requests for review
+
+### Development Workflow
+1. Create feature branch
+2. Implement changes
+3. Add tests
+4. Update documentation
+5. Submit pull request
+
+### Code Review Guidelines
+- Review component structure
+- Check accessibility
+- Verify performance
+- Validate tests
+
+## Support
+
+### Troubleshooting
+- Check component logs
+- Verify state updates
+- Monitor performance
+- Review error boundaries
+
+### Resources
+- [Component Library Documentation](./component-library.md)
+- [Design System Guide](./design-system.md)
+- [State Management Guide](./state-management.md)
+- [Testing Guide](./testing.md)
 
 ---
-Last Updated: March 2024
-© 2024 SafeAI. All rights reserved. 
+*Last updated: March 2024*
+Copyright © 2024 SafeAI. All rights reserved. 
