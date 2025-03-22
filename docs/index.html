@@ -10,11 +10,12 @@
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
   <!-- Search functionality -->
   <script src="https://unpkg.com/lunr/lunr.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="css/shared-demo.css" />
   <style>
     body { 
       margin: 0; 
@@ -112,7 +113,6 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
       Box, Typography, Container, Card, CardContent, CardActionArea, 
       Grid, AppBar, Toolbar, IconButton, Button, Divider, Paper,
@@ -310,19 +310,41 @@
       { title: "FAQ", icon: ICONS.QUESTION_ANSWER, link: "faq.html" }
     ];
 
-    // Custom theme
+    // Create theme configuration
     const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
-          main: '#3f51b5',
+          main: '#2196f3',
         },
         secondary: {
           main: '#f50057',
         },
         background: {
           default: '#121212',
-          paper: '#1e1e1e',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
         },
       },
     });
@@ -544,8 +566,14 @@
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<DocHome />);
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <DocHome />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
   </script>
 </body>
 </html> 

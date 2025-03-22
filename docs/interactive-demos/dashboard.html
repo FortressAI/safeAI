@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - SafeAI Interactive Demos</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
@@ -613,13 +613,13 @@
       );
     }
 
-    // Render the application with theme provider
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(
+    // Render the app with ThemeProvider
+    ReactDOM.render(
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Dashboard />
-      </ThemeProvider>
+      </ThemeProvider>,
+      document.getElementById('root')
     );
   </script>
 </body>
