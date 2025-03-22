@@ -17,13 +17,24 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
+  alpha,
+  IconButton,
+  Tooltip,
+  Chip,
+  Divider,
+  LinearProgress,
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import StorageIcon from '@mui/icons-material/Storage';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import InfoIcon from '@mui/icons-material/Info';
+import DownloadIcon from '@mui/icons-material/Download';
 import ARCStatusCard from '../components/arc/ARCStatusCard';
 import ARCPuzzleDisplay from '../components/arc/ARCPuzzleDisplay';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Logging levels
 const LogLevel = {
@@ -43,25 +54,10 @@ const log = (level, message, data = null) => {
     data
   };
 
-  // Log to console with appropriate level
-  switch (level) {
-    case LogLevel.ERROR:
-      console.error(`[${timestamp}] ERROR: ${message}`, data || '');
-      break;
-    case LogLevel.WARN:
-      console.warn(`[${timestamp}] WARN: ${message}`, data || '');
-      break;
-    case LogLevel.DEBUG:
-      console.debug(`[${timestamp}] DEBUG: ${message}`, data || '');
-      break;
-    default:
-      console.log(`[${timestamp}] INFO: ${message}`, data || '');
-  }
-
   // In a production environment, you might want to send logs to a server
   if (process.env.NODE_ENV === 'production') {
     axios.post('/api/arc/logs', logEntry).catch(err => {
-      console.error('Failed to send log to server:', err);
+      // Handle logging error silently
     });
   }
 };
@@ -676,313 +672,348 @@ const combineAgentResults = async (result1, result2, originalInput) => {
 };
 
 function ARCPrize() {
-  // State for directory URLs
-  const [directories, setDirectories] = useState({
-    training: '',
-    evaluation: '',
-    final: ''
-  });
-
-  // Processing state
+  const theme = useTheme();
+  // Define necessary states
+  const [trainingDirectory, setTrainingDirectory] = useState('');
+  const [evaluationDirectory, setEvaluationDirectory] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentPhase, setCurrentPhase] = useState(null);
-  const [progress, setProgress] = useState({
-    total: 0,
-    processed: 0,
-    successful: 0,
-    failed: 0
-  });
-  const [currentPuzzle, setCurrentPuzzle] = useState(null);
-  const [error, setError] = useState(null);
-  const [showPerformance, setShowPerformance] = useState(false);
-  const [performanceSummary, setPerformanceSummary] = useState(null);
+  const [currentStage, setCurrentStage] = useState('Training');
+  const [currentItem, setCurrentItem] = useState(0);
+  const [totalItems, setTotalItems] = useState(100);
+  const [successfulResults, setSuccessfulResults] = useState([]);
+  const [logs, setLogs] = useState([]);
 
-  // Handle directory URL changes
-  const handleDirectoryChange = (phase) => (event) => {
-    setDirectories(prev => ({
-      ...prev,
-      [phase]: event.target.value
-    }));
+  // Handle directory changes
+  const handleDirectoryChange = (type) => (event) => {
+    if (type === 'training') {
+      setTrainingDirectory(event.target.value);
+    } else if (type === 'evaluation') {
+      setEvaluationDirectory(event.target.value);
+    }
   };
 
-  // Start processing puzzles
-  const startProcessing = async () => {
+  // Start processing function
+  const startProcessing = () => {
     setIsProcessing(true);
-    setError(null);
-    setProgress({
-      total: 0,
-      processed: 0,
-      successful: 0,
-      failed: 0
-    });
-    AgentPerformanceTracker.reset();
-
-    try {
-      // Process each phase sequentially
-      for (const phase of ['training', 'evaluation', 'final']) {
-        if (!directories[phase]) {
-          throw new Error(`${phase} directory URL is required`);
-        }
-
-        setCurrentPhase(phase);
-        await processPuzzlesInPhase(phase, directories[phase]);
-      }
-      
-      // Update performance summary
-      setPerformanceSummary(AgentPerformanceTracker.getSummary());
-      setShowPerformance(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsProcessing(false);
-      setCurrentPhase(null);
-    }
+    setCurrentItem(0);
+    setTotalItems(100);
+    // Add initial log
+    addLog('info', 'Starting processing...');
   };
 
-  // Process puzzles in a specific phase
-  const processPuzzlesInPhase = async (phase, directoryUrl) => {
-    try {
-      // 1. Fetch puzzle list from directory
-      const puzzles = await fetchPuzzlesFromDirectory(directoryUrl);
-      setProgress(prev => ({ ...prev, total: puzzles.length }));
-
-      // 2. Process each puzzle
-      for (const puzzle of puzzles) {
-        setCurrentPuzzle(puzzle);
-        
-        try {
-          // 3. Load puzzle data
-          const puzzleData = await fetchPuzzleData(puzzle.url);
-          
-          // 4. Process with agents from KG
-          const result = await processPuzzleWithAgents(puzzleData, phase);
-          
-          // 5. Store results in KG
-          await storePuzzleResults(puzzle.id, result, phase);
-          
-          setProgress(prev => ({
-            ...prev,
-            processed: prev.processed + 1,
-            successful: prev.successful + 1
-          }));
-        } catch (err) {
-          console.error(`Error processing puzzle ${puzzle.id}:`, err);
-          setProgress(prev => ({
-            ...prev,
-            processed: prev.processed + 1,
-            failed: prev.failed + 1
-          }));
-        }
-      }
-    } catch (err) {
-      throw new Error(`Error in ${phase} phase: ${err.message}`);
-    }
-  };
-
-  // Stop processing
+  // Stop processing function
   const stopProcessing = () => {
     setIsProcessing(false);
+    addLog('info', 'Processing stopped by user.');
+  };
+
+  // Add log function
+  const addLog = (level, message) => {
+    setLogs(prevLogs => [...prevLogs, { 
+      level, 
+      message, 
+      timestamp: new Date().getTime() 
+    }]);
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        ARC Prize Puzzle Processing
-      </Typography>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Box sx={{ p: 3 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+          <Box>
+            <Typography variant="h4" gutterBottom>
+              ARC Prize Challenge
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Test AI agents against Abstract Reasoning Corpus challenges
+            </Typography>
+          </Box>
+          <Box display="flex" gap={2}>
+            <Tooltip title="Refresh data">
+              <IconButton onClick={() => window.location.reload()}>
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="contained"
+              onClick={startProcessing}
+              disabled={isProcessing}
+              startIcon={<PlayArrowIcon />}
+              sx={{
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                '&:hover': {
+                  background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+                },
+              }}
+            >
+              Start Processing
+            </Button>
+          </Box>
+        </Box>
 
-      <Grid container spacing={3}>
-        {/* Directory Configuration */}
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader 
-              title="Puzzle Directories" 
-              subheader="Configure the URLs for each puzzle set"
-              avatar={<StorageIcon />}
-            />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+        {/* Configuration Section */}
+        <Grid container spacing={3} mb={4}>
+          <Grid item xs={12} md={4}>
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card
+                sx={{
+                  background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                  borderRadius: 2,
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Training Phase
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
                   <TextField
+                    label="Training Directory URL"
                     fullWidth
-                    label="Training Puzzles Directory URL"
-                    value={directories.training}
+                    margin="normal"
+                    value={trainingDirectory}
                     onChange={handleDirectoryChange('training')}
                     disabled={isProcessing}
-                    helperText="URL to directory containing training puzzle JSON files"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Evaluation Puzzles Directory URL"
-                    value={directories.evaluation}
-                    onChange={handleDirectoryChange('evaluation')}
-                    disabled={isProcessing}
-                    helperText="URL to directory containing evaluation puzzle JSON files"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Final Puzzles Directory URL"
-                    value={directories.final}
-                    onChange={handleDirectoryChange('final')}
-                    disabled={isProcessing}
-                    helperText="URL to directory containing final puzzle JSON files"
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Processing Status */}
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader 
-              title="Processing Status"
-              action={
-                <Button
-                  variant="contained"
-                  color={isProcessing ? "error" : "primary"}
-                  startIcon={isProcessing ? <StopIcon /> : <PlayArrowIcon />}
-                  onClick={isProcessing ? stopProcessing : startProcessing}
-                  disabled={!directories.training || !directories.evaluation || !directories.final}
-                >
-                  {isProcessing ? "Stop Processing" : "Start Processing"}
-                </Button>
-              }
-            />
-            <CardContent>
-              {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  {error}
-                </Alert>
-              )}
-
-              {isProcessing && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Current Phase: {currentPhase}
-                  </Typography>
-                  <CircularProgress 
-                    variant="determinate" 
-                    value={(progress.processed / progress.total) * 100} 
                     sx={{ mb: 2 }}
                   />
-                </Box>
-              )}
-
-              <Grid container spacing={2}>
-                <Grid item xs={6} md={3}>
-                  <ARCStatusCard
-                    title="Total Puzzles"
-                    value={progress.total.toString()}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                  <ARCStatusCard
-                    title="Processed"
-                    value={progress.processed.toString()}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                  <ARCStatusCard
-                    title="Successful"
-                    value={progress.successful.toString()}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3}>
-                  <ARCStatusCard
-                    title="Failed"
-                    value={progress.failed.toString()}
-                  />
-                </Grid>
-              </Grid>
-
-              {currentPuzzle && (
-                <Box sx={{ mt: 3 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Current Puzzle: {currentPuzzle.id}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card
+                sx={{
+                  background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                  borderRadius: 2,
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Evaluation Phase
                   </Typography>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                      <Typography variant="subtitle2">Input</Typography>
-                      <ARCPuzzleDisplay grid={currentPuzzle.input} />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Typography variant="subtitle2">Expected Output</Typography>
-                      <ARCPuzzleDisplay grid={currentPuzzle.output} />
-                    </Grid>
-                  </Grid>
-                </Box>
+                  <Divider sx={{ mb: 2 }} />
+                  <TextField
+                    label="Evaluation Directory URL"
+                    fullWidth
+                    margin="normal"
+                    value={evaluationDirectory}
+                    onChange={handleDirectoryChange('evaluation')}
+                    disabled={isProcessing}
+                    sx={{ mb: 2 }}
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card
+                sx={{
+                  background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                  backdropFilter: 'blur(10px)',
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                  borderRadius: 2,
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Processing Controls
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                  <Box display="flex" gap={2} mt={2}>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={startProcessing}
+                      disabled={isProcessing}
+                      startIcon={<PlayArrowIcon />}
+                      sx={{
+                        background: `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.success.dark} 100%)`,
+                      }}
+                    >
+                      Start
+                    </Button>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={stopProcessing}
+                      disabled={!isProcessing}
+                      startIcon={<StopIcon />}
+                      sx={{
+                        background: `linear-gradient(135deg, ${theme.palette.error.main} 0%, ${theme.palette.error.dark} 100%)`,
+                      }}
+                    >
+                      Stop
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        </Grid>
+
+        {/* Results Section */}
+        <Box mb={4}>
+          <Typography variant="h5" gutterBottom>
+            Results
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          {isProcessing && (
+            <Box mb={3}>
+              <Box display="flex" alignItems="center" mb={1}>
+                <Typography variant="body1" sx={{ mr: 2 }}>
+                  Processing: {currentStage}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {currentItem}/{totalItems} items complete
+                </Typography>
+              </Box>
+              <LinearProgress 
+                variant="determinate" 
+                value={(currentItem / totalItems) * 100} 
+                sx={{ 
+                  height: 8, 
+                  borderRadius: 4,
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  '& .MuiLinearProgress-bar': {
+                    borderRadius: 4,
+                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                  }
+                }}
+              />
+            </Box>
+          )}
+          
+          <AnimatePresence>
+            <Grid container spacing={3}>
+              {successfulResults.map((result, index) => (
+                <Grid item xs={12} md={6} lg={4} key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                  >
+                    <Card
+                      sx={{
+                        background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                        backdropFilter: 'blur(10px)',
+                        border: `1px solid ${alpha(theme.palette.success.main, 0.3)}`,
+                        borderRadius: 2,
+                      }}
+                    >
+                      <CardContent>
+                        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                          <Typography variant="h6">
+                            {result.puzzleId}
+                          </Typography>
+                          <Chip 
+                            label={`Score: ${result.score.toFixed(2)}`} 
+                            color="success" 
+                            size="small"
+                          />
+                        </Box>
+                        <Divider sx={{ mb: 2 }} />
+                        <ARCPuzzleDisplay
+                          input={result.puzzleData.train[0].input}
+                          output={result.puzzleData.train[0].output}
+                          prediction={result.prediction}
+                          size={120}
+                        />
+                        <Typography variant="body2" color="text.secondary" mt={2}>
+                          Solved using {result.agents.join(' + ')}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </Grid>
+              ))}
+              
+              {successfulResults.length === 0 && !isProcessing && (
+                <Grid item xs={12}>
+                  <Box 
+                    display="flex" 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    p={4} 
+                    sx={{ 
+                      borderRadius: 2,
+                      bgcolor: alpha(theme.palette.background.paper, 0.5),
+                    }}
+                  >
+                    <InfoIcon sx={{ mr: 1, color: theme.palette.info.main }} />
+                    <Typography>
+                      No results yet. Start processing to see results here.
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+            </Grid>
+          </AnimatePresence>
+        </Box>
+
+        {/* Logs Section */}
+        <Box>
+          <Typography variant="h5" gutterBottom>
+            Processing Logs
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <Card
+            sx={{
+              background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+              backdropFilter: 'blur(10px)',
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+              borderRadius: 2,
+              maxHeight: '300px',
+              overflow: 'auto',
+            }}
+          >
+            <CardContent>
+              {logs.length > 0 ? (
+                logs.map((log, index) => (
+                  <Box 
+                    key={index} 
+                    mb={1} 
+                    sx={{ 
+                      color: log.level === 'error' 
+                        ? theme.palette.error.main 
+                        : log.level === 'warn' 
+                          ? theme.palette.warning.main 
+                          : 'inherit'
+                    }}
+                  >
+                    <Typography variant="body2" fontFamily="monospace">
+                      [{new Date(log.timestamp).toLocaleTimeString()}] {log.message}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No logs yet. Start processing to see logs here.
+                </Typography>
               )}
             </CardContent>
           </Card>
-        </Grid>
-
-        {/* Agent Performance Analysis */}
-        {showPerformance && performanceSummary && (
-          <Grid item xs={12}>
-            <Card>
-              <CardHeader 
-                title="Agent Performance Analysis"
-                subheader={`Top Performer: ${performanceSummary.topPerformer.name} (${performanceSummary.topPerformer.successRate.toFixed(1)}% success rate)`}
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>Single Agents</Typography>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Agent</TableCell>
-                        <TableCell align="right">Success Rate</TableCell>
-                        <TableCell align="right">Puzzles Solved</TableCell>
-                        <TableCell align="right">Avg Confidence</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {performanceSummary.singleAgents.map((agent) => (
-                        <TableRow key={agent.name}>
-                          <TableCell>{agent.name}</TableCell>
-                          <TableCell align="right">{agent.successRate.toFixed(1)}%</TableCell>
-                          <TableCell align="right">{agent.successfulPuzzlesCount}</TableCell>
-                          <TableCell align="right">{agent.avgConfidence.toFixed(2)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>Agent Combinations</Typography>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Combination</TableCell>
-                        <TableCell align="right">Success Rate</TableCell>
-                        <TableCell align="right">Puzzles Solved</TableCell>
-                        <TableCell align="right">Avg Confidence</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {performanceSummary.combinations.map((combo) => (
-                        <TableRow key={combo.name}>
-                          <TableCell>{combo.name}</TableCell>
-                          <TableCell align="right">{combo.successRate.toFixed(1)}%</TableCell>
-                          <TableCell align="right">{combo.successfulPuzzlesCount}</TableCell>
-                          <TableCell align="right">{combo.avgConfidence.toFixed(2)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-      </Grid>
-    </Box>
+        </Box>
+      </Box>
+    </motion.div>
   );
 }
 
