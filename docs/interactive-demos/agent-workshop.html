@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Workshop - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .tutorial-section {
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      overflow-x: auto;
+      color: #e6e6e6;
+    }
+    .tab-content {
+      padding: 15px 0;
+    }
+    .code-editor {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      min-height: 200px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Tabs, Tab, Grid, Divider, 
+      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, MenuItem, Select, FormControl, InputLabel
+    } = MaterialUI;
+
+    // Sample knowledge graph data
+    const knowledgeGraphs = [
+      { id: 1, name: 'Mathematics', numNodes: '1.2M', numEdges: '3.5M' },
+      { id: 2, name: 'Ethics', numNodes: '850K', numEdges: '2.1M' },
+      { id: 3, name: 'Physics', numNodes: '1.5M', numEdges: '4.2M' }
+    ];
+
+    // Sample capabilities
+    const capabilities = [
+      'Theorem proving',
+      'Equation solving',
+      'Ethical reasoning',
+      'Risk assessment',
+      'Knowledge extraction',
+      'Pattern recognition'
+    ];
+
+    // Main tutorial component
+    function AgentWorkshopTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+      const [agentName, setAgentName] = React.useState('');
+      const [selectedKG, setSelectedKG] = React.useState('');
+      const [selectedCapabilities, setSelectedCapabilities] = React.useState([]);
+      const [agentCode, setAgentCode] = React.useState('function processInput(input) {\n  // Your agent logic here\n  return {\n    result: null,\n    confidence: 0.0,\n    explanation: ""\n  };\n}');
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      const handleCapabilityToggle = (capability) => {
+        if (selectedCapabilities.includes(capability)) {
+          setSelectedCapabilities(selectedCapabilities.filter(c => c !== capability));
+        } else {
+          setSelectedCapabilities([...selectedCapabilities, capability]);
+        }
+      };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            Agent Workshop - Interactive Tutorial
+          </Typography>
+          
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange}
+            sx={{ mb: 3 }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+          
+          {/* Overview Tab */}
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What is the Agent Workshop?</Typography>
+                <Typography variant="body1" paragraph>
+                  The Agent Workshop is a powerful environment for creating, training, and testing AI agents 
+                  in the SafeAI ecosystem. It provides tools to develop agents that leverage knowledge graphs,
+                  implement specific capabilities, and can be validated against test scenarios.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <Grid container spacing={2}>
+                  {['Agent Creation', 'Knowledge Integration', 'Capability Definition', 'Testing & Validation'].map((item, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{item}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Components Tab */}
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Agent Workshop Components</Typography>
+                <Typography variant="body1" paragraph>
+                  The Agent Workshop consists of several key components for creating and testing agents.
+                </Typography>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Agent Configuration Panel:</Typography>
+                <Card sx={{ maxWidth: 500, bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>Agent Configuration</Typography>
+                    <TextField 
+                      label="Agent Name" 
+                      variant="outlined" 
+                      fullWidth 
+                      size="small"
+                      sx={{ mb: 2 }}
+                    />
+                    <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                      <InputLabel>Knowledge Graph</InputLabel>
+                      <Select label="Knowledge Graph">
+                        <MenuItem value="mathematics">Mathematics</MenuItem>
+                        <MenuItem value="ethics">Ethics</MenuItem>
+                        <MenuItem value="physics">Physics</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Typography variant="body2" gutterBottom>Capabilities:</Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {['Theorem proving', 'Equation solving', 'Pattern recognition'].map((cap) => (
+                        <Chip 
+                          key={cap} 
+                          label={cap} 
+                          size="small"
+                          onClick={() => {}}
+                        />
+                      ))}
+                    </Box>
+                  </CardContent>
+                </Card>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Code Editor:</Typography>
+                <Card sx={{ maxWidth: 500, bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>Agent Code</Typography>
+                    <div className="code-editor">
+                      <pre>
+{`function processInput(input) {
+  // Your agent logic here
+  return {
+    result: null,
+    confidence: 0.0,
+    explanation: ""
+  };
+}`}
+                      </pre>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          {/* Live Demo Tab */}
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>
+                  Agent Workshop Live Demo
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Configure Agent</Typography>
+                        <TextField 
+                          label="Agent Name" 
+                          variant="outlined" 
+                          fullWidth 
+                          size="small"
+                          sx={{ mb: 2 }}
+                          value={agentName}
+                          onChange={(e) => setAgentName(e.target.value)}
+                        />
+                        <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                          <InputLabel>Knowledge Graph</InputLabel>
+                          <Select 
+                            label="Knowledge Graph"
+                            value={selectedKG}
+                            onChange={(e) => setSelectedKG(e.target.value)}
+                          >
+                            {knowledgeGraphs.map(kg => (
+                              <MenuItem key={kg.id} value={kg.name}>{kg.name}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                        <Typography variant="body2" gutterBottom>Capabilities:</Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                          {capabilities.map((cap) => (
+                            <Chip 
+                              key={cap} 
+                              label={cap} 
+                              size="small"
+                              color={selectedCapabilities.includes(cap) ? 'primary' : 'default'}
+                              onClick={() => handleCapabilityToggle(cap)}
+                            />
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Agent Code</Typography>
+                        <TextField
+                          multiline
+                          rows={10}
+                          fullWidth
+                          value={agentCode}
+                          onChange={(e) => setAgentCode(e.target.value)}
+                          InputProps={{
+                            style: { 
+                              fontFamily: 'monospace', 
+                              fontSize: '14px',
+                              backgroundColor: '#1e1e1e',
+                              color: '#e6e6e6' 
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="contained" 
+                          color="primary" 
+                          sx={{ mt: 2 }}
+                          disabled={!agentName || !selectedKG || selectedCapabilities.length === 0}
+                        >
+                          Create Agent
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Code Examples Tab */}
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Let's look at some of the key code examples from the Agent Workshop.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Agent Creation Function:</Typography>
+                <div className="code-block">
+                  {`const createAgent = async (agentData) => {
+  try {
+    const { name, knowledgeGraph, capabilities, code } = agentData;
+    
+    // Validate agent configuration
+    if (!name || !knowledgeGraph || capabilities.length === 0 || !code) {
+      throw new Error('Invalid agent configuration');
+    }
+    
+    // Validate agent code structure
+    if (!code.includes('function processInput') || !code.includes('return')) {
+      throw new Error('Invalid agent code structure');
+    }
+    
+    // Request to create agent
+    const response = await axios.post('/api/agents', {
+      name,
+      knowledgeGraph,
+      capabilities,
+      code,
+      version: '1.0.0',
+      created: new Date().toISOString()
+    });
+    
+    return {
+      success: true,
+      agent: response.data
+    };
+  } catch (error) {
+    console.error('Error creating agent:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};`}
+                </div>
+                
+                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>Agent Test Function:</Typography>
+                <div className="code-block">
+                  {`const testAgent = async (agentId, testCase) => {
+  try {
+    const response = await axios.post(\`/api/agents/\${agentId}/test\`, {
+      input: testCase.input,
+      expectedOutput: testCase.expectedOutput
+    });
+    
+    const result = response.data;
+    
+    return {
+      success: result.output === testCase.expectedOutput,
+      confidence: result.confidence,
+      explanation: result.explanation,
+      executionTime: result.executionTime
+    };
+  } catch (error) {
+    console.error('Error testing agent:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};`}
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<AgentWorkshopTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

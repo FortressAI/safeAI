@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graphs - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .tutorial-section {
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      overflow-x: auto;
+      color: #e6e6e6;
+    }
+    .tab-content {
+      padding: 15px 0;
+    }
+    .graph-container {
+      height: 400px;
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Tabs, Tab, Grid, Divider, 
+      Avatar, Chip, Paper, IconButton, Tooltip,
+      List, ListItem, ListItemText, ListItemIcon
+    } = MaterialUI;
+
+    // Sample knowledge graph data
+    const knowledgeGraphs = [
+      { 
+        id: 1,
+        name: 'Mathematics',
+        description: 'Mathematical concepts, theorems, and relations',
+        nodes: 1200000,
+        edges: 3500000,
+        lastUpdated: '2023-09-15',
+        size: '2.5 GB',
+        status: 'Active'
+      },
+      { 
+        id: 2,
+        name: 'Ethics',
+        description: 'Ethical principles, values, and frameworks',
+        nodes: 850000,
+        edges: 2100000,
+        lastUpdated: '2023-10-22',
+        size: '1.8 GB',
+        status: 'Active'
+      },
+      { 
+        id: 3,
+        name: 'Physics',
+        description: 'Physical laws, theories, and phenomena',
+        nodes: 1500000,
+        edges: 4200000,
+        lastUpdated: '2023-08-30',
+        size: '3.1 GB',
+        status: 'Active'
+      }
+    ];
+
+    // Main tutorial component
+    function KnowledgeGraphsTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+      const [selectedGraph, setSelectedGraph] = React.useState(null);
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      const handleSelectGraph = (graph) => {
+        setSelectedGraph(graph);
+      };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            Knowledge Graphs - Interactive Tutorial
+          </Typography>
+          
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange}
+            sx={{ mb: 3 }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+          
+          {/* Overview Tab */}
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What are Knowledge Graphs?</Typography>
+                <Typography variant="body1" paragraph>
+                  Knowledge Graphs are structured representations of knowledge that organize information into 
+                  interconnected nodes (entities) and edges (relationships). They form the backbone of the 
+                  SafeAI platform, providing agents with the knowledge they need to perform tasks safely and effectively.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <Grid container spacing={2}>
+                  {['Graph Visualization', 'Entity Management', 'Relationship Exploration', 'Knowledge Integration'].map((item, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{item}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Components Tab */}
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Knowledge Graph Components</Typography>
+                <Typography variant="body1" paragraph>
+                  The Knowledge Graphs module consists of several key components for visualizing and managing knowledge.
+                </Typography>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Graph Visualization:</Typography>
+                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>Graph Viewer</Typography>
+                    <div className="graph-container">
+                      <Typography variant="body1" color="text.secondary">
+                        Interactive graph visualization would appear here
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Entity Explorer:</Typography>
+                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>Entity Details</Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemText 
+                          primary="Pythagorean Theorem" 
+                          secondary="Mathematical theorem relating to right triangles"
+                        />
+                      </ListItem>
+                      <Divider />
+                      <ListItem>
+                        <ListItemText 
+                          primary="Properties" 
+                          secondary="a² + b² = c²"
+                        />
+                      </ListItem>
+                      <Divider />
+                      <ListItem>
+                        <ListItemText 
+                          primary="Domain" 
+                          secondary="Geometry"
+                        />
+                      </ListItem>
+                    </List>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          {/* Live Demo Tab */}
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>
+                  Knowledge Graphs Live Demo
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Available Knowledge Graphs</Typography>
+                        <List>
+                          {knowledgeGraphs.map(graph => (
+                            <ListItem 
+                              key={graph.id} 
+                              button
+                              onClick={() => handleSelectGraph(graph)}
+                              selected={selectedGraph && selectedGraph.id === graph.id}
+                              sx={{ 
+                                borderRadius: 1, 
+                                mb: 1, 
+                                bgcolor: selectedGraph && selectedGraph.id === graph.id ? 'rgba(255,255,255,0.1)' : 'transparent'
+                              }}
+                            >
+                              <ListItemText 
+                                primary={graph.name}
+                                secondary={`${graph.nodes.toLocaleString()} nodes, ${graph.edges.toLocaleString()} edges`}
+                              />
+                              <Chip 
+                                label={graph.status} 
+                                size="small" 
+                                color={graph.status === 'Active' ? 'success' : 'default'}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <CardContent>
+                        {selectedGraph ? (
+                          <>
+                            <Typography variant="h6" gutterBottom>{selectedGraph.name} Knowledge Graph</Typography>
+                            <Divider sx={{ mb: 2 }} />
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} sm={6}>
+                                <Typography variant="body2" color="text.secondary">Description:</Typography>
+                                <Typography variant="body1" paragraph>{selectedGraph.description}</Typography>
+                                
+                                <Typography variant="body2" color="text.secondary">Statistics:</Typography>
+                                <Typography variant="body1">Nodes: {selectedGraph.nodes.toLocaleString()}</Typography>
+                                <Typography variant="body1">Edges: {selectedGraph.edges.toLocaleString()}</Typography>
+                                <Typography variant="body1">Size: {selectedGraph.size}</Typography>
+                                <Typography variant="body1">Last Updated: {selectedGraph.lastUpdated}</Typography>
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <Typography variant="body2" color="text.secondary">Graph Preview:</Typography>
+                                <div className="graph-container" style={{ height: 200 }}>
+                                  <Typography variant="body2" color="text.secondary">
+                                    Interactive graph visualization would appear here
+                                  </Typography>
+                                </div>
+                              </Grid>
+                            </Grid>
+                            <Divider sx={{ my: 2 }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                              <Button variant="outlined" size="small">Explore</Button>
+                              <Button variant="contained" size="small">Query</Button>
+                            </Box>
+                          </>
+                        ) : (
+                          <Box sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            height: 300,
+                            flexDirection: 'column'
+                          }}>
+                            <Typography variant="body1" color="text.secondary" gutterBottom>
+                              Select a knowledge graph to view details
+                            </Typography>
+                            <Button variant="outlined" size="small">
+                              Add New Knowledge Graph
+                            </Button>
+                          </Box>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Code Examples Tab */}
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Let's look at some of the key code examples from the Knowledge Graphs module.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Graph Visualization Component:</Typography>
+                <div className="code-block">
+                  {`import React, { useEffect, useRef } from 'react';
+import ForceGraph3D from 'react-force-graph-3d';
+import { Box, useTheme } from '@mui/material';
+
+const GraphVisualization = ({ data, onNodeClick }) => {
+  const theme = useTheme();
+  const graphRef = useRef();
+  
+  useEffect(() => {
+    // Customize graph appearance when component mounts
+    if (graphRef.current) {
+      graphRef.current.d3Force('charge').strength(-120);
+      graphRef.current.d3Force('link').distance(link => 
+        link.value ? 30 + (100 / link.value) : 30
+      );
+    }
+  }, []);
+  
+  return (
+    <Box sx={{ height: 500, width: '100%' }}>
+      <ForceGraph3D
+        ref={graphRef}
+        graphData={data}
+        nodeColor={node => node.color || theme.palette.primary.main}
+        nodeLabel={node => node.label || node.id}
+        linkColor={() => theme.palette.grey[400]}
+        linkWidth={link => link.value || 1}
+        linkDirectionalArrowLength={link => link.directed ? 3.5 : 0}
+        linkDirectionalArrowRelPos={1}
+        onNodeClick={onNodeClick}
+        backgroundColor={theme.palette.background.paper}
+      />
+    </Box>
+  );
+};
+
+export default GraphVisualization;`}
+                </div>
+                
+                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>Knowledge Graph Query Function:</Typography>
+                <div className="code-block">
+                  {`const queryKnowledgeGraph = async (graphId, query) => {
+  try {
+    // Validate query structure
+    if (!query || typeof query !== 'object') {
+      throw new Error('Invalid query structure');
+    }
+    
+    // Execute SPARQL or Cypher query against the knowledge graph
+    const response = await axios.post(\`/api/knowledge-graphs/\${graphId}/query\`, {
+      query: query.text,
+      format: query.format || 'json',
+      limit: query.limit || 100,
+      offset: query.offset || 0
+    });
+    
+    // Process and format results
+    const results = response.data;
+    
+    // Transform results into visualization-friendly format if needed
+    if (query.format === 'graph') {
+      return {
+        nodes: results.nodes.map(node => ({
+          id: node.id,
+          label: node.label,
+          color: getCategoryColor(node.category),
+          category: node.category,
+          properties: node.properties
+        })),
+        links: results.edges.map(edge => ({
+          source: edge.source,
+          target: edge.target,
+          label: edge.label,
+          directed: edge.directed || true,
+          value: edge.weight || 1
+        }))
+      };
+    }
+    
+    return results;
+  } catch (error) {
+    console.error('Error querying knowledge graph:', error);
+    throw error;
+  }
+};
+
+// Helper function to map category to color
+const getCategoryColor = (category) => {
+  const categoryColors = {
+    concept: '#4caf50',
+    person: '#2196f3',
+    theorem: '#9c27b0',
+    equation: '#ff9800',
+    default: '#607d8b'
+  };
+  
+  return categoryColors[category] || categoryColors.default;
+};`}
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<KnowledgeGraphsTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

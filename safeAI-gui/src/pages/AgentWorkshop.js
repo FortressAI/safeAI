@@ -47,26 +47,42 @@ import {
   TableCell,
   Tooltip,
   Stack,
-  Collapse
+  Collapse,
+  OutlinedInput,
+  Avatar,
+  useTheme,
+  Badge
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import CodeIcon from '@mui/icons-material/Code';
-import DescriptionIcon from '@mui/icons-material/Description';
-import SecurityIcon from '@mui/icons-material/Security';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import LinkIcon from '@mui/icons-material/Link';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import AddIcon from '@mui/icons-material/Add';
+import {
+  Search as SearchIcon,
+  Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  PlayArrow as PlayIcon,
+  Stop as StopIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Refresh as RefreshIcon,
+  FilterList as FilterIcon,
+  Sort as SortIcon,
+  SmartToy as SmartToyIcon,
+  Code as CodeIcon,
+  Psychology as PsychologyIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Storage as StorageIcon,
+  Memory as MemoryIcon,
+  NetworkCheck as NetworkIcon,
+  Star as StarIcon,
+  Save as SaveIcon,
+  Build as BuildIcon,
+  TestTube as TestIcon,
+  Settings as SettingsIcon,
+  Warning as WarningIcon,
+  CheckCircle as CheckIcon,
+  Error as ErrorIcon,
+} from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -102,7 +118,27 @@ const availableCapabilities = [
   { id: 8, name: 'data_validation', description: 'Validate data integrity and quality' },
 ];
 
-function AgentWorkshop() {
+const steps = [
+  {
+    label: 'Basic Information',
+    description: 'Set up the basic configuration for your agent',
+  },
+  {
+    label: 'Capabilities',
+    description: 'Define what your agent can do',
+  },
+  {
+    label: 'Security & Ethics',
+    description: 'Configure security and ethical constraints',
+  },
+  {
+    label: 'Testing',
+    description: 'Test your agent before deployment',
+  },
+];
+
+const AgentWorkshop = () => {
+  const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -161,9 +197,6 @@ class SecurityAnalyzerAgent {
   // Template selection states
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templateSearchQuery, setTemplateSearchQuery] = useState('');
-  
-  // Steps for the agent creation
-  const steps = ['Describe Agent', 'Review & Validate', 'Create Agent'];
   
   // Example generated agent details
   const generatedAgent = {
@@ -377,7 +410,7 @@ class SecurityAnalyzerAgent {
     <Card variant="outlined" sx={{ mt: 2 }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <AccountBalanceIcon color="primary" sx={{ mr: 1 }} />
+          <NetworkIcon color="primary" sx={{ mr: 1 }} />
           <Typography variant="h6">
             Blockchain Validation
           </Typography>
@@ -410,7 +443,7 @@ class SecurityAnalyzerAgent {
                       <StepLabel 
                         error={step.error}
                         StepIconProps={{
-                          icon: step.completed ? <CheckCircleIcon color="success" /> : index + 1,
+                          icon: step.completed ? <CheckIcon color="success" /> : index + 1,
                         }}
                       >
                         {step.label}
@@ -429,7 +462,7 @@ class SecurityAnalyzerAgent {
             {blockchainValidationStatus === 'validated' && (
               <Box sx={{ mt: 2, p: 2, bgcolor: alpha('#43a047', 0.05), borderRadius: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CheckCircleIcon color="success" sx={{ mr: 1 }} />
+                  <CheckIcon color="success" sx={{ mr: 1 }} />
                   <Typography variant="subtitle1" color="success.main">
                     Blockchain Validation Complete
                   </Typography>
@@ -439,7 +472,7 @@ class SecurityAnalyzerAgent {
                 </Typography>
                 <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
                   <Chip 
-                    icon={<VerifiedIcon />} 
+                    icon={<StarIcon />} 
                     label="Verified" 
                     color="success" 
                     size="small"
@@ -464,7 +497,7 @@ class SecurityAnalyzerAgent {
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <DescriptionIcon color="primary" sx={{ mr: 1 }} />
+            <CodeIcon color="primary" sx={{ mr: 1 }} />
             <Typography variant="h6">
               LLM Prompt Template
             </Typography>
@@ -516,638 +549,356 @@ class SecurityAnalyzerAgent {
     </Card>
   );
   
-  return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Agent Workshop
-      </Typography>
-      
-      <Paper elevation={2} sx={{ mt: 2, mb: 4 }}>
-        <Tabs 
-          value={tabValue} 
-          onChange={handleTabChange}
-          variant="fullWidth"
-          textColor="primary"
-          indicatorColor="primary"
-        >
-          <Tab icon={<PsychologyIcon />} label="Create from Description" />
-          <Tab icon={<SmartToyIcon />} label="Create from Template" />
-          <Tab icon={<CodeIcon />} label="Custom Script" />
-        </Tabs>
-        
-        <TabPanel value={tabValue} index={0}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <Box sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label="Agent Name"
+              value={agentDescription}
+              onChange={(e) => setAgentDescription(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              value={agentDescription}
+              onChange={(e) => setAgentDescription(e.target.value)}
+              multiline
+              rows={3}
+              sx={{ mb: 2 }}
+            />
+            <FormControl fullWidth>
+              <InputLabel>Agent Type</InputLabel>
+              <Select
+                value={agentType}
+                onChange={(e) => setAgentType(e.target.value)}
+                label="Agent Type"
+              >
+                {agentTypes.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
                 ))}
-              </Stepper>
-            </Grid>
-            
-            {activeStep === 0 && (
-              <>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Describe Your Agent
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    Describe what you want your agent to do in natural language. Our system will generate a complete agent definition based on your description.
-                  </Typography>
-                </Grid>
-                
-                <Grid item xs={12}>
-                  <TextField
-                    label="Agent Description"
-                    multiline
-                    rows={6}
-                    value={agentDescription}
-                    onChange={(e) => setAgentDescription(e.target.value)}
-                    fullWidth
-                    placeholder="Create an agent that analyzes code for security vulnerabilities. It should check for common issues like SQL injection, XSS, and buffer overflows. The agent should provide detailed explanations of found vulnerabilities and suggest fixes."
-                    variant="outlined"
-                  />
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth>
-                    <InputLabel>Agent Type</InputLabel>
-                    <Select
-                      value={agentType}
-                      label="Agent Type"
-                      onChange={handleAgentTypeChange}
-                    >
-                      {agentTypes.map((type) => (
-                        <MenuItem key={type.value} value={type.value}>
-                          {type.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </>
-            )}
-            
-            {activeStep === 1 && (
-              <>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Review Generated Agent
-                  </Typography>
-                  <Alert severity="info" sx={{ mb: 2 }}>
-                    Please review the generated agent definition below. You can proceed to create the agent or go back to modify your description.
-                  </Alert>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined">
+              </Select>
+            </FormControl>
+          </Box>
+        );
+      case 1:
+        return (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              Select Capabilities
+            </Typography>
+            <Grid container spacing={2}>
+              {availableCapabilities.map((capability) => (
+                <Grid item xs={12} sm={6} key={capability.id}>
+                  <Card
+                    sx={{
+                      cursor: 'pointer',
+                      background: agentType === 'script' && agentDescription.includes(capability.name)
+                        ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`
+                        : 'transparent',
+                      border: `1px solid ${agentType === 'script' && agentDescription.includes(capability.name)
+                        ? alpha(theme.palette.primary.main, 0.2)
+                        : alpha(theme.palette.common.white, 0.1)}`,
+                      '&:hover': {
+                        borderColor: alpha(theme.palette.primary.main, 0.3),
+                      },
+                    }}
+                    onClick={() => {
+                      const newDescription = agentDescription.includes(capability.name)
+                        ? agentDescription.replace(capability.name, '').trim()
+                        : `${agentDescription} ${capability.name}`.trim();
+                      setAgentDescription(newDescription);
+                    }}
+                  >
                     <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <SmartToyIcon color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6">
-                          {generatedAgent.name}
-                        </Typography>
-                      </Box>
-                      
-                      <Divider sx={{ mb: 2 }} />
-                      
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Type:</strong> {agentType === 'llm' ? 'LLM-based Agent' : 'Groovy Script Agent'}
-                      </Typography>
-                      
-                      <Typography variant="body2" paragraph>
-                        {generatedAgent.description}
-                      </Typography>
-                      
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Capabilities:</strong>
-                      </Typography>
-                      
-                      <Box sx={{ mb: 2 }}>
-                        {generatedAgent.capabilities.map((cap) => (
-                          <Chip 
-                            key={cap} 
-                            label={cap} 
-                            size="small" 
-                            color="primary" 
-                            variant="outlined"
-                            sx={{ mr: 1, mb: 1 }}
-                          />
-                        ))}
-                      </Box>
-                      
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Effectiveness Threshold:</strong> {generatedAgent.effectiveness_threshold}
-                      </Typography>
-                      
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Ethics Guidelines:</strong>
-                      </Typography>
-                      <Typography variant="body2" paragraph>
-                        {generatedAgent.ethics_guidelines}
-                      </Typography>
-                      
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <SecurityIcon color="success" sx={{ mr: 1 }} />
-                        <Typography variant="body2" color="success.main">
-                          Security Validation Passed
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                  
-                  {/* Add Blockchain Validation Section */}
-                  {blockchainEnabled && (
-                    <BlockchainValidationSection />
-                  )}
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  {agentType === 'llm' ? (
-                    <LLMPromptEditor />
-                  ) : (
-                    <Card variant="outlined">
-                      <CardContent>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                          <CodeIcon color="primary" sx={{ mr: 1 }} />
-                          <Typography variant="h6">
-                            Groovy Script
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar
+                          sx={{
+                            bgcolor: agentType === 'script' && agentDescription.includes(capability.name)
+                              ? alpha(theme.palette.primary.main, 0.1)
+                              : alpha(theme.palette.common.white, 0.1),
+                            color: agentType === 'script' && agentDescription.includes(capability.name)
+                              ? theme.palette.primary.main
+                              : theme.palette.text.secondary,
+                          }}
+                        >
+                          <SmartToyIcon />
+                        </Avatar>
+                        <Box>
+                          <Typography variant="subtitle1">{capability.name}</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {capability.description}
                           </Typography>
                         </Box>
-                        
-                        <TextField
-                          multiline
-                          rows={10}
-                          value={scriptContent}
-                          fullWidth
-                          variant="outlined"
-                          InputProps={{
-                            readOnly: true,
-                            sx: { fontFamily: 'monospace' }
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  )}
+                      </Box>
+                    </CardContent>
+                  </Card>
                 </Grid>
-              </>
-            )}
-            
-            {activeStep === 2 && (
-              <Grid item xs={12}>
-                <Box sx={{ textAlign: 'center', py: 3 }}>
-                  <CheckCircleIcon color="success" sx={{ fontSize: 60, mb: 2 }} />
-                  <Typography variant="h5" gutterBottom>
-                    Agent Created Successfully!
-                  </Typography>
-                  <Typography variant="body1" paragraph>
-                    Your agent "{generatedAgent.name}" has been created and is ready to use.
-                  </Typography>
-                  <Button variant="contained" color="primary" onClick={handleReset} sx={{ mt: 2 }}>
-                    Create Another Agent
-                  </Button>
-                </Box>
-              </Grid>
-            )}
-            
-            {activeStep < 2 && (
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                  {activeStep > 0 && (
-                    <Button 
-                      onClick={handleBack} 
-                      sx={{ mr: 1 }}
-                      disabled={loading}
-                    >
-                      Back
-                    </Button>
-                  )}
+              ))}
+            </Grid>
+          </Box>
+        );
+      case 2:
+        return (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              Security Level
+            </Typography>
+            <FormControl fullWidth sx={{ mb: 3 }}>
+              <InputLabel>Security Level</InputLabel>
+              <Select
+                value={agentType === 'script' ? 'medium' : 'high'}
+                onChange={(e) => {
+                  if (agentType === 'script') {
+                    setAgentType('script');
+                  }
+                }}
+                label="Security Level"
+              >
+                <MenuItem value="low">Low</MenuItem>
+                <MenuItem value="medium">Medium</MenuItem>
+                <MenuItem value="high">High</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Typography variant="subtitle1" gutterBottom>
+              Ethical Constraints
+            </Typography>
+            <Grid container spacing={2}>
+              {['Fairness', 'Transparency', 'Privacy', 'Accountability', 'Safety'].map((constraint) => (
+                <Grid item xs={12} sm={6} key={constraint}>
+                  <Card
+                    sx={{
+                      cursor: 'pointer',
+                      background: agentType === 'script' && agentDescription.includes(constraint)
+                        ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`
+                        : 'transparent',
+                      border: `1px solid ${agentType === 'script' && agentDescription.includes(constraint)
+                        ? alpha(theme.palette.primary.main, 0.2)
+                        : alpha(theme.palette.common.white, 0.1)}`,
+                      '&:hover': {
+                        borderColor: alpha(theme.palette.primary.main, 0.3),
+                      },
+                    }}
+                    onClick={() => {
+                      const newDescription = agentDescription.includes(constraint)
+                        ? agentDescription.replace(constraint, '').trim()
+                        : `${agentDescription} ${constraint}`.trim();
+                      setAgentDescription(newDescription);
+                    }}
+                  >
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar
+                          sx={{
+                            bgcolor: agentType === 'script' && agentDescription.includes(constraint)
+                              ? alpha(theme.palette.primary.main, 0.1)
+                              : alpha(theme.palette.common.white, 0.1),
+                            color: agentType === 'script' && agentDescription.includes(constraint)
+                              ? theme.palette.primary.main
+                              : theme.palette.text.secondary,
+                          }}
+                        >
+                          <PsychologyIcon />
+                        </Avatar>
+                        <Box>
+                          <Typography variant="subtitle1">{constraint}</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            Apply {constraint.toLowerCase()} constraints
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        );
+      case 3:
+        return (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              Test Results
+            </Typography>
+            <Grid container spacing={2}>
+              {[
+                { name: 'Security Scan', status: 'success' },
+                { name: 'Ethics Validation', status: 'success' },
+                { name: 'Performance Test', status: 'warning' },
+                { name: 'Integration Test', status: 'error' },
+              ].map((test) => (
+                <Grid item xs={12} sm={6} key={test.name}>
+                  <Card
+                    sx={{
+                      background: `linear-gradient(135deg, ${alpha(
+                        test.status === 'success'
+                          ? theme.palette.success.main
+                          : test.status === 'warning'
+                          ? theme.palette.warning.main
+                          : theme.palette.error.main,
+                        0.1
+                      )} 0%, ${alpha(
+                        test.status === 'success'
+                          ? theme.palette.success.main
+                          : test.status === 'warning'
+                          ? theme.palette.warning.main
+                          : theme.palette.error.main,
+                        0.05
+                      )} 100%)`,
+                      border: `1px solid ${alpha(
+                        test.status === 'success'
+                          ? theme.palette.success.main
+                          : test.status === 'warning'
+                          ? theme.palette.warning.main
+                          : theme.palette.error.main,
+                        0.2
+                      )}`,
+                    }}
+                  >
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar
+                          sx={{
+                            bgcolor: alpha(
+                              test.status === 'success'
+                                ? theme.palette.success.main
+                                : test.status === 'warning'
+                                ? theme.palette.warning.main
+                                : theme.palette.error.main,
+                              0.1
+                            ),
+                            color:
+                              test.status === 'success'
+                                ? theme.palette.success.main
+                                : test.status === 'warning'
+                                ? theme.palette.warning.main
+                                : theme.palette.error.main,
+                          }}
+                        >
+                          {test.status === 'success' ? (
+                            <CheckIcon />
+                          ) : test.status === 'warning' ? (
+                            <WarningIcon />
+                          ) : (
+                            <ErrorIcon />
+                          )}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="subtitle1">{test.name}</Typography>
+                          <Typography
+                            variant="body2"
+                            color={
+                              test.status === 'success'
+                                ? 'success.main'
+                                : test.status === 'warning'
+                                ? 'warning.main'
+                                : 'error.main'
+                            }
+                          >
+                            {test.status === 'success'
+                              ? 'Passed'
+                              : test.status === 'warning'
+                              ? 'Warning'
+                              : 'Failed'}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+            Agent Workshop
+          </Typography>
+          <Typography color="text.secondary">
+            Create and configure your AI agents
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          startIcon={<SaveIcon />}
+          sx={{
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+            '&:hover': {
+              background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+            },
+          }}
+        >
+          Save Agent
+        </Button>
+      </Box>
+
+      {/* Stepper */}
+      <Paper
+        sx={{
+          p: 3,
+          background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(
+            theme.palette.background.paper,
+            0.95
+          )} 100%)`,
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+        }}
+      >
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {steps.map((step, index) => (
+            <Step key={step.label}>
+              <StepLabel
+                StepIconProps={{
+                  sx: {
+                    color: activeStep >= index ? theme.palette.primary.main : theme.palette.text.secondary,
+                  },
+                }}
+              >
+                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                  {step.label}
+                </Typography>
+              </StepLabel>
+              <StepContent>
+                <Typography color="text.secondary" sx={{ mb: 2 }}>
+                  {step.description}
+                </Typography>
+                {renderStepContent(index)}
+                <Box sx={{ mt: 2 }}>
                   <Button
                     variant="contained"
-                    color="primary"
                     onClick={handleNext}
-                    disabled={loading || (activeStep === 0 && !agentDescription.trim())}
+                    sx={{ mr: 1 }}
+                    disabled={index === steps.length - 1}
                   >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : activeStep === 1 ? 'Create Agent' : 'Next'}
+                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                  </Button>
+                  <Button disabled={index === 0} onClick={handleBack}>
+                    Back
                   </Button>
                 </Box>
-                {error && (
-                  <Alert severity="error" sx={{ mt: 2 }}>
-                    {error}
-                  </Alert>
-                )}
-              </Grid>
-            )}
-          </Grid>
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={1}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Create from Template
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                Choose from pre-defined agent templates to quickly create specialized agents.
-              </Typography>
-            </Grid>
-            
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Search Templates"
-                value={templateSearchQuery}
-                onChange={(e) => setTemplateSearchQuery(e.target.value)}
-                placeholder="Search by name, capability, or description..."
-                sx={{ mb: 3 }}
-              />
-            </Grid>
-            
-            <Grid item xs={12}>
-              <Grid container spacing={2}>
-                {/* Template Cards */}
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ 
-                    height: '100%',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { boxShadow: 3 },
-                    cursor: 'pointer',
-                    borderColor: selectedTemplate === 'security' ? 'primary.main' : 'inherit',
-                    bgcolor: selectedTemplate === 'security' ? alpha('#43a047', 0.05) : 'inherit'
-                  }}
-                  onClick={() => setSelectedTemplate('security')}
-                  >
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <SecurityIcon color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6">Security Analyzer</Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        Analyzes code and data for security vulnerabilities and suggests fixes.
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
-                        <Chip label="threat_detection" size="small" />
-                        <Chip label="data_validation" size="small" />
-                      </Box>
-                      <Typography variant="caption" color="text.secondary">
-                        Uses: LLM with Security Plugin
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ 
-                    height: '100%',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { boxShadow: 3 },
-                    cursor: 'pointer',
-                    borderColor: selectedTemplate === 'kg' ? 'primary.main' : 'inherit',
-                    bgcolor: selectedTemplate === 'kg' ? alpha('#43a047', 0.05) : 'inherit'
-                  }}
-                  onClick={() => setSelectedTemplate('kg')}
-                  >
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <SmartToyIcon color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6">Knowledge Graph Explorer</Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        Traverses knowledge graphs to extract insights and answer questions.
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
-                        <Chip label="kg_integration" size="small" />
-                        <Chip label="query_optimization" size="small" />
-                      </Box>
-                      <Typography variant="caption" color="text.secondary">
-                        Uses: Cypher + LLM
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ 
-                    height: '100%',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { boxShadow: 3 },
-                    cursor: 'pointer',
-                    borderColor: selectedTemplate === 'audit' ? 'primary.main' : 'inherit',
-                    bgcolor: selectedTemplate === 'audit' ? alpha('#43a047', 0.05) : 'inherit'
-                  }}
-                  onClick={() => setSelectedTemplate('audit')}
-                  >
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <VerifiedIcon color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6">Compliance Auditor</Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        Verifies compliance with regulatory standards and generates reports.
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
-                        <Chip label="compliance_check" size="small" />
-                        <Chip label="audit_logging" size="small" />
-                        <Chip label="blockchain_tx" size="small" />
-                      </Box>
-                      <Typography variant="caption" color="text.secondary">
-                        Uses: Groovy Script
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ 
-                    height: '100%', 
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: '1px dashed grey',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { borderColor: 'primary.main' },
-                    cursor: 'pointer'
-                  }}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <AddIcon color="action" sx={{ fontSize: 40, mb: 1 }} />
-                      <Typography variant="body1">Create Custom Template</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </Grid>
-            
-            {selectedTemplate && (
-              <Grid item xs={12} sx={{ mt: 2 }}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <SecurityIcon color="primary" sx={{ mr: 1 }} />
-                      <Typography variant="h6">
-                        Customize Template
-                      </Typography>
-                    </Box>
-                    
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Agent Name"
-                          defaultValue={selectedTemplate === 'security' ? 'SecurityAnalyzer' : 
-                                        selectedTemplate === 'kg' ? 'KnowledgeGraphExplorer' : 'ComplianceAuditor'}
-                          margin="normal"
-                        />
-                        
-                        <TextField
-                          fullWidth
-                          label="Description"
-                          multiline
-                          rows={2}
-                          defaultValue={selectedTemplate === 'security' ? 
-                            'Analyzes code and data for security vulnerabilities and suggests fixes.' : 
-                            'Custom description'}
-                          margin="normal"
-                        />
-                      </Grid>
-                      
-                      <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>Effectiveness Threshold</InputLabel>
-                          <Select
-                            defaultValue={0.85}
-                            label="Effectiveness Threshold"
-                          >
-                            <MenuItem value={0.75}>0.75 - Standard</MenuItem>
-                            <MenuItem value={0.85}>0.85 - High</MenuItem>
-                            <MenuItem value={0.95}>0.95 - Very High</MenuItem>
-                          </Select>
-                        </FormControl>
-                        
-                        <FormGroup sx={{ mt: 2 }}>
-                          <FormControlLabel
-                            control={<Switch defaultChecked />}
-                            label="Register on blockchain"
-                          />
-                          <FormControlLabel
-                            control={<Switch defaultChecked />}
-                            label="Enable security validation"
-                          />
-                        </FormGroup>
-                      </Grid>
-                      
-                      <Grid item xs={12}>
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                          <Button
-                            variant="outlined"
-                            sx={{ mr: 1 }}
-                            onClick={() => setSelectedTemplate(null)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<SmartToyIcon />}
-                          >
-                            Create Agent
-                          </Button>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-          </Grid>
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={2}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Custom Groovy Script
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                Write custom Groovy script to implement your agent's behavior. The script should define a class with required methods.
-              </Typography>
-            </Grid>
-            
-            <Grid item xs={12}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                    <Typography variant="subtitle1">
-                      Script Editor
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={isValidatingScript ? <CircularProgress size={20} /> : <PlayArrowIcon />}
-                      onClick={validateGroovyScript}
-                      disabled={isValidatingScript}
-                    >
-                      {isValidatingScript ? 'Validating...' : 'Validate Script'}
-                    </Button>
-                  </Box>
-                  
-                  <TextField
-                    multiline
-                    rows={15}
-                    value={scriptContent}
-                    onChange={handleScriptChange}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{
-                      sx: { fontFamily: 'monospace' }
-                    }}
-                  />
-                  
-                  {scriptValidationResults && (
-                    <Box sx={{ mt: 2 }}>
-                      {scriptValidationResults.valid ? (
-                        <Alert severity="success" icon={<CheckCircleIcon />}>
-                          Script validation successful!
-                        </Alert>
-                      ) : (
-                        <Alert severity="error" icon={<ErrorIcon />}>
-                          Script contains errors that need to be fixed.
-                        </Alert>
-                      )}
-                      
-                      {(scriptValidationResults.errors || scriptValidationResults.warnings) && (
-                        <TableContainer sx={{ mt: 2 }}>
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>Line</TableCell>
-                                <TableCell>Type</TableCell>
-                                <TableCell>Message</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {scriptValidationResults.errors && scriptValidationResults.errors.map((error, index) => (
-                                <TableRow key={`error-${index}`}>
-                                  <TableCell>{error.line}</TableCell>
-                                  <TableCell>
-                                    <Chip size="small" color="error" label="Error" />
-                                  </TableCell>
-                                  <TableCell>{error.message}</TableCell>
-                                </TableRow>
-                              ))}
-                              {scriptValidationResults.warnings && scriptValidationResults.warnings.map((warning, index) => (
-                                <TableRow key={`warning-${index}`}>
-                                  <TableCell>{warning.line}</TableCell>
-                                  <TableCell>
-                                    <Chip size="small" color="warning" label="Warning" />
-                                  </TableCell>
-                                  <TableCell>{warning.message}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      )}
-                    </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-            
-            <Grid item xs={12}>
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>Script Requirements & Documentation</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography variant="subtitle2" gutterBottom>Required Structure</Typography>
-                  <Typography variant="body2" paragraph>
-                    Your script must define a class with a constructor that accepts an AgentContext parameter and an execute method.
-                  </Typography>
-                  
-                  <Typography variant="subtitle2" gutterBottom>Available APIs</Typography>
-                  <ul>
-                    <li>GraphDatabaseService - For Neo4j operations</li>
-                    <li>AgentContext - Provides access to resources</li>
-                    <li>SecurityUtils - Helper methods for security validations</li>
-                  </ul>
-                </AccordionDetails>
-              </Accordion>
-              
-              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={blockchainEnabled}
-                      onChange={(e) => setBlockchainEnabled(e.target.checked)}
-                      color="primary"
-                    />
-                  }
-                  label="Register on blockchain"
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!scriptValidationResults?.valid}
-                  startIcon={<SaveIcon />}
-                >
-                  Create Agent
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </TabPanel>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
       </Paper>
-      
-      <Paper elevation={2} sx={{ p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Your Agents
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <SmartToyIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="SecurityAnalyzer" 
-                  secondary="Analyzes code for security vulnerabilities"
-                />
-                <Chip label="LLM" size="small" color="primary" />
-              </ListItem>
-              <Divider />
-              <ListItem button>
-                <ListItemIcon>
-                  <SmartToyIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="DataValidator" 
-                  secondary="Validates data integrity and structure"
-                />
-                <Chip label="Groovy" size="small" color="secondary" />
-              </ListItem>
-              <Divider />
-              <ListItem button>
-                <ListItemIcon>
-                  <SmartToyIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="ComplianceChecker" 
-                  secondary="Verifies compliance with regulations"
-                />
-                <Chip label="LLM" size="small" color="primary" />
-              </ListItem>
-            </List>
-          </Grid>
-        </Grid>
-      </Paper>
-    </div>
+    </Box>
   );
-}
+};
 
 export default AgentWorkshop; 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .tutorial-section {
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .code-block {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 10px 0;
+      overflow-x: auto;
+    }
+    .tab-content {
+      padding: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Tabs, Tab, Grid, Divider, 
+      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress
+    } = MaterialUI;
+
+    // Main tutorial component
+    function DashboardTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            SafeAI Dashboard - Interactive Tutorial
+          </Typography>
+          
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange}
+            sx={{ mb: 3 }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+          
+          {/* Overview Tab */}
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What is the Dashboard?</Typography>
+                <Typography variant="body1" paragraph>
+                  The Dashboard provides a high-level overview of your SafeAI system's status, 
+                  including system health, security, knowledge graphs, and active agents.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Components:</Typography>
+                <Grid container spacing={2}>
+                  {['System Health', 'Security Status', 'Knowledge Graphs', 'Active Agents'].map((item, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{item}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Components Tab */}
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Dashboard Components</Typography>
+                <Typography variant="body1" paragraph>
+                  The Dashboard consists of several key components that display different aspects
+                  of your SafeAI system.
+                </Typography>
+              </div>
+            </div>
+          )}
+          
+          {/* Live Demo Tab */}
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>
+                  Dashboard Live Demo
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  Here's an interactive demonstration of the SafeAI Dashboard.
+                </Typography>
+              </div>
+            </div>
+          )}
+          
+          {/* Code Examples Tab */}
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Let's look at some of the key code examples from the Dashboard.
+                </Typography>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<DashboardTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

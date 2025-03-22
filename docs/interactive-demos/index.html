@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeAI Interactive Demos</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .demo-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .demo-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, Card, CardContent, CardActionArea, Grid,
+      AppBar, Toolbar, IconButton, Avatar
+    } = MaterialUI;
+
+    // Import Material Icons
+    const {
+      Menu: MenuIcon,
+      Dashboard: DashboardIcon,
+      SmartToy: SmartToyIcon,
+      Build: BuildIcon,
+      Psychology: PsychologyIcon,
+      Security: SecurityIcon,
+      Storage: StorageIcon,
+      Settings: SettingsIcon
+    } = MaterialIcons;
+
+    // Demo data
+    const demos = [
+      {
+        title: "Dashboard",
+        description: "Overview of system health, security, knowledge graphs, and active agents",
+        icon: <DashboardIcon />,
+        color: "#2196f3",
+        url: "dashboard.html"
+      },
+      {
+        title: "Agent Browser",
+        description: "Browse, search, and manage AI agents in the SafeAI ecosystem",
+        icon: <SmartToyIcon />,
+        color: "#4caf50",
+        url: "agent-browser.html"
+      },
+      {
+        title: "Agent Workshop",
+        description: "Create, train, and test AI agents with knowledge graph integration",
+        icon: <BuildIcon />,
+        color: "#ff9800",
+        url: "agent-workshop.html"
+      },
+      {
+        title: "ARC Prize Challenge",
+        description: "Test AI agents against Abstract Reasoning Corpus challenges",
+        icon: <PsychologyIcon />,
+        color: "#e91e63",
+        url: "arc-prize.html"
+      }
+    ];
+
+    function DemoIndex() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                SafeAI Interactive Demos
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+              <Typography variant="h3" component="h1" gutterBottom>
+                SafeAI Interactive Tutorials
+              </Typography>
+              <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
+                Explore the SafeAI application through these interactive demos of each component
+              </Typography>
+            </Box>
+            
+            <Grid container spacing={4}>
+              {demos.map((demo, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Card 
+                    className="demo-card"
+                    sx={{ 
+                      height: '100%', 
+                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      border: `1px solid rgba(255,255,255,0.1)`,
+                      borderRadius: 2
+                    }}
+                  >
+                    <CardActionArea 
+                      sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+                      href={demo.url}
+                    >
+                      <CardContent sx={{ width: '100%' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Avatar sx={{ backgroundColor: demo.color, mr: 2 }}>
+                            {demo.icon}
+                          </Avatar>
+                          <Typography variant="h5" component="div">
+                            {demo.title}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" color="text.secondary" paragraph>
+                          {demo.description}
+                        </Typography>
+                        <Typography variant="caption" color={demo.color} sx={{ mt: 2 }}>
+                          Click to launch demo
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            
+            <Box sx={{ textAlign: 'center', mt: 6, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                These interactive demos are for educational purposes only.
+              </Typography>
+              <Typography variant="body2">
+                Explore the full SafeAI application for complete functionality.
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<DemoIndex />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

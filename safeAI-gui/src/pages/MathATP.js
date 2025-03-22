@@ -122,6 +122,7 @@ const MathATP = () => {
   // Handle tab change
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
+    setTabValue(newValue);
   };
 
   // Handle theorem changes

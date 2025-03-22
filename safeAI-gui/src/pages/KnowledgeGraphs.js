@@ -34,85 +34,100 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Avatar,
+  useTheme,
+  alpha,
+  Badge,
+  Alert,
+  FormControlLabel,
+  Switch,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import SchemaIcon from '@mui/icons-material/Schema';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import InfoIcon from '@mui/icons-material/Info';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import SecurityIcon from '@mui/icons-material/Security';
-import GavelIcon from '@mui/icons-material/Gavel';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import StorageIcon from '@mui/icons-material/Storage';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import {
+  Search as SearchIcon,
+  Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  PlayArrow as PlayIcon,
+  Stop as StopIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Refresh as RefreshIcon,
+  FilterList as FilterIcon,
+  Sort as SortIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Storage as StorageIcon,
+  Memory as MemoryIcon,
+  NetworkCheck as NetworkIcon,
+  Star as StarIcon,
+  Save as SaveIcon,
+  Build as BuildIcon,
+  TestTube as TestIcon,
+  Settings as SettingsIcon,
+  Warning as WarningIcon,
+  CheckCircle as CheckIcon,
+  Error as ErrorIcon,
+  Shield as ShieldIcon,
+  Lock as LockIcon,
+  Key as KeyIcon,
+  BugReport as BugIcon,
+  AccountTree as GraphIcon,
+  Timeline as TimelineIcon,
+  Schema as SchemaIcon,
+  Link as LinkIcon,
+  Node as NodeIcon,
+  Hub as HubIcon,
+  Psychology as EthicsIcon,
+  Functions as MathIcon,
+  Gavel as LogicIcon,
+  Security as SafetyIcon,
+} from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Sample Knowledge Graphs
 const sampleKGs = [
   {
     id: 1,
-    name: 'CyberSecurity_KG',
-    description: 'Knowledge graph for cybersecurity patterns and threat detection',
-    category: 'Security',
-    nodes: 5243,
-    relationships: 12876,
-    lastUpdated: '2023-10-15 08:30:45',
+    name: 'Ethics Knowledge Graph',
+    description: 'Comprehensive graph of ethical principles and their relationships',
+    nodes: 1250,
+    relationships: 3500,
+    lastUpdated: '2024-03-15',
     status: 'active',
+    icon: <EthicsIcon />,
+    color: '#4CAF50',
   },
   {
     id: 2,
-    name: 'DataPrivacySecurity_KG',
-    description: 'Privacy protection frameworks and data security patterns',
-    category: 'Privacy',
-    nodes: 3156,
-    relationships: 7845,
-    lastUpdated: '2023-10-14 09:15:45',
+    name: 'Mathematics Knowledge Graph',
+    description: 'Mathematical concepts and their hierarchical relationships',
+    nodes: 850,
+    relationships: 2200,
+    lastUpdated: '2024-03-14',
     status: 'active',
+    icon: <MathIcon />,
+    color: '#2196F3',
   },
   {
     id: 3,
-    name: 'Ethics_KG',
-    description: 'Ethical principles and patterns for responsible AI',
-    category: 'Ethics',
-    nodes: 2789,
-    relationships: 6234,
-    lastUpdated: '2023-10-13 11:20:32',
+    name: 'Logic Knowledge Graph',
+    description: 'Logical relationships and inference rules',
+    nodes: 650,
+    relationships: 1800,
+    lastUpdated: '2024-03-13',
     status: 'active',
+    icon: <LogicIcon />,
+    color: '#9C27B0',
   },
   {
     id: 4,
-    name: 'LegalCompliance_KG',
-    description: 'Legal and regulatory compliance frameworks',
-    category: 'Legal',
-    nodes: 4128,
-    relationships: 9876,
-    lastUpdated: '2023-10-12 16:45:10',
+    name: 'Safety Knowledge Graph',
+    description: 'Safety protocols and risk assessment relationships',
+    nodes: 450,
+    relationships: 1200,
+    lastUpdated: '2024-03-12',
     status: 'active',
-  },
-  {
-    id: 5,
-    name: 'RiskManagement_KG',
-    description: 'Risk assessment and mitigation patterns',
-    category: 'Risk',
-    nodes: 3652,
-    relationships: 8245,
-    lastUpdated: '2023-10-11 13:10:28',
-    status: 'active',
-  },
-  {
-    id: 6,
-    name: 'CustomDomain_KG',
-    description: 'Custom domain-specific knowledge patterns',
-    category: 'Custom',
-    nodes: 1245,
-    relationships: 3456,
-    lastUpdated: '2023-10-10 10:30:15',
-    status: 'draft',
+    icon: <SafetyIcon />,
+    color: '#FF9800',
   },
 ];
 
@@ -143,464 +158,371 @@ function TabPanel(props) {
   );
 }
 
-function KnowledgeGraphs() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [tabValue, setTabValue] = useState(0);
-  const [openKGDetail, setOpenKGDetail] = useState(false);
-  const [selectedKG, setSelectedKG] = useState(null);
+const MetricCard = ({ title, value, icon, color, trend }) => {
+  const theme = useTheme();
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card
+        sx={{
+          height: '100%',
+          background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha(color, 0.2)}`,
+          borderRadius: 2,
+          boxShadow: `0 4px 20px ${alpha(color, 0.1)}`,
+          '&:hover': {
+            boxShadow: `0 8px 30px ${alpha(color, 0.2)}`,
+          },
+        }}
+      >
+        <CardContent>
+          <Box display="flex" alignItems="center" mb={2}>
+            <Box
+              sx={{
+                p: 1,
+                borderRadius: 1,
+                bgcolor: alpha(color, 0.1),
+                mr: 2,
+              }}
+            >
+              {icon}
+            </Box>
+            <Typography variant="h6" color="textPrimary">
+              {title}
+            </Typography>
+          </Box>
+          <Typography variant="h4" color="textPrimary" gutterBottom>
+            {value}
+          </Typography>
+          <Typography
+            variant="body2"
+            color={trend.startsWith('+') ? 'success.main' : 'error.main'}
+          >
+            {trend} from last update
+          </Typography>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
+const GraphCard = ({ graph }) => {
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [menuKGId, setMenuKGId] = useState(null);
-  
-  // Handle tab change
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
-  
-  // Handle KG detail dialog
-  const handleOpenKGDetail = (kg) => {
-    setSelectedKG(kg);
-    setOpenKGDetail(true);
-  };
-  
-  const handleCloseKGDetail = () => {
-    setOpenKGDetail(false);
-  };
-  
-  // Handle KG menu
-  const handleMenuOpen = (event, kgId) => {
+
+  const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    setMenuKGId(kgId);
   };
-  
+
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setMenuKGId(null);
   };
-  
-  // Filter KGs based on search term and category
-  const filteredKGs = sampleKGs.filter(kg => {
-    const matchesSearch = kg.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        kg.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || kg.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-  
-  // Get KGs by tab selection
-  const getTabKGs = () => {
-    switch (tabValue) {
-      case 0: // All KGs
-        return filteredKGs;
-      case 1: // Security KGs
-        return filteredKGs.filter(kg => ['Security', 'Privacy', 'Risk'].includes(kg.category));
-      case 2: // Compliance KGs
-        return filteredKGs.filter(kg => ['Legal', 'Ethics'].includes(kg.category));
-      case 3: // Custom KGs
-        return filteredKGs.filter(kg => kg.category === 'Custom');
-      default:
-        return filteredKGs;
-    }
-  };
-  
-  // Get icon for KG category
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'Security':
-        return <SecurityIcon color="primary" />;
-      case 'Privacy':
-        return <SecurityIcon color="info" />;
-      case 'Ethics':
-        return <PsychologyIcon color="secondary" />;
-      case 'Legal':
-        return <GavelIcon color="warning" />;
-      case 'Risk':
-        return <InfoIcon color="error" />;
-      case 'Custom':
-        return <SchemaIcon color="action" />;
-      default:
-        return <SchemaIcon />;
-    }
-  };
-  
+
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Knowledge Graphs
-      </Typography>
-      
-      {/* Search and Filter Bar */}
-      <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              placeholder="Search knowledge graphs..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card
+        sx={{
+          height: '100%',
+          background: `linear-gradient(135deg, ${alpha(graph.color, 0.1)} 0%, ${alpha(graph.color, 0.05)} 100%)`,
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha(graph.color, 0.2)}`,
+          borderRadius: 2,
+          boxShadow: `0 4px 20px ${alpha(graph.color, 0.1)}`,
+          '&:hover': {
+            boxShadow: `0 8px 30px ${alpha(graph.color, 0.2)}`,
+          },
+        }}
+      >
+        <CardContent>
+          <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
+            <Box display="flex" alignItems="center">
+              <Box
+                sx={{
+                  p: 1,
+                  borderRadius: 1,
+                  bgcolor: alpha(graph.color, 0.1),
+                  mr: 2,
+                }}
+              >
+                {graph.icon}
+              </Box>
+              <Box>
+                <Typography variant="h6" color="textPrimary">
+                  {graph.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Last updated: {graph.lastUpdated}
+                </Typography>
+              </Box>
+            </Box>
+            <IconButton onClick={handleMenuOpen}>
+              <MoreVertIcon />
+            </IconButton>
+          </Box>
+          <Typography variant="body2" color="textSecondary" paragraph>
+            {graph.description}
+          </Typography>
+          <Box display="flex" gap={2} mt={2}>
+            <Chip
+              icon={<NodeIcon />}
+              label={`${graph.nodes} nodes`}
+              size="small"
+              sx={{
+                bgcolor: alpha(graph.color, 0.1),
+                color: graph.color,
+                '& .MuiChip-icon': {
+                  color: graph.color,
+                },
               }}
             />
-          </Grid>
-          
-          <Grid item xs={6} md={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <FilterListIcon color="action" sx={{ mr: 1 }} />
-              <TextField
-                select
-                fullWidth
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                label="Category"
-                variant="outlined"
-              >
-                {kgCategories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Grid>
-          
-          <Grid item xs={6} md={3}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-              >
-                Add New Knowledge Graph
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-      
-      {/* Tabs */}
-      <Paper elevation={2}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          textColor="primary"
-          indicatorColor="primary"
-        >
-          <Tab icon={<SchemaIcon />} label="All Knowledge Graphs" />
-          <Tab icon={<SecurityIcon />} label="Security KGs" />
-          <Tab icon={<GavelIcon />} label="Compliance KGs" />
-          <Tab icon={<StorageIcon />} label="Custom KGs" />
-        </Tabs>
-        
-        {/* All KGs Tab */}
-        <TabPanel value={tabValue} index={0}>
-          <KGTable kgs={getTabKGs()} 
-                   handleOpenKGDetail={handleOpenKGDetail}
-                   handleMenuOpen={handleMenuOpen}
-                   getCategoryIcon={getCategoryIcon} />
-        </TabPanel>
-        
-        {/* Security KGs Tab */}
-        <TabPanel value={tabValue} index={1}>
-          <KGTable kgs={getTabKGs()} 
-                   handleOpenKGDetail={handleOpenKGDetail}
-                   handleMenuOpen={handleMenuOpen}
-                   getCategoryIcon={getCategoryIcon} />
-        </TabPanel>
-        
-        {/* Compliance KGs Tab */}
-        <TabPanel value={tabValue} index={2}>
-          <KGTable kgs={getTabKGs()} 
-                   handleOpenKGDetail={handleOpenKGDetail}
-                   handleMenuOpen={handleMenuOpen}
-                   getCategoryIcon={getCategoryIcon} />
-        </TabPanel>
-        
-        {/* Custom KGs Tab */}
-        <TabPanel value={tabValue} index={3}>
-          <KGTable kgs={getTabKGs()} 
-                   handleOpenKGDetail={handleOpenKGDetail}
-                   handleMenuOpen={handleMenuOpen}
-                   getCategoryIcon={getCategoryIcon} />
-        </TabPanel>
-      </Paper>
-      
-      {/* KG Detail Dialog */}
-      {selectedKG && (
-        <Dialog
-          open={openKGDetail}
-          onClose={handleCloseKGDetail}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {getCategoryIcon(selectedKG.category)}
-              <Typography variant="h6" sx={{ ml: 1 }}>
-                {selectedKG.name}
-              </Typography>
-              {selectedKG.status === 'active' && (
-                <Chip 
-                  size="small" 
-                  color="success" 
-                  label="Active" 
-                  sx={{ ml: 2 }}
-                />
-              )}
-            </Box>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
-                <Typography variant="h6" gutterBottom>
-                  Description
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  {selectedKG.description}
-                </Typography>
-                
-                <Typography variant="h6" gutterBottom>
-                  Metrics
-                </Typography>
-                <TableContainer component={Paper} variant="outlined" sx={{ mb: 3 }}>
-                  <Table size="small">
-                    <TableBody>
-                      <TableRow>
-                        <TableCell component="th" scope="row">Nodes</TableCell>
-                        <TableCell align="right">{selectedKG.nodes.toLocaleString()}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">Relationships</TableCell>
-                        <TableCell align="right">{selectedKG.relationships.toLocaleString()}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">Density</TableCell>
-                        <TableCell align="right">
-                          {(selectedKG.relationships / selectedKG.nodes).toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">Last Updated</TableCell>
-                        <TableCell align="right">{selectedKG.lastUpdated}</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                
-                <Typography variant="h6" gutterBottom>
-                  Related Knowledge Graphs
-                </Typography>
-                <List>
-                  {sampleKGs
-                    .filter(kg => kg.id !== selectedKG.id)
-                    .slice(0, 3)
-                    .map(kg => (
-                      <ListItem key={kg.id} button>
-                        <ListItemIcon>
-                          {getCategoryIcon(kg.category)}
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary={kg.name}
-                          secondary={kg.description.substring(0, 60) + '...'}
-                        />
-                      </ListItem>
-                    ))}
-                </List>
-              </Grid>
-              
-              <Grid item xs={12} md={4}>
-                <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Details
-                  </Typography>
-                  <List dense>
-                    <ListItem>
-                      <ListItemText primary="ID" secondary={selectedKG.id} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Category" secondary={selectedKG.category} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Status" secondary={
-                        <Chip 
-                          size="small" 
-                          color={selectedKG.status === 'active' ? 'success' : 'default'}
-                          label={selectedKG.status === 'active' ? 'Active' : 'Draft'}
-                        />
-                      } />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Last Updated" secondary={selectedKG.lastUpdated} />
-                    </ListItem>
-                  </List>
-                </Paper>
-                
-                <Typography variant="h6" gutterBottom>
-                  Actions
-                </Typography>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  startIcon={<VisibilityIcon />}
-                  sx={{ mb: 2 }}
-                >
-                  Visualize Graph
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<EditIcon />}
-                  sx={{ mb: 2 }}
-                >
-                  Edit Graph
-                </Button>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  startIcon={<CloudDownloadIcon />}
-                  sx={{ mb: 2 }}
-                >
-                  Export Graph
-                </Button>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseKGDetail}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      
-      {/* KG Menu */}
+            <Chip
+              icon={<LinkIcon />}
+              label={`${graph.relationships} edges`}
+              size="small"
+              sx={{
+                bgcolor: alpha(graph.color, 0.1),
+                color: graph.color,
+                '& .MuiChip-icon': {
+                  color: graph.color,
+                },
+              }}
+            />
+            <Chip
+              icon={<CheckIcon />}
+              label={graph.status}
+              size="small"
+              color="success"
+            />
+          </Box>
+        </CardContent>
+      </Card>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => {
-          const kg = sampleKGs.find(k => k.id === menuKGId);
-          handleOpenKGDetail(kg);
-          handleMenuClose();
-        }}>
-          <ListItemIcon>
-            <InfoIcon fontSize="small" />
-          </ListItemIcon>
-          View Details
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <VisibilityIcon fontSize="small" />
-          </ListItemIcon>
-          Visualize
-        </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
-          Edit
+          <ListItemText>Edit Graph</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
-            <CloudDownloadIcon fontSize="small" />
+            <RefreshIcon fontSize="small" />
           </ListItemIcon>
-          Export
+          <ListItemText>Update Graph</ListItemText>
         </MenuItem>
-        <Divider />
-        <MenuItem>
+        <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
-            <DeleteIcon fontSize="small" color="error" />
+            <DeleteIcon fontSize="small" />
           </ListItemIcon>
-          <Typography color="error">Delete</Typography>
+          <ListItemText>Delete Graph</ListItemText>
         </MenuItem>
       </Menu>
-    </div>
+    </motion.div>
   );
-}
+};
 
-// KG Table Component
-function KGTable({ kgs, handleOpenKGDetail, handleMenuOpen, getCategoryIcon }) {
-  if (kgs.length === 0) {
-    return (
-      <Paper sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="h6" color="text.secondary">
-          No knowledge graphs found matching your criteria
+function KnowledgeGraphs() {
+  const theme = useTheme();
+  const [activeTab, setActiveTab] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGraph, setSelectedGraph] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleGraphClick = (graph) => {
+    setSelectedGraph(graph);
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setSelectedGraph(null);
+  };
+
+  return (
+    <Box sx={{ p: 3 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+        <Typography variant="h4" color="textPrimary">
+          Knowledge Graphs
         </Typography>
         <Button
-          variant="outlined"
+          variant="contained"
           startIcon={<AddIcon />}
-          sx={{ mt: 2 }}
+          onClick={() => setDialogOpen(true)}
+          sx={{
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+            '&:hover': {
+              background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+            },
+          }}
         >
-          Add New Knowledge Graph
+          Create New Graph
         </Button>
-      </Paper>
-    );
-  }
-  
-  return (
-    <TableContainer component={Paper} variant="outlined">
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Category</TableCell>
-            <TableCell>Nodes</TableCell>
-            <TableCell>Relationships</TableCell>
-            <TableCell>Last Updated</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {kgs.map((kg) => (
-            <TableRow key={kg.id}>
-              <TableCell>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {getCategoryIcon(kg.category)}
-                  <Typography sx={{ ml: 1 }}>
-                    {kg.name}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell>{kg.category}</TableCell>
-              <TableCell>{kg.nodes.toLocaleString()}</TableCell>
-              <TableCell>{kg.relationships.toLocaleString()}</TableCell>
-              <TableCell>{kg.lastUpdated}</TableCell>
-              <TableCell>
-                <Chip 
-                  size="small" 
-                  color={kg.status === 'active' ? 'success' : 'default'}
-                  label={kg.status === 'active' ? 'Active' : 'Draft'}
-                />
-              </TableCell>
-              <TableCell align="right">
-                <Tooltip title="View Details">
-                  <IconButton size="small" onClick={() => handleOpenKGDetail(kg)}>
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Visualize">
-                  <IconButton size="small">
-                    <VisibilityIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                <IconButton
-                  size="small"
-                  onClick={(e) => handleMenuOpen(e, kg.id)}
-                >
-                  <MoreVertIcon fontSize="small" />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      </Box>
+
+      <Grid container spacing={3} mb={4}>
+        <Grid item xs={12} md={3}>
+          <MetricCard
+            title="Total Graphs"
+            value="4"
+            icon={<GraphIcon />}
+            color={theme.palette.primary.main}
+            trend="+1"
+          />
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <MetricCard
+            title="Total Nodes"
+            value="3,200"
+            icon={<NodeIcon />}
+            color={theme.palette.success.main}
+            trend="+150"
+          />
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <MetricCard
+            title="Total Edges"
+            value="8,700"
+            icon={<LinkIcon />}
+            color={theme.palette.info.main}
+            trend="+420"
+          />
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <MetricCard
+            title="Active Graphs"
+            value="4"
+            icon={<HubIcon />}
+            color={theme.palette.warning.main}
+            trend="0"
+          />
+        </Grid>
+      </Grid>
+
+      <Box mb={3}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Search knowledge graphs..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+              bgcolor: alpha(theme.palette.background.paper, 0.8),
+              backdropFilter: 'blur(10px)',
+              '&:hover': {
+                bgcolor: alpha(theme.palette.background.paper, 0.9),
+              },
+            },
+          }}
+        />
+      </Box>
+
+      <Tabs
+        value={activeTab}
+        onChange={handleTabChange}
+        sx={{
+          mb: 3,
+          '& .MuiTabs-indicator': {
+            height: 3,
+            borderRadius: 3,
+            background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          },
+        }}
+      >
+        <Tab label="All Graphs" />
+        <Tab label="Active" />
+        <Tab label="Archived" />
+      </Tabs>
+
+      <Grid container spacing={3}>
+        {sampleKGs.map((graph) => (
+          <Grid item xs={12} md={6} lg={4} key={graph.id}>
+            <GraphCard graph={graph} />
+          </Grid>
+        ))}
+      </Grid>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.paper, 0.95)} 100%)`,
+            backdropFilter: 'blur(10px)',
+          },
+        }}
+      >
+        <DialogTitle>
+          {selectedGraph ? 'Edit Knowledge Graph' : 'Create New Knowledge Graph'}
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label="Graph Name"
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              variant="outlined"
+              multiline
+              rows={3}
+              sx={{ mb: 2 }}
+            />
+            <FormControlLabel
+              control={<Switch defaultChecked />}
+              label="Active"
+              sx={{ mb: 2 }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleDialogClose}
+            sx={{
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+              '&:hover': {
+                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+              },
+            }}
+          >
+            {selectedGraph ? 'Save Changes' : 'Create Graph'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }
 

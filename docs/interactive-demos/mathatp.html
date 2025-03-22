@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathATP - Interactive Tutorial</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { margin: 0; padding: 0; font-family: Roboto, sans-serif; background-color: #121212; color: #fff; }
+    #root { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .tutorial-section { margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; background-color: rgba(255,255,255,0.05); }
+    .code-block { background-color: #1e1e1e; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 14px; margin: 10px 0; overflow-x: auto; color: #e6e6e6; }
+    .tab-content { padding: 15px 0; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, Divider, LinearProgress, TextField } = MaterialUI;
+
+    function MathATPTutorial() {
+      const [tabValue, setTabValue] = React.useState(0);
+      const handleTabChange = (event, newValue) => { setTabValue(newValue); };
+
+      return (
+        <Box>
+          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+            MathATP - Interactive Tutorial
+          </Typography>
+          <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 3 }}>
+            <Tab label="Overview" />
+            <Tab label="Components" />
+            <Tab label="Live Demo" />
+            <Tab label="Code Examples" />
+          </Tabs>
+
+          {tabValue === 0 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>What is MathATP?</Typography>
+                <Typography variant="body1" paragraph>
+                  MathATP is a cutting-edge system for automated theorem proving and advanced mathematical problem-solving. 
+                  It assists in generating proofs, solving equations, and verifying complex mathematical statements using state-of-the-art algorithms.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <Grid container spacing={2}>
+                  {['Automated Theorem Proving', 'Complex Equation Solving', 'Interactive Proof Generation', 'Real-time Validation'].map((feature, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                        <CardContent>
+                          <Typography variant="h6" color="#0074D9">{feature}</Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            </div>
+          )}
+
+          {tabValue === 1 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>MathATP Components</Typography>
+                <Typography variant="body1" paragraph>
+                  MathATP consists of multiple modules working together:
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Proof Generator:</Typography>
+                <Typography variant="body2" paragraph>
+                  Generates detailed, step-by-step proofs for mathematical statements.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Equation Solver:</Typography>
+                <Typography variant="body2" paragraph>
+                  Solves complex equations and provides detailed workings.
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Theorem Checker:</Typography>
+                <Typography variant="body2" paragraph>
+                  Validates the correctness of proofs and mathematical assertions.
+                </Typography>
+              </div>
+            </div>
+          )}
+
+          {tabValue === 2 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>MathATP Live Demo</Typography>
+                <Typography variant="body1" paragraph>
+                  Try a sample mathematical problem. For instance, verify the Pythagorean theorem or solve a quadratic equation.
+                </Typography>
+                <TextField label="Enter Mathematical Statement" fullWidth variant="outlined" sx={{ mb: 2 }} />
+                <Button variant="contained" color="primary">Run Proof Generator</Button>
+                <Box sx={{ mt: 4 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Interactive proof generation simulation in progress...
+                  </Typography>
+                  <LinearProgress variant="determinate" value={60} sx={{ mt: 2 }} />
+                </Box>
+              </div>
+            </div>
+          )}
+
+          {tabValue === 3 && (
+            <div className="tab-content">
+              <div className="tutorial-section">
+                <Typography variant="h5" gutterBottom>MathATP Code Examples</Typography>
+                <Typography variant="body1" paragraph>
+                  Below is a simple example of a proof generation function in MathATP:
+                </Typography>
+                <div className="code-block">
+{`function generateProof(statement) {
+  if (!statement) {
+    throw new Error('No statement provided');
+  }
+  const proofSteps = [];
+  proofSteps.push('Step 1: Validate the statement');
+  proofSteps.push('Step 2: Apply necessary theorems');
+  proofSteps.push('Step 3: Construct the proof sequence');
+  return proofSteps;
+}`}
+                </div>
+              </div>
+            </div>
+          )}
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<MathATPTutorial />, document.getElementById('root'));
+  </script>
+</body>
+</html> 
