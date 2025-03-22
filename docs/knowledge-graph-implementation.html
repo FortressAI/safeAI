@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graph Implementation Guide - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+    pre {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      CODE: "code",
+      SCHEMA: "schema"
+    };
+
+    function KnowledgeGraphImplementationGuide() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Knowledge Graph Implementation Guide
+              </Typography>
+              <Button color="inherit" href="index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Knowledge Graph Implementation Guide
+            </Typography>
+            
+            <Paper className="content">
+              <Typography variant="h4" gutterBottom>Overview</Typography>
+              <Typography paragraph>
+                This guide outlines the architecture, design principles, and best practices for implementing 
+                knowledge graphs within the SafeAI system. Knowledge graphs serve as a structured, dynamic 
+                representation of entities and their relationships, powering various components such as the 
+                Knowledge Graphs interactive demo and backend processing pipelines.
+              </Typography>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Architecture</Typography>
+              
+              <Typography variant="h5" gutterBottom>Data Model</Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Entities & Relationships" 
+                    secondary="Define the nodes (entities) and the edges (relationships) between them. Each entity may contain properties such as name, description, and metadata."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Schema Design" 
+                    secondary="Focus on a flexible schema that supports diverse data types and evolving relationships."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h5" gutterBottom>Components</Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Graph Viewer" 
+                    secondary="An interactive UI component to visualize the graph structure, with zoom, pan, and detailed entity views."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Entity Explorer" 
+                    secondary="A tool for browsing and editing the properties of individual entities."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Query Engine" 
+                    secondary="Handles efficient fetching, filtering, and aggregation of graph data via RESTful APIs."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Data Ingestion Module" 
+                    secondary="Integrates with external sources to import and transform raw data into graph structures."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Implementation Details</Typography>
+              
+              <Typography variant="h5" gutterBottom>Frontend Implementation</Typography>
+              <Typography paragraph>
+                For frontend implementation, use a force-directed graph visualization library like D3.js or React-Force-Graph. Here's a basic example of how to implement the Graph Viewer:
+              </Typography>
+              
+              <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`import React from 'react';
+import ForceGraph2D from 'react-force-graph-2d';
+
+function GraphViewer({ data }) {
+  return (
+    <ForceGraph2D
+      graphData={data}
+      nodeLabel={node => node.name}
+      nodeAutoColorBy="type"
+      linkDirectionalArrowLength={3.5}
+      linkDirectionalArrowRelPos={1}
+    />
+  );
+}`}
+                </Typography>
+              </Paper>
+              
+              <Typography variant="h5" gutterBottom>Backend Implementation</Typography>
+              <Typography paragraph>
+                Backend services should leverage a dedicated graph database such as Neo4j or Amazon Neptune, with a well-defined API layer for interactions:
+              </Typography>
+              
+              <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Example Neo4j Query Service
+const neo4j = require('neo4j-driver');
+
+class KnowledgeGraphService {
+  constructor(uri, user, password) {
+    this.driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+  }
+  
+  async getEntities(type, limit = 100) {
+    const session = this.driver.session();
+    try {
+      const result = await session.run(
+        'MATCH (n:Entity {type: $type}) RETURN n LIMIT $limit',
+        { type, limit }
+      );
+      return result.records.map(record => record.get('n').properties);
+    } finally {
+      await session.close();
+    }
+  }
+  
+  // Additional methods for CRUD operations
+}`}
+                </Typography>
+              </Paper>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Best Practices</Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Implement Incremental Loading" 
+                    secondary="For large graphs, load data incrementally to improve performance and user experience."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Use Caching Strategies" 
+                    secondary="Implement intelligent caching to minimize database queries for frequently accessed data."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Provide Clear Documentation" 
+                    secondary="Document entity types, relationship types, and properties for developers and domain experts."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>check</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Design for Extensibility" 
+                    secondary="Use a modular architecture that allows for easy addition of new entity and relationship types."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+              </List>
+              
+              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <Button 
+                  variant="contained" 
+                  startIcon={<Icon>{ICONS.SCHEMA}</Icon>}
+                  href="interactive-demos/knowledge-graphs.html"
+                  sx={{ mr: 2 }}
+                >
+                  Try Knowledge Graphs Demo
+                </Button>
+                <Button 
+                  variant="outlined"
+                  startIcon={<Icon>{ICONS.HOME}</Icon>}
+                  href="index.html"
+                >
+                  Back to Documentation
+                </Button>
+              </Box>
+            </Paper>
+            
+            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                Last updated: {new Date().toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the application
+    ReactDOM.render(<KnowledgeGraphImplementationGuide />, document.getElementById('root'));
+  </script>
+</body>
+</html> 
