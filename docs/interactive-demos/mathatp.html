@@ -49,12 +49,26 @@
       {
         name: "Pythagorean Theorem",
         statement: "a^2 + b^2 = c^2",
-        description: "In a right triangle, the square of the hypotenuse equals the sum of squares of other sides"
+        description: "In a right triangle, the square of the hypotenuse equals the sum of squares of other sides",
+        proof: [
+          { step: "Consider a right triangle with sides a, b, and hypotenuse c", type: "given" },
+          { step: "Draw squares on each side", type: "construction" },
+          { step: "Area of square on hypotenuse = c²", type: "calculation" },
+          { step: "Area of squares on other sides = a² + b²", type: "calculation" },
+          { step: "By geometric proof, c² = a² + b²", type: "conclusion" }
+        ]
       },
       {
         name: "Quadratic Formula",
         statement: "x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}",
-        description: "Solution to the quadratic equation ax² + bx + c = 0"
+        description: "Solution to the quadratic equation ax² + bx + c = 0",
+        proof: [
+          { step: "Start with ax² + bx + c = 0", type: "given" },
+          { step: "Divide by a: x² + (b/a)x + c/a = 0", type: "algebra" },
+          { step: "Complete the square", type: "algebra" },
+          { step: "Solve for x", type: "algebra" },
+          { step: "x = (-b ± √(b²-4ac))/(2a)", type: "conclusion" }
+        ]
       }
     ];
 
@@ -66,6 +80,9 @@
       const [isProcessing, setIsProcessing] = React.useState(false);
       const [error, setError] = React.useState(null);
       const [progress, setProgress] = React.useState(0);
+      const [equationToSolve, setEquationToSolve] = React.useState("");
+      const [solution, setSolution] = React.useState(null);
+      const [currentStep, setCurrentStep] = React.useState(0);
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -118,6 +135,51 @@
 
         setIsProcessing(false);
         setProgress(100);
+      };
+
+      const solveEquation = async () => {
+        if (!equationToSolve) {
+          setError("Please enter an equation to solve");
+          return;
+        }
+
+        setIsProcessing(true);
+        setProgress(0);
+        setSolution(null);
+
+        // Simulate equation solving steps
+        const steps = [
+          "Parsing equation...",
+          "Identifying variables and constants...",
+          "Applying algebraic rules...",
+          "Solving for unknown...",
+          "Verifying solution..."
+        ];
+
+        for (let i = 0; i < steps.length; i++) {
+          setProofSteps(prev => [...prev, { step: steps[i], status: "processing" }]);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setProgress((i + 1) * 20);
+        }
+
+        // Example solution
+        setSolution({
+          steps: [
+            { step: "Original equation: " + equationToSolve, type: "given" },
+            { step: "Isolate variable terms", type: "algebra" },
+            { step: "Combine like terms", type: "algebra" },
+            { step: "Solve for variable", type: "algebra" },
+            { step: "x = 4", type: "solution" }
+          ]
+        });
+
+        setIsProcessing(false);
+        setProgress(100);
+      };
+
+      const handleEquationToSolveChange = (event) => {
+        setEquationToSolve(event.target.value);
+        setError(null);
       };
 
       const renderMath = (math) => {
@@ -285,14 +347,59 @@
                     fullWidth
                     label="Enter Equation"
                     placeholder="e.g., 2x + 5 = 13"
+                    value={equationToSolve}
+                    onChange={handleEquationToSolveChange}
                     sx={{ mb: 2 }}
                   />
                   <Button
                     variant="contained"
-                    startIcon={<Icon>{ICONS.REFRESH}</Icon>}
+                    onClick={solveEquation}
+                    disabled={isProcessing || !equationToSolve}
+                    startIcon={<Icon>{isProcessing ? ICONS.REFRESH : ICONS.CHECK}</Icon>}
+                    sx={{ mb: 2 }}
                   >
-                    Solve Equation
+                    {isProcessing ? "Solving..." : "Solve Equation"}
                   </Button>
+
+                  {error && (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                      {error}
+                    </Alert>
+                  )}
+
+                  {isProcessing && (
+                    <Box sx={{ mb: 2 }}>
+                      <LinearProgress variant="determinate" value={progress} />
+                      <Typography variant="caption" color="text.secondary">
+                        Progress: {progress}%
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {solution && (
+                    <Paper className="demo-section" sx={{ mt: 2 }}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Solution Steps
+                      </Typography>
+                      <List>
+                        {solution.steps.map((step, index) => (
+                          <ListItem key={index}>
+                            <ListItemIcon>
+                              <Icon>
+                                {step.type === "solution" ? ICONS.CHECK :
+                                 step.type === "error" ? ICONS.ERROR :
+                                 ICONS.INFO}
+                              </Icon>
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={step.step}
+                              secondary={step.type.charAt(0).toUpperCase() + step.type.slice(1)}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Paper>
+                  )}
                 </Paper>
               </Box>
             )}
