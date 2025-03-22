@@ -47,7 +47,8 @@
       FORMAT_LIST: "format_list_bulleted",
       FORMAT_QUOTE: "format_quote",
       COMMENT: "comment",
-      SHARE: "share"
+      SHARE: "share",
+      INFO: "info"
     };
 
     // Sample article templates
@@ -55,17 +56,37 @@
       {
         name: "News Article",
         description: "Standard news article format with headline, subheadline, and body",
-        template: "<h1>Headline</h1><h2>Subheadline</h2><p>Article content goes here...</p>"
+        template: `<h1>Breaking News</h1>
+<h2>Subheadline</h2>
+<p class="lead">Lead paragraph introducing the story...</p>
+<p>Main article content goes here...</p>
+<div class="quote">"Important quote from a source"</div>
+<p>More content...</p>`
       },
       {
         name: "Blog Post",
         description: "Casual blog post format with introduction and sections",
-        template: "<h1>Blog Title</h1><p>Introduction...</p><h2>First Section</h2><p>Content...</p>"
+        template: `<h1>Blog Title</h1>
+<p class="lead">Introduction to the topic...</p>
+<h2>First Section</h2>
+<p>Content for the first section...</p>
+<h2>Second Section</h2>
+<p>Content for the second section...</p>
+<div class="conclusion">Summary and next steps...</div>`
       },
       {
         name: "Technical Article",
         description: "Technical article with code blocks and diagrams",
-        template: "<h1>Technical Topic</h1><p>Overview...</p><pre><code>Code example</code></pre>"
+        template: `<h1>Technical Topic</h1>
+<p class="lead">Overview of the technical concept...</p>
+<h2>Background</h2>
+<p>Technical background information...</p>
+<pre><code>// Code example
+function example() {
+  // Implementation
+}</code></pre>
+<h2>Analysis</h2>
+<p>Technical analysis and findings...</p>`
       }
     ];
 
@@ -79,6 +100,8 @@
       const [error, setError] = React.useState(null);
       const [showImageDialog, setShowImageDialog] = React.useState(false);
       const [imageUrl, setImageUrl] = React.useState("");
+      const [previewMode, setPreviewMode] = React.useState(false);
+      const [selectedFormat, setSelectedFormat] = React.useState(null);
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -119,13 +142,53 @@
         setNewComment("");
       };
 
-      const handleImageUpload = () => {
+      const handleFormatChange = (format) => {
+        setSelectedFormat(format);
+        let newContent = articleContent;
+        
+        switch (format) {
+          case "bold":
+            newContent = `<strong>${articleContent}</strong>`;
+            break;
+          case "italic":
+            newContent = `<em>${articleContent}</em>`;
+            break;
+          case "list":
+            newContent = `<ul><li>${articleContent}</li></ul>`;
+            break;
+          case "quote":
+            newContent = `<blockquote>${articleContent}</blockquote>`;
+            break;
+          default:
+            newContent = articleContent;
+        }
+        
+        setArticleContent(newContent);
+      };
+
+      const handleImagePreview = () => {
         if (!imageUrl) return;
         
-        const imageHtml = `<img src="${imageUrl}" alt="Uploaded image" style="max-width: 100%;" />`;
-        setArticleContent(prev => prev + imageHtml);
-        setShowImageDialog(false);
-        setImageUrl("");
+        const img = new Image();
+        img.onload = () => {
+          setShowImageDialog(false);
+          const imageHtml = `<figure>
+            <img src="${imageUrl}" alt="Uploaded image" style="max-width: 100%;" />
+            <figcaption>Image caption</figcaption>
+          </figure>`;
+          setArticleContent(prev => prev + imageHtml);
+          setImageUrl("");
+        };
+        img.src = imageUrl;
+      };
+
+      const renderPreview = () => {
+        return (
+          <div 
+            className="article-preview"
+            dangerouslySetInnerHTML={{ __html: articleContent }}
+          />
+        );
       };
 
       return (
@@ -203,8 +266,13 @@
 
                   <Grid item xs={12} md={8}>
                     <Paper className="demo-section">
-                      <Box sx={{ mb: 2, display: 'flex', gap: 1 }}>
-                        <ToggleButtonGroup size="small" exclusive>
+                      <Box sx={{ mb: 2, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        <ToggleButtonGroup 
+                          size="small" 
+                          value={selectedFormat}
+                          onChange={(e, newFormat) => handleFormatChange(newFormat)}
+                          exclusive
+                        >
                           <ToggleButton value="bold">
                             <Icon>{ICONS.FORMAT_BOLD}</Icon>
                           </ToggleButton>
@@ -224,17 +292,30 @@
                         <IconButton>
                           <Icon>{ICONS.LINK}</Icon>
                         </IconButton>
+                        <Button
+                          variant="outlined"
+                          onClick={() => setPreviewMode(!previewMode)}
+                          startIcon={<Icon>{previewMode ? ICONS.EDIT : ICONS.INFO}</Icon>}
+                        >
+                          {previewMode ? "Edit" : "Preview"}
+                        </Button>
                       </Box>
 
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={10}
-                        value={articleContent}
-                        onChange={(e) => handleContentChange(e.target.value)}
-                        placeholder="Write your article here..."
-                        sx={{ mb: 2 }}
-                      />
+                      {previewMode ? (
+                        <Box className="article-preview">
+                          {renderPreview()}
+                        </Box>
+                      ) : (
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={10}
+                          value={articleContent}
+                          onChange={(e) => handleContentChange(e.target.value)}
+                          placeholder="Write your article here..."
+                          sx={{ mb: 2 }}
+                        />
+                      )}
 
                       <Box sx={{ display: 'flex', gap: 1 }}>
                         <Button
@@ -356,10 +437,22 @@ console.log(articleWithComments.comments);  // Array of comments`}
                 placeholder="https://example.com/image.jpg"
                 sx={{ mt: 2 }}
               />
+              {imageUrl && (
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Preview:
+                  </Typography>
+                  <img 
+                    src={imageUrl} 
+                    alt="Preview" 
+                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+                  />
+                </Box>
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setShowImageDialog(false)}>Cancel</Button>
-              <Button onClick={handleImageUpload} variant="contained">
+              <Button onClick={handleImagePreview} variant="contained">
                 Add Image
               </Button>
             </DialogActions>
