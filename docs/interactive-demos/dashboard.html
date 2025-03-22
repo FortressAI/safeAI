@@ -3,442 +3,415 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeAI Dashboard</title>
-  <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-  <!-- Babel for JSX transpiling -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <!-- D3.js for charts -->
+  <title>Dashboard - Interactive Demo</title>
+  <link rel="stylesheet" href="../css/shared-demo.css">
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <!-- Chart.js for additional visualizations -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <!-- Shared styles -->
-  <link rel="stylesheet" href="../css/shared-demo.css" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
-    .metric-card {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      padding: 20px;
-      transition: transform 0.2s;
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
     }
     
-    .metric-card:hover {
-      transform: translateY(-4px);
+    .metric-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     }
     
     .metric-value {
       font-size: 32px;
       font-weight: bold;
       margin: 10px 0;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
-    .metric-trend {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    .metric-label {
       font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
     }
-    
-    .trend-up { color: #4caf50; }
-    .trend-down { color: #f44336; }
     
     .chart-container {
       background: rgba(0, 0, 0, 0.2);
       border-radius: 8px;
       padding: 20px;
-      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+    
+    .chart {
       height: 300px;
     }
     
-    .agent-list {
-      max-height: 400px;
-      overflow-y: auto;
+    .activity-list {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 20px;
     }
     
-    .agent-item {
+    .activity-item {
       display: flex;
       align-items: center;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    .agent-avatar {
-      width: 40px;
-      height: 40px;
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      margin-right: 12px;
+      background: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--primary-color);
+      margin-right: 15px;
     }
     
-    .agent-info {
+    .activity-details {
       flex: 1;
     }
     
-    .agent-status {
-      padding: 4px 8px;
-      border-radius: 12px;
+    .activity-time {
+      color: rgba(255, 255, 255, 0.5);
       font-size: 12px;
-      font-weight: 500;
     }
     
-    .status-active {
-      background: rgba(76, 175, 80, 0.2);
-      color: #4caf50;
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
     }
     
-    .status-idle {
-      background: rgba(255, 152, 0, 0.2);
-      color: #ff9800;
-    }
-    
-    .status-error {
-      background: rgba(244, 67, 54, 0.2);
-      color: #f44336;
-    }
+    .status-healthy { background-color: #4CAF50; }
+    .status-warning { background-color: #FFC107; }
+    .status-error { background-color: #F44336; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { 
-      Box, Typography, Grid, Card, CardContent,
-      Icon, IconButton, Tooltip, LinearProgress,
-      List, ListItem, ListItemText, ListItemIcon,
-      Tabs, Tab, Button, Chip, Avatar,
-      Dialog, DialogTitle, DialogContent, DialogActions
-    } = MaterialUI;
+  <div class="container">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Real-time monitoring of SafeAI system performance</p>
 
-    // Mock data for the dashboard
-    const systemMetrics = {
-      activeAgents: 12,
-      systemHealth: 98,
-      securityScore: 95,
-      knowledgeNodes: 1250000,
-      cpuUsage: 45,
-      memoryUsage: 62,
-      networkLatency: 28,
-      incidentsToday: 0
-    };
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Active Agents</div>
+        <div class="metric-value" id="activeAgents">12</div>
+        <div class="metric-trend">+2 from last hour</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">System Load</div>
+        <div class="metric-value" id="systemLoad">45%</div>
+        <div class="metric-trend">Normal range</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Response Time</div>
+        <div class="metric-value" id="responseTime">0.8s</div>
+        <div class="metric-trend">-0.1s from average</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Success Rate</div>
+        <div class="metric-value" id="successRate">99.9%</div>
+        <div class="metric-trend">Above target</div>
+      </div>
+    </div>
 
-    const agents = [
-      { id: 1, name: 'Ethics Agent', type: 'Core', status: 'active', tasks: 145, uptime: '99.9%' },
-      { id: 2, name: 'Math Agent', type: 'Domain', status: 'active', tasks: 89, uptime: '99.7%' },
-      { id: 3, name: 'Security Agent', type: 'Core', status: 'active', tasks: 234, uptime: '100%' },
-      { id: 4, name: 'Knowledge Agent', type: 'Core', status: 'idle', tasks: 56, uptime: '98.5%' },
-      { id: 5, name: 'ARC Agent', type: 'Domain', status: 'active', tasks: 78, uptime: '99.8%' },
-      { id: 6, name: 'FreePress Agent', type: 'Domain', status: 'active', tasks: 112, uptime: '99.6%' }
-    ];
+    <div class="chart-grid">
+      <div class="chart-container">
+        <h2>Agent Activity</h2>
+        <div class="chart" id="activityChart"></div>
+      </div>
+      <div class="chart-container">
+        <h2>System Resources</h2>
+        <div class="chart" id="resourcesChart"></div>
+      </div>
+    </div>
 
-    const securityEvents = [
-      { id: 1, type: 'Access Control', severity: 'low', message: 'New agent authentication', time: '2 mins ago' },
-      { id: 2, type: 'System Update', severity: 'info', message: 'Security patches applied', time: '15 mins ago' },
-      { id: 3, type: 'Monitoring', severity: 'info', message: 'Routine security scan', time: '1 hour ago' }
-    ];
+    <div class="activity-list">
+      <h2>Recent Activity</h2>
+      <div id="activityList">
+        <!-- Activity items will be dynamically added here -->
+      </div>
+    </div>
+  </div>
 
-    function Dashboard() {
-      const [selectedTab, setSelectedTab] = React.useState(0);
-      const [selectedAgent, setSelectedAgent] = React.useState(null);
-      
-      React.useEffect(() => {
-        // Initialize charts when component mounts
-        initSystemHealthChart();
-        initAgentActivityChart();
-        initSecurityMetricsChart();
-      }, []);
-
-      const initSystemHealthChart = () => {
-        const ctx = document.getElementById('systemHealthChart');
-        if (!ctx) return;
+  <script>
+    class Dashboard {
+      constructor() {
+        this.metrics = {
+          activeAgents: 12,
+          systemLoad: 45,
+          responseTime: 0.8,
+          successRate: 99.9
+        };
         
-        new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: Array.from({length: 24}, (_, i) => `${i}:00`),
-            datasets: [{
-              label: 'System Health',
-              data: Array.from({length: 24}, () => 90 + Math.random() * 10),
-              borderColor: '#4caf50',
-              tension: 0.4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false }
-            },
-            scales: {
-              y: {
-                beginAtZero: false,
-                min: 80,
-                max: 100
-              }
-            }
-          }
-        });
-      };
-
-      const initAgentActivityChart = () => {
-        const ctx = document.getElementById('agentActivityChart');
-        if (!ctx) return;
+        this.activityData = Array.from({length: 24}, (_, i) => ({
+          time: i,
+          ethics: Math.random() * 30 + 20,
+          math: Math.random() * 30 + 20,
+          arc: Math.random() * 30 + 20,
+          security: Math.random() * 30 + 20
+        }));
         
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: agents.map(a => a.name),
-            datasets: [{
-              label: 'Tasks Completed',
-              data: agents.map(a => a.tasks),
-              backgroundColor: '#2196f3'
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-      };
-
-      const initSecurityMetricsChart = () => {
-        const ctx = document.getElementById('securityMetricsChart');
-        if (!ctx) return;
+        this.resourceData = Array.from({length: 60}, (_, i) => ({
+          time: i,
+          cpu: Math.random() * 30 + 40,
+          memory: Math.random() * 20 + 50,
+          network: Math.random() * 25 + 35
+        }));
         
-        new Chart(ctx, {
-          type: 'radar',
-          data: {
-            labels: [
-              'Access Control',
-              'Encryption',
-              'Monitoring',
-              'Updates',
-              'Compliance',
-              'Incident Response'
-            ],
-            datasets: [{
-              label: 'Security Score',
-              data: [95, 98, 92, 96, 94, 90],
-              borderColor: '#f44336',
-              backgroundColor: 'rgba(244, 67, 54, 0.2)'
-            }]
+        this.recentActivity = [
+          {
+            agent: 'Ethics Agent',
+            action: 'Completed value alignment check',
+            time: '2 minutes ago',
+            status: 'healthy'
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              r: {
-                min: 80,
-                max: 100
-              }
-            }
+          {
+            agent: 'Security Monitor',
+            action: 'Detected and blocked suspicious activity',
+            time: '5 minutes ago',
+            status: 'warning'
+          },
+          {
+            agent: 'Math Agent',
+            action: 'Solved complex optimization problem',
+            time: '10 minutes ago',
+            status: 'healthy'
           }
+        ];
+        
+        this.initializeCharts();
+        this.updateActivityList();
+        this.startRealTimeUpdates();
+      }
+
+      initializeCharts() {
+        // Agent Activity Chart
+        const activityData = [{
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Ethics Agent',
+          x: this.activityData.map(d => d.time),
+          y: this.activityData.map(d => d.ethics),
+          line: { color: '#4CAF50' }
+        }, {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Math Agent',
+          x: this.activityData.map(d => d.time),
+          y: this.activityData.map(d => d.math),
+          line: { color: '#2196F3' }
+        }, {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'ARC Agent',
+          x: this.activityData.map(d => d.time),
+          y: this.activityData.map(d => d.arc),
+          line: { color: '#FFC107' }
+        }, {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Security Agent',
+          x: this.activityData.map(d => d.time),
+          y: this.activityData.map(d => d.security),
+          line: { color: '#F44336' }
+        }];
+
+        const activityLayout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#fff' },
+          showlegend: true,
+          legend: {
+            bgcolor: 'rgba(0,0,0,0.5)',
+            bordercolor: 'rgba(255,255,255,0.1)',
+            borderwidth: 1
+          },
+          margin: { t: 10, r: 10, b: 40, l: 40 },
+          xaxis: {
+            showgrid: false,
+            title: 'Hour'
+          },
+          yaxis: {
+            showgrid: true,
+            gridcolor: 'rgba(255,255,255,0.1)',
+            title: 'Activity Level (%)'
+          }
+        };
+
+        Plotly.newPlot('activityChart', activityData, activityLayout);
+
+        // System Resources Chart
+        const resourceData = [{
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU',
+          x: this.resourceData.map(d => d.time),
+          y: this.resourceData.map(d => d.cpu),
+          line: { color: '#4CAF50' }
+        }, {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Memory',
+          x: this.resourceData.map(d => d.time),
+          y: this.resourceData.map(d => d.memory),
+          line: { color: '#2196F3' }
+        }, {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Network',
+          x: this.resourceData.map(d => d.time),
+          y: this.resourceData.map(d => d.network),
+          line: { color: '#FFC107' }
+        }];
+
+        const resourceLayout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#fff' },
+          showlegend: true,
+          legend: {
+            bgcolor: 'rgba(0,0,0,0.5)',
+            bordercolor: 'rgba(255,255,255,0.1)',
+            borderwidth: 1
+          },
+          margin: { t: 10, r: 10, b: 40, l: 40 },
+          xaxis: {
+            showgrid: false,
+            title: 'Time (minutes)'
+          },
+          yaxis: {
+            showgrid: true,
+            gridcolor: 'rgba(255,255,255,0.1)',
+            title: 'Usage (%)'
+          }
+        };
+
+        Plotly.newPlot('resourcesChart', resourceData, resourceLayout);
+      }
+
+      updateActivityList() {
+        const container = document.getElementById('activityList');
+        container.innerHTML = this.recentActivity.map(activity => `
+          <div class="activity-item">
+            <div class="activity-icon">
+              <div class="status-indicator status-${activity.status}"></div>
+            </div>
+            <div class="activity-details">
+              <div>${activity.agent}</div>
+              <div>${activity.action}</div>
+              <div class="activity-time">${activity.time}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      updateMetrics() {
+        // Update metric values with small random changes
+        this.metrics.activeAgents += Math.random() > 0.5 ? 1 : -1;
+        this.metrics.systemLoad += (Math.random() - 0.5) * 5;
+        this.metrics.responseTime += (Math.random() - 0.5) * 0.1;
+        this.metrics.successRate = Math.min(100, this.metrics.successRate + (Math.random() - 0.5) * 0.1);
+
+        // Update DOM
+        document.getElementById('activeAgents').textContent = Math.max(0, Math.round(this.metrics.activeAgents));
+        document.getElementById('systemLoad').textContent = Math.max(0, Math.min(100, Math.round(this.metrics.systemLoad))) + '%';
+        document.getElementById('responseTime').textContent = Math.max(0, this.metrics.responseTime.toFixed(1)) + 's';
+        document.getElementById('successRate').textContent = this.metrics.successRate.toFixed(1) + '%';
+      }
+
+      updateCharts() {
+        // Update activity data
+        this.activityData.shift();
+        this.activityData.push({
+          time: this.activityData[this.activityData.length - 1].time + 1,
+          ethics: Math.random() * 30 + 20,
+          math: Math.random() * 30 + 20,
+          arc: Math.random() * 30 + 20,
+          security: Math.random() * 30 + 20
         });
-      };
 
-      return (
-        <Box className="demo-container">
-          <Typography variant="h3" gutterBottom>
-            System Dashboard
-          </Typography>
+        // Update resource data
+        this.resourceData.shift();
+        this.resourceData.push({
+          time: this.resourceData[this.resourceData.length - 1].time + 1,
+          cpu: Math.random() * 30 + 40,
+          memory: Math.random() * 20 + 50,
+          network: Math.random() * 25 + 35
+        });
 
-          <Grid container spacing={3}>
-            {/* System Metrics */}
-            <Grid item xs={12} md={3}>
-              <div className="metric-card">
-                <Typography color="textSecondary">Active Agents</Typography>
-                <div className="metric-value">{systemMetrics.activeAgents}</div>
-                <div className="metric-trend trend-up">
-                  <Icon>trending_up</Icon>
-                  <span>+2 from yesterday</span>
-                </div>
-              </div>
-            </Grid>
-            
-            <Grid item xs={12} md={3}>
-              <div className="metric-card">
-                <Typography color="textSecondary">System Health</Typography>
-                <div className="metric-value">{systemMetrics.systemHealth}%</div>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={systemMetrics.systemHealth}
-                  sx={{ height: 8, borderRadius: 4 }}
-                />
-              </div>
-            </Grid>
-            
-            <Grid item xs={12} md={3}>
-              <div className="metric-card">
-                <Typography color="textSecondary">Security Score</Typography>
-                <div className="metric-value">{systemMetrics.securityScore}%</div>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={systemMetrics.securityScore}
-                  sx={{ height: 8, borderRadius: 4 }}
-                />
-              </div>
-            </Grid>
-            
-            <Grid item xs={12} md={3}>
-              <div className="metric-card">
-                <Typography color="textSecondary">Knowledge Nodes</Typography>
-                <div className="metric-value">{(systemMetrics.knowledgeNodes / 1000000).toFixed(2)}M</div>
-                <div className="metric-trend trend-up">
-                  <Icon>trending_up</Icon>
-                  <span>+50K this week</span>
-                </div>
-              </div>
-            </Grid>
+        // Update plots
+        Plotly.update('activityChart', {
+          x: [
+            this.activityData.map(d => d.time),
+            this.activityData.map(d => d.time),
+            this.activityData.map(d => d.time),
+            this.activityData.map(d => d.time)
+          ],
+          y: [
+            this.activityData.map(d => d.ethics),
+            this.activityData.map(d => d.math),
+            this.activityData.map(d => d.arc),
+            this.activityData.map(d => d.security)
+          ]
+        });
 
-            {/* System Health Chart */}
-            <Grid item xs={12} md={8}>
-              <div className="chart-container">
-                <Typography variant="h6" gutterBottom>System Health Trends</Typography>
-                <canvas id="systemHealthChart"></canvas>
-              </div>
-            </Grid>
+        Plotly.update('resourcesChart', {
+          x: [
+            this.resourceData.map(d => d.time),
+            this.resourceData.map(d => d.time),
+            this.resourceData.map(d => d.time)
+          ],
+          y: [
+            this.resourceData.map(d => d.cpu),
+            this.resourceData.map(d => d.memory),
+            this.resourceData.map(d => d.network)
+          ]
+        });
+      }
 
-            {/* Security Events */}
-            <Grid item xs={12} md={4}>
-              <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', height: '100%' }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Security Events</Typography>
-                  <List>
-                    {securityEvents.map(event => (
-                      <ListItem key={event.id}>
-                        <ListItemIcon>
-                          <Icon>{
-                            event.severity === 'high' ? 'error' :
-                            event.severity === 'medium' ? 'warning' :
-                            'info'
-                          }</Icon>
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary={event.message}
-                          secondary={event.time}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Agent Activity Chart */}
-            <Grid item xs={12} md={6}>
-              <div className="chart-container">
-                <Typography variant="h6" gutterBottom>Agent Activity</Typography>
-                <canvas id="agentActivityChart"></canvas>
-              </div>
-            </Grid>
-
-            {/* Security Metrics Chart */}
-            <Grid item xs={12} md={6}>
-              <div className="chart-container">
-                <Typography variant="h6" gutterBottom>Security Metrics</Typography>
-                <canvas id="securityMetricsChart"></canvas>
-              </div>
-            </Grid>
-
-            {/* Active Agents */}
-            <Grid item xs={12}>
-              <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Active Agents</Typography>
-                  <div className="agent-list">
-                    {agents.map(agent => (
-                      <div key={agent.id} className="agent-item">
-                        <div className="agent-avatar">
-                          <Icon>{
-                            agent.type === 'Core' ? 'settings' : 'psychology'
-                          }</Icon>
-                        </div>
-                        <div className="agent-info">
-                          <Typography variant="subtitle1">{agent.name}</Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            {agent.type} • {agent.tasks} tasks • {agent.uptime} uptime
-                          </Typography>
-                        </div>
-                        <Chip 
-                          label={agent.status}
-                          className={`agent-status status-${agent.status}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-
-          {/* Agent Details Dialog */}
-          <Dialog 
-            open={!!selectedAgent} 
-            onClose={() => setSelectedAgent(null)}
-            maxWidth="sm"
-            fullWidth
-          >
-            {selectedAgent && (
-              <>
-                <DialogTitle>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Avatar sx={{ bgcolor: 'primary.main' }}>
-                      <Icon>{selectedAgent.type === 'Core' ? 'settings' : 'psychology'}</Icon>
-                    </Avatar>
-                    <Typography variant="h6">{selectedAgent.name}</Typography>
-                  </Box>
-                </DialogTitle>
-                <DialogContent>
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle1" gutterBottom>Agent Details</Typography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <Typography variant="body2" color="textSecondary">Type</Typography>
-                        <Typography variant="body1">{selectedAgent.type}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2" color="textSecondary">Status</Typography>
-                        <Chip 
-                          label={selectedAgent.status}
-                          className={`agent-status status-${selectedAgent.status}`}
-                          size="small"
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2" color="textSecondary">Tasks Completed</Typography>
-                        <Typography variant="body1">{selectedAgent.tasks}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2" color="textSecondary">Uptime</Typography>
-                        <Typography variant="body1">{selectedAgent.uptime}</Typography>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setSelectedAgent(null)}>Close</Button>
-                </DialogActions>
-              </>
-            )}
-          </Dialog>
-        </Box>
-      );
+      startRealTimeUpdates() {
+        setInterval(() => {
+          this.updateMetrics();
+          this.updateCharts();
+        }, 2000);
+      }
     }
 
-    // Render the app
-    ReactDOM.render(<Dashboard />, document.getElementById('root'));
+    // Initialize the dashboard when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      window.dashboard = new Dashboard();
+    });
   </script>
 </body>
 </html> 
