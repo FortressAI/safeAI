@@ -1,0 +1,130 @@
+<!-- Navigation -->
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <a href="/">
+                <img src="/assets/images/logo.svg" alt="SafeAI Logo" class="logo">
+                <span>SafeAI</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="/getting-started.html">Getting Started</a>
+            <a href="/basic-concepts.html">Basic Concepts</a>
+            <a href="/user-guide.html">User Guide</a>
+            <a href="/interactive-demo.html" class="active">Interactive Demo</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/knowledge-graph-implementation.html">Technical</a>
+        </div>
+        <div class="nav-actions">
+            <a href="https://github.com/safeai/safeai" class="github-link" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="/community/" class="community-link">Community</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.main-nav {
+    background-color: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+}
+
+.nav-brand a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo {
+    height: 32px;
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.nav-links a:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.active {
+    color: #2196f3;
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.github-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.github-link:hover {
+    color: #fff;
+}
+
+.community-link {
+    color: #2196f3;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.community-link:hover {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .nav-container {
+        padding: 0 10px;
+    }
+}
+</style> 

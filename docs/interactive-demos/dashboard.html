@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Interactive Tutorial</title>
+  <title>SafeAI Dashboard</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -11,145 +11,434 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <!-- D3.js for charts -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Chart.js for additional visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
-    }
-    #root { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 20px;
-    }
-    .tutorial-section {
-      margin-bottom: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .metric-card {
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 8px;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s;
     }
-    .code-block {
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 14px;
+    
+    .metric-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    .metric-value {
+      font-size: 32px;
+      font-weight: bold;
       margin: 10px 0;
-      overflow-x: auto;
     }
-    .tab-content {
-      padding: 15px 0;
+    
+    .metric-trend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+    }
+    
+    .trend-up { color: #4caf50; }
+    .trend-down { color: #f44336; }
+    
+    .chart-container {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      height: 300px;
+    }
+    
+    .agent-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .agent-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .agent-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-color);
+    }
+    
+    .agent-info {
+      flex: 1;
+    }
+    
+    .agent-status {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .status-active {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+    }
+    
+    .status-idle {
+      background: rgba(255, 152, 0, 0.2);
+      color: #ff9800;
+    }
+    
+    .status-error {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
-      Box, Typography, Button, Card, CardContent, 
-      Tabs, Tab, Grid, Divider, 
-      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress
+      Box, Typography, Grid, Card, CardContent,
+      Icon, IconButton, Tooltip, LinearProgress,
+      List, ListItem, ListItemText, ListItemIcon,
+      Tabs, Tab, Button, Chip, Avatar,
+      Dialog, DialogTitle, DialogContent, DialogActions
     } = MaterialUI;
 
-    // Main tutorial component
-    function DashboardTutorial() {
-      const [tabValue, setTabValue] = React.useState(0);
+    // Mock data for the dashboard
+    const systemMetrics = {
+      activeAgents: 12,
+      systemHealth: 98,
+      securityScore: 95,
+      knowledgeNodes: 1250000,
+      cpuUsage: 45,
+      memoryUsage: 62,
+      networkLatency: 28,
+      incidentsToday: 0
+    };
 
-      const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
+    const agents = [
+      { id: 1, name: 'Ethics Agent', type: 'Core', status: 'active', tasks: 145, uptime: '99.9%' },
+      { id: 2, name: 'Math Agent', type: 'Domain', status: 'active', tasks: 89, uptime: '99.7%' },
+      { id: 3, name: 'Security Agent', type: 'Core', status: 'active', tasks: 234, uptime: '100%' },
+      { id: 4, name: 'Knowledge Agent', type: 'Core', status: 'idle', tasks: 56, uptime: '98.5%' },
+      { id: 5, name: 'ARC Agent', type: 'Domain', status: 'active', tasks: 78, uptime: '99.8%' },
+      { id: 6, name: 'FreePress Agent', type: 'Domain', status: 'active', tasks: 112, uptime: '99.6%' }
+    ];
+
+    const securityEvents = [
+      { id: 1, type: 'Access Control', severity: 'low', message: 'New agent authentication', time: '2 mins ago' },
+      { id: 2, type: 'System Update', severity: 'info', message: 'Security patches applied', time: '15 mins ago' },
+      { id: 3, type: 'Monitoring', severity: 'info', message: 'Routine security scan', time: '1 hour ago' }
+    ];
+
+    function Dashboard() {
+      const [selectedTab, setSelectedTab] = React.useState(0);
+      const [selectedAgent, setSelectedAgent] = React.useState(null);
+      
+      React.useEffect(() => {
+        // Initialize charts when component mounts
+        initSystemHealthChart();
+        initAgentActivityChart();
+        initSecurityMetricsChart();
+      }, []);
+
+      const initSystemHealthChart = () => {
+        const ctx = document.getElementById('systemHealthChart');
+        if (!ctx) return;
+        
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+            datasets: [{
+              label: 'System Health',
+              data: Array.from({length: 24}, () => 90 + Math.random() * 10),
+              borderColor: '#4caf50',
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                min: 80,
+                max: 100
+              }
+            }
+          }
+        });
+      };
+
+      const initAgentActivityChart = () => {
+        const ctx = document.getElementById('agentActivityChart');
+        if (!ctx) return;
+        
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: agents.map(a => a.name),
+            datasets: [{
+              label: 'Tasks Completed',
+              data: agents.map(a => a.tasks),
+              backgroundColor: '#2196f3'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      };
+
+      const initSecurityMetricsChart = () => {
+        const ctx = document.getElementById('securityMetricsChart');
+        if (!ctx) return;
+        
+        new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: [
+              'Access Control',
+              'Encryption',
+              'Monitoring',
+              'Updates',
+              'Compliance',
+              'Incident Response'
+            ],
+            datasets: [{
+              label: 'Security Score',
+              data: [95, 98, 92, 96, 94, 90],
+              borderColor: '#f44336',
+              backgroundColor: 'rgba(244, 67, 54, 0.2)'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                min: 80,
+                max: 100
+              }
+            }
+          }
+        });
       };
 
       return (
-        <Box>
-          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
-            SafeAI Dashboard - Interactive Tutorial
+        <Box className="demo-container">
+          <Typography variant="h3" gutterBottom>
+            System Dashboard
           </Typography>
-          
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange}
-            sx={{ mb: 3 }}
+
+          <Grid container spacing={3}>
+            {/* System Metrics */}
+            <Grid item xs={12} md={3}>
+              <div className="metric-card">
+                <Typography color="textSecondary">Active Agents</Typography>
+                <div className="metric-value">{systemMetrics.activeAgents}</div>
+                <div className="metric-trend trend-up">
+                  <Icon>trending_up</Icon>
+                  <span>+2 from yesterday</span>
+                </div>
+              </div>
+            </Grid>
+            
+            <Grid item xs={12} md={3}>
+              <div className="metric-card">
+                <Typography color="textSecondary">System Health</Typography>
+                <div className="metric-value">{systemMetrics.systemHealth}%</div>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={systemMetrics.systemHealth}
+                  sx={{ height: 8, borderRadius: 4 }}
+                />
+              </div>
+            </Grid>
+            
+            <Grid item xs={12} md={3}>
+              <div className="metric-card">
+                <Typography color="textSecondary">Security Score</Typography>
+                <div className="metric-value">{systemMetrics.securityScore}%</div>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={systemMetrics.securityScore}
+                  sx={{ height: 8, borderRadius: 4 }}
+                />
+              </div>
+            </Grid>
+            
+            <Grid item xs={12} md={3}>
+              <div className="metric-card">
+                <Typography color="textSecondary">Knowledge Nodes</Typography>
+                <div className="metric-value">{(systemMetrics.knowledgeNodes / 1000000).toFixed(2)}M</div>
+                <div className="metric-trend trend-up">
+                  <Icon>trending_up</Icon>
+                  <span>+50K this week</span>
+                </div>
+              </div>
+            </Grid>
+
+            {/* System Health Chart */}
+            <Grid item xs={12} md={8}>
+              <div className="chart-container">
+                <Typography variant="h6" gutterBottom>System Health Trends</Typography>
+                <canvas id="systemHealthChart"></canvas>
+              </div>
+            </Grid>
+
+            {/* Security Events */}
+            <Grid item xs={12} md={4}>
+              <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', height: '100%' }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>Security Events</Typography>
+                  <List>
+                    {securityEvents.map(event => (
+                      <ListItem key={event.id}>
+                        <ListItemIcon>
+                          <Icon>{
+                            event.severity === 'high' ? 'error' :
+                            event.severity === 'medium' ? 'warning' :
+                            'info'
+                          }</Icon>
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={event.message}
+                          secondary={event.time}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Agent Activity Chart */}
+            <Grid item xs={12} md={6}>
+              <div className="chart-container">
+                <Typography variant="h6" gutterBottom>Agent Activity</Typography>
+                <canvas id="agentActivityChart"></canvas>
+              </div>
+            </Grid>
+
+            {/* Security Metrics Chart */}
+            <Grid item xs={12} md={6}>
+              <div className="chart-container">
+                <Typography variant="h6" gutterBottom>Security Metrics</Typography>
+                <canvas id="securityMetricsChart"></canvas>
+              </div>
+            </Grid>
+
+            {/* Active Agents */}
+            <Grid item xs={12}>
+              <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>Active Agents</Typography>
+                  <div className="agent-list">
+                    {agents.map(agent => (
+                      <div key={agent.id} className="agent-item">
+                        <div className="agent-avatar">
+                          <Icon>{
+                            agent.type === 'Core' ? 'settings' : 'psychology'
+                          }</Icon>
+                        </div>
+                        <div className="agent-info">
+                          <Typography variant="subtitle1">{agent.name}</Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {agent.type} • {agent.tasks} tasks • {agent.uptime} uptime
+                          </Typography>
+                        </div>
+                        <Chip 
+                          label={agent.status}
+                          className={`agent-status status-${agent.status}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* Agent Details Dialog */}
+          <Dialog 
+            open={!!selectedAgent} 
+            onClose={() => setSelectedAgent(null)}
+            maxWidth="sm"
+            fullWidth
           >
-            <Tab label="Overview" />
-            <Tab label="Components" />
-            <Tab label="Live Demo" />
-            <Tab label="Code Examples" />
-          </Tabs>
-          
-          {/* Overview Tab */}
-          {tabValue === 0 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>What is the Dashboard?</Typography>
-                <Typography variant="body1" paragraph>
-                  The Dashboard provides a high-level overview of your SafeAI system's status, 
-                  including system health, security, knowledge graphs, and active agents.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Components:</Typography>
-                <Grid container spacing={2}>
-                  {['System Health', 'Security Status', 'Knowledge Graphs', 'Active Agents'].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
-                        <CardContent>
-                          <Typography variant="h6" color="#0074D9">{item}</Typography>
-                        </CardContent>
-                      </Card>
+            {selectedAgent && (
+              <>
+                <DialogTitle>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>
+                      <Icon>{selectedAgent.type === 'Core' ? 'settings' : 'psychology'}</Icon>
+                    </Avatar>
+                    <Typography variant="h6">{selectedAgent.name}</Typography>
+                  </Box>
+                </DialogTitle>
+                <DialogContent>
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle1" gutterBottom>Agent Details</Typography>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary">Type</Typography>
+                        <Typography variant="body1">{selectedAgent.type}</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary">Status</Typography>
+                        <Chip 
+                          label={selectedAgent.status}
+                          className={`agent-status status-${selectedAgent.status}`}
+                          size="small"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary">Tasks Completed</Typography>
+                        <Typography variant="body1">{selectedAgent.tasks}</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="textSecondary">Uptime</Typography>
+                        <Typography variant="body1">{selectedAgent.uptime}</Typography>
+                      </Grid>
                     </Grid>
-                  ))}
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Components Tab */}
-          {tabValue === 1 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Dashboard Components</Typography>
-                <Typography variant="body1" paragraph>
-                  The Dashboard consists of several key components that display different aspects
-                  of your SafeAI system.
-                </Typography>
-              </div>
-            </div>
-          )}
-          
-          {/* Live Demo Tab */}
-          {tabValue === 2 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>
-                  Dashboard Live Demo
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Here's an interactive demonstration of the SafeAI Dashboard.
-                </Typography>
-              </div>
-            </div>
-          )}
-          
-          {/* Code Examples Tab */}
-          {tabValue === 3 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
-                <Typography variant="body1" paragraph>
-                  Let's look at some of the key code examples from the Dashboard.
-                </Typography>
-              </div>
-            </div>
-          )}
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setSelectedAgent(null)}>Close</Button>
+                </DialogActions>
+              </>
+            )}
+          </Dialog>
         </Box>
       );
     }
 
-    ReactDOM.render(<DashboardTutorial />, document.getElementById('root'));
+    // Render the app
+    ReactDOM.render(<Dashboard />, document.getElementById('root'));
   </script>
 </body>
 </html> 

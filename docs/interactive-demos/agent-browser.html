@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Browser - Interactive Tutorial</title>
+  <title>Agent Browser - Interactive Demo</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -11,53 +11,103 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <!-- D3.js for visualizations -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" />
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
     }
-    #root { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 20px;
+    
+    .agent-card {
+      position: relative;
+      overflow: hidden;
     }
-    .tutorial-section {
-      margin-bottom: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.05);
+    
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     }
-    .code-block {
-      background-color: #1e1e1e;
-      padding: 15px;
+    
+    .agent-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .metric-item {
+      text-align: center;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
-      font-family: monospace;
-      font-size: 14px;
-      margin: 10px 0;
-      overflow-x: auto;
     }
-    .tab-content {
-      padding: 15px 0;
+    
+    .metric-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .metric-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .search-bar {
+      margin-bottom: 20px;
+    }
+    
+    .filter-chips {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .agent-details-dialog {
+      max-width: 600px;
+    }
+    
+    .agent-details-content {
+      padding: 20px;
+    }
+    
+    .agent-details-section {
+      margin-bottom: 20px;
+    }
+    
+    .agent-details-section:last-child {
+      margin-bottom: 0;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
       Box, Typography, Button, Card, CardContent, 
       Tabs, Tab, Grid, Divider, 
-      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress
+      Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, 
+      CircularProgress, Alert
     } = MaterialUI;
 
-    // Sample agents data
+    // Enhanced agents data with more realistic metrics
     const agents = [
       { 
         id: 1,
@@ -67,7 +117,19 @@
         version: '2.1.0',
         status: 'Active',
         description: 'An agent specialized in solving complex mathematical problems',
-        capabilities: ['Theorem proving', 'Equation solving', 'Optimization']
+        capabilities: ['Theorem proving', 'Equation solving', 'Optimization'],
+        metrics: {
+          tasksCompleted: 1247,
+          successRate: 98.5,
+          avgResponseTime: 0.8,
+          uptime: 99.9
+        },
+        lastActive: '2 minutes ago',
+        resourceUsage: {
+          cpu: 45,
+          memory: 60,
+          network: 30
+        }
       },
       { 
         id: 2,
@@ -77,7 +139,19 @@
         version: '1.5.2',
         status: 'Active',
         description: 'Analyzes ethical implications of decisions and scenarios',
-        capabilities: ['Value alignment', 'Ethical analysis', 'Cultural sensitivity']
+        capabilities: ['Value alignment', 'Ethical analysis', 'Cultural sensitivity'],
+        metrics: {
+          tasksCompleted: 856,
+          successRate: 95.2,
+          avgResponseTime: 1.2,
+          uptime: 99.8
+        },
+        lastActive: '5 minutes ago',
+        resourceUsage: {
+          cpu: 35,
+          memory: 45,
+          network: 25
+        }
       },
       { 
         id: 3,
@@ -87,192 +161,436 @@
         version: '3.0.1',
         status: 'Active',
         description: 'Monitors system security and detects potential threats',
-        capabilities: ['Threat detection', 'Vulnerability scanning', 'Access control']
+        capabilities: ['Threat detection', 'Vulnerability scanning', 'Access control'],
+        metrics: {
+          tasksCompleted: 2341,
+          successRate: 99.9,
+          avgResponseTime: 0.3,
+          uptime: 100
+        },
+        lastActive: 'Just now',
+        resourceUsage: {
+          cpu: 55,
+          memory: 70,
+          network: 40
+        }
       }
     ];
 
-    // Main tutorial component
-    function AgentBrowserTutorial() {
+    // Main component
+    function AgentBrowser() {
       const [tabValue, setTabValue] = React.useState(0);
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [selectedAgent, setSelectedAgent] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+      const [filteredAgents, setFilteredAgents] = React.useState(agents);
+      const [selectedDomain, setSelectedDomain] = React.useState('all');
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
       };
 
+      const handleSearch = (event) => {
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
+        setFilteredAgents(agents.filter(agent => 
+          agent.name.toLowerCase().includes(query) ||
+          agent.description.toLowerCase().includes(query) ||
+          agent.capabilities.some(cap => cap.toLowerCase().includes(query))
+        ));
+      };
+
+      const handleAgentClick = (agent) => {
+        setSelectedAgent(agent);
+      };
+
+      const handleDomainFilter = (domain) => {
+        setSelectedDomain(domain);
+        setFilteredAgents(domain === 'all' 
+          ? agents 
+          : agents.filter(agent => agent.domain === domain)
+        );
+      };
+
+      const domains = ['all', ...new Set(agents.map(agent => agent.domain))];
+
       return (
-        <Box>
+        <Box className="demo-container">
           <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
-            Agent Browser - Interactive Tutorial
+            Agent Browser
           </Typography>
           
           <Tabs 
             value={tabValue} 
             onChange={handleTabChange}
-            sx={{ mb: 3 }}
+            className="demo-tabs"
           >
             <Tab label="Overview" />
-            <Tab label="Components" />
-            <Tab label="Live Demo" />
-            <Tab label="Code Examples" />
+            <Tab label="Browse Agents" />
+            <Tab label="Analytics" />
+            <Tab label="Documentation" />
           </Tabs>
           
           {/* Overview Tab */}
           {tabValue === 0 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>What is the Agent Browser?</Typography>
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Welcome to the Agent Browser</Typography>
                 <Typography variant="body1" paragraph>
-                  The Agent Browser provides a comprehensive interface for browsing, searching, and managing 
-                  AI agents in the SafeAI ecosystem. It allows you to explore agents by domain, capability, 
-                  or other attributes.
+                  The Agent Browser provides a comprehensive interface for exploring and managing AI agents 
+                  in the SafeAI ecosystem. Browse through different agents, monitor their performance, 
+                  and understand their capabilities.
                 </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
-                <Grid container spacing={2}>
-                  {['Browse Agents', 'Agent Details', 'Agent Search', 'Deploy Agents'].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
-                        <CardContent>
-                          <Typography variant="h6" color="#0074D9">{item}</Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
+                
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  <Grid item xs={12} md={4}>
+                    <Card className="interactive-element">
+                      <CardContent>
+                        <Typography variant="h6" color="primary">Browse Agents</Typography>
+                        <Typography variant="body2">
+                          Explore different types of AI agents and their capabilities
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Card className="interactive-element">
+                      <CardContent>
+                        <Typography variant="h6" color="primary">Monitor Performance</Typography>
+                        <Typography variant="body2">
+                          Track agent metrics and system health in real-time
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Card className="interactive-element">
+                      <CardContent>
+                        <Typography variant="h6" color="primary">Manage Agents</Typography>
+                        <Typography variant="body2">
+                          Deploy, configure, and manage agent instances
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                 </Grid>
               </div>
             </div>
           )}
           
-          {/* Components Tab */}
+          {/* Browse Agents Tab */}
           {tabValue === 1 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Agent Browser Components</Typography>
-                <Typography variant="body1" paragraph>
-                  The Agent Browser consists of several key components that help you discover and manage agents.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Agent Card:</Typography>
-                <Card sx={{ maxWidth: 350, bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
-                  <CardContent>
-                    <Typography variant="h6">Math Solver</Typography>
-                    <Chip size="small" label="Mathematics" sx={{ mb: 1 }} />
-                    <Typography variant="body2">
-                      An agent specialized in solving complex mathematical problems
-                    </Typography>
-                    <Divider sx={{ my: 2 }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Chip size="small" label="v2.1.0" />
-                      <Chip size="small" label="Active" color="success" />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          )}
-          
-          {/* Live Demo Tab */}
-          {tabValue === 2 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>
-                  Agent Browser Live Demo
-                </Typography>
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Available Agents
-                  </Typography>
-                  <Grid container spacing={2}>
-                    {agents.map(agent => (
-                      <Grid item xs={12} sm={6} md={4} key={agent.id}>
-                        <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
-                          <CardContent>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                              <Typography variant="h6">{agent.name}</Typography>
-                              <Chip size="small" label={agent.status} color={agent.status === 'Active' ? 'success' : 'default'} />
-                            </Box>
-                            <Chip size="small" label={agent.domain} sx={{ mb: 2 }} />
-                            <Typography variant="body2" paragraph>
-                              {agent.description}
-                            </Typography>
-                            <Divider sx={{ my: 1 }} />
-                            <Box sx={{ mt: 2 }}>
-                              <Typography variant="caption" color="text.secondary">
-                                Capabilities:
-                              </Typography>
-                              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-                                {agent.capabilities.map((cap, idx) => (
-                                  <Chip key={idx} label={cap} size="small" sx={{ bgcolor: 'rgba(0,0,0,0.3)' }} />
-                                ))}
-                              </Box>
-                            </Box>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              </div>
-            </div>
-          )}
-          
-          {/* Code Examples Tab */}
-          {tabValue === 3 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
-                <Typography variant="body1" paragraph>
-                  Let's look at some of the key code examples from the Agent Browser.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Agent Card Component:</Typography>
-                <div className="code-block">
-                  {`const AgentCard = ({ agent, onSelect }) => {
-  return (
-    <Card sx={{ 
-      height: '100%',
-      transition: 'transform 0.2s ease-in-out',
-      '&:hover': { transform: 'translateY(-4px)' }
-    }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Typography variant="h6">{agent.name}</Typography>
-          <Chip size="small" label={agent.status} color={agent.status === 'Active' ? 'success' : 'default'} />
-        </Box>
-        <Chip size="small" label={agent.domain} sx={{ mb: 2 }} />
-        <Typography variant="body2" paragraph>
-          {agent.description}
-        </Typography>
-        <Divider sx={{ my: 1 }} />
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="caption" color="text.secondary">
-            Capabilities:
-          </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-            {agent.capabilities.map((cap, idx) => (
-              <Chip key={idx} label={cap} size="small" />
-            ))}
-          </Box>
-        </Box>
-        <Button 
-          variant="outlined" 
-          size="small" 
-          fullWidth 
-          sx={{ mt: 2 }} 
-          onClick={() => onSelect(agent)}
-        >
-          View Details
-        </Button>
-      </CardContent>
-    </Card>
-  );
-}`}
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Search agents..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="search-bar"
+                />
+                
+                <div className="filter-chips">
+                  {domains.map(domain => (
+                    <Chip
+                      key={domain}
+                      label={domain.charAt(0).toUpperCase() + domain.slice(1)}
+                      onClick={() => handleDomainFilter(domain)}
+                      color={selectedDomain === domain ? 'primary' : 'default'}
+                    />
+                  ))}
+                </div>
+
+                <div className="agent-grid">
+                  {filteredAgents.map(agent => (
+                    <Card 
+                      key={agent.id} 
+                      className="agent-card interactive-element"
+                      onClick={() => handleAgentClick(agent)}
+                    >
+                      <CardContent>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                          <Typography variant="h6">{agent.name}</Typography>
+                          <Chip 
+                            size="small" 
+                            label={agent.status} 
+                            color={agent.status === 'Active' ? 'success' : 'default'} 
+                          />
+                        </Box>
+                        <Chip size="small" label={agent.domain} sx={{ mb: 2 }} />
+                        <Typography variant="body2" paragraph>
+                          {agent.description}
+                        </Typography>
+                        
+                        <div className="agent-metrics">
+                          <div className="metric-item">
+                            <Typography className="metric-value">{agent.metrics.tasksCompleted}</Typography>
+                            <Typography className="metric-label">Tasks Completed</Typography>
+                          </div>
+                          <div className="metric-item">
+                            <Typography className="metric-value">{agent.metrics.successRate}%</Typography>
+                            <Typography className="metric-label">Success Rate</Typography>
+                          </div>
+                          <div className="metric-item">
+                            <Typography className="metric-value">{agent.metrics.avgResponseTime}s</Typography>
+                            <Typography className="metric-label">Avg Response Time</Typography>
+                          </div>
+                          <div className="metric-item">
+                            <Typography className="metric-value">{agent.metrics.uptime}%</Typography>
+                            <Typography className="metric-label">Uptime</Typography>
+                          </div>
+                        </div>
+                        
+                        <Divider sx={{ my: 2 }} />
+                        
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="caption" color="text.secondary">
+                            Capabilities:
+                          </Typography>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+                            {agent.capabilities.map((cap, idx) => (
+                              <Chip 
+                                key={idx} 
+                                label={cap} 
+                                size="small" 
+                                sx={{ bgcolor: 'rgba(0,0,0,0.3)' }} 
+                              />
+                            ))}
+                          </Box>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </div>
             </div>
           )}
+          
+          {/* Analytics Tab */}
+          {tabValue === 2 && (
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Agent Analytics</Typography>
+                <Typography variant="body1" paragraph>
+                  Monitor agent performance and system metrics in real-time.
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Resource Usage</Typography>
+                        <Box sx={{ mt: 2 }}>
+                          {agents.map(agent => (
+                            <Box key={agent.id} sx={{ mb: 2 }}>
+                              <Typography variant="subtitle2">{agent.name}</Typography>
+                              <LinearProgress 
+                                variant="determinate" 
+                                value={agent.resourceUsage.cpu} 
+                                sx={{ mb: 1 }}
+                              />
+                              <Typography variant="caption">
+                                CPU: {agent.resourceUsage.cpu}% | Memory: {agent.resourceUsage.memory}% | Network: {agent.resourceUsage.network}%
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Performance Metrics</Typography>
+                        <Box sx={{ mt: 2 }}>
+                          {agents.map(agent => (
+                            <Box key={agent.id} sx={{ mb: 2 }}>
+                              <Typography variant="subtitle2">{agent.name}</Typography>
+                              <Typography variant="body2">
+                                Tasks Completed: {agent.metrics.tasksCompleted}
+                              </Typography>
+                              <Typography variant="body2">
+                                Success Rate: {agent.metrics.successRate}%
+                              </Typography>
+                              <Typography variant="body2">
+                                Average Response Time: {agent.metrics.avgResponseTime}s
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Documentation Tab */}
+          {tabValue === 3 && (
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Agent Browser Documentation</Typography>
+                <Typography variant="body1" paragraph>
+                  Learn how to use the Agent Browser and understand its features.
+                </Typography>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>search</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Agent Search"
+                      secondary="Search agents by name, capability, or domain"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>analytics</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Performance Monitoring"
+                      secondary="Track agent metrics and system health"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>settings</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Agent Management"
+                      secondary="Configure and manage agent instances"
+                    />
+                  </ListItem>
+                </List>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Example Usage:</Typography>
+                <div className="code-block">
+                  {`// Example: Deploying a new agent
+const deployAgent = async (agentConfig) => {
+  try {
+    const response = await api.deployAgent(agentConfig);
+    return response;
+  } catch (error) {
+    console.error('Failed to deploy agent:', error);
+    throw error;
+  }
+};
+
+// Example: Monitoring agent metrics
+const monitorAgent = (agentId) => {
+  return api.getAgentMetrics(agentId);
+};`}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Agent Details Dialog */}
+          <Dialog 
+            open={!!selectedAgent} 
+            onClose={() => setSelectedAgent(null)}
+            className="agent-details-dialog"
+            maxWidth="md"
+            fullWidth
+          >
+            {selectedAgent && (
+              <>
+                <DialogTitle>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>
+                      {selectedAgent.name.charAt(0)}
+                    </Avatar>
+                    <Typography variant="h6">{selectedAgent.name}</Typography>
+                  </Box>
+                </DialogTitle>
+                <DialogContent className="agent-details-content">
+                  <div className="agent-details-section">
+                    <Typography variant="subtitle1" gutterBottom>Overview</Typography>
+                    <Typography variant="body2" paragraph>
+                      {selectedAgent.description}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                      <Chip label={selectedAgent.type} size="small" />
+                      <Chip label={selectedAgent.domain} size="small" />
+                      <Chip label={`v${selectedAgent.version}`} size="small" />
+                    </Box>
+                  </div>
+
+                  <div className="agent-details-section">
+                    <Typography variant="subtitle1" gutterBottom>Capabilities</Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {selectedAgent.capabilities.map((cap, idx) => (
+                        <Chip key={idx} label={cap} size="small" />
+                      ))}
+                    </Box>
+                  </div>
+
+                  <div className="agent-details-section">
+                    <Typography variant="subtitle1" gutterBottom>Performance Metrics</Typography>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">Tasks Completed</Typography>
+                        <Typography variant="h6">{selectedAgent.metrics.tasksCompleted}</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">Success Rate</Typography>
+                        <Typography variant="h6">{selectedAgent.metrics.successRate}%</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">Avg Response Time</Typography>
+                        <Typography variant="h6">{selectedAgent.metrics.avgResponseTime}s</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2">Uptime</Typography>
+                        <Typography variant="h6">{selectedAgent.metrics.uptime}%</Typography>
+                      </Grid>
+                    </Grid>
+                  </div>
+
+                  <div className="agent-details-section">
+                    <Typography variant="subtitle1" gutterBottom>Resource Usage</Typography>
+                    <Box sx={{ mt: 1 }}>
+                      <Typography variant="body2">CPU Usage</Typography>
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={selectedAgent.resourceUsage.cpu} 
+                        sx={{ mb: 1 }}
+                      />
+                      <Typography variant="body2">Memory Usage</Typography>
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={selectedAgent.resourceUsage.memory} 
+                        sx={{ mb: 1 }}
+                      />
+                      <Typography variant="body2">Network Usage</Typography>
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={selectedAgent.resourceUsage.network} 
+                      />
+                    </Box>
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setSelectedAgent(null)}>Close</Button>
+                  <Button variant="contained" color="primary">
+                    Configure Agent
+                  </Button>
+                </DialogActions>
+              </>
+            )}
+          </Dialog>
         </Box>
       );
     }
 
-    ReactDOM.render(<AgentBrowserTutorial />, document.getElementById('root'));
+    // Render the app
+    ReactDOM.render(<AgentBrowser />, document.getElementById('root'));
   </script>
 </body>
 </html> 

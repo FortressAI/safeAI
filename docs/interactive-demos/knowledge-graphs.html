@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Knowledge Graphs - Interactive Tutorial</title>
+  <title>Knowledge Graphs - Interactive Demo</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -11,296 +11,363 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <!-- D3.js for visualizations -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" />
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
-    }
-    #root { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 20px;
-    }
-    .tutorial-section {
-      margin-bottom: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-    .code-block {
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 14px;
-      margin: 10px 0;
-      overflow-x: auto;
-      color: #e6e6e6;
-    }
-    .tab-content {
-      padding: 15px 0;
-    }
     .graph-container {
-      height: 400px;
-      background-color: rgba(0,0,0,0.3);
-      border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin: 10px 0;
+      width: 100%;
+      height: 600px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .graph-controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+    
+    .graph-legend {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+    
+    .legend-item {
       display: flex;
       align-items: center;
-      justify-content: center;
+      margin: 5px 0;
+    }
+    
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .node-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 4px;
+      color: white;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 1001;
+    }
+    
+    .graph-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
     const { 
       Box, Typography, Button, Card, CardContent, 
       Tabs, Tab, Grid, Divider, 
-      Avatar, Chip, Paper, IconButton, Tooltip,
-      List, ListItem, ListItemText, ListItemIcon
+      IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon,
+      CircularProgress, Alert, Slider
     } = MaterialUI;
 
     // Sample knowledge graph data
-    const knowledgeGraphs = [
-      { 
-        id: 1,
-        name: 'Mathematics',
-        description: 'Mathematical concepts, theorems, and relations',
-        nodes: 1200000,
-        edges: 3500000,
-        lastUpdated: '2023-09-15',
-        size: '2.5 GB',
-        status: 'Active'
-      },
-      { 
-        id: 2,
-        name: 'Ethics',
-        description: 'Ethical principles, values, and frameworks',
-        nodes: 850000,
-        edges: 2100000,
-        lastUpdated: '2023-10-22',
-        size: '1.8 GB',
-        status: 'Active'
-      },
-      { 
-        id: 3,
-        name: 'Physics',
-        description: 'Physical laws, theories, and phenomena',
-        nodes: 1500000,
-        edges: 4200000,
-        lastUpdated: '2023-08-30',
-        size: '3.1 GB',
-        status: 'Active'
-      }
-    ];
+    const graphData = {
+      nodes: [
+        { id: 1, label: 'Ethics Agent', type: 'agent', category: 'ethics' },
+        { id: 2, label: 'Math Agent', type: 'agent', category: 'math' },
+        { id: 3, label: 'ARC Agent', type: 'agent', category: 'arc' },
+        { id: 4, label: 'FreePress Agent', type: 'agent', category: 'freepress' },
+        { id: 5, label: 'Knowledge Base', type: 'system', category: 'system' },
+        { id: 6, label: 'Security Layer', type: 'system', category: 'system' },
+        { id: 7, label: 'Smart Contracts', type: 'system', category: 'system' },
+        { id: 8, label: 'API Gateway', type: 'system', category: 'system' },
+        { id: 9, label: 'Ethics Guidelines', type: 'knowledge', category: 'ethics' },
+        { id: 10, label: 'Math Models', type: 'knowledge', category: 'math' },
+        { id: 11, label: 'ARC Protocols', type: 'knowledge', category: 'arc' },
+        { id: 12, label: 'Content Rules', type: 'knowledge', category: 'freepress' }
+      ],
+      links: [
+        { source: 1, target: 5, type: 'accesses', weight: 1 },
+        { source: 2, target: 5, type: 'accesses', weight: 1 },
+        { source: 3, target: 5, type: 'accesses', weight: 1 },
+        { source: 4, target: 5, type: 'accesses', weight: 1 },
+        { source: 5, target: 6, type: 'protected_by', weight: 2 },
+        { source: 6, target: 7, type: 'enforces', weight: 2 },
+        { source: 7, target: 8, type: 'exposes', weight: 1 },
+        { source: 1, target: 9, type: 'uses', weight: 1 },
+        { source: 2, target: 10, type: 'uses', weight: 1 },
+        { source: 3, target: 11, type: 'uses', weight: 1 },
+        { source: 4, target: 12, type: 'uses', weight: 1 }
+      ]
+    };
 
-    // Main tutorial component
-    function KnowledgeGraphsTutorial() {
+    // Main component
+    function KnowledgeGraphs() {
       const [tabValue, setTabValue] = React.useState(0);
-      const [selectedGraph, setSelectedGraph] = React.useState(null);
+      const [selectedNode, setSelectedNode] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+      const [zoom, setZoom] = React.useState(1);
+      const [simulation, setSimulation] = React.useState(null);
+      const [graphContainer, setGraphContainer] = React.useState(null);
+
+      React.useEffect(() => {
+        if (graphContainer) {
+          initGraph();
+        }
+      }, [graphContainer]);
+
+      const initGraph = () => {
+        const width = graphContainer.clientWidth;
+        const height = graphContainer.clientHeight;
+        const svg = d3.select(graphContainer)
+          .append('svg')
+          .attr('width', width)
+          .attr('height', height);
+
+        // Create force simulation
+        const sim = d3.forceSimulation(graphData.nodes)
+          .force('link', d3.forceLink(graphData.links)
+            .id(d => d.id)
+            .distance(d => d.weight * 50))
+          .force('charge', d3.forceManyBody().strength(-200))
+          .force('center', d3.forceCenter(width / 2, height / 2))
+          .force('collision', d3.forceCollide().radius(50));
+
+        // Create links
+        const link = svg.append('g')
+          .selectAll('line')
+          .data(graphData.links)
+          .enter()
+          .append('line')
+          .attr('stroke', d => {
+            switch(d.type) {
+              case 'accesses': return '#4caf50';
+              case 'protected_by': return '#f44336';
+              case 'enforces': return '#ff9800';
+              case 'exposes': return '#2196f3';
+              case 'uses': return '#9c27b0';
+              default: return '#666';
+            }
+          })
+          .attr('stroke-width', d => d.weight)
+          .attr('stroke-dasharray', d => d.type === 'protected_by' ? '5,5' : null);
+
+        // Create nodes
+        const node = svg.append('g')
+          .selectAll('circle')
+          .data(graphData.nodes)
+          .enter()
+          .append('circle')
+          .attr('r', d => d.type === 'agent' ? 25 : d.type === 'system' ? 20 : 15)
+          .attr('fill', d => {
+            switch(d.category) {
+              case 'ethics': return '#4caf50';
+              case 'math': return '#2196f3';
+              case 'arc': return '#ff9800';
+              case 'freepress': return '#9c27b0';
+              case 'system': return '#f44336';
+              default: return '#666';
+            }
+          })
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 2)
+          .call(d3.drag()
+            .on('start', dragstarted)
+            .on('drag', dragged)
+            .on('end', dragended));
+
+        // Add labels
+        const label = svg.append('g')
+          .selectAll('text')
+          .data(graphData.nodes)
+          .enter()
+          .append('text')
+          .text(d => d.label)
+          .attr('fill', '#fff')
+          .attr('text-anchor', 'middle')
+          .attr('dy', 4)
+          .attr('font-size', d => d.type === 'agent' ? '12px' : '10px')
+          .attr('font-weight', d => d.type === 'agent' ? 'bold' : 'normal');
+
+        // Add tooltips
+        const tooltip = d3.select('body')
+          .append('div')
+          .attr('class', 'node-tooltip')
+          .style('opacity', 0);
+
+        node.on('mouseover', function(event, d) {
+          tooltip.transition()
+            .duration(200)
+            .style('opacity', .9);
+          tooltip.html(`${d.label}<br/>Type: ${d.type}<br/>Category: ${d.category}`)
+            .style('left', (event.pageX + 10) + 'px')
+            .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', function() {
+          tooltip.transition()
+            .duration(500)
+            .style('opacity', 0);
+        })
+        .on('click', function(event, d) {
+          setSelectedNode(d);
+        });
+
+        // Update positions on each tick
+        sim.on('tick', () => {
+          link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+
+          node
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y);
+
+          label
+            .attr('x', d => d.x)
+            .attr('y', d => d.y);
+        });
+
+        setSimulation(sim);
+
+        // Add zoom behavior
+        const zoomBehavior = d3.zoom()
+          .scaleExtent([0.1, 4])
+          .on('zoom', (event) => {
+            svg.attr('transform', event.transform);
+            setZoom(event.transform.k);
+          });
+
+        svg.call(zoomBehavior);
+      };
+
+      // Drag functions
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
+
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      }
+
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
       };
 
-      const handleSelectGraph = (graph) => {
-        setSelectedGraph(graph);
+      const handleZoomChange = (event, newValue) => {
+        setZoom(newValue);
+        if (simulation) {
+          simulation.force('charge').strength(-200 * newValue);
+        }
       };
 
       return (
-        <Box>
+        <Box className="demo-container">
           <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
-            Knowledge Graphs - Interactive Tutorial
+            Knowledge Graphs
           </Typography>
           
           <Tabs 
             value={tabValue} 
             onChange={handleTabChange}
-            sx={{ mb: 3 }}
+            className="demo-tabs"
           >
             <Tab label="Overview" />
-            <Tab label="Components" />
-            <Tab label="Live Demo" />
-            <Tab label="Code Examples" />
+            <Tab label="Interactive Graph" />
+            <Tab label="Statistics" />
+            <Tab label="Documentation" />
           </Tabs>
           
           {/* Overview Tab */}
           {tabValue === 0 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>What are Knowledge Graphs?</Typography>
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Welcome to Knowledge Graphs</Typography>
                 <Typography variant="body1" paragraph>
-                  Knowledge Graphs are structured representations of knowledge that organize information into 
-                  interconnected nodes (entities) and edges (relationships). They form the backbone of the 
-                  SafeAI platform, providing agents with the knowledge they need to perform tasks safely and effectively.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
-                <Grid container spacing={2}>
-                  {['Graph Visualization', 'Entity Management', 'Relationship Exploration', 'Knowledge Integration'].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
-                        <CardContent>
-                          <Typography variant="h6" color="#0074D9">{item}</Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Components Tab */}
-          {tabValue === 1 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Knowledge Graph Components</Typography>
-                <Typography variant="body1" paragraph>
-                  The Knowledge Graphs module consists of several key components for visualizing and managing knowledge.
+                  Explore the interconnected knowledge graph of the SafeAI system. 
+                  Visualize relationships between agents, system components, and knowledge bases.
                 </Typography>
                 
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Graph Visualization:</Typography>
-                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
-                  <CardContent>
-                    <Typography variant="subtitle1" gutterBottom>Graph Viewer</Typography>
-                    <div className="graph-container">
-                      <Typography variant="body1" color="text.secondary">
-                        Interactive graph visualization would appear here
-                      </Typography>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Entity Explorer:</Typography>
-                <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)', mb: 3 }}>
-                  <CardContent>
-                    <Typography variant="subtitle1" gutterBottom>Entity Details</Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemText 
-                          primary="Pythagorean Theorem" 
-                          secondary="Mathematical theorem relating to right triangles"
-                        />
-                      </ListItem>
-                      <Divider />
-                      <ListItem>
-                        <ListItemText 
-                          primary="Properties" 
-                          secondary="a² + b² = c²"
-                        />
-                      </ListItem>
-                      <Divider />
-                      <ListItem>
-                        <ListItemText 
-                          primary="Domain" 
-                          secondary="Geometry"
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          )}
-          
-          {/* Live Demo Tab */}
-          {tabValue === 2 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>
-                  Knowledge Graphs Live Demo
-                </Typography>
-                <Grid container spacing={3}>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
                   <Grid item xs={12} md={4}>
-                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                    <Card className="interactive-element">
                       <CardContent>
-                        <Typography variant="h6" gutterBottom>Available Knowledge Graphs</Typography>
-                        <List>
-                          {knowledgeGraphs.map(graph => (
-                            <ListItem 
-                              key={graph.id} 
-                              button
-                              onClick={() => handleSelectGraph(graph)}
-                              selected={selectedGraph && selectedGraph.id === graph.id}
-                              sx={{ 
-                                borderRadius: 1, 
-                                mb: 1, 
-                                bgcolor: selectedGraph && selectedGraph.id === graph.id ? 'rgba(255,255,255,0.1)' : 'transparent'
-                              }}
-                            >
-                              <ListItemText 
-                                primary={graph.name}
-                                secondary={`${graph.nodes.toLocaleString()} nodes, ${graph.edges.toLocaleString()} edges`}
-                              />
-                              <Chip 
-                                label={graph.status} 
-                                size="small" 
-                                color={graph.status === 'Active' ? 'success' : 'default'}
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
+                        <Typography variant="h6" color="primary">Interactive Visualization</Typography>
+                        <Typography variant="body2">
+                          Drag nodes, zoom in/out, and explore relationships
+                        </Typography>
                       </CardContent>
                     </Card>
                   </Grid>
-                  <Grid item xs={12} md={8}>
-                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
+                  <Grid item xs={12} md={4}>
+                    <Card className="interactive-element">
                       <CardContent>
-                        {selectedGraph ? (
-                          <>
-                            <Typography variant="h6" gutterBottom>{selectedGraph.name} Knowledge Graph</Typography>
-                            <Divider sx={{ mb: 2 }} />
-                            <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                                <Typography variant="body2" color="text.secondary">Description:</Typography>
-                                <Typography variant="body1" paragraph>{selectedGraph.description}</Typography>
-                                
-                                <Typography variant="body2" color="text.secondary">Statistics:</Typography>
-                                <Typography variant="body1">Nodes: {selectedGraph.nodes.toLocaleString()}</Typography>
-                                <Typography variant="body1">Edges: {selectedGraph.edges.toLocaleString()}</Typography>
-                                <Typography variant="body1">Size: {selectedGraph.size}</Typography>
-                                <Typography variant="body1">Last Updated: {selectedGraph.lastUpdated}</Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <Typography variant="body2" color="text.secondary">Graph Preview:</Typography>
-                                <div className="graph-container" style={{ height: 200 }}>
-                                  <Typography variant="body2" color="text.secondary">
-                                    Interactive graph visualization would appear here
-                                  </Typography>
-                                </div>
-                              </Grid>
-                            </Grid>
-                            <Divider sx={{ my: 2 }} />
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                              <Button variant="outlined" size="small">Explore</Button>
-                              <Button variant="contained" size="small">Query</Button>
-                            </Box>
-                          </>
-                        ) : (
-                          <Box sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            height: 300,
-                            flexDirection: 'column'
-                          }}>
-                            <Typography variant="body1" color="text.secondary" gutterBottom>
-                              Select a knowledge graph to view details
-                            </Typography>
-                            <Button variant="outlined" size="small">
-                              Add New Knowledge Graph
-                            </Button>
-                          </Box>
-                        )}
+                        <Typography variant="h6" color="primary">Node Categories</Typography>
+                        <Typography variant="body2">
+                          Different types of nodes represent various system components
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Card className="interactive-element">
+                      <CardContent>
+                        <Typography variant="h6" color="primary">Relationship Types</Typography>
+                        <Typography variant="body2">
+                          Various connection types show different interactions
+                        </Typography>
                       </CardContent>
                     </Card>
                   </Grid>
@@ -309,123 +376,281 @@
             </div>
           )}
           
-          {/* Code Examples Tab */}
-          {tabValue === 3 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
-                <Typography variant="body1" paragraph>
-                  Let's look at some of the key code examples from the Knowledge Graphs module.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Graph Visualization Component:</Typography>
-                <div className="code-block">
-                  {`import React, { useEffect, useRef } from 'react';
-import ForceGraph3D from 'react-force-graph-3d';
-import { Box, useTheme } from '@mui/material';
-
-const GraphVisualization = ({ data, onNodeClick }) => {
-  const theme = useTheme();
-  const graphRef = useRef();
-  
-  useEffect(() => {
-    // Customize graph appearance when component mounts
-    if (graphRef.current) {
-      graphRef.current.d3Force('charge').strength(-120);
-      graphRef.current.d3Force('link').distance(link => 
-        link.value ? 30 + (100 / link.value) : 30
-      );
-    }
-  }, []);
-  
-  return (
-    <Box sx={{ height: 500, width: '100%' }}>
-      <ForceGraph3D
-        ref={graphRef}
-        graphData={data}
-        nodeColor={node => node.color || theme.palette.primary.main}
-        nodeLabel={node => node.label || node.id}
-        linkColor={() => theme.palette.grey[400]}
-        linkWidth={link => link.value || 1}
-        linkDirectionalArrowLength={link => link.directed ? 3.5 : 0}
-        linkDirectionalArrowRelPos={1}
-        onNodeClick={onNodeClick}
-        backgroundColor={theme.palette.background.paper}
-      />
-    </Box>
-  );
-};
-
-export default GraphVisualization;`}
+          {/* Interactive Graph Tab */}
+          {tabValue === 1 && (
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <div className="graph-stats">
+                  <div className="stat-card">
+                    <Typography className="stat-value">{graphData.nodes.length}</Typography>
+                    <Typography className="stat-label">Total Nodes</Typography>
+                  </div>
+                  <div className="stat-card">
+                    <Typography className="stat-value">{graphData.links.length}</Typography>
+                    <Typography className="stat-label">Total Connections</Typography>
+                  </div>
+                  <div className="stat-card">
+                    <Typography className="stat-value">
+                      {new Set(graphData.nodes.map(n => n.category)).size}
+                    </Typography>
+                    <Typography className="stat-label">Categories</Typography>
+                  </div>
                 </div>
-                
-                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>Knowledge Graph Query Function:</Typography>
-                <div className="code-block">
-                  {`const queryKnowledgeGraph = async (graphId, query) => {
-  try {
-    // Validate query structure
-    if (!query || typeof query !== 'object') {
-      throw new Error('Invalid query structure');
-    }
-    
-    // Execute SPARQL or Cypher query against the knowledge graph
-    const response = await axios.post(\`/api/knowledge-graphs/\${graphId}/query\`, {
-      query: query.text,
-      format: query.format || 'json',
-      limit: query.limit || 100,
-      offset: query.offset || 0
-    });
-    
-    // Process and format results
-    const results = response.data;
-    
-    // Transform results into visualization-friendly format if needed
-    if (query.format === 'graph') {
-      return {
-        nodes: results.nodes.map(node => ({
-          id: node.id,
-          label: node.label,
-          color: getCategoryColor(node.category),
-          category: node.category,
-          properties: node.properties
-        })),
-        links: results.edges.map(edge => ({
-          source: edge.source,
-          target: edge.target,
-          label: edge.label,
-          directed: edge.directed || true,
-          value: edge.weight || 1
-        }))
-      };
-    }
-    
-    return results;
-  } catch (error) {
-    console.error('Error querying knowledge graph:', error);
-    throw error;
-  }
-};
 
-// Helper function to map category to color
-const getCategoryColor = (category) => {
-  const categoryColors = {
-    concept: '#4caf50',
-    person: '#2196f3',
-    theorem: '#9c27b0',
-    equation: '#ff9800',
-    default: '#607d8b'
-  };
-  
-  return categoryColors[category] || categoryColors.default;
-};`}
+                <div className="graph-container" ref={setGraphContainer}>
+                  <div className="graph-controls">
+                    <Typography variant="subtitle2" gutterBottom>Controls</Typography>
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="caption">Zoom Level</Typography>
+                      <Slider
+                        value={zoom}
+                        onChange={handleZoomChange}
+                        min={0.1}
+                        max={4}
+                        step={0.1}
+                        valueLabelDisplay="auto"
+                      />
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => {
+                        if (simulation) {
+                          simulation.alpha(1).restart();
+                        }
+                      }}
+                    >
+                      Reset Layout
+                    </Button>
+                  </div>
+
+                  <div className="graph-legend">
+                    <Typography variant="subtitle2" gutterBottom>Legend</Typography>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{ backgroundColor: '#4caf50' }}></div>
+                      <Typography variant="caption">Ethics</Typography>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{ backgroundColor: '#2196f3' }}></div>
+                      <Typography variant="caption">Math</Typography>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{ backgroundColor: '#ff9800' }}></div>
+                      <Typography variant="caption">ARC</Typography>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{ backgroundColor: '#9c27b0' }}></div>
+                      <Typography variant="caption">FreePress</Typography>
+                    </div>
+                    <div className="legend-item">
+                      <div className="legend-color" style={{ backgroundColor: '#f44336' }}></div>
+                      <Typography variant="caption">System</Typography>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           )}
+          
+          {/* Statistics Tab */}
+          {tabValue === 2 && (
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Graph Statistics</Typography>
+                <Typography variant="body1" paragraph>
+                  Detailed statistics about the knowledge graph structure and relationships.
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Node Distribution</Typography>
+                        <Box sx={{ mt: 2 }}>
+                          {Object.entries(
+                            graphData.nodes.reduce((acc, node) => {
+                              acc[node.type] = (acc[node.type] || 0) + 1;
+                              return acc;
+                            }, {})
+                          ).map(([type, count]) => (
+                            <Box key={type} sx={{ mb: 1 }}>
+                              <Typography variant="body2">
+                                {type.charAt(0).toUpperCase() + type.slice(1)}: {count}
+                              </Typography>
+                              <LinearProgress 
+                                variant="determinate" 
+                                value={(count / graphData.nodes.length) * 100}
+                                sx={{ height: 8, borderRadius: 4 }}
+                              />
+                            </Box>
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>Connection Types</Typography>
+                        <Box sx={{ mt: 2 }}>
+                          {Object.entries(
+                            graphData.links.reduce((acc, link) => {
+                              acc[link.type] = (acc[link.type] || 0) + 1;
+                              return acc;
+                            }, {})
+                          ).map(([type, count]) => (
+                            <Box key={type} sx={{ mb: 1 }}>
+                              <Typography variant="body2">
+                                {type.charAt(0).toUpperCase() + type.slice(1)}: {count}
+                              </Typography>
+                              <LinearProgress 
+                                variant="determinate" 
+                                value={(count / graphData.links.length) * 100}
+                                sx={{ height: 8, borderRadius: 4 }}
+                              />
+                            </Box>
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          )}
+          
+          {/* Documentation Tab */}
+          {tabValue === 3 && (
+            <div className="demo-tab-content">
+              <div className="demo-section">
+                <Typography variant="h5" gutterBottom>Knowledge Graph Documentation</Typography>
+                <Typography variant="body1" paragraph>
+                  Learn about the knowledge graph structure and how to interact with it.
+                </Typography>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Node Types:</Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>person</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Agents"
+                      secondary="AI agents that perform specific tasks"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>computer</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="System Components"
+                      secondary="Core system infrastructure components"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>school</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Bases"
+                      secondary="Collections of domain-specific knowledge"
+                    />
+                  </ListItem>
+                </List>
+                
+                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Connection Types:</Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>link</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Accesses"
+                      secondary="Agent accessing a system component"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>security</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Protected By"
+                      secondary="Security relationship between components"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>settings</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Enforces"
+                      secondary="Policy enforcement relationship"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+          )}
+
+          {/* Node Details Dialog */}
+          <Dialog 
+            open={!!selectedNode} 
+            onClose={() => setSelectedNode(null)}
+            maxWidth="sm"
+            fullWidth
+          >
+            {selectedNode && (
+              <>
+                <DialogTitle>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <div 
+                      className="legend-color" 
+                      style={{ 
+                        backgroundColor: selectedNode.category === 'ethics' ? '#4caf50' :
+                                       selectedNode.category === 'math' ? '#2196f3' :
+                                       selectedNode.category === 'arc' ? '#ff9800' :
+                                       selectedNode.category === 'freepress' ? '#9c27b0' :
+                                       '#f44336'
+                      }}
+                    />
+                    <Typography variant="h6">{selectedNode.label}</Typography>
+                  </Box>
+                </DialogTitle>
+                <DialogContent>
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle1" gutterBottom>Details</Typography>
+                    <Typography variant="body2">Type: {selectedNode.type}</Typography>
+                    <Typography variant="body2">Category: {selectedNode.category}</Typography>
+                    
+                    <Typography variant="subtitle1" sx={{ mt: 2 }} gutterBottom>Connections</Typography>
+                    <List>
+                      {graphData.links
+                        .filter(link => link.source.id === selectedNode.id || link.target.id === selectedNode.id)
+                        .map((link, idx) => (
+                          <ListItem key={idx}>
+                            <ListItemText
+                              primary={`${link.source.id === selectedNode.id ? link.target.label : link.source.label}`}
+                              secondary={`${link.type} (${link.weight})`}
+                            />
+                          </ListItem>
+                        ))}
+                    </List>
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setSelectedNode(null)}>Close</Button>
+                </DialogActions>
+              </>
+            )}
+          </Dialog>
         </Box>
       );
     }
 
-    ReactDOM.render(<KnowledgeGraphsTutorial />, document.getElementById('root'));
+    // Render the app
+    ReactDOM.render(<KnowledgeGraphs />, document.getElementById('root'));
   </script>
 </body>
 </html> 
