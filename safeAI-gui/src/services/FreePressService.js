@@ -204,4 +204,6 @@ class FreePressService {
     }
 }
 
-export default new FreePressService(); 
+// Create an instance and export it
+const freePressServiceInstance = new FreePressService();
+export default freePressServiceInstance; 
