@@ -11,8 +11,12 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
     body { margin: 0; padding: 0; font-family: Roboto, sans-serif; background-color: #121212; color: #fff; }
     #root { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -24,112 +28,307 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, Divider, LinearProgress, TextField } = MaterialUI;
+    const { 
+      Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, 
+      Divider, LinearProgress, TextField, Paper, IconButton, Tooltip,
+      List, ListItem, ListItemText, ListItemIcon, Chip, Alert
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      CHECK: "check_circle",
+      ERROR: "error",
+      WARNING: "warning",
+      INFO: "info",
+      REFRESH: "refresh",
+      SAVE: "save"
+    };
+
+    // Sample theorems and equations
+    const sampleTheorems = [
+      {
+        name: "Pythagorean Theorem",
+        statement: "a^2 + b^2 = c^2",
+        description: "In a right triangle, the square of the hypotenuse equals the sum of squares of other sides"
+      },
+      {
+        name: "Quadratic Formula",
+        statement: "x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}",
+        description: "Solution to the quadratic equation ax² + bx + c = 0"
+      }
+    ];
 
     function MathATPTutorial() {
       const [tabValue, setTabValue] = React.useState(0);
-      const handleTabChange = (event, newValue) => { setTabValue(newValue); };
+      const [selectedTheorem, setSelectedTheorem] = React.useState(null);
+      const [equation, setEquation] = React.useState("");
+      const [proofSteps, setProofSteps] = React.useState([]);
+      const [isProcessing, setIsProcessing] = React.useState(false);
+      const [error, setError] = React.useState(null);
+      const [progress, setProgress] = React.useState(0);
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+        setError(null);
+      };
+
+      const handleTheoremSelect = (theorem) => {
+        setSelectedTheorem(theorem);
+        setEquation(theorem.statement);
+        setProofSteps([]);
+        setProgress(0);
+      };
+
+      const handleEquationChange = (event) => {
+        setEquation(event.target.value);
+        setError(null);
+      };
+
+      const generateProof = async () => {
+        if (!equation) {
+          setError("Please enter a mathematical statement");
+          return;
+        }
+
+        setIsProcessing(true);
+        setProgress(0);
+        setProofSteps([]);
+
+        // Simulate proof generation
+        const steps = [
+          "Validating mathematical statement...",
+          "Applying relevant theorems...",
+          "Constructing proof sequence...",
+          "Verifying each step...",
+          "Generating final proof..."
+        ];
+
+        for (let i = 0; i < steps.length; i++) {
+          setProofSteps(prev => [...prev, { step: steps[i], status: "processing" }]);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setProgress((i + 1) * 20);
+        }
+
+        // Final proof steps
+        setProofSteps(prev => [
+          ...prev,
+          { step: "Statement is valid", status: "success" },
+          { step: "Proof is complete", status: "success" }
+        ]);
+
+        setIsProcessing(false);
+        setProgress(100);
+      };
+
+      const renderMath = (math) => {
+        try {
+          return katex.renderToString(math, { displayMode: true });
+        } catch (err) {
+          return math;
+        }
+      };
 
       return (
         <Box>
-          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+          <Typography variant="h4" gutterBottom>
             MathATP - Interactive Tutorial
           </Typography>
-          <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 3 }}>
+          <Tabs value={tabValue} onChange={handleTabChange}>
             <Tab label="Overview" />
-            <Tab label="Components" />
-            <Tab label="Live Demo" />
+            <Tab label="Theorem Proving" />
+            <Tab label="Equation Solving" />
             <Tab label="Code Examples" />
           </Tabs>
 
-          {tabValue === 0 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>What is MathATP?</Typography>
-                <Typography variant="body1" paragraph>
+          <Box className="tab-content">
+            {tabValue === 0 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  What is MathATP?
+                </Typography>
+                <Typography paragraph>
                   MathATP is a cutting-edge system for automated theorem proving and advanced mathematical problem-solving. 
                   It assists in generating proofs, solving equations, and verifying complex mathematical statements using state-of-the-art algorithms.
                 </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
+
                 <Grid container spacing={2}>
                   {['Automated Theorem Proving', 'Complex Equation Solving', 'Interactive Proof Generation', 'Real-time Validation'].map((feature, index) => (
                     <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
+                      <Card className="demo-section">
                         <CardContent>
-                          <Typography variant="h6" color="#0074D9">{feature}</Typography>
+                          <Typography variant="h6" color="primary">{feature}</Typography>
                         </CardContent>
                       </Card>
                     </Grid>
                   ))}
                 </Grid>
-              </div>
-            </div>
-          )}
+              </Box>
+            )}
 
-          {tabValue === 1 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>MathATP Components</Typography>
-                <Typography variant="body1" paragraph>
-                  MathATP consists of multiple modules working together:
+            {tabValue === 1 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Theorem Proving
                 </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Proof Generator:</Typography>
-                <Typography variant="body2" paragraph>
-                  Generates detailed, step-by-step proofs for mathematical statements.
+                <Typography paragraph>
+                  Select a theorem or enter your own mathematical statement to generate a proof.
                 </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Equation Solver:</Typography>
-                <Typography variant="body2" paragraph>
-                  Solves complex equations and provides detailed workings.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Theorem Checker:</Typography>
-                <Typography variant="body2" paragraph>
-                  Validates the correctness of proofs and mathematical assertions.
-                </Typography>
-              </div>
-            </div>
-          )}
 
-          {tabValue === 2 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>MathATP Live Demo</Typography>
-                <Typography variant="body1" paragraph>
-                  Try a sample mathematical problem. For instance, verify the Pythagorean theorem or solve a quadratic equation.
-                </Typography>
-                <TextField label="Enter Mathematical Statement" fullWidth variant="outlined" sx={{ mb: 2 }} />
-                <Button variant="contained" color="primary">Run Proof Generator</Button>
-                <Box sx={{ mt: 4 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Interactive proof generation simulation in progress...
-                  </Typography>
-                  <LinearProgress variant="determinate" value={60} sx={{ mt: 2 }} />
-                </Box>
-              </div>
-            </div>
-          )}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Paper className="demo-section">
+                      <Typography variant="subtitle1" gutterBottom>
+                        Sample Theorems
+                      </Typography>
+                      <List>
+                        {sampleTheorems.map((theorem, index) => (
+                          <ListItem 
+                            button 
+                            key={index}
+                            selected={selectedTheorem?.name === theorem.name}
+                            onClick={() => handleTheoremSelect(theorem)}
+                          >
+                            <ListItemIcon>
+                              <Icon>{ICONS.INFO}</Icon>
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={theorem.name}
+                              secondary={theorem.description}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Paper>
+                  </Grid>
 
-          {tabValue === 3 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>MathATP Code Examples</Typography>
-                <Typography variant="body1" paragraph>
-                  Below is a simple example of a proof generation function in MathATP:
+                  <Grid item xs={12} md={8}>
+                    <Paper className="demo-section">
+                      <TextField
+                        fullWidth
+                        label="Enter Mathematical Statement"
+                        value={equation}
+                        onChange={handleEquationChange}
+                        multiline
+                        rows={3}
+                        sx={{ mb: 2 }}
+                      />
+                      {equation && (
+                        <Box sx={{ mb: 2 }}>
+                          <Typography variant="subtitle2" gutterBottom>
+                            Preview:
+                          </Typography>
+                          <div dangerouslySetInnerHTML={{ __html: renderMath(equation) }} />
+                        </Box>
+                      )}
+                      <Button
+                        variant="contained"
+                        onClick={generateProof}
+                        disabled={isProcessing || !equation}
+                        startIcon={<Icon>{isProcessing ? ICONS.REFRESH : ICONS.CHECK}</Icon>}
+                      >
+                        {isProcessing ? "Generating Proof..." : "Generate Proof"}
+                      </Button>
+                    </Paper>
+
+                    {error && (
+                      <Alert severity="error" sx={{ mt: 2 }}>
+                        {error}
+                      </Alert>
+                    )}
+
+                    {isProcessing && (
+                      <Box sx={{ mt: 2 }}>
+                        <LinearProgress variant="determinate" value={progress} />
+                        <Typography variant="caption" color="text.secondary">
+                          Progress: {progress}%
+                        </Typography>
+                      </Box>
+                    )}
+
+                    {proofSteps.length > 0 && (
+                      <Paper className="demo-section" sx={{ mt: 2 }}>
+                        <Typography variant="subtitle1" gutterBottom>
+                          Proof Steps
+                        </Typography>
+                        <List>
+                          {proofSteps.map((step, index) => (
+                            <ListItem key={index}>
+                              <ListItemIcon>
+                                <Icon>
+                                  {step.status === "success" ? ICONS.CHECK :
+                                   step.status === "error" ? ICONS.ERROR :
+                                   ICONS.INFO}
+                                </Icon>
+                              </ListItemIcon>
+                              <ListItemText primary={step.step} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Paper>
+                    )}
+                  </Grid>
+                </Grid>
+              </Box>
+            )}
+
+            {tabValue === 2 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Equation Solving
                 </Typography>
-                <div className="code-block">
-{`function generateProof(statement) {
-  if (!statement) {
-    throw new Error('No statement provided');
-  }
-  const proofSteps = [];
-  proofSteps.push('Step 1: Validate the statement');
-  proofSteps.push('Step 2: Apply necessary theorems');
-  proofSteps.push('Step 3: Construct the proof sequence');
-  return proofSteps;
-}`}
-                </div>
-              </div>
-            </div>
-          )}
+                <Typography paragraph>
+                  Enter an equation to solve it step by step.
+                </Typography>
+
+                <Paper className="demo-section">
+                  <TextField
+                    fullWidth
+                    label="Enter Equation"
+                    placeholder="e.g., 2x + 5 = 13"
+                    sx={{ mb: 2 }}
+                  />
+                  <Button
+                    variant="contained"
+                    startIcon={<Icon>{ICONS.REFRESH}</Icon>}
+                  >
+                    Solve Equation
+                  </Button>
+                </Paper>
+              </Box>
+            )}
+
+            {tabValue === 3 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Code Examples
+                </Typography>
+                <Typography paragraph>
+                  Here's an example of how to use the MathATP API:
+                </Typography>
+
+                <Paper className="demo-section">
+                  <pre className="code-block">
+{`// Example: Generate a proof for the Pythagorean theorem
+const theorem = {
+  name: "Pythagorean Theorem",
+  statement: "a^2 + b^2 = c^2",
+  context: "right triangle"
+};
+
+const proof = await mathATP.generateProof(theorem);
+console.log(proof.steps);  // Array of proof steps
+console.log(proof.isValid);  // true/false
+
+// Example: Solve a quadratic equation
+const equation = "x^2 + 5x + 6 = 0";
+const solution = await mathATP.solveEquation(equation);
+console.log(solution.roots);  // [-2, -3]
+console.log(solution.steps);  // Step-by-step solution`}
+                  </pre>
+                </Paper>
+              </Box>
+            )}
+          </Box>
         </Box>
       );
     }
