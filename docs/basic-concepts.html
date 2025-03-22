@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Concepts - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Card, CardContent, Grid
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      SMART_TOY: "smart_toy",
+      SCHEMA: "schema",
+      SECURITY: "security",
+      VERIFIED_USER: "verified_user",
+      EXTENSION: "extension",
+      SETTINGS: "settings",
+      DATA_OBJECT: "data_object",
+      INTEGRATION_INSTRUCTIONS: "integration_instructions",
+      POLICY: "policy"
+    };
+
+    function BasicConcepts() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Basic Concepts
+              </Typography>
+              <Button color="inherit" href="index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Basic Concepts
+            </Typography>
+            
+            <Paper className="content">
+              <Typography variant="h4" gutterBottom>Introduction</Typography>
+              <Typography paragraph>
+                SafeAI is built on several foundational concepts that form the basis of its functionality. 
+                Understanding these concepts is key to effectively utilizing the platform. This guide introduces 
+                the core ideas behind SafeAI, providing a conceptual framework for further exploration.
+              </Typography>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Core Components</Typography>
+              
+              <Grid container spacing={4} sx={{ mt: 2 }}>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(25, 118, 210, 0.1)', border: '1px solid rgba(25, 118, 210, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#1976d2' }}>{ICONS.SMART_TOY}</Icon>
+                        <Typography variant="h5">Autonomous Agents</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        AI entities capable of performing tasks independently. Agents operate within defined parameters 
+                        and leverage knowledge graphs to make informed decisions. They can interact with users, 
+                        systems, and other agents to accomplish objectives.
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ color: '#1976d2' }}>
+                        Key Properties:
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Goal-directed behavior" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Learning capabilities" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Decision-making transparency" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', border: '1px solid rgba(46, 125, 50, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#2e7d32' }}>{ICONS.SCHEMA}</Icon>
+                        <Typography variant="h5">Knowledge Graphs</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        Structured representations of knowledge that enable agents to understand relationships between entities. 
+                        Knowledge graphs provide context and reference points for agents' decision-making processes.
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ color: '#2e7d32' }}>
+                        Key Properties:
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Entity relationships" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Semantic understanding" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Verifiable data sources" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(211, 47, 47, 0.1)', border: '1px solid rgba(211, 47, 47, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#d32f2f' }}>{ICONS.SECURITY}</Icon>
+                        <Typography variant="h5">Safety Frameworks</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        Protocols and mechanisms that ensure agent behavior aligns with ethical guidelines and safety priorities. 
+                        These frameworks include monitoring systems, alignment algorithms, and value-based constraints.
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ color: '#d32f2f' }}>
+                        Key Components:
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Ethical guardrails" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Behavior monitoring" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Intervention protocols" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(123, 31, 162, 0.1)', border: '1px solid rgba(123, 31, 162, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#7b1fa2' }}>{ICONS.VERIFIED_USER}</Icon>
+                        <Typography variant="h5">Trust Mechanisms</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        Systems that establish and maintain trust between users and AI agents. These include verification 
+                        methods, transparency tools, and accountability frameworks.
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ color: '#7b1fa2' }}>
+                        Key Elements:
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Decision auditability" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Credential verification" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                          <ListItemText primary="Performance metrics" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 5 }}>Operational Principles</Typography>
+              
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.INTEGRATION_INSTRUCTIONS}</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Cooperative Intelligence" 
+                    secondary="Agents are designed to work collaboratively with humans and other agents, augmenting capabilities rather than replacing human judgment."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.POLICY}</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Value Alignment" 
+                    secondary="AI systems are aligned with human values and ethical principles, ensuring their behavior remains beneficial even as they evolve."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.DATA_OBJECT}</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Transparent Decision-Making" 
+                    secondary="Agent decision processes are transparent and explainable, allowing users to understand why specific actions were taken."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.EXTENSION}</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Modularity" 
+                    secondary="The platform is designed with modular components that can be customized, extended, and combined to meet diverse needs."
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>The SafeAI Ecosystem</Typography>
+              <Typography paragraph>
+                The SafeAI ecosystem encompasses a variety of interconnected elements:
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6" gutterBottom>Core Services</Typography>
+                  <List dense>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">smart_toy</Icon></ListItemIcon>
+                      <ListItemText primary="Agent Development Environment" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">schema</Icon></ListItemIcon>
+                      <ListItemText primary="Knowledge Graph Builder" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">security</Icon></ListItemIcon>
+                      <ListItemText primary="Safety Monitoring System" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">data_object</Icon></ListItemIcon>
+                      <ListItemText primary="Data Integration Tools" />
+                    </ListItem>
+                  </List>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6" gutterBottom>Supporting Infrastructure</Typography>
+                  <List dense>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">verified_user</Icon></ListItemIcon>
+                      <ListItemText primary="Identity and Access Management" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">policy</Icon></ListItemIcon>
+                      <ListItemText primary="Governance Frameworks" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">settings</Icon></ListItemIcon>
+                      <ListItemText primary="Configuration Tools" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon fontSize="small">integration_instructions</Icon></ListItemIcon>
+                      <ListItemText primary="API Management" />
+                    </ListItem>
+                  </List>
+                </Grid>
+              </Grid>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Technical Architecture</Typography>
+              <Typography paragraph>
+                SafeAI employs a multi-layered architecture:
+              </Typography>
+              
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <Card sx={{ height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <CardContent>
+                      <Typography variant="h6" align="center" gutterBottom>Foundation Layer</Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      <List dense>
+                        <ListItem>
+                          <ListItemText primary="Core AI Models" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Distributed Computing" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Storage Systems" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Security Infrastructure" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} sm={4}>
+                  <Card sx={{ height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.08)' }}>
+                    <CardContent>
+                      <Typography variant="h6" align="center" gutterBottom>Service Layer</Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      <List dense>
+                        <ListItem>
+                          <ListItemText primary="Agent Services" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Knowledge Services" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Safety Services" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Integration Services" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} sm={4}>
+                  <Card sx={{ height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.12)' }}>
+                    <CardContent>
+                      <Typography variant="h6" align="center" gutterBottom>Interface Layer</Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      <List dense>
+                        <ListItem>
+                          <ListItemText primary="User Interfaces" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="APIs" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="SDK & Tools" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText primary="Integrations" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 5 }}>Next Steps</Typography>
+              <Typography paragraph>
+                With an understanding of these basic concepts, you can explore more detailed aspects of the SafeAI platform:
+              </Typography>
+              
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    startIcon={<Icon>smart_toy</Icon>}
+                    href="interactive-demos/agent-browser.html"
+                    sx={{ justifyContent: "flex-start", textAlign: "left", p: 1 }}
+                  >
+                    Explore Agent Browser
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    startIcon={<Icon>schema</Icon>}
+                    href="interactive-demos/knowledge-graphs.html"
+                    sx={{ justifyContent: "flex-start", textAlign: "left", p: 1 }}
+                  >
+                    Knowledge Graph Demo
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    startIcon={<Icon>security</Icon>}
+                    href="interactive-demos/security-center.html"
+                    sx={{ justifyContent: "flex-start", textAlign: "left", p: 1 }}
+                  >
+                    Security Center
+                  </Button>
+                </Grid>
+              </Grid>
+              
+              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <Button 
+                  variant="contained" 
+                  startIcon={<Icon>menu_book</Icon>}
+                  href="user-guide.html"
+                  sx={{ mr: 2 }}
+                >
+                  Continue to User Guide
+                </Button>
+                <Button 
+                  variant="outlined"
+                  startIcon={<Icon>home</Icon>}
+                  href="index.html"
+                >
+                  Back to Documentation
+                </Button>
+              </Box>
+            </Paper>
+            
+            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                Last updated: {new Date().toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the application
+    ReactDOM.render(<BasicConcepts />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

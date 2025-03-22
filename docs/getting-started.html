@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Stepper, Step, StepLabel, StepContent, Link
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      LAPTOP: "laptop",
+      ACCOUNT_CIRCLE: "account_circle",
+      DASHBOARD: "dashboard",
+      NAVIGATION: "navigation",
+      HELP: "help",
+      SCHOOL: "school"
+    };
+
+    function GettingStarted() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Getting Started
+              </Typography>
+              <Button color="inherit" href="index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Getting Started with SafeAI
+            </Typography>
+            
+            <Paper className="content">
+              <Typography variant="h4" gutterBottom>Introduction</Typography>
+              <Typography paragraph>
+                Welcome to SafeAI! This guide will help you get started with the platform, from initial setup to your first interactions with AI agents and knowledge graphs.
+              </Typography>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Table of Contents</Typography>
+              <List>
+                <ListItem button component={Link} href="#system-requirements">
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="System Requirements" />
+                </ListItem>
+                <ListItem button component={Link} href="#account-setup">
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Account Setup" />
+                </ListItem>
+                <ListItem button component={Link} href="#platform-navigation">
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Platform Navigation" />
+                </ListItem>
+                <ListItem button component={Link} href="#first-steps">
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="First Steps" />
+                </ListItem>
+                <ListItem button component={Link} href="#next-steps">
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Next Steps" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" id="system-requirements" gutterBottom sx={{ mt: 4 }}>System Requirements</Typography>
+              <Typography paragraph>
+                Before you begin, ensure your system meets these requirements:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                  <ListItemText primary="Modern web browser (Chrome, Firefox, Safari, Edge)" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                  <ListItemText primary="MetaMask or other Web3 wallet extension" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                  <ListItemText primary="Internet connection" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                  <ListItemText primary="Minimum screen resolution: 1280x720" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" id="account-setup" gutterBottom sx={{ mt: 4 }}>Account Setup</Typography>
+              <Stepper orientation="vertical" sx={{ 
+                mt: 2, 
+                "& .MuiStepLabel-root": { color: "white" },
+                "& .MuiStepIcon-root": { color: "#2196f3" },
+                "& .MuiStepConnector-line": { borderColor: "rgba(255,255,255,0.1)" }
+              }}>
+                <Step active={true}>
+                  <StepLabel>Visit the SafeAI platform</StepLabel>
+                </Step>
+                <Step active={true}>
+                  <StepLabel>Click "Connect Wallet" in the upper right corner</StepLabel>
+                </Step>
+                <Step active={true}>
+                  <StepLabel>Select your Web3 wallet (e.g., MetaMask)</StepLabel>
+                </Step>
+                <Step active={true}>
+                  <StepLabel>Approve the connection request</StepLabel>
+                </Step>
+                <Step active={true}>
+                  <StepLabel>Your wallet address will appear in the top navigation bar</StepLabel>
+                </Step>
+              </Stepper>
+              
+              <Typography variant="h4" id="platform-navigation" gutterBottom sx={{ mt: 4 }}>Platform Navigation</Typography>
+              <Typography paragraph>
+                The SafeAI interface consists of:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>dashboard</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Main Sidebar" 
+                    secondary="Access to all major sections"
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>menu</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Top Navigation Bar" 
+                    secondary="Account information, notifications, and contextual actions"
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>web</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Content Area" 
+                    secondary="Main workspace that changes based on selected section"
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>info</Icon></ListItemIcon>
+                  <ListItemText 
+                    primary="Status Bar" 
+                    secondary="System health and important notifications"
+                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
+                  />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" id="first-steps" gutterBottom sx={{ mt: 4 }}>First Steps</Typography>
+              
+              <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>1. Explore the Dashboard</Typography>
+              <Typography paragraph>
+                The Dashboard provides an overview of your SafeAI ecosystem:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="System health status" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Active agents" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Knowledge graph statistics" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Recent activities" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>2. Browse Available Agents</Typography>
+              <Typography paragraph>
+                Visit the Agent Browser to:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Discover pre-built AI agents" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Learn about their capabilities" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Test agents in the sandbox environment" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>3. Explore Knowledge Graphs</Typography>
+              <Typography paragraph>
+                Navigate to Knowledge Graphs to:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="View available knowledge domains" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Explore relationships between concepts" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                  <ListItemText primary="Learn how to query the knowledge base" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" id="next-steps" gutterBottom sx={{ mt: 4 }}>Next Steps</Typography>
+              <Typography paragraph>
+                After completing these initial steps, you can:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>smart_toy</Icon></ListItemIcon>
+                  <ListItemText primary="Create Your First Agent" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>schema</Icon></ListItemIcon>
+                  <ListItemText primary="Learn About Knowledge Graphs" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>extension</Icon></ListItemIcon>
+                  <ListItemText primary="Explore Specialized Modules" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>people</Icon></ListItemIcon>
+                  <ListItemText primary="Join the Community" />
+                </ListItem>
+              </List>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Getting Help</Typography>
+              <Typography paragraph>
+                If you need assistance:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon><Icon>help</Icon></ListItemIcon>
+                  <ListItemText primary="Click the &quot;Help&quot; icon in any section" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>forum</Icon></ListItemIcon>
+                  <ListItemText primary="Visit our Community Forum" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>email</Icon></ListItemIcon>
+                  <ListItemText primary="Contact support@safeAI.com" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><Icon>question_answer</Icon></ListItemIcon>
+                  <ListItemText primary="Check our FAQ" />
+                </ListItem>
+              </List>
+              
+              <Typography paragraph sx={{ mt: 4 }}>
+                For more detailed information, refer to our comprehensive User Manual.
+              </Typography>
+              
+              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <Button 
+                  variant="contained" 
+                  startIcon={<Icon>smart_toy</Icon>}
+                  href="interactive-demos/agent-browser.html"
+                  sx={{ mr: 2 }}
+                >
+                  Try Agent Browser Demo
+                </Button>
+                <Button 
+                  variant="outlined"
+                  startIcon={<Icon>home</Icon>}
+                  href="index.html"
+                >
+                  Back to Documentation
+                </Button>
+              </Box>
+            </Paper>
+            
+            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                Last updated: {new Date().toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the application
+    ReactDOM.render(<GettingStarted />, document.getElementById('root'));
+  </script>
+</body>
+</html> 
