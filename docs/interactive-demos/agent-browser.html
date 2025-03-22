@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent Browser - Interactive Demo</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
@@ -207,300 +207,128 @@
       Avatar, Chip, Paper, IconButton, Tooltip, LinearProgress,
       TextField, Dialog, DialogTitle, DialogContent, DialogActions,
       List, ListItem, ListItemText, ListItemIcon, 
-      CircularProgress, Alert
+      CircularProgress, Alert,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
 
-    // Enhanced agents data with more realistic metrics
-    const agents = [
-      { 
-        id: 1,
-        name: 'Math Solver',
-        type: 'Specialized', 
-        domain: 'Mathematics',
-        version: '2.1.0',
-        status: 'Active',
-        description: 'An agent specialized in solving complex mathematical problems',
-        capabilities: ['Theorem proving', 'Equation solving', 'Optimization'],
-        metrics: {
-          tasksCompleted: 1247,
-          successRate: 98.5,
-          avgResponseTime: 0.8,
-          uptime: 99.9
+    // Custom theme
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#3f51b5',
         },
-        lastActive: '2 minutes ago',
-        resourceUsage: {
-          cpu: 45,
-          memory: 60,
-          network: 30
-        }
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
       },
-      { 
-        id: 2,
-        name: 'Ethics Analyzer',
-        type: 'Knowledge-based', 
-        domain: 'Ethics',
-        version: '1.5.2',
-        status: 'Active',
-        description: 'Analyzes ethical implications of decisions and scenarios',
-        capabilities: ['Value alignment', 'Ethical analysis', 'Cultural sensitivity'],
-        metrics: {
-          tasksCompleted: 856,
-          successRate: 95.2,
-          avgResponseTime: 1.2,
-          uptime: 99.8
-        },
-        lastActive: '5 minutes ago',
-        resourceUsage: {
-          cpu: 35,
-          memory: 45,
-          network: 25
-        }
-      },
-      { 
-        id: 3,
-        name: 'Security Monitor',
-        type: 'System', 
-        domain: 'Security',
-        version: '3.0.1',
-        status: 'Active',
-        description: 'Monitors system security and detects potential threats',
-        capabilities: ['Threat detection', 'Vulnerability scanning', 'Access control'],
-        metrics: {
-          tasksCompleted: 2341,
-          successRate: 99.9,
-          avgResponseTime: 0.3,
-          uptime: 100
-        },
-        lastActive: 'Just now',
-        resourceUsage: {
-          cpu: 55,
-          memory: 70,
-          network: 40
-        }
-      }
-    ];
+    });
 
-    function Instructions() {
+    // Agent Card Component
+    function AgentCard({ agent, onSelect }) {
       return (
-        <div className="instructions-section">
-          <h2>Welcome to the Agent Browser</h2>
-          <p>
-            Explore and monitor AI agents in the SafeAI ecosystem. This interactive browser allows you to view agent details,
-            track performance metrics, and analyze resource usage in real-time.
-          </p>
-
-          <div className="features-grid">
-            <div className="feature-box">
-              <h4><i className="material-icons">search</i>Search & Filter</h4>
-              <ul>
-                <li>Use the search bar to find agents by name or capability</li>
-                <li>Filter agents by domain using the category chips</li>
-                <li>View active, inactive, and maintenance status</li>
-              </ul>
-            </div>
-
-            <div className="feature-box">
-              <h4><i className="material-icons">analytics</i>Performance Metrics</h4>
-              <ul>
-                <li>Tasks completed: <span className="metric-example">1,247</span></li>
-                <li>Success rate: <span className="metric-example">98.5%</span></li>
-                <li>Response time: <span className="metric-example">0.8s</span></li>
-                <li>Uptime: <span className="metric-example">99.9%</span></li>
-              </ul>
-            </div>
-
-            <div className="feature-box">
-              <h4><i className="material-icons">memory</i>Resource Monitoring</h4>
-              <ul>
-                <li>Real-time CPU usage tracking</li>
-                <li>Memory consumption analysis</li>
-                <li>Network bandwidth monitoring</li>
-                <li>Historical performance data</li>
-              </ul>
-            </div>
-
-            <div className="feature-box">
-              <h4><i className="material-icons">settings</i>Agent Management</h4>
-              <ul>
-                <li>View detailed agent capabilities</li>
-                <li>Check version information</li>
-                <li>Monitor agent status</li>
-                <li>Access activity logs</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="tip">
-            <strong>Pro Tip:</strong> Click on any agent card to view detailed metrics, resource usage graphs,
-            and historical performance data. Use the search bar to quickly find agents by their capabilities.
-          </div>
-        </div>
-      );
-    }
-
-    // Custom hooks for agent management
-    function useAgentManagement() {
-      const [agents, setAgents] = React.useState(agents);
-      const [selectedAgent, setSelectedAgent] = React.useState(null);
-      const [isLoading, setIsLoading] = React.useState(false);
-      const [error, setError] = React.useState(null);
-
-      const updateAgentStatus = React.useCallback(async (agentId, newStatus) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 500));
-          setAgents(prev => prev.map(agent => 
-            agent.id === agentId ? { ...agent, status: newStatus } : agent
-          ));
-        } catch (err) {
-          setError('Failed to update agent status');
-        } finally {
-          setIsLoading(false);
-        }
-      }, []);
-
-      const updateAgentMetrics = React.useCallback(async (agentId, metrics) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 500));
-          setAgents(prev => prev.map(agent => 
-            agent.id === agentId ? { ...agent, metrics } : agent
-          ));
-        } catch (err) {
-          setError('Failed to update agent metrics');
-        } finally {
-          setIsLoading(false);
-        }
-      }, []);
-
-      return {
-        agents,
-        selectedAgent,
-        setSelectedAgent,
-        isLoading,
-        error,
-        updateAgentStatus,
-        updateAgentMetrics
-      };
-    }
-
-    // Custom hook for filtering and searching
-    function useAgentFilters() {
-      const [searchQuery, setSearchQuery] = React.useState('');
-      const [activeFilters, setActiveFilters] = React.useState({
-        type: [],
-        domain: [],
-        status: []
-      });
-
-      const filterAgents = React.useCallback((agents) => {
-        return agents.filter(agent => {
-          const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                              agent.description.toLowerCase().includes(searchQuery.toLowerCase());
-          
-          const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(agent.type);
-          const matchesDomain = activeFilters.domain.length === 0 || activeFilters.domain.includes(agent.domain);
-          const matchesStatus = activeFilters.status.length === 0 || activeFilters.status.includes(agent.status);
-          
-          return matchesSearch && matchesType && matchesDomain && matchesStatus;
-        });
-      }, [searchQuery, activeFilters]);
-
-      const toggleFilter = React.useCallback((category, value) => {
-        setActiveFilters(prev => ({
-          ...prev,
-          [category]: prev[category].includes(value)
-            ? prev[category].filter(v => v !== value)
-            : [...prev[category], value]
-        }));
-      }, []);
-
-      return {
-        searchQuery,
-        setSearchQuery,
-        activeFilters,
-        toggleFilter,
-        filterAgents
-      };
-    }
-
-    // Agent Card Component with memoization
-    const AgentCard = React.memo(function AgentCard({ agent, onSelect, onStatusChange }) {
-      const handleStatusChange = React.useCallback(() => {
-        const newStatus = agent.status === 'Active' ? 'Inactive' : 'Active';
-        onStatusChange(agent.id, newStatus);
-      }, [agent.id, agent.status, onStatusChange]);
-
-      return (
-        <Card className="agent-card">
+        <Card className="agent-card" onClick={() => onSelect(agent)}>
           <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                {agent.name.charAt(0)}
+              <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                {agent.name[0]}
               </Avatar>
-              <Box sx={{ flex: 1 }}>
+              <Box>
                 <Typography variant="h6">{agent.name}</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {agent.type} • {agent.domain}
                 </Typography>
               </Box>
-              <IconButton onClick={handleStatusChange}>
-                <Icon>{agent.status === 'Active' ? 'check_circle' : 'cancel'}</Icon>
-              </IconButton>
             </Box>
             
             <Typography variant="body2" paragraph>
               {agent.description}
             </Typography>
             
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
               {agent.capabilities.map(capability => (
-                <Chip key={capability} label={capability} size="small" />
+                <Chip
+                  key={capability}
+                  label={capability}
+                  size="small"
+                  variant="outlined"
+                />
               ))}
             </Box>
             
-            <Grid container spacing={2}>
-              {Object.entries(agent.metrics).map(([key, value]) => (
-                <Grid item xs={6} key={key}>
-                  <Paper className="metric-item">
-                    <Typography variant="h6" className="metric-value">
-                      {value}
-                    </Typography>
-                    <Typography variant="caption" className="metric-label">
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              ))}
+            <Grid container spacing={2} className="agent-metrics">
+              <Grid item xs={6}>
+                <Box className="metric-item">
+                  <Typography className="metric-value">
+                    {agent.metrics.tasksCompleted}
+                  </Typography>
+                  <Typography className="metric-label">
+                    Tasks Completed
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box className="metric-item">
+                  <Typography className="metric-value">
+                    {agent.metrics.successRate}%
+                  </Typography>
+                  <Typography className="metric-label">
+                    Success Rate
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box className="metric-item">
+                  <Typography className="metric-value">
+                    {agent.metrics.avgResponseTime}s
+                  </Typography>
+                  <Typography className="metric-label">
+                    Avg Response Time
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box className="metric-item">
+                  <Typography className="metric-value">
+                    {agent.metrics.uptime}%
+                  </Typography>
+                  <Typography className="metric-label">
+                    Uptime
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
+            
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <span className={`status-indicator status-${agent.status.toLowerCase()}`} />
+                <Typography variant="body2">
+                  {agent.status}
+                </Typography>
+              </Box>
+              <Typography variant="caption" color="text.secondary">
+                Last active: {agent.lastActive}
+              </Typography>
+            </Box>
           </CardContent>
         </Card>
       );
-    });
+    }
 
     // Agent Details Dialog Component
-    const AgentDetailsDialog = React.memo(function AgentDetailsDialog({ 
-      agent, 
-      open, 
-      onClose,
-      onMetricsUpdate 
-    }) {
-      const [metrics, setMetrics] = React.useState(agent.metrics);
-
-      const handleMetricsUpdate = React.useCallback(() => {
-        onMetricsUpdate(agent.id, metrics);
-      }, [agent.id, metrics, onMetricsUpdate]);
+    function AgentDetailsDialog({ agent, open, onClose }) {
+      if (!agent) return null;
 
       return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
           <DialogTitle>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                {agent.name.charAt(0)}
+              <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                {agent.name[0]}
               </Avatar>
               {agent.name}
             </Box>
@@ -513,89 +341,162 @@
                 </Typography>
                 <List>
                   <ListItem>
-                    <ListItemIcon><Icon>category</Icon></ListItemIcon>
-                    <ListItemText primary="Type" secondary={agent.type} />
+                    <ListItemText
+                      primary="Type"
+                      secondary={agent.type}
+                    />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Icon>domain</Icon></ListItemIcon>
-                    <ListItemText primary="Domain" secondary={agent.domain} />
+                    <ListItemText
+                      primary="Domain"
+                      secondary={agent.domain}
+                    />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Icon>info</Icon></ListItemIcon>
-                    <ListItemText primary="Version" secondary={agent.version} />
+                    <ListItemText
+                      primary="Version"
+                      secondary={agent.version}
+                    />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Icon>schedule</Icon></ListItemIcon>
-                    <ListItemText primary="Last Active" secondary={agent.lastActive} />
+                    <ListItemText
+                      primary="Status"
+                      secondary={
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <span className={`status-indicator status-${agent.status.toLowerCase()}`} />
+                          {agent.status}
+                        </Box>
+                      }
+                    />
                   </ListItem>
                 </List>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
-                  Metrics
+                  Capabilities
                 </Typography>
-                {Object.entries(metrics).map(([key, value]) => (
-                  <Box key={key} sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
-                    </Typography>
-                    <TextField
-                      type="number"
-                      value={value}
-                      onChange={(e) => setMetrics(prev => ({
-                        ...prev,
-                        [key]: parseFloat(e.target.value)
-                      }))}
-                      size="small"
-                      fullWidth
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  {agent.capabilities.map(capability => (
+                    <Chip
+                      key={capability}
+                      label={capability}
+                      color="primary"
+                      variant="outlined"
                     />
-                  </Box>
-                ))}
+                  ))}
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>
+                  Resource Usage
+                </Typography>
+                <Box className="resource-chart">
+                  <div id={`resourceChart-${agent.id}`} />
+                </Box>
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose}>Close</Button>
-            <Button onClick={handleMetricsUpdate} variant="contained">
-              Update Metrics
-            </Button>
           </DialogActions>
         </Dialog>
       );
-    });
+    }
 
     // Main Agent Browser Component
     function AgentBrowser() {
-      const {
-        agents,
-        selectedAgent,
-        setSelectedAgent,
-        isLoading,
-        error,
-        updateAgentStatus,
-        updateAgentMetrics
-      } = useAgentManagement();
+      const [agents, setAgents] = React.useState([]);
+      const [selectedAgent, setSelectedAgent] = React.useState(null);
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [selectedType, setSelectedType] = React.useState('all');
+      const [isLoading, setIsLoading] = React.useState(true);
+      const [error, setError] = React.useState(null);
 
-      const {
-        searchQuery,
-        setSearchQuery,
-        activeFilters,
-        toggleFilter,
-        filterAgents
-      } = useAgentFilters();
+      // Effect for initial data loading
+      React.useEffect(() => {
+        loadAgents();
+      }, []);
 
-      const filteredAgents = React.useMemo(() => 
-        filterAgents(agents),
-        [agents, filterAgents]
-      );
+      // Effect for resource charts
+      React.useEffect(() => {
+        if (selectedAgent) {
+          initializeResourceChart(selectedAgent);
+        }
+      }, [selectedAgent]);
+
+      const loadAgents = async () => {
+        try {
+          setIsLoading(true);
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setAgents([
+            {
+              id: 1,
+              name: 'Math Solver',
+              type: 'Specialized',
+              domain: 'Mathematics',
+              version: '2.1.0',
+              status: 'Active',
+              description: 'An agent specialized in solving complex mathematical problems',
+              capabilities: ['Theorem proving', 'Equation solving', 'Optimization'],
+              metrics: {
+                tasksCompleted: 1247,
+                successRate: 98.5,
+                avgResponseTime: 0.8,
+                uptime: 99.9
+              },
+              lastActive: '2 minutes ago',
+              resourceUsage: {
+                cpu: 45,
+                memory: 60,
+                network: 30
+              }
+            },
+            // ... Add more sample agents here
+          ]);
+        } catch (err) {
+          setError('Failed to load agents. Please try again later.');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      const initializeResourceChart = (agent) => {
+        const trace = {
+          x: ['CPU', 'Memory', 'Network'],
+          y: [
+            agent.resourceUsage.cpu,
+            agent.resourceUsage.memory,
+            agent.resourceUsage.network
+          ],
+          type: 'bar',
+          marker: {
+            color: ['#4CAF50', '#2196F3', '#FFC107']
+          }
+        };
+
+        const layout = {
+          title: 'Resource Usage',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#fff' },
+          showlegend: false
+        };
+
+        Plotly.newPlot(`resourceChart-${agent.id}`, [trace], layout);
+      };
+
+      const filteredAgents = agents.filter(agent => {
+        const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            agent.description.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesType = selectedType === 'all' || agent.type === selectedType;
+        return matchesSearch && matchesType;
+      });
 
       return (
         <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom>
             Agent Browser
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" paragraph>
-            Monitor and manage SafeAI agents
           </Typography>
 
           {error && (
@@ -604,71 +505,68 @@
             </Alert>
           )}
 
-          <Paper sx={{ p: 2, mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
             <TextField
               fullWidth
               variant="outlined"
               placeholder="Search agents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: <Icon sx={{ mr: 1 }}>search</Icon>
-              }}
+              className="search-bar"
             />
-          </Paper>
+          </Box>
 
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="subtitle2" gutterBottom>
-              Filters
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              {['Type', 'Domain', 'Status'].map(category => (
-                <React.Fragment key={category}>
-                  {Array.from(new Set(agents.map(a => a[category.toLowerCase()]))).map(value => (
-                    <Chip
-                      key={value}
-                      label={value}
-                      onClick={() => toggleFilter(category.toLowerCase(), value)}
-                      color={activeFilters[category.toLowerCase()].includes(value) ? 'primary' : 'default'}
-                    />
-                  ))}
-                </React.Fragment>
-              ))}
-            </Box>
+          <Box className="filter-chips">
+            <Chip
+              label="All"
+              onClick={() => setSelectedType('all')}
+              className={`filter-chip ${selectedType === 'all' ? 'active' : ''}`}
+            />
+            <Chip
+              label="Specialized"
+              onClick={() => setSelectedType('Specialized')}
+              className={`filter-chip ${selectedType === 'Specialized' ? 'active' : ''}`}
+            />
+            <Chip
+              label="Knowledge-based"
+              onClick={() => setSelectedType('Knowledge-based')}
+              className={`filter-chip ${selectedType === 'Knowledge-based' ? 'active' : ''}`}
+            />
           </Box>
 
           {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
               <CircularProgress />
             </Box>
           ) : (
-            <Grid container spacing={3}>
+            <Box className="agent-grid">
               {filteredAgents.map(agent => (
-                <Grid item xs={12} sm={6} md={4} key={agent.id}>
-                  <AgentCard
-                    agent={agent}
-                    onSelect={() => setSelectedAgent(agent)}
-                    onStatusChange={updateAgentStatus}
-                  />
-                </Grid>
+                <AgentCard
+                  key={agent.id}
+                  agent={agent}
+                  onSelect={setSelectedAgent}
+                />
               ))}
-            </Grid>
+            </Box>
           )}
 
-          {selectedAgent && (
-            <AgentDetailsDialog
-              agent={selectedAgent}
-              open={!!selectedAgent}
-              onClose={() => setSelectedAgent(null)}
-              onMetricsUpdate={updateAgentMetrics}
-            />
-          )}
+          <AgentDetailsDialog
+            agent={selectedAgent}
+            open={!!selectedAgent}
+            onClose={() => setSelectedAgent(null)}
+          />
         </Box>
       );
     }
 
-    // Render the app
-    ReactDOM.render(<AgentBrowser />, document.getElementById('root'));
+    // Render the application with theme provider
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <AgentBrowser />
+      </ThemeProvider>
+    );
   </script>
 </body>
 </html> 

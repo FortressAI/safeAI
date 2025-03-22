@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Knowledge Graphs - Interactive Demo</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
@@ -197,8 +197,26 @@
       IconButton, Tooltip, LinearProgress,
       TextField, Dialog, DialogTitle, DialogContent, DialogActions,
       List, ListItem, ListItemText, ListItemIcon,
-      CircularProgress, Alert, Slider, Icon, Chip
+      CircularProgress, Alert, Slider, Icon, Chip,
+      useTheme, ThemeProvider, createTheme, CssBaseline
     } = MaterialUI;
+
+    // Custom theme
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#3f51b5',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
 
     function Instructions() {
       return (
@@ -258,394 +276,272 @@
       );
     }
 
-    // Custom hook for graph data management
-    function useGraphData() {
-      const [graphData, setGraphData] = React.useState({
-        nodes: [],
-        links: []
-      });
-      const [selectedNode, setSelectedNode] = React.useState(null);
-      const [isLoading, setIsLoading] = React.useState(false);
-      const [error, setError] = React.useState(null);
-
-      const loadGraphData = React.useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setGraphData({
-            nodes: [
-              { id: 'ethics', name: 'Ethics Agent', type: 'agent', size: 30 },
-              { id: 'security', name: 'Security Agent', type: 'agent', size: 30 },
-              { id: 'math', name: 'Math Agent', type: 'agent', size: 30 },
-              { id: 'arc', name: 'ARC Agent', type: 'agent', size: 30 },
-              { id: 'dashboard', name: 'Dashboard', type: 'interface', size: 20 },
-              { id: 'browser', name: 'Agent Browser', type: 'interface', size: 20 },
-              { id: 'monitor', name: 'System Monitor', type: 'interface', size: 20 }
-            ],
-            links: [
-              { source: 'ethics', target: 'security', type: 'monitoring', strength: 0.7 },
-              { source: 'security', target: 'math', type: 'protection', strength: 0.8 },
-              { source: 'math', target: 'arc', type: 'interaction', strength: 0.6 },
-              { source: 'ethics', target: 'dashboard', type: 'connection', strength: 0.5 },
-              { source: 'security', target: 'browser', type: 'connection', strength: 0.5 },
-              { source: 'math', target: 'monitor', type: 'connection', strength: 0.5 }
-            ]
-          });
-        } catch (err) {
-          setError('Failed to load graph data');
-        } finally {
-          setIsLoading(false);
-        }
-      }, []);
-
-      const updateNodePosition = React.useCallback((nodeId, x, y) => {
-        setGraphData(prev => ({
-          ...prev,
-          nodes: prev.nodes.map(node =>
-            node.id === nodeId ? { ...node, x, y } : node
-          )
-        }));
-      }, []);
-
-      const addNode = React.useCallback((node) => {
-        setGraphData(prev => ({
-          ...prev,
-          nodes: [...prev.nodes, node]
-        }));
-      }, []);
-
-      const addLink = React.useCallback((link) => {
-        setGraphData(prev => ({
-          ...prev,
-          links: [...prev.links, link]
-        }));
-      }, []);
-
-      return {
-        graphData,
-        selectedNode,
-        setSelectedNode,
-        isLoading,
-        error,
-        loadGraphData,
-        updateNodePosition,
-        addNode,
-        addLink
-      };
-    }
-
-    // Custom hook for graph visualization settings
-    function useGraphSettings() {
-      const [settings, setSettings] = React.useState({
-        nodeSize: 30,
-        linkStrength: 0.5,
-        charge: -100,
-        distance: 100,
-        showLabels: true,
-        showArrows: true,
-        selectedTypes: ['agent', 'interface']
-      });
-
-      const updateSetting = React.useCallback((key, value) => {
-        setSettings(prev => ({
-          ...prev,
-          [key]: value
-        }));
-      }, []);
-
-      const toggleType = React.useCallback((type) => {
-        setSettings(prev => ({
-          ...prev,
-          selectedTypes: prev.selectedTypes.includes(type)
-            ? prev.selectedTypes.filter(t => t !== type)
-            : [...prev.selectedTypes, type]
-        }));
-      }, []);
-
-      return {
-        settings,
-        updateSetting,
-        toggleType
-      };
-    }
-
-    // Graph Node Component
-    const GraphNode = React.memo(function GraphNode({ node, isSelected, onClick }) {
-      const nodeColor = node.type === 'agent' ? '#4CAF50' : '#2196F3';
-      
-      return (
-        <g
-          transform={`translate(${node.x},${node.y})`}
-          onClick={() => onClick(node)}
-          style={{ cursor: 'pointer' }}
-        >
-          <circle
-            r={node.size}
-            fill={nodeColor}
-            stroke={isSelected ? '#fff' : 'none'}
-            strokeWidth={isSelected ? 2 : 0}
-          />
-          {node.name && (
-            <text
-              x={node.size + 5}
-              y={5}
-              fill="#fff"
-              fontSize="12"
-              textAnchor="start"
-            >
-              {node.name}
-            </text>
-          )}
-        </g>
-      );
-    });
-
-    // Graph Link Component
-    const GraphLink = React.memo(function GraphLink({ link, settings }) {
-      const linkColor = {
-        monitoring: '#4CAF50',
-        protection: '#F44336',
-        interaction: '#FFC107',
-        connection: '#9C27B0'
-      }[link.type] || '#fff';
-
-      return (
-        <line
-          x1={link.source.x}
-          y1={link.source.y}
-          x2={link.target.x}
-          y2={link.target.y}
-          stroke={linkColor}
-          strokeWidth={link.strength * 2}
-          opacity={0.6}
-        />
-      );
-    });
-
     // Node Details Dialog Component
-    const NodeDetailsDialog = React.memo(function NodeDetailsDialog({
-      node,
-      open,
-      onClose,
-      onAddLink
-    }) {
-      const [targetNode, setTargetNode] = React.useState('');
-      const [linkType, setLinkType] = React.useState('connection');
-      const [linkStrength, setLinkStrength] = React.useState(0.5);
-
-      const handleAddLink = React.useCallback(() => {
-        if (targetNode) {
-          onAddLink({
-            source: node.id,
-            target: targetNode,
-            type: linkType,
-            strength: linkStrength
-          });
-          onClose();
-        }
-      }, [node.id, targetNode, linkType, linkStrength, onAddLink, onClose]);
+    function NodeDetailsDialog({ node, open, onClose }) {
+      if (!node) return null;
 
       return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
           <DialogTitle>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Icon sx={{ mr: 1 }}>{node.type === 'agent' ? 'smart_toy' : 'dashboard'}</Icon>
+              <Icon sx={{ mr: 2 }}>{node.type === 'agent' ? 'smart_toy' : 'memory'}</Icon>
               {node.name}
             </Box>
           </DialogTitle>
           <DialogContent>
             <List>
               <ListItem>
-                <ListItemIcon><Icon>category</Icon></ListItemIcon>
-                <ListItemText primary="Type" secondary={node.type} />
+                <ListItemText
+                  primary="Type"
+                  secondary={node.type}
+                />
               </ListItem>
               <ListItem>
-                <ListItemIcon><Icon>info</Icon></ListItemIcon>
-                <ListItemText primary="ID" secondary={node.id} />
+                <ListItemText
+                  primary="Description"
+                  secondary={node.description}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Relationships"
+                  secondary={
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {node.relationships.map(rel => (
+                        <Chip
+                          key={rel}
+                          label={rel}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      ))}
+                    </Box>
+                  }
+                />
               </ListItem>
             </List>
-
-            <Divider sx={{ my: 2 }} />
-
-            <Typography variant="h6" gutterBottom>
-              Add Connection
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              label="Target Node"
-              value={targetNode}
-              onChange={(e) => setTargetNode(e.target.value)}
-              sx={{ mb: 2 }}
-            >
-              {graphData.nodes
-                .filter(n => n.id !== node.id)
-                .map(n => (
-                  <MenuItem key={n.id} value={n.id}>
-                    {n.name}
-                  </MenuItem>
-                ))}
-            </TextField>
-
-            <TextField
-              select
-              fullWidth
-              label="Connection Type"
-              value={linkType}
-              onChange={(e) => setLinkType(e.target.value)}
-              sx={{ mb: 2 }}
-            >
-              <MenuItem value="monitoring">Monitoring</MenuItem>
-              <MenuItem value="protection">Protection</MenuItem>
-              <MenuItem value="interaction">Interaction</MenuItem>
-              <MenuItem value="connection">Connection</MenuItem>
-            </TextField>
-
-            <Typography gutterBottom>
-              Connection Strength
-            </Typography>
-            <Slider
-              value={linkStrength}
-              onChange={(_, value) => setLinkStrength(value)}
-              min={0}
-              max={1}
-              step={0.1}
-              marks
-            />
           </DialogContent>
           <DialogActions>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={handleAddLink} variant="contained">
-              Add Connection
-            </Button>
+            <Button onClick={onClose}>Close</Button>
           </DialogActions>
         </Dialog>
       );
-    });
+    }
+
+    // Graph Controls Component
+    function GraphControls({ onZoomIn, onZoomOut, onReset, onTogglePhysics }) {
+      return (
+        <Box className="controls-panel">
+          <Tooltip title="Zoom In">
+            <IconButton onClick={onZoomIn} color="primary">
+              <Icon>add</Icon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Zoom Out">
+            <IconButton onClick={onZoomOut} color="primary">
+              <Icon>remove</Icon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Reset View">
+            <IconButton onClick={onReset} color="primary">
+              <Icon>refresh</Icon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Toggle Physics">
+            <IconButton onClick={onTogglePhysics} color="primary">
+              <Icon>science</Icon>
+            </IconButton>
+          </Tooltip>
+        </Box>
+      );
+    }
+
+    // Relationship Panel Component
+    function RelationshipPanel({ relationships, selectedTypes, onToggleType }) {
+      return (
+        <Box className="relationship-panel">
+          <Typography variant="subtitle2" gutterBottom>
+            Relationship Types
+          </Typography>
+          {relationships.map(rel => (
+            <Box key={rel.type} className="relationship-type">
+              <Box
+                className="relationship-color"
+                sx={{ bgcolor: rel.color }}
+              />
+              <Typography variant="body2">
+                {rel.type}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => onToggleType(rel.type)}
+                sx={{ ml: 'auto' }}
+              >
+                <Icon>
+                  {selectedTypes.includes(rel.type) ? 'visibility' : 'visibility_off'}
+                </Icon>
+              </IconButton>
+            </Box>
+          ))}
+        </Box>
+      );
+    }
 
     // Main Knowledge Graph Component
     function KnowledgeGraph() {
-      const {
-        graphData,
-        selectedNode,
-        setSelectedNode,
-        isLoading,
-        error,
-        loadGraphData,
-        updateNodePosition,
-        addNode,
-        addLink
-      } = useGraphData();
-
-      const {
-        settings,
-        updateSetting,
-        toggleType
-      } = useGraphSettings();
-
+      const [graphData, setGraphData] = React.useState(null);
+      const [selectedNode, setSelectedNode] = React.useState(null);
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [selectedTypes, setSelectedTypes] = React.useState([]);
+      const [isLoading, setIsLoading] = React.useState(true);
+      const [error, setError] = React.useState(null);
       const graphRef = React.useRef(null);
 
-      // Effect for initial data load
+      // Sample data
+      const sampleData = {
+        nodes: [
+          {
+            id: 1,
+            name: 'Math Agent',
+            type: 'agent',
+            description: 'Specialized in mathematical problem solving',
+            relationships: ['depends_on', 'interacts_with'],
+            size: 30,
+            color: '#4CAF50'
+          },
+          {
+            id: 2,
+            name: 'Ethics Agent',
+            type: 'agent',
+            description: 'Analyzes ethical implications',
+            relationships: ['monitors', 'protects'],
+            size: 30,
+            color: '#2196F3'
+          },
+          {
+            id: 3,
+            name: 'Security System',
+            type: 'system',
+            description: 'Ensures system security',
+            relationships: ['protects', 'monitors'],
+            size: 25,
+            color: '#F44336'
+          }
+        ],
+        links: [
+          {
+            source: 1,
+            target: 2,
+            type: 'interacts_with',
+            color: '#2196F3'
+          },
+          {
+            source: 2,
+            target: 3,
+            type: 'monitors',
+            color: '#FFC107'
+          }
+        ]
+      };
+
+      const relationships = [
+        { type: 'depends_on', color: '#4CAF50' },
+        { type: 'interacts_with', color: '#2196F3' },
+        { type: 'monitors', color: '#FFC107' },
+        { type: 'protects', color: '#F44336' }
+      ];
+
+      // Effect for initial data loading
       React.useEffect(() => {
         loadGraphData();
-      }, [loadGraphData]);
+      }, []);
 
-      // Effect for graph visualization
+      // Effect for graph initialization
       React.useEffect(() => {
-        if (!graphRef.current) return;
-
-        const svg = d3.select(graphRef.current);
-        const width = svg.node().getBoundingClientRect().width;
-        const height = svg.node().getBoundingClientRect().height;
-
-        // Clear previous content
-        svg.selectAll('*').remove();
-
-        // Create simulation
-        const simulation = d3.forceSimulation(graphData.nodes)
-          .force('link', d3.forceLink(graphData.links)
-            .id(d => d.id)
-            .distance(settings.distance)
-            .strength(settings.linkStrength))
-          .force('charge', d3.forceManyBody().strength(settings.charge))
-          .force('center', d3.forceCenter(width / 2, height / 2));
-
-        // Create links
-        svg.append('g')
-          .selectAll('line')
-          .data(graphData.links)
-          .join('line')
-          .attr('stroke', '#999')
-          .attr('stroke-opacity', 0.6)
-          .attr('stroke-width', d => Math.sqrt(d.strength));
-
-        // Create nodes
-        const node = svg.append('g')
-          .selectAll('g')
-          .data(graphData.nodes)
-          .join('g')
-          .call(d3.drag()
-            .on('start', dragstarted)
-            .on('drag', dragged)
-            .on('end', dragended));
-
-        node.append('circle')
-          .attr('r', d => d.size)
-          .attr('fill', d => d.type === 'agent' ? '#4CAF50' : '#2196F3');
-
-        if (settings.showLabels) {
-          node.append('text')
-            .attr('x', d => d.size + 5)
-            .attr('y', 5)
-            .text(d => d.name)
-            .attr('fill', '#fff')
-            .attr('font-size', '12px');
+        if (graphData && graphRef.current) {
+          initializeGraph();
         }
+      }, [graphData]);
 
-        // Update positions on each tick
-        simulation.on('tick', () => {
-          svg.selectAll('line')
-            .attr('x1', d => d.source.x)
-            .attr('y1', d => d.source.y)
-            .attr('x2', d => d.target.x)
-            .attr('y2', d => d.target.y);
-
-          node.attr('transform', d => `translate(${d.x},${d.y})`);
-        });
-
-        // Drag functions
-        function dragstarted(event) {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          event.subject.fx = event.subject.x;
-          event.subject.fy = event.subject.y;
+      const loadGraphData = async () => {
+        try {
+          setIsLoading(true);
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setGraphData(sampleData);
+        } catch (err) {
+          setError('Failed to load graph data. Please try again later.');
+        } finally {
+          setIsLoading(false);
         }
+      };
 
-        function dragged(event) {
-          event.subject.fx = event.x;
-          event.subject.fy = event.y;
+      const initializeGraph = () => {
+        const Graph = ForceGraph()(graphRef.current)
+          .graphData(graphData)
+          .nodeLabel('name')
+          .nodeColor('color')
+          .nodeRelSize(6)
+          .linkColor('color')
+          .linkWidth(2)
+          .onNodeClick((node) => setSelectedNode(node))
+          .d3Force('charge').strength(-100)
+          .d3Force('link').distance(100);
+
+        // Store graph instance for controls
+        window.graphInstance = Graph;
+      };
+
+      const handleZoomIn = () => {
+        if (window.graphInstance) {
+          window.graphInstance.zoom(1.2);
         }
+      };
 
-        function dragended(event) {
-          if (!event.active) simulation.alphaTarget(0);
-          event.subject.fx = null;
-          event.subject.fy = null;
-          updateNodePosition(event.subject.id, event.x, event.y);
+      const handleZoomOut = () => {
+        if (window.graphInstance) {
+          window.graphInstance.zoom(0.8);
         }
+      };
 
-        return () => {
-          simulation.stop();
+      const handleReset = () => {
+        if (window.graphInstance) {
+          window.graphInstance.resetZoom();
+        }
+      };
+
+      const handleTogglePhysics = () => {
+        if (window.graphInstance) {
+          window.graphInstance.d3ReheatSimulation();
+        }
+      };
+
+      const handleToggleType = (type) => {
+        setSelectedTypes(prev =>
+          prev.includes(type)
+            ? prev.filter(t => t !== type)
+            : [...prev, type]
+        );
+      };
+
+      const filteredData = React.useMemo(() => {
+        if (!graphData) return null;
+
+        const filteredLinks = graphData.links.filter(link =>
+          selectedTypes.length === 0 || selectedTypes.includes(link.type)
+        );
+
+        return {
+          nodes: graphData.nodes,
+          links: filteredLinks
         };
-      }, [graphData, settings, updateNodePosition]);
+      }, [graphData, selectedTypes]);
 
       return (
         <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom>
             Knowledge Graph Explorer
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" paragraph>
-            Visualize and analyze relationships between AI agents and systems
           </Typography>
 
           {error && (
@@ -654,81 +550,49 @@
             </Alert>
           )}
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
-              <Paper className="graph-container">
-                {isLoading ? (
-                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <CircularProgress />
-                  </Box>
-                ) : (
-                  <svg ref={graphRef} width="100%" height="100%" />
-                )}
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Graph Settings
-                </Typography>
-                <Box sx={{ mb: 2 }}>
-                  <Typography gutterBottom>
-                    Node Size
-                  </Typography>
-                  <Slider
-                    value={settings.nodeSize}
-                    onChange={(_, value) => updateSetting('nodeSize', value)}
-                    min={10}
-                    max={50}
-                    step={5}
-                    marks
-                  />
-                </Box>
-                <Box sx={{ mb: 2 }}>
-                  <Typography gutterBottom>
-                    Link Strength
-                  </Typography>
-                  <Slider
-                    value={settings.linkStrength}
-                    onChange={(_, value) => updateSetting('linkStrength', value)}
-                    min={0}
-                    max={1}
-                    step={0.1}
-                    marks
-                  />
-                </Box>
-                <Box sx={{ mb: 2 }}>
-                  <Typography gutterBottom>
-                    Node Types
-                  </Typography>
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                    {['agent', 'interface'].map(type => (
-                      <Chip
-                        key={type}
-                        label={type}
-                        onClick={() => toggleType(type)}
-                        color={settings.selectedTypes.includes(type) ? 'primary' : 'default'}
-                      />
-                    ))}
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          {selectedNode && (
-            <NodeDetailsDialog
-              node={selectedNode}
-              open={!!selectedNode}
-              onClose={() => setSelectedNode(null)}
-              onAddLink={addLink}
+          <Box sx={{ mb: 3 }}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search nodes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-box"
             />
-          )}
+          </Box>
+
+          <Box className="graph-container">
+            <div ref={graphRef} />
+            <GraphControls
+              onZoomIn={handleZoomIn}
+              onZoomOut={handleZoomOut}
+              onReset={handleReset}
+              onTogglePhysics={handleTogglePhysics}
+            />
+            <RelationshipPanel
+              relationships={relationships}
+              selectedTypes={selectedTypes}
+              onToggleType={handleToggleType}
+            />
+          </Box>
+
+          <NodeDetailsDialog
+            node={selectedNode}
+            open={!!selectedNode}
+            onClose={() => setSelectedNode(null)}
+          />
         </Box>
       );
     }
 
-    ReactDOM.render(<KnowledgeGraph />, document.getElementById('root'));
+    // Render the application with theme provider
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <KnowledgeGraph />
+      </ThemeProvider>
+    );
   </script>
 </body>
 </html> 

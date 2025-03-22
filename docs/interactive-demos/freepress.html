@@ -3,465 +3,418 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreePress - Interactive Tutorial</title>
+  <title>Free Press - SafeAI Interactive Demos</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <!-- TinyMCE for rich text editing -->
-  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
-    body { margin: 0; padding: 0; font-family: Roboto, sans-serif; background-color: #121212; color: #fff; }
-    #root { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .tutorial-section { margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; background-color: rgba(255,255,255,0.05); }
-    .code-block { background-color: #1e1e1e; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 14px; margin: 10px 0; overflow-x: auto; color: #e6e6e6; }
-    .tab-content { padding: 15px 0; }
+    .freepress-container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      height: calc(100vh - 64px);
+    }
+    
+    .sidebar {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .main-content {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .article-card {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 16px;
+    }
+    
+    .article-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .article-card.selected {
+      border: 2px solid #2196f3;
+    }
+    
+    .article-content {
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    
+    .analysis-panel {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .sentiment-chart {
+      height: 200px;
+      margin: 20px 0;
+    }
+    
+    .keyword-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .keyword-chip {
+      background-color: rgba(33, 150, 243, 0.1);
+      color: #2196f3;
+      border: 1px solid rgba(33, 150, 243, 0.3);
+    }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     const { 
-      Box, Typography, Button, Card, CardContent, Tabs, Tab, Grid, 
-      Divider, TextField, Paper, IconButton, Tooltip, List, ListItem, 
-      ListItemText, ListItemIcon, Chip, Alert, ToggleButton, ToggleButtonGroup,
-      Dialog, DialogTitle, DialogContent, DialogActions
+      Box, Typography, Container, Card, CardContent, Grid, AppBar, Toolbar,
+      IconButton, Icon, Button, TextField, Select, MenuItem, FormControl,
+      InputLabel, Chip, Stack, Divider, Alert, List, ListItem, ListItemText,
+      ListItemIcon, Paper, Tabs, Tab
     } = MaterialUI;
 
-    // Material icon names
-    const ICONS = {
-      EDIT: "edit",
-      SAVE: "save",
-      DELETE: "delete",
-      ADD: "add",
-      IMAGE: "image",
-      LINK: "link",
-      FORMAT_BOLD: "format_bold",
-      FORMAT_ITALIC: "format_italic",
-      FORMAT_LIST: "format_list_bulleted",
-      FORMAT_QUOTE: "format_quote",
-      COMMENT: "comment",
-      SHARE: "share",
-      INFO: "info"
-    };
-
-    // Sample article templates
-    const articleTemplates = [
+    // Sample articles
+    const articles = [
       {
-        name: "News Article",
-        description: "Standard news article format with headline, subheadline, and body",
-        template: `<h1>Breaking News</h1>
-<h2>Subheadline</h2>
-<p class="lead">Lead paragraph introducing the story...</p>
-<p>Main article content goes here...</p>
-<div class="quote">"Important quote from a source"</div>
-<p>More content...</p>`
+        id: 1,
+        title: 'AI Ethics: The Future of Responsible Technology',
+        author: 'Dr. Sarah Chen',
+        date: '2024-03-22',
+        category: 'Technology',
+        sentiment: 0.8,
+        keywords: ['AI', 'Ethics', 'Technology', 'Future', 'Responsibility'],
+        content: `Artificial Intelligence continues to reshape our world, but with great power comes great responsibility. 
+        As we develop increasingly sophisticated AI systems, the ethical implications become more complex and critical.
+        
+        Key considerations include:
+        • Bias and fairness in AI systems
+        • Privacy and data protection
+        • Transparency and explainability
+        • Accountability and governance
+        
+        The future of AI must be built on a foundation of strong ethical principles and responsible development practices.`
       },
       {
-        name: "Blog Post",
-        description: "Casual blog post format with introduction and sections",
-        template: `<h1>Blog Title</h1>
-<p class="lead">Introduction to the topic...</p>
-<h2>First Section</h2>
-<p>Content for the first section...</p>
-<h2>Second Section</h2>
-<p>Content for the second section...</p>
-<div class="conclusion">Summary and next steps...</div>`
+        id: 2,
+        title: 'The Impact of AI on Journalism',
+        author: 'Michael Rodriguez',
+        date: '2024-03-21',
+        category: 'Media',
+        sentiment: 0.6,
+        keywords: ['AI', 'Journalism', 'Media', 'Technology', 'Future'],
+        content: `The journalism landscape is undergoing a significant transformation with the integration of AI technologies.
+        From automated content generation to fact-checking, AI is changing how news is created and consumed.
+        
+        Key developments:
+        • Automated reporting for data-driven stories
+        • AI-powered fact-checking systems
+        • Personalized news delivery
+        • Enhanced content analysis
+        
+        While AI offers exciting possibilities, it also raises important questions about journalistic integrity and human oversight.`
       },
       {
-        name: "Technical Article",
-        description: "Technical article with code blocks and diagrams",
-        template: `<h1>Technical Topic</h1>
-<p class="lead">Overview of the technical concept...</p>
-<h2>Background</h2>
-<p>Technical background information...</p>
-<pre><code>// Code example
-function example() {
-  // Implementation
-}</code></pre>
-<h2>Analysis</h2>
-<p>Technical analysis and findings...</p>`
+        id: 3,
+        title: 'Building Trust in AI Systems',
+        author: 'Prof. James Wilson',
+        date: '2024-03-20',
+        category: 'Research',
+        sentiment: 0.9,
+        keywords: ['AI', 'Trust', 'Transparency', 'Ethics', 'Systems'],
+        content: `Trust is the cornerstone of successful AI deployment. As AI systems become more integrated into our lives,
+        building and maintaining trust becomes increasingly important.
+        
+        Key factors:
+        • Transparent decision-making processes
+        • Clear communication of AI capabilities
+        • Robust testing and validation
+        • User feedback and iteration
+        
+        The path to trustworthy AI requires collaboration between developers, users, and regulators.`
       }
     ];
 
-    function FreePressTutorial() {
+    function FreePress() {
+      const [selectedArticle, setSelectedArticle] = React.useState(null);
       const [tabValue, setTabValue] = React.useState(0);
-      const [articleContent, setArticleContent] = React.useState("");
-      const [selectedTemplate, setSelectedTemplate] = React.useState(null);
-      const [comments, setComments] = React.useState([]);
-      const [newComment, setNewComment] = React.useState("");
-      const [isSaving, setIsSaving] = React.useState(false);
-      const [error, setError] = React.useState(null);
-      const [showImageDialog, setShowImageDialog] = React.useState(false);
-      const [imageUrl, setImageUrl] = React.useState("");
-      const [previewMode, setPreviewMode] = React.useState(false);
-      const [selectedFormat, setSelectedFormat] = React.useState(null);
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [sentimentChart, setSentimentChart] = React.useState(null);
+      const chartRef = React.useRef(null);
+
+      React.useEffect(() => {
+        // Initialize sentiment chart
+        if (chartRef.current) {
+          const ctx = chartRef.current.getContext('2d');
+          const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Positive', 'Neutral', 'Negative'],
+              datasets: [{
+                label: 'Sentiment Distribution',
+                data: [60, 30, 10],
+                backgroundColor: [
+                  'rgba(76, 175, 80, 0.5)',
+                  'rgba(158, 158, 158, 0.5)',
+                  'rgba(244, 67, 54, 0.5)'
+                ],
+                borderColor: [
+                  'rgba(76, 175, 80, 1)',
+                  'rgba(158, 158, 158, 1)',
+                  'rgba(244, 67, 54, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                x: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                }
+              }
+            }
+          });
+          setSentimentChart(chart);
+        }
+      }, []);
+
+      const handleArticleSelect = (article) => {
+        setSelectedArticle(article);
+      };
 
       const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
-        setError(null);
       };
 
-      const handleTemplateSelect = (template) => {
-        setSelectedTemplate(template);
-        setArticleContent(template.template);
-      };
-
-      const handleContentChange = (content) => {
-        setArticleContent(content);
-        setError(null);
-      };
-
-      const handleSave = async () => {
-        if (!articleContent) {
-          setError("Please add some content to your article");
-          return;
-        }
-
-        setIsSaving(true);
-        // Simulate save operation
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsSaving(false);
-      };
-
-      const handleAddComment = () => {
-        if (!newComment.trim()) return;
-        
-        setComments(prev => [...prev, {
-          id: Date.now(),
-          text: newComment,
-          author: "User",
-          timestamp: new Date().toLocaleString()
-        }]);
-        setNewComment("");
-      };
-
-      const handleFormatChange = (format) => {
-        setSelectedFormat(format);
-        let newContent = articleContent;
-        
-        switch (format) {
-          case "bold":
-            newContent = `<strong>${articleContent}</strong>`;
-            break;
-          case "italic":
-            newContent = `<em>${articleContent}</em>`;
-            break;
-          case "list":
-            newContent = `<ul><li>${articleContent}</li></ul>`;
-            break;
-          case "quote":
-            newContent = `<blockquote>${articleContent}</blockquote>`;
-            break;
-          default:
-            newContent = articleContent;
-        }
-        
-        setArticleContent(newContent);
-      };
-
-      const handleImagePreview = () => {
-        if (!imageUrl) return;
-        
-        const img = new Image();
-        img.onload = () => {
-          setShowImageDialog(false);
-          const imageHtml = `<figure>
-            <img src="${imageUrl}" alt="Uploaded image" style="max-width: 100%;" />
-            <figcaption>Image caption</figcaption>
-          </figure>`;
-          setArticleContent(prev => prev + imageHtml);
-          setImageUrl("");
-        };
-        img.src = imageUrl;
-      };
-
-      const renderPreview = () => {
-        return (
-          <div 
-            className="article-preview"
-            dangerouslySetInnerHTML={{ __html: articleContent }}
-          />
-        );
-      };
+      const filteredArticles = articles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.content.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
       return (
         <Box>
-          <Typography variant="h4" gutterBottom>
-            FreePress - Interactive Tutorial
-          </Typography>
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="Overview" />
-            <Tab label="Article Editor" />
-            <Tab label="Comments" />
-            <Tab label="Code Examples" />
-          </Tabs>
-
-          <Box className="tab-content">
-            {tabValue === 0 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  What is FreePress?
-                </Typography>
-                <Typography paragraph>
-                  FreePress is an intuitive content management and publishing tool designed for seamless news and article creation in the SafeAI ecosystem. 
-                  It enables users to craft, edit, and publish high-quality content with real-time previews and interactive components.
-                </Typography>
-
-                <Grid container spacing={2}>
-                  {['Interactive Article Editor', 'Real-time Preview', 'Multimedia Integration', 'Comment & Feedback System'].map((feature, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card className="demo-section">
-                        <CardContent>
-                          <Typography variant="h6" color="primary">{feature}</Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
-
-            {tabValue === 1 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Article Editor
-                </Typography>
-                <Typography paragraph>
-                  Create your article using the rich text editor below. Choose a template or start from scratch.
-                </Typography>
-
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <Paper className="demo-section">
-                      <Typography variant="subtitle1" gutterBottom>
-                        Article Templates
-                      </Typography>
-                      <List>
-                        {articleTemplates.map((template, index) => (
-                          <ListItem 
-                            button 
-                            key={index}
-                            selected={selectedTemplate?.name === template.name}
-                            onClick={() => handleTemplateSelect(template)}
-                          >
-                            <ListItemIcon>
-                              <Icon>{ICONS.EDIT}</Icon>
-                            </ListItemIcon>
-                            <ListItemText 
-                              primary={template.name}
-                              secondary={template.description}
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Paper>
-                  </Grid>
-
-                  <Grid item xs={12} md={8}>
-                    <Paper className="demo-section">
-                      <Box sx={{ mb: 2, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        <ToggleButtonGroup 
-                          size="small" 
-                          value={selectedFormat}
-                          onChange={(e, newFormat) => handleFormatChange(newFormat)}
-                          exclusive
-                        >
-                          <ToggleButton value="bold">
-                            <Icon>{ICONS.FORMAT_BOLD}</Icon>
-                          </ToggleButton>
-                          <ToggleButton value="italic">
-                            <Icon>{ICONS.FORMAT_ITALIC}</Icon>
-                          </ToggleButton>
-                          <ToggleButton value="list">
-                            <Icon>{ICONS.FORMAT_LIST}</Icon>
-                          </ToggleButton>
-                          <ToggleButton value="quote">
-                            <Icon>{ICONS.FORMAT_QUOTE}</Icon>
-                          </ToggleButton>
-                        </ToggleButtonGroup>
-                        <IconButton onClick={() => setShowImageDialog(true)}>
-                          <Icon>{ICONS.IMAGE}</Icon>
-                        </IconButton>
-                        <IconButton>
-                          <Icon>{ICONS.LINK}</Icon>
-                        </IconButton>
-                        <Button
-                          variant="outlined"
-                          onClick={() => setPreviewMode(!previewMode)}
-                          startIcon={<Icon>{previewMode ? ICONS.EDIT : ICONS.INFO}</Icon>}
-                        >
-                          {previewMode ? "Edit" : "Preview"}
-                        </Button>
-                      </Box>
-
-                      {previewMode ? (
-                        <Box className="article-preview">
-                          {renderPreview()}
-                        </Box>
-                      ) : (
-                        <TextField
-                          fullWidth
-                          multiline
-                          rows={10}
-                          value={articleContent}
-                          onChange={(e) => handleContentChange(e.target.value)}
-                          placeholder="Write your article here..."
-                          sx={{ mb: 2 }}
-                        />
-                      )}
-
-                      <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Button
-                          variant="contained"
-                          onClick={handleSave}
-                          disabled={isSaving}
-                          startIcon={<Icon>{isSaving ? ICONS.SAVE : ICONS.SAVE}</Icon>}
-                        >
-                          {isSaving ? "Saving..." : "Save Article"}
-                        </Button>
-                      </Box>
-                    </Paper>
-
-                    {error && (
-                      <Alert severity="error" sx={{ mt: 2 }}>
-                        {error}
-                      </Alert>
-                    )}
-                  </Grid>
-                </Grid>
-              </Box>
-            )}
-
-            {tabValue === 2 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Comments
-                </Typography>
-                <Typography paragraph>
-                  Read and add comments to the article.
-                </Typography>
-
-                <Paper className="demo-section">
-                  <Box sx={{ mb: 2 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <Icon>article</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Free Press
+              </Typography>
+              <Button color="inherit" href="index.html">
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container maxWidth={false} sx={{ mt: 4 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <Card className="sidebar">
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Articles
+                    </Typography>
+                    
                     <TextField
                       fullWidth
-                      multiline
-                      rows={3}
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      placeholder="Add a comment..."
-                      sx={{ mb: 1 }}
+                      variant="outlined"
+                      placeholder="Search articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      sx={{ mb: 2 }}
                     />
-                    <Button
-                      variant="contained"
-                      onClick={handleAddComment}
-                      disabled={!newComment.trim()}
-                      startIcon={<Icon>{ICONS.COMMENT}</Icon>}
-                    >
-                      Add Comment
-                    </Button>
-                  </Box>
-
-                  <List>
-                    {comments.map((comment) => (
-                      <ListItem key={comment.id}>
-                        <ListItemIcon>
-                          <Icon>{ICONS.COMMENT}</Icon>
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={comment.text}
-                          secondary={`${comment.author} - ${comment.timestamp}`}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Paper>
-              </Box>
-            )}
-
-            {tabValue === 3 && (
-              <Box>
-                <Typography variant="h6" gutterBottom>
-                  Code Examples
-                </Typography>
-                <Typography paragraph>
-                  Here's an example of how to use the FreePress API:
-                </Typography>
-
-                <Paper className="demo-section">
-                  <pre className="code-block">
-{`// Example: Create a new article
-const article = {
-  title: "My Article",
-  content: "<h1>Hello World</h1><p>This is my article...</p>",
-  author: "John Doe",
-  tags: ["news", "technology"]
-};
-
-const savedArticle = await freePress.createArticle(article);
-console.log(savedArticle.id);  // Article ID
-
-// Example: Add a comment
-const comment = {
-  articleId: savedArticle.id,
-  text: "Great article!",
-  author: "Jane Smith"
-};
-
-await freePress.addComment(comment);
-
-// Example: Get article with comments
-const articleWithComments = await freePress.getArticle(savedArticle.id);
-console.log(articleWithComments.comments);  // Array of comments`}
-                  </pre>
-                </Paper>
-              </Box>
-            )}
-          </Box>
-
-          <Dialog open={showImageDialog} onClose={() => setShowImageDialog(false)}>
-            <DialogTitle>Add Image</DialogTitle>
-            <DialogContent>
-              <TextField
-                fullWidth
-                label="Image URL"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                sx={{ mt: 2 }}
-              />
-              {imageUrl && (
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Preview:
-                  </Typography>
-                  <img 
-                    src={imageUrl} 
-                    alt="Preview" 
-                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
-                  />
-                </Box>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowImageDialog(false)}>Cancel</Button>
-              <Button onClick={handleImagePreview} variant="contained">
-                Add Image
-              </Button>
-            </DialogActions>
-          </Dialog>
+                    
+                    <Stack spacing={2}>
+                      {filteredArticles.map((article) => (
+                        <Card
+                          key={article.id}
+                          className={`article-card ${selectedArticle?.id === article.id ? 'selected' : ''}`}
+                          onClick={() => handleArticleSelect(article)}
+                        >
+                          <CardContent>
+                            <Typography variant="subtitle1">
+                              {article.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              By {article.author}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {new Date(article.date).toLocaleDateString()}
+                            </Typography>
+                            <Chip
+                              label={article.category}
+                              size="small"
+                              sx={{ mt: 1 }}
+                            />
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
+              
+              <Grid item xs={12} md={8}>
+                {selectedArticle ? (
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" gutterBottom>
+                        {selectedArticle.title}
+                      </Typography>
+                      
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ mr: 2 }}>
+                          By {selectedArticle.author}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {new Date(selectedArticle.date).toLocaleDateString()}
+                        </Typography>
+                      </Box>
+                      
+                      <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+                        <Tab label="Content" />
+                        <Tab label="Analysis" />
+                        <Tab label="Metrics" />
+                      </Tabs>
+                      
+                      {tabValue === 0 && (
+                        <div className="article-content">
+                          <Typography variant="body1" paragraph>
+                            {selectedArticle.content}
+                          </Typography>
+                        </div>
+                      )}
+                      
+                      {tabValue === 1 && (
+                        <div className="analysis-panel">
+                          <Typography variant="h6" gutterBottom>
+                            Content Analysis
+                          </Typography>
+                          
+                          <Typography variant="subtitle1" gutterBottom>
+                            Sentiment Analysis
+                          </Typography>
+                          <div className="sentiment-chart">
+                            <canvas ref={chartRef} />
+                          </div>
+                          
+                          <Typography variant="subtitle1" gutterBottom>
+                            Key Topics
+                          </Typography>
+                          <div className="keyword-list">
+                            {selectedArticle.keywords.map((keyword, index) => (
+                              <Chip
+                                key={index}
+                                label={keyword}
+                                className="keyword-chip"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {tabValue === 2 && (
+                        <div className="analysis-panel">
+                          <Typography variant="h6" gutterBottom>
+                            Article Metrics
+                          </Typography>
+                          
+                          <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                              <Paper sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="h4">
+                                  {Math.round(selectedArticle.sentiment * 100)}%
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Positive Sentiment
+                                </Typography>
+                              </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Paper sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="h4">
+                                  {selectedArticle.keywords.length}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Key Topics
+                                </Typography>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" color="text.secondary" align="center">
+                        Select an article to view its content and analysis
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                )}
+              </Grid>
+            </Grid>
+          </Container>
         </Box>
       );
     }
 
-    ReactDOM.render(<FreePressTutorial />, document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<FreePress />);
   </script>
 </body>
 </html> 

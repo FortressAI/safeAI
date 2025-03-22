@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeAI Interactive Demos</title>
   <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
     body { 
       margin: 0; 
@@ -33,6 +34,23 @@
       transform: translateY(-8px);
       box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
     }
+    .status-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-complete {
+      background-color: #4caf50;
+      color: white;
+    }
+    .status-incomplete {
+      background-color: #ff9800;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -41,7 +59,7 @@
     // Import Material-UI components
     const { 
       Box, Typography, Container, Card, CardContent, CardActionArea, Grid,
-      AppBar, Toolbar, IconButton, Avatar, Icon
+      AppBar, Toolbar, IconButton, Avatar, Icon, Chip, Tooltip
     } = MaterialUI;
 
     // Material icon names
@@ -58,63 +76,71 @@
       ARTICLE: "article"
     };
 
-    // Demo data
+    // Demo data with status
     const demos = [
       {
         title: "Dashboard",
         description: "Overview of system health, security, knowledge graphs, and active agents",
         icon: ICONS.DASHBOARD,
         color: "#2196f3",
-        url: "dashboard.html"
+        url: "dashboard.html",
+        status: "complete"
       },
       {
         title: "Agent Browser",
         description: "Browse, search, and manage AI agents in the SafeAI ecosystem",
         icon: ICONS.SMART_TOY,
         color: "#4caf50",
-        url: "agent-browser.html"
+        url: "agent-browser.html",
+        status: "complete"
       },
       {
         title: "Knowledge Graphs",
         description: "Explore and analyze knowledge relationships with interactive visualization",
         icon: ICONS.STORAGE,
         color: "#9c27b0",
-        url: "knowledge-graphs.html"
+        url: "knowledge-graphs.html",
+        status: "complete"
       },
       {
         title: "Agent Workshop",
         description: "Create, train, and test AI agents with knowledge graph integration",
         icon: ICONS.BUILD,
         color: "#ff9800",
-        url: "agent-workshop.html"
+        url: "agent-workshop.html",
+        status: "complete"
       },
       {
         title: "Math ATP",
         description: "Automated theorem proving and mathematical reasoning",
         icon: ICONS.FUNCTIONS,
         color: "#00bcd4",
-        url: "mathatp.html"
+        url: "mathatp.html",
+        status: "complete"
       },
       {
         title: "Security Center",
         description: "Monitor and manage security policies and agent behavior",
         icon: ICONS.SECURITY,
         color: "#f44336",
-        url: "security-center.html"
+        url: "security-center.html",
+        status: "complete"
       },
       {
         title: "Free Press",
         description: "Explore AI-powered journalism and content analysis",
         icon: ICONS.ARTICLE,
         color: "#795548",
-        url: "freepress.html"
+        url: "freepress.html",
+        status: "complete"
       },
       {
         title: "ARC Prize Challenge",
         description: "Test AI agents against Abstract Reasoning Corpus challenges",
         icon: ICONS.PSYCHOLOGY,
         color: "#e91e63",
-        url: "arc-prize.html"
+        url: "arc-prize.html",
+        status: "complete"
       }
     ];
 
@@ -135,6 +161,11 @@
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 SafeAI Interactive Demos
               </Typography>
+              <Chip 
+                label={`${demos.filter(d => d.status === "complete").length}/${demos.length} Complete`}
+                color="primary"
+                variant="outlined"
+              />
             </Toolbar>
           </AppBar>
           
@@ -157,7 +188,8 @@
                       height: '100%', 
                       backgroundColor: 'rgba(255,255,255,0.05)',
                       border: `1px solid rgba(255,255,255,0.1)`,
-                      borderRadius: 2
+                      borderRadius: 2,
+                      position: 'relative'
                     }}
                   >
                     <CardActionArea 
@@ -176,9 +208,18 @@
                         <Typography variant="body2" color="text.secondary" paragraph>
                           {demo.description}
                         </Typography>
-                        <Typography variant="caption" color={demo.color} sx={{ mt: 2 }}>
-                          Click to launch demo
-                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                          <Typography variant="caption" color={demo.color}>
+                            Click to launch demo
+                          </Typography>
+                          <Tooltip title={demo.status === "complete" ? "Demo is complete" : "Demo is under development"}>
+                            <Chip 
+                              label={demo.status === "complete" ? "Complete" : "In Progress"}
+                              size="small"
+                              color={demo.status === "complete" ? "success" : "warning"}
+                            />
+                          </Tooltip>
+                        </Box>
                       </CardContent>
                     </CardActionArea>
                   </Card>
@@ -199,7 +240,8 @@
       );
     }
 
-    ReactDOM.render(<DemoIndex />, document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DemoIndex />);
   </script>
 </body>
 </html> 
