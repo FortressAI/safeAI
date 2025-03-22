@@ -41,48 +41,48 @@
     // Import Material-UI components
     const { 
       Box, Typography, Container, Card, CardContent, CardActionArea, Grid,
-      AppBar, Toolbar, IconButton, Avatar
+      AppBar, Toolbar, IconButton, Avatar, Icon
     } = MaterialUI;
 
-    // Import Material Icons
-    const {
-      Menu: MenuIcon,
-      Dashboard: DashboardIcon,
-      SmartToy: SmartToyIcon,
-      Build: BuildIcon,
-      Psychology: PsychologyIcon,
-      Security: SecurityIcon,
-      Storage: StorageIcon,
-      Settings: SettingsIcon
-    } = MaterialIcons;
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      DASHBOARD: "dashboard", 
+      SMART_TOY: "smart_toy",
+      BUILD: "build",
+      PSYCHOLOGY: "psychology",
+      SECURITY: "security",
+      STORAGE: "storage",
+      SETTINGS: "settings"
+    };
 
     // Demo data
     const demos = [
       {
         title: "Dashboard",
         description: "Overview of system health, security, knowledge graphs, and active agents",
-        icon: <DashboardIcon />,
+        icon: ICONS.DASHBOARD,
         color: "#2196f3",
         url: "dashboard.html"
       },
       {
         title: "Agent Browser",
         description: "Browse, search, and manage AI agents in the SafeAI ecosystem",
-        icon: <SmartToyIcon />,
+        icon: ICONS.SMART_TOY,
         color: "#4caf50",
         url: "agent-browser.html"
       },
       {
         title: "Agent Workshop",
         description: "Create, train, and test AI agents with knowledge graph integration",
-        icon: <BuildIcon />,
+        icon: ICONS.BUILD,
         color: "#ff9800",
         url: "agent-workshop.html"
       },
       {
         title: "ARC Prize Challenge",
         description: "Test AI agents against Abstract Reasoning Corpus challenges",
-        icon: <PsychologyIcon />,
+        icon: ICONS.PSYCHOLOGY,
         color: "#e91e63",
         url: "arc-prize.html"
       }
@@ -100,7 +100,7 @@
                 aria-label="menu"
                 sx={{ mr: 2 }}
               >
-                <MenuIcon />
+                <Icon>menu</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 SafeAI Interactive Demos
@@ -137,7 +137,7 @@
                       <CardContent sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                           <Avatar sx={{ backgroundColor: demo.color, mr: 2 }}>
-                            {demo.icon}
+                            <Icon>{demo.icon}</Icon>
                           </Avatar>
                           <Typography variant="h5" component="div">
                             {demo.title}

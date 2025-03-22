@@ -67,6 +67,30 @@ We welcome contributions to our documentation. Please see our [Contributing Guid
 ## Contact
 For questions or feedback about this documentation, please contact our documentation team at docs@safeai.com.
 
+## Serving Documentation Locally
+
+To properly view the interactive demos and documentation (especially if you see a blank screen when opening from disk), it is recommended to serve the docs folder with a local web server. You can use one of the following methods:
+
+### Unix/Linux/MacOS
+1. Open a terminal and navigate to the `docs` directory.
+2. (Optional) If `serve_docs.sh` is not executable, run the following command to set the execute permission:
+   ```bash
+   chmod +x serve_docs.sh
+   ```
+3. Run the following command:
+   ```bash
+   ./serve_docs.sh
+   ```
+4. Open your browser and navigate to `http://localhost:8000/interactive-demos/index.html`.
+
+### Windows
+1. Open a Command Prompt and navigate to the `docs` directory.
+2. Run the following command:
+   ```bat
+   serve_docs.bat
+   ```
+3. Open your browser and navigate to `http://localhost:8000/interactive-demos/index.html`.
+
 ---
 *Last updated: March 2024*
 
