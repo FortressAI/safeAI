@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeAI Documentation</title>
+  <title>SafeAI Documentation Wiki</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -11,6 +11,8 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <!-- Search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <style>
@@ -22,7 +24,7 @@
       color: #fff;
     }
     #root { 
-      max-width: 1200px; 
+      max-width: 1400px; 
       margin: 0 auto; 
       padding: 20px;
     }
@@ -38,6 +40,73 @@
       color: inherit;
       text-decoration: none;
     }
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #1e1e1e;
+      border-radius: 4px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .search-result-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+    .search-result-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .quick-link {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.3s ease;
+    }
+    .quick-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .featured-content {
+      margin: 2rem 0;
+    }
+    .featured-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .featured-card h3 {
+      margin-top: 0;
+      color: #3f51b5;
+    }
+    .featured-card p {
+      margin-bottom: 1rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      background: rgba(63, 81, 181, 0.2);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
@@ -47,7 +116,9 @@
     const { 
       Box, Typography, Container, Card, CardContent, CardActionArea, 
       Grid, AppBar, Toolbar, IconButton, Button, Divider, Paper,
-      useTheme, ThemeProvider, createTheme, CssBaseline, Icon
+      useTheme, ThemeProvider, createTheme, CssBaseline, Icon,
+      TextField, InputAdornment, List, ListItem, ListItemText,
+      ListItemIcon, Chip, Tabs, Tab, Alert
     } = MaterialUI;
 
     // Material Icons using icon font classes
@@ -61,86 +132,182 @@
       PEOPLE: "people",
       DEVICES: "devices",
       PLAY_ARROW: "play_arrow",
-      GITHUB: "code" // Using code as fallback since GitHub icon isn't in standard set
+      GITHUB: "code",
+      SEARCH: "search",
+      BOOK: "book",
+      ROCKET: "rocket",
+      SECURITY: "security",
+      ANALYTICS: "analytics",
+      API: "api",
+      SETTINGS: "settings",
+      BUG_REPORT: "bug_report",
+      QUESTION_ANSWER: "question_answer"
     };
 
-    // Define documentation sections
+    // Define documentation sections with enhanced content
     const sections = [
       {
-        title: "User Documentation",
-        icon: ICONS.SCHOOL,
+        title: "Getting Started",
+        icon: ICONS.ROCKET,
         color: "#2196f3",
+        description: "Quick start guides and essential concepts for new users",
         items: [
-          { title: "Getting Started Guide", link: "getting-started.html" },
-          { title: "Basic Concepts", link: "basic-concepts.html" },
-          { title: "User Guide", link: "user-guide.html" },
-          { title: "User Journeys", link: "user-journeys/index.html" }
+          { 
+            title: "Quick Start Guide", 
+            link: "getting-started.html",
+            description: "Set up your SafeAI environment in minutes",
+            tags: ["Setup", "Installation", "Configuration"]
+          },
+          { 
+            title: "Basic Concepts", 
+            link: "basic-concepts.html",
+            description: "Understanding core SafeAI concepts and terminology",
+            tags: ["Concepts", "Terminology", "Overview"]
+          },
+          { 
+            title: "System Architecture", 
+            link: "technical/architecture.html",
+            description: "Overview of SafeAI's system architecture and components",
+            tags: ["Architecture", "Components", "System Design"]
+          }
         ]
       },
       {
-        title: "Developer Documentation",
-        icon: ICONS.CODE,
+        title: "User Guides",
+        icon: ICONS.SCHOOL,
         color: "#4caf50",
+        description: "Comprehensive guides for using SafeAI features",
         items: [
-          { title: "Developer Journey", link: "developer-journeys/developer-journey.html" },
-          { title: "Technical Documentation", link: "technical/index.html" },
-          { title: "Knowledge Graph Implementation", link: "knowledge-graph-implementation.html" }
+          { 
+            title: "User Guide", 
+            link: "user-guide.html",
+            description: "Complete guide to using SafeAI's features",
+            tags: ["Features", "Usage", "Tutorial"]
+          },
+          { 
+            title: "Interactive Demos", 
+            link: "interactive-demos/index.html",
+            description: "Hands-on demonstrations of key features",
+            tags: ["Demos", "Interactive", "Learning"]
+          },
+          { 
+            title: "User Journeys", 
+            link: "user-journeys/index.html",
+            description: "Step-by-step guides for common use cases",
+            tags: ["Journeys", "Use Cases", "Examples"]
+          }
         ]
       },
       {
-        title: "Domain Expert Documentation",
-        icon: ICONS.PSYCHOLOGY,
+        title: "Developer Resources",
+        icon: ICONS.CODE,
         color: "#ff9800",
+        description: "Technical documentation and development guides",
         items: [
-          { title: "Domain Expert Journey", link: "domain-expert-journeys/domain-expert-journey.html" },
-          { title: "Domain-Specific Guides", link: "domains/index.html" },
-          { title: "Integration Guides", link: "integration/index.html" }
+          { 
+            title: "API Documentation", 
+            link: "technical/api.html",
+            description: "Complete API reference and integration guides",
+            tags: ["API", "Integration", "Reference"]
+          },
+          { 
+            title: "Knowledge Graph Implementation", 
+            link: "knowledge-graph-implementation.html",
+            description: "Guide to implementing knowledge graphs with SafeAI",
+            tags: ["Knowledge Graphs", "Implementation", "Development"]
+          },
+          { 
+            title: "Developer Journey", 
+            link: "developer-journeys/developer-journey.html",
+            description: "Step-by-step guide for developers",
+            tags: ["Development", "Journey", "Guide"]
+          }
         ]
       },
       {
-        title: "Support and Resources",
-        icon: ICONS.HELP,
+        title: "Security & Compliance",
+        icon: ICONS.SECURITY,
         color: "#e91e63",
+        description: "Security features and compliance documentation",
         items: [
-          { title: "FAQ", link: "faq.html" },
-          { title: "Troubleshooting Guide", link: "support/troubleshooting.html" },
-          { title: "Contact Information", link: "support/contact.html" }
+          { 
+            title: "Security Guide", 
+            link: "security/index.html",
+            description: "Comprehensive security documentation",
+            tags: ["Security", "Best Practices", "Guidelines"]
+          },
+          { 
+            title: "Compliance Guide", 
+            link: "legal/compliance-guide.html",
+            description: "Compliance requirements and guidelines",
+            tags: ["Compliance", "Legal", "Requirements"]
+          },
+          { 
+            title: "Audit Logs", 
+            link: "security/audit-logs.html",
+            description: "Understanding and using audit logs",
+            tags: ["Audit", "Logs", "Monitoring"]
+          }
         ]
       },
       {
-        title: "Legal and Compliance",
-        icon: ICONS.GAVEL,
-        color: "#9c27b0",
-        items: [
-          { title: "Terms of Service", link: "legal/terms.html" },
-          { title: "Privacy Policy", link: "legal/privacy.html" },
-          { title: "Compliance Guide", link: "legal/compliance-guide.html" }
-        ]
-      },
-      {
-        title: "Community",
+        title: "Support & Community",
         icon: ICONS.PEOPLE,
-        color: "#607d8b",
+        color: "#9c27b0",
+        description: "Community resources and support documentation",
         items: [
-          { title: "Community Guidelines", link: "community/guidelines.html" },
-          { title: "Community Resources", link: "community/resources.html" }
-        ]
-      },
-      {
-        title: "Interactive Demos",
-        icon: ICONS.PLAY_ARROW,
-        color: "#00bcd4",
-        items: [
-          { title: "Dashboard Demo", link: "interactive-demos/dashboard.html" },
-          { title: "Agent Browser", link: "interactive-demos/agent-browser.html" },
-          { title: "Agent Workshop", link: "interactive-demos/agent-workshop.html" },
-          { title: "Knowledge Graphs", link: "interactive-demos/knowledge-graphs.html" },
-          { title: "Security Center", link: "interactive-demos/security-center.html" },
-          { title: "ARC Prize Challenge", link: "interactive-demos/arc-prize.html" },
-          { title: "Math ATP", link: "interactive-demos/mathatp.html" },
-          { title: "Free Press", link: "interactive-demos/freepress.html" }
+          { 
+            title: "FAQ", 
+            link: "faq.html",
+            description: "Frequently asked questions and answers",
+            tags: ["FAQ", "Help", "Support"]
+          },
+          { 
+            title: "Community Guidelines", 
+            link: "community/guidelines.html",
+            description: "Guidelines for community participation",
+            tags: ["Community", "Guidelines", "Participation"]
+          },
+          { 
+            title: "Troubleshooting", 
+            link: "support/troubleshooting.html",
+            description: "Common issues and solutions",
+            tags: ["Troubleshooting", "Support", "Issues"]
+          }
         ]
       }
+    ];
+
+    // Featured content sections
+    const featuredContent = [
+      {
+        title: "Getting Started with SafeAI",
+        description: "Learn how to set up your SafeAI environment and start using its features in minutes.",
+        link: "getting-started.html",
+        icon: ICONS.ROCKET
+      },
+      {
+        title: "Understanding Knowledge Graphs",
+        description: "Deep dive into SafeAI's knowledge graph implementation and usage.",
+        link: "knowledge-graph-implementation.html",
+        icon: ICONS.PSYCHOLOGY
+      },
+      {
+        title: "Security Best Practices",
+        description: "Essential security guidelines and best practices for SafeAI deployment.",
+        link: "security/index.html",
+        icon: ICONS.SECURITY
+      }
+    ];
+
+    // Quick links
+    const quickLinks = [
+      { title: "Interactive Demos", icon: ICONS.PLAY_ARROW, link: "interactive-demos/index.html" },
+      { title: "API Reference", icon: ICONS.API, link: "technical/api.html" },
+      { title: "Security Guide", icon: ICONS.SECURITY, link: "security/index.html" },
+      { title: "Community Forum", icon: ICONS.PEOPLE, link: "community/forum.html" },
+      { title: "Bug Reports", icon: ICONS.BUG_REPORT, link: "support/bug-reports.html" },
+      { title: "FAQ", icon: ICONS.QUESTION_ANSWER, link: "faq.html" }
     ];
 
     // Custom theme
@@ -161,6 +328,21 @@
     });
 
     function DocHome() {
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [searchResults, setSearchResults] = React.useState([]);
+      const [selectedTab, setSelectedTab] = React.useState(0);
+
+      const handleSearch = (event) => {
+        const query = event.target.value;
+        setSearchQuery(query);
+        // Implement search functionality here
+        // This would typically involve searching through documentation content
+      };
+
+      const handleTabChange = (event, newValue) => {
+        setSelectedTab(newValue);
+      };
+
       return (
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
@@ -177,7 +359,7 @@
                   <Icon>menu</Icon>
                 </IconButton>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                  SafeAI Documentation
+                  SafeAI Documentation Wiki
                 </Typography>
                 <Button 
                   variant="outlined" 
@@ -202,13 +384,83 @@
             <Container>
               <Box sx={{ textAlign: 'center', mb: 6 }}>
                 <Typography variant="h3" component="h1" gutterBottom>
-                  SafeAI Documentation
+                  SafeAI Documentation Wiki
                 </Typography>
                 <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-                  Comprehensive guides and resources for the SafeAI platform
+                  Your comprehensive guide to the SafeAI platform
                 </Typography>
               </Box>
-              
+
+              {/* Search Bar */}
+              <Box className="search-container">
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Search documentation..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Icon>search</Icon>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                {searchResults.length > 0 && (
+                  <Paper className="search-results">
+                    <List>
+                      {searchResults.map((result, index) => (
+                        <ListItem key={index} button>
+                          <ListItemText primary={result.title} secondary={result.description} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Paper>
+                )}
+              </Box>
+
+              {/* Quick Links */}
+              <Box className="quick-links">
+                {quickLinks.map((link, index) => (
+                  <a key={index} href={link.link} className="quick-link">
+                    <Icon>{link.icon}</Icon>
+                    <Typography>{link.title}</Typography>
+                  </a>
+                ))}
+              </Box>
+
+              {/* Featured Content */}
+              <Box className="featured-content">
+                <Typography variant="h5" gutterBottom>
+                  Featured Content
+                </Typography>
+                <Grid container spacing={3}>
+                  {featuredContent.map((content, index) => (
+                    <Grid item xs={12} md={4} key={index}>
+                      <Card className="featured-card">
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Icon sx={{ mr: 1, color: 'primary.main' }}>{content.icon}</Icon>
+                          <Typography variant="h6">{content.title}</Typography>
+                        </Box>
+                        <Typography variant="body2" color="text.secondary" paragraph>
+                          {content.description}
+                        </Typography>
+                        <Button 
+                          variant="text" 
+                          color="primary"
+                          href={content.link}
+                          startIcon={<Icon>arrow_forward</Icon>}
+                        >
+                          Learn More
+                        </Button>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+
+              {/* Main Documentation Sections */}
               <Grid container spacing={4}>
                 {sections.map((section, index) => (
                   <Grid item xs={12} md={6} lg={4} key={index}>
@@ -239,25 +491,46 @@
                           </Typography>
                         </Box>
                         
+                        <Typography variant="body2" color="text.secondary" paragraph>
+                          {section.description}
+                        </Typography>
+                        
                         <Divider sx={{ my: 2 }} />
                         
                         <Box sx={{ mt: 2 }}>
                           {section.items.map((item, itemIdx) => (
-                            <Button 
-                              key={itemIdx}
-                              variant={item.isPrimary ? "contained" : "text"}
-                              color={item.isPrimary ? "primary" : "inherit"}
-                              fullWidth
-                              href={item.link}
-                              sx={{ 
-                                justifyContent: 'flex-start', 
-                                textAlign: 'left', 
-                                mb: 1,
-                                backgroundColor: item.isPrimary ? `${section.color}` : 'transparent'
-                              }}
-                            >
-                              {item.title}
-                            </Button>
+                            <Box key={itemIdx} sx={{ mb: 2 }}>
+                              <Button 
+                                variant="text"
+                                color="inherit"
+                                fullWidth
+                                href={item.link}
+                                sx={{ 
+                                  justifyContent: 'flex-start',
+                                  textAlign: 'left',
+                                  textTransform: 'none'
+                                }}
+                              >
+                                <Box sx={{ flex: 1 }}>
+                                  <Typography variant="subtitle1">
+                                    {item.title}
+                                  </Typography>
+                                  <Typography variant="body2" color="text.secondary">
+                                    {item.description}
+                                  </Typography>
+                                  <Box sx={{ mt: 1 }}>
+                                    {item.tags.map((tag, tagIdx) => (
+                                      <Chip
+                                        key={tagIdx}
+                                        label={tag}
+                                        size="small"
+                                        className="tag"
+                                      />
+                                    ))}
+                                  </Box>
+                                </Box>
+                              </Button>
+                            </Box>
                           ))}
                         </Box>
                       </CardContent>
@@ -265,34 +538,14 @@
                   </Grid>
                 ))}
               </Grid>
-              
-              <Box 
-                sx={{ 
-                  textAlign: 'center', 
-                  mt: 6, 
-                  pt: 2,
-                  borderTop: '1px solid rgba(255,255,255,0.1)',
-                  fontSize: '0.875rem', 
-                  color: 'text.secondary' 
-                }}
-              >
-                <Typography variant="body2" display="block" gutterBottom>
-                  SafeAI Documentation Portal • {new Date().getFullYear()} • All Rights Reserved
-                </Typography>
-                <Typography variant="body2" display="block" gutterBottom>
-                  Last updated: {new Date().toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" display="block" gutterBottom>
-                  <a href="index.html">Documentation Home</a>
-                </Typography>
-              </Box>
             </Container>
           </Box>
         </ThemeProvider>
       );
     }
 
-    ReactDOM.render(<DocHome />, document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DocHome />);
   </script>
 </body>
 </html> 
