@@ -3,739 +3,294 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARC Prize Challenge - Interactive Tutorial</title>
-  <!-- React and ReactDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-  <!-- Babel for JSX transpiling -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <title>ARC Prize Challenge - Interactive Demo</title>
+  <link rel="stylesheet" href="../css/shared-demo.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mui/material@5.0.0/umd/material-ui.production.min.js"></script>
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
+    .grid-cell {
+      width: 24px;
+      height: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
     }
-    #root { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 20px;
+    .grid-cell:hover {
+      transform: scale(1.1);
+      z-index: 1;
     }
-    .tutorial-section {
-      margin-bottom: 40px;
+    .color-0 { background-color: #000000; }
+    .color-1 { background-color: #0074D9; }
+    .color-2 { background-color: #FF4136; }
+    .color-3 { background-color: #2ECC40; }
+    .color-4 { background-color: #FFDC00; }
+    .color-5 { background-color: #B10DC9; }
+    .color-6 { background-color: #FF851B; }
+    .color-7 { background-color: #7FDBFF; }
+    .color-8 { background-color: #F012BE; }
+    .color-9 { background-color: #39CCCC; }
+    
+    .phase-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.05);
+      margin-bottom: 20px;
     }
-    .code-block {
-      background-color: #1e1e1e;
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .result-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
       padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2196f3, #1976d2);
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+    
+    .log-container {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto;
       font-family: monospace;
-      font-size: 14px;
-      margin: 10px 0;
-      overflow-x: auto;
+      margin-top: 20px;
     }
-    .color-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin: 10px 0;
+    
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 4px;
     }
-    .color-cell {
-      width: 24px;
-      height: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .section-divider {
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.2), rgba(255,255,255,0));
-      margin: 30px 0;
-    }
-    .tab-content {
-      padding: 15px 0;
-    }
+    
+    .log-info { color: #4CAF50; }
+    .log-warn { color: #FFC107; }
+    .log-error { color: #F44336; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    // Import Material-UI components
-    const { 
-      Box, Typography, Button, TextField, Card, CardContent, 
-      Tabs, Tab, CircularProgress, Grid, Divider, 
-      Chip, Paper, IconButton, Tooltip, LinearProgress,
-      alpha, Icon
-    } = MaterialUI;
+  <div class="container">
+    <h1>ARC Prize Challenge</h1>
+    <p class="subtitle">Test AI agents against Abstract Reasoning Corpus challenges</p>
 
-    // Material icon names
-    const ICONS = {
-      PLAY_ARROW: "play_arrow",
-      STOP: "stop",
-      REFRESH: "refresh",
-      INFO: "info"
-    };
+    <div class="phase-card">
+      <h2>Training Phase</h2>
+      <div class="input-group">
+        <label for="training-dir">Training Directory URL</label>
+        <input type="text" id="training-dir" placeholder="Enter training directory URL">
+      </div>
+    </div>
 
-    // Sample puzzle data
-    const samplePuzzleData = {
-      id: "demo_puzzle_001",
-      input: [
-        [0, 0, 0, 0, 0],
-        [0, 1, 1, 1, 0],
-        [0, 1, 0, 1, 0],
-        [0, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0]
-      ],
-      output: [
-        [0, 0, 0, 0, 0],
-        [0, 2, 2, 2, 0],
-        [0, 2, 0, 2, 0],
-        [0, 2, 2, 2, 0],
-        [0, 0, 0, 0, 0]
-      ]
-    };
+    <div class="phase-card">
+      <h2>Evaluation Phase</h2>
+      <div class="input-group">
+        <label for="eval-dir">Evaluation Directory URL</label>
+        <input type="text" id="eval-dir" placeholder="Enter evaluation directory URL">
+      </div>
+    </div>
 
-    // Color map for ARC puzzles
-    const colorMap = [
-      '#000000', // 0: Black
-      '#0074D9', // 1: Blue
-      '#FF4136', // 2: Red
-      '#2ECC40', // 3: Green
-      '#FFDC00', // 4: Yellow
-      '#B10DC9', // 5: Purple
-      '#FF851B', // 6: Orange
-      '#7FDBFF', // 7: Light Blue
-      '#F012BE', // 8: Magenta
-      '#39CCCC'  // 9: Cyan
-    ];
+    <div class="controls">
+      <button id="start-btn" class="btn primary">Start Processing</button>
+      <button id="stop-btn" class="btn danger" disabled>Stop Processing</button>
+    </div>
 
-    // ARCPuzzleDisplay component (simplified)
-    function ARCPuzzleDisplay({ input, output, prediction }) {
-      // Function to render a single grid
-      const renderGrid = (grid, title) => {
-        if (!grid || !Array.isArray(grid) || grid.length === 0) {
-          return (
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                {title} (No data)
-              </Typography>
-              <Box sx={{ height: 100, bgcolor: 'rgba(0,0,0,0.2)', borderRadius: 1 }} />
-            </Box>
-          );
-        }
+    <div id="progress-section" style="display: none;">
+      <h3>Current Progress</h3>
+      <p id="progress-status">Processing: Training Phase</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" style="width: 0%"></div>
+      </div>
+      <p id="progress-count">0/100 items complete</p>
+    </div>
+
+    <div id="results-section">
+      <h2>Results</h2>
+      <div class="results-grid" id="results-container">
+        <!-- Results will be dynamically added here -->
+      </div>
+    </div>
+
+    <div id="logs-section">
+      <h2>Processing Logs</h2>
+      <div class="log-container" id="log-container">
+        <!-- Logs will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class ARCDemo {
+      constructor() {
+        this.isProcessing = false;
+        this.currentPhase = 'training';
+        this.currentItem = 0;
+        this.totalItems = 100;
+        this.results = [];
+        this.logs = [];
         
-        return (
-          <Box>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
-              {title} ({grid[0].length}×{grid.length})
-            </Typography>
-            
-            <Box 
-              sx={{ 
-                display: 'inline-block',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 1,
-                overflow: 'hidden'
-              }}
-            >
-              {grid.map((row, rowIndex) => (
-                <Box key={rowIndex} sx={{ display: 'flex' }}>
-                  {row.map((cell, cellIndex) => (
-                    <Box 
-                      key={cellIndex}
-                      sx={{
-                        width: 24,
-                        height: 24,
-                        bgcolor: colorMap[cell] || '#333',
-                        border: '1px solid rgba(0,0,0,0.2)',
-                        transition: 'transform 0.2s',
-                        '&:hover': {
-                          transform: 'scale(1.1)',
-                          zIndex: 1
-                        }
-                      }}
-                    />
-                  ))}
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        );
-      };
-      
-      return (
-        <Paper sx={{ p: 3, bgcolor: 'rgba(0,0,0,0.2)' }}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={4}>
-              {renderGrid(input, 'Input')}
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              {renderGrid(output, 'Expected Output')}
-            </Grid>
-            {prediction && (
-              <Grid item xs={12} sm={6} md={4}>
-                {renderGrid(prediction, 'AI Prediction')}
-              </Grid>
-            )}
-          </Grid>
-        </Paper>
-      );
-    }
+        this.initializeEventListeners();
+      }
 
-    // Main tutorial component
-    function ARCTutorial() {
-      const [tabValue, setTabValue] = React.useState(0);
-      const [isProcessing, setIsProcessing] = React.useState(false);
-      const [progress, setProgress] = React.useState(0);
-      const [logs, setLogs] = React.useState([
-        { level: 'info', message: 'System initialized', timestamp: Date.now() }
-      ]);
-      const [trainingDirectory, setTrainingDirectory] = React.useState('https://github.com/fchollet/ARC/training');
-      const [evaluationDirectory, setEvaluationDirectory] = React.useState('https://github.com/fchollet/ARC/evaluation');
-      const [prediction, setPrediction] = React.useState(null);
+      initializeEventListeners() {
+        document.getElementById('start-btn').addEventListener('click', () => this.startProcessing());
+        document.getElementById('stop-btn').addEventListener('click', () => this.stopProcessing());
+      }
 
-      const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
-      };
-
-      const addLog = (level, message) => {
-        setLogs(prev => [...prev, { level, message, timestamp: Date.now() }]);
-      };
-
-      const startProcessing = () => {
-        setIsProcessing(true);
-        setProgress(0);
-        addLog('info', 'Starting processing...');
+      startProcessing() {
+        this.isProcessing = true;
+        this.currentItem = 0;
+        this.updateUI();
+        this.addLog('info', 'Starting processing...');
         
-        // Simulate processing with progress updates
-        const interval = setInterval(() => {
-          setProgress(prev => {
-            const newProgress = prev + Math.random() * 5;
-            if (newProgress >= 100) {
-              clearInterval(interval);
-              setIsProcessing(false);
-              addLog('info', 'Processing complete');
-              
-              // Display a simulated prediction after completion
-              setPrediction([
-                [0, 0, 0, 0, 0],
-                [0, 2, 2, 2, 0],
-                [0, 2, 0, 2, 0],
-                [0, 2, 2, 2, 0],
-                [0, 0, 0, 0, 0]
-              ]);
-              return 100;
-            }
-            return newProgress;
+        // Simulate processing
+        this.processingInterval = setInterval(() => this.processNextItem(), 1000);
+      }
+
+      stopProcessing() {
+        this.isProcessing = false;
+        clearInterval(this.processingInterval);
+        this.updateUI();
+        this.addLog('info', 'Processing stopped by user.');
+      }
+
+      processNextItem() {
+        this.currentItem++;
+        
+        // Simulate puzzle solving
+        if (Math.random() > 0.7) {
+          this.addResult({
+            puzzleId: `Puzzle-${this.currentItem}`,
+            score: Math.random() * 100,
+            input: this.generateRandomGrid(),
+            output: this.generateRandomGrid(),
+            prediction: this.generateRandomGrid(),
+            agents: ['Pattern Recognition', 'Spatial Reasoning']
           });
-          
-          // Add some sample logs
-          if (Math.random() > 0.7) {
-            const logTypes = ['info', 'debug', 'warn'];
-            const logMessages = [
-              'Processing puzzle data',
-              'Running agent analysis',
-              'Agent combination attempt',
-              'Pattern recognition in progress',
-              'Evaluating solution confidence'
-            ];
-            
-            addLog(
-              logTypes[Math.floor(Math.random() * logTypes.length)],
-              logMessages[Math.floor(Math.random() * logMessages.length)]
-            );
-          }
-        }, 500);
-      };
+        }
 
-      const stopProcessing = () => {
-        setIsProcessing(false);
-        addLog('warn', 'Processing stopped by user');
-      };
+        if (this.currentItem >= this.totalItems) {
+          this.stopProcessing();
+          this.addLog('info', 'Processing completed.');
+        }
 
-      return (
-        <Box>
-          <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
-            ARC Prize Challenge - Interactive Tutorial
-          </Typography>
-          
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange}
-            sx={{ 
-              mb: 3,
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#0074D9',
-              }
-            }}
-          >
-            <Tab label="Overview" />
-            <Tab label="Components" />
-            <Tab label="Live Demo" />
-            <Tab label="Code Examples" />
-          </Tabs>
-          
-          {/* Overview Tab */}
-          {tabValue === 0 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>What is the ARC Prize Challenge?</Typography>
-                <Typography variant="body1" paragraph>
-                  The Abstraction and Reasoning Corpus (ARC) is a benchmark for AI systems developed by François Chollet. 
-                  It's designed to measure general AI capabilities by testing an agent's ability to solve novel tasks 
-                  with limited examples.
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  Our ARC Prize Challenge application is a React-based interface that allows you to:
-                </Typography>
-                <ul>
-                  <li>Load and process ARC puzzles from different sources</li>
-                  <li>Test multiple AI agents against these puzzles</li>
-                  <li>Combine agents for improved performance</li>
-                  <li>Visualize puzzle solutions and track agent performance</li>
-                </ul>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Components:</Typography>
-                <Grid container spacing={2}>
-                  {['ARCPuzzleDisplay', 'Intelligent Agent Selection', 'Performance Tracking', 'Logging System'].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                      <Card sx={{ bgcolor: 'rgba(0,0,0,0.3)' }}>
-                        <CardContent>
-                          <Typography variant="h6" color="#0074D9">{item}</Typography>
-                          <Typography variant="body2">Click Components tab to learn more</Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Components Tab */}
-          {tabValue === 1 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>ARCPuzzleDisplay</Typography>
-                <Typography variant="body1" paragraph>
-                  The ARCPuzzleDisplay component visualizes ARC puzzles as colored grids. Each cell in the grid is 
-                  represented by a number that maps to a specific color.
-                </Typography>
-                
-                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Color Mapping:</Typography>
-                <div className="color-grid">
-                  {colorMap.map((color, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '5px 10px' }}>
-                      <div className="color-cell" style={{ backgroundColor: color }}></div>
-                      <span style={{ marginLeft: '8px' }}>{index}: {color}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Sample Puzzle:</Typography>
-                <ARCPuzzleDisplay 
-                  input={samplePuzzleData.input} 
-                  output={samplePuzzleData.output}
-                />
-              </div>
-              
-              <div className="section-divider"></div>
-              
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Agent Performance Tracker</Typography>
-                <Typography variant="body1" paragraph>
-                  The Agent Performance Tracker monitors how well different AI agents perform on ARC puzzles, both individually
-                  and in combination. It uses metrics like success rate, confidence, and synergy to recommend optimal agent
-                  combinations for specific puzzle types.
-                </Typography>
-                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Key Metrics:</Typography>
-                <Grid container spacing={2}>
-                  {[
-                    { name: "Success Rate", desc: "Percentage of puzzles solved correctly" },
-                    { name: "Confidence", desc: "Agent's self-reported certainty in its solutions" },
-                    { name: "Synergy", desc: "How well agents work together compared to individually" },
-                    { name: "Pattern Recognition", desc: "Performance on specific puzzle patterns" }
-                  ].map((metric, index) => (
-                    <Grid item xs={12} sm={6} key={index}>
-                      <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
-                        <Typography variant="subtitle1" color="#0074D9">{metric.name}</Typography>
-                        <Typography variant="body2">{metric.desc}</Typography>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </div>
-              
-              <div className="section-divider"></div>
-              
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Logging System</Typography>
-                <Typography variant="body1" paragraph>
-                  The application includes a comprehensive logging system that captures various events, errors, and
-                  processing information. Logs help users understand what's happening behind the scenes.
-                </Typography>
-                
-                <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Log Levels:</Typography>
-                <Grid container spacing={2}>
-                  {[
-                    { level: "INFO", color: "#fff", desc: "General information about operations" },
-                    { level: "DEBUG", color: "#7FDBFF", desc: "Detailed information for debugging" },
-                    { level: "WARN", color: "#FF851B", desc: "Warnings that don't stop execution" },
-                    { level: "ERROR", color: "#FF4136", desc: "Errors that may affect functionality" }
-                  ].map((level, index) => (
-                    <Grid item xs={12} sm={6} key={index}>
-                      <Box 
-                        sx={{ 
-                          p: 1, 
-                          border: `1px solid ${level.color}`,
-                          borderRadius: 1,
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <Chip label={level.level} size="small" sx={{ bgcolor: level.color, color: '#000', mr: 1 }} />
-                        <Typography variant="body2">{level.desc}</Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Live Demo Tab */}
-          {tabValue === 2 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>
-                  Try the ARC Prize Challenge
-                </Typography>
-                
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-                  <Box>
-                    <Typography variant="subtitle1" color="text.secondary">
-                      Configure and run ARC puzzle processing
-                    </Typography>
-                  </Box>
-                  <Box display="flex" gap={2}>
-                    <Tooltip title="Refresh data">
-                      <IconButton>
-                        <Icon>refresh</Icon>
-                      </IconButton>
-                    </Tooltip>
-                    <Button
-                      variant="contained"
-                      onClick={startProcessing}
-                      disabled={isProcessing}
-                      startIcon={<Icon>play_arrow</Icon>}
-                      sx={{
-                        background: `linear-gradient(135deg, #0074D9 0%, #0063B1 100%)`,
-                        '&:hover': {
-                          background: `linear-gradient(135deg, #0063B1 0%, #0074D9 100%)`,
-                        },
-                      }}
-                    >
-                      Start Processing
-                    </Button>
-                  </Box>
-                </Box>
+        this.updateUI();
+      }
 
-                <Grid container spacing={3} mb={4}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          Training Phase
-                        </Typography>
-                        <Divider sx={{ mb: 2 }} />
-                        <TextField
-                          label="Training Directory URL"
-                          fullWidth
-                          margin="normal"
-                          value={trainingDirectory}
-                          onChange={(e) => setTrainingDirectory(e.target.value)}
-                          disabled={isProcessing}
-                          sx={{ mb: 2 }}
-                          InputProps={{
-                            sx: { color: '#fff' }
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          Evaluation Phase
-                        </Typography>
-                        <Divider sx={{ mb: 2 }} />
-                        <TextField
-                          label="Evaluation Directory URL"
-                          fullWidth
-                          margin="normal"
-                          value={evaluationDirectory}
-                          onChange={(e) => setEvaluationDirectory(e.target.value)}
-                          disabled={isProcessing}
-                          sx={{ mb: 2 }}
-                          InputProps={{
-                            sx: { color: '#fff' }
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-
-                {isProcessing && (
-                  <Box mb={3}>
-                    <Box display="flex" alignItems="center" mb={1}>
-                      <Typography variant="body1" sx={{ mr: 2 }}>
-                        Processing: Training Phase
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {Math.round(progress)}% complete
-                      </Typography>
-                    </Box>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={progress} 
-                      sx={{ 
-                        height: 8, 
-                        borderRadius: 4,
-                        bgcolor: 'rgba(0,0,0,0.2)',
-                      }}
-                    />
-                    <Box display="flex" justifyContent="center" mt={2}>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={stopProcessing}
-                        startIcon={<Icon>stop</Icon>}
-                      >
-                        Stop Processing
-                      </Button>
-                    </Box>
-                  </Box>
-                )}
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-                  Current Puzzle
-                </Typography>
-                <ARCPuzzleDisplay 
-                  input={samplePuzzleData.input} 
-                  output={samplePuzzleData.output}
-                  prediction={prediction}
-                />
-                
-                <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
-                  Processing Logs
-                </Typography>
-                <Paper
-                  sx={{
-                    maxHeight: '200px',
-                    overflow: 'auto',
-                    p: 2,
-                    bgcolor: 'rgba(0,0,0,0.3)',
-                  }}
-                >
-                  {logs.map((log, index) => (
-                    <Box 
-                      key={index} 
-                      mb={1} 
-                      sx={{ 
-                        color: log.level === 'error' 
-                          ? '#FF4136' 
-                          : log.level === 'warn' 
-                            ? '#FF851B' 
-                            : log.level === 'debug'
-                              ? '#7FDBFF'
-                              : '#fff'
-                      }}
-                    >
-                      <Typography variant="body2" fontFamily="monospace">
-                        [{new Date(log.timestamp).toLocaleTimeString()}] {log.message}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Paper>
-              </div>
-            </div>
-          )}
-          
-          {/* Code Examples Tab */}
-          {tabValue === 3 && (
-            <div className="tab-content">
-              <div className="tutorial-section">
-                <Typography variant="h5" gutterBottom>Key Code Examples</Typography>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>ARCPuzzleDisplay Component:</Typography>
-                <div className="code-block">
-                  {`import React from 'react';
-import { Box, Paper, Typography, Grid } from '@mui/material';
-
-const ARCPuzzleDisplay = ({ input, output, prediction }) => {
-  // Color palette for grid cells
-  const colorMap = [
-    '#000000', '#0074D9', '#FF4136', '#2ECC40', '#FFDC00', 
-    '#B10DC9', '#FF851B', '#7FDBFF', '#F012BE', '#39CCCC'
-  ];
-  
-  // Function to render a single grid
-  const renderGrid = (grid, title) => {
-    return (
-      <Box>
-        <Typography variant="caption">{title}</Typography>
-        <Box sx={{ display: 'inline-block', borderRadius: 1 }}>
-          {grid.map((row, rowIndex) => (
-            <Box key={rowIndex} sx={{ display: 'flex' }}>
-              {row.map((cell, cellIndex) => (
-                <Box 
-                  key={cellIndex}
-                  sx={{
-                    width: 24,
-                    height: 24,
-                    bgcolor: colorMap[cell],
-                    border: '1px solid rgba(0,0,0,0.2)'
-                  }}
-                />
-              ))}
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    );
-  };
-  
-  return (
-    <Paper sx={{ p: 3 }}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} md={4}>
-          {renderGrid(input, 'Input')}
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          {renderGrid(output, 'Expected Output')}
-        </Grid>
-        {prediction && (
-          <Grid item xs={12} sm={6} md={4}>
-            {renderGrid(prediction, 'AI Prediction')}
-          </Grid>
-        )}
-      </Grid>
-    </Paper>
-  );
-};
-
-export default ARCPuzzleDisplay;`}
-                </div>
-                
-                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>Agent Performance Tracking:</Typography>
-                <div className="code-block">
-                  {`// Agent performance tracking
-const AgentPerformanceTracker = {
-  singleAgents: new Map(),
-  combinations: new Map(),
-  
-  trackSingleAgent: function(agentName, success, puzzleId, confidence) {
-    if (!this.singleAgents.has(agentName)) {
-      this.singleAgents.set(agentName, {
-        successes: 0,
-        attempts: 0,
-        successRate: 0,
-        avgConfidence: 0
-      });
-    }
-    
-    const stats = this.singleAgents.get(agentName);
-    stats.attempts++;
-    
-    if (success) {
-      stats.successes++;
-    }
-    
-    stats.successRate = (stats.successes / stats.attempts) * 100;
-    stats.avgConfidence = ((stats.avgConfidence * (stats.attempts - 1)) + confidence) / stats.attempts;
-  },
-  
-  recommendCombinations: function(puzzleId, maxAgents = 3) {
-    // Logic to recommend optimal agent combinations based on past performance
-    // ...
-    return recommendations;
-  }
-};`}
-                </div>
-                
-                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>Processing Puzzles with Agents:</Typography>
-                <div className="code-block">
-                  {`const processPuzzleWithAgents = async (puzzleData, phase) => {
-  try {
-    // 1. Load agent definitions
-    const agents = await loadAgentDefinitions();
-    
-    // 2. Create a list of promises for each agent to process the puzzle
-    const agentPromises = agents.map(agent => {
-      return withRetry(async () => {
-        const result = await axios.post('/api/arc/process', {
-          puzzle: puzzleData,
-          agent: agent.name,
-          phase: phase,
-          agent_code: agent.agent_code
-        });
-        
-        // Track single agent performance
-        const success = isCorrectSolution(result.data.candidate, puzzleData.output);
-        AgentPerformanceTracker.trackSingleAgent(
-          agent.name,
-          success,
-          puzzleData.id,
-          result.data.metadata.confidence
+      generateRandomGrid() {
+        const size = 3 + Math.floor(Math.random() * 3);
+        return Array(size).fill(0).map(() => 
+          Array(size).fill(0).map(() => Math.floor(Math.random() * 10))
         );
+      }
+
+      addResult(result) {
+        this.results.unshift(result);
+        this.updateResultsDisplay();
+      }
+
+      addLog(level, message) {
+        const log = {
+          level,
+          message,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        this.logs.push(log);
+        this.updateLogsDisplay();
+      }
+
+      updateUI() {
+        const progressSection = document.getElementById('progress-section');
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
         
-        return result;
-      });
-    });
+        progressSection.style.display = this.isProcessing ? 'block' : 'none';
+        startBtn.disabled = this.isProcessing;
+        stopBtn.disabled = !this.isProcessing;
+        
+        document.getElementById('progress-status').textContent = 
+          `Processing: ${this.currentPhase === 'training' ? 'Training' : 'Evaluation'} Phase`;
+        document.getElementById('progress-count').textContent = 
+          `${this.currentItem}/${this.totalItems} items complete`;
+        document.querySelector('.progress-bar-fill').style.width = 
+          `${(this.currentItem / this.totalItems) * 100}%`;
+      }
 
-    // 3. Run all agents in parallel
-    const results = await Promise.allSettled(agentPromises);
-    
-    // 4. Check for successful solutions and process agent combinations
-    // ...
+      updateResultsDisplay() {
+        const container = document.getElementById('results-container');
+        container.innerHTML = this.results.map(result => this.createResultCard(result)).join('');
+      }
 
-    return {
-      success: true,
-      prediction: bestResult.data.candidate,
-      agent: bestResult.data.metadata.method,
-      confidence: bestResult.data.metadata.confidence
-    };
-  } catch (err) {
-    log(LogLevel.ERROR, 'Failed to process puzzle with agents', err);
-    throw err;
-  }
-};`}
-                </div>
-              </div>
+      createResultCard(result) {
+        return `
+          <div class="result-card">
+            <div class="result-header">
+              <h3>${result.puzzleId}</h3>
+              <span class="score">Score: ${result.score.toFixed(2)}</span>
             </div>
-          )}
-          
-          <Box sx={{ mt: 4, textAlign: 'center', color: 'text.secondary' }}>
-            <Typography variant="body2">
-              This interactive tutorial demonstrates the key components and functionality of the ARC Prize Challenge application.
-            </Typography>
-            <Typography variant="body2">
-              To learn more, explore the documentation or check out the source code.
-            </Typography>
-          </Box>
-        </Box>
-      );
+            <div class="puzzle-display">
+              ${this.renderGrid(result.input, 'Input')}
+              ${this.renderGrid(result.output, 'Expected')}
+              ${this.renderGrid(result.prediction, 'Prediction')}
+            </div>
+            <p class="agents">Solved using: ${result.agents.join(' + ')}</p>
+          </div>
+        `;
+      }
+
+      renderGrid(grid, label) {
+        return `
+          <div class="grid-container">
+            <p class="grid-label">${label}</p>
+            <div class="grid">
+              ${grid.map(row => `
+                <div class="grid-row">
+                  ${row.map(cell => `
+                    <div class="grid-cell color-${cell}"></div>
+                  `).join('')}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      updateLogsDisplay() {
+        const container = document.getElementById('log-container');
+        container.innerHTML = this.logs.map(log => `
+          <div class="log-entry log-${log.level}">
+            [${log.timestamp}] ${log.message}
+          </div>
+        `).join('');
+        container.scrollTop = container.scrollHeight;
+      }
     }
 
-    ReactDOM.render(<ARCTutorial />, document.getElementById('root'));
+    // Initialize the demo when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      window.arcDemo = new ARCDemo();
+    });
   </script>
 </body>
 </html> 
