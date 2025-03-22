@@ -338,421 +338,331 @@
       );
     }
 
-    // Main component
-    function AgentBrowser() {
-      const [tabValue, setTabValue] = React.useState(0);
-      const [searchQuery, setSearchQuery] = React.useState('');
+    // Custom hooks for agent management
+    function useAgentManagement() {
+      const [agents, setAgents] = React.useState(agents);
       const [selectedAgent, setSelectedAgent] = React.useState(null);
-      const [loading, setLoading] = React.useState(false);
+      const [isLoading, setIsLoading] = React.useState(false);
       const [error, setError] = React.useState(null);
-      const [filteredAgents, setFilteredAgents] = React.useState(agents);
-      const [selectedDomain, setSelectedDomain] = React.useState('all');
 
-      const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
+      const updateAgentStatus = React.useCallback(async (agentId, newStatus) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 500));
+          setAgents(prev => prev.map(agent => 
+            agent.id === agentId ? { ...agent, status: newStatus } : agent
+          ));
+        } catch (err) {
+          setError('Failed to update agent status');
+        } finally {
+          setIsLoading(false);
+        }
+      }, []);
+
+      const updateAgentMetrics = React.useCallback(async (agentId, metrics) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 500));
+          setAgents(prev => prev.map(agent => 
+            agent.id === agentId ? { ...agent, metrics } : agent
+          ));
+        } catch (err) {
+          setError('Failed to update agent metrics');
+        } finally {
+          setIsLoading(false);
+        }
+      }, []);
+
+      return {
+        agents,
+        selectedAgent,
+        setSelectedAgent,
+        isLoading,
+        error,
+        updateAgentStatus,
+        updateAgentMetrics
       };
+    }
 
-      const handleSearch = (event) => {
-        const query = event.target.value.toLowerCase();
-        setSearchQuery(query);
-        setFilteredAgents(agents.filter(agent => 
-          agent.name.toLowerCase().includes(query) ||
-          agent.description.toLowerCase().includes(query) ||
-          agent.capabilities.some(cap => cap.toLowerCase().includes(query))
-        ));
+    // Custom hook for filtering and searching
+    function useAgentFilters() {
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [activeFilters, setActiveFilters] = React.useState({
+        type: [],
+        domain: [],
+        status: []
+      });
+
+      const filterAgents = React.useCallback((agents) => {
+        return agents.filter(agent => {
+          const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              agent.description.toLowerCase().includes(searchQuery.toLowerCase());
+          
+          const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(agent.type);
+          const matchesDomain = activeFilters.domain.length === 0 || activeFilters.domain.includes(agent.domain);
+          const matchesStatus = activeFilters.status.length === 0 || activeFilters.status.includes(agent.status);
+          
+          return matchesSearch && matchesType && matchesDomain && matchesStatus;
+        });
+      }, [searchQuery, activeFilters]);
+
+      const toggleFilter = React.useCallback((category, value) => {
+        setActiveFilters(prev => ({
+          ...prev,
+          [category]: prev[category].includes(value)
+            ? prev[category].filter(v => v !== value)
+            : [...prev[category], value]
+        }));
+      }, []);
+
+      return {
+        searchQuery,
+        setSearchQuery,
+        activeFilters,
+        toggleFilter,
+        filterAgents
       };
+    }
 
-      const handleAgentClick = (agent) => {
-        setSelectedAgent(agent);
-      };
+    // Agent Card Component with memoization
+    const AgentCard = React.memo(function AgentCard({ agent, onSelect, onStatusChange }) {
+      const handleStatusChange = React.useCallback(() => {
+        const newStatus = agent.status === 'Active' ? 'Inactive' : 'Active';
+        onStatusChange(agent.id, newStatus);
+      }, [agent.id, agent.status, onStatusChange]);
 
-      const handleDomainFilter = (domain) => {
-        setSelectedDomain(domain);
-        setFilteredAgents(domain === 'all' 
-          ? agents 
-          : agents.filter(agent => agent.domain === domain)
-        );
-      };
+      return (
+        <Card className="agent-card">
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                {agent.name.charAt(0)}
+              </Avatar>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h6">{agent.name}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {agent.type} • {agent.domain}
+                </Typography>
+              </Box>
+              <IconButton onClick={handleStatusChange}>
+                <Icon>{agent.status === 'Active' ? 'check_circle' : 'cancel'}</Icon>
+              </IconButton>
+            </Box>
+            
+            <Typography variant="body2" paragraph>
+              {agent.description}
+            </Typography>
+            
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+              {agent.capabilities.map(capability => (
+                <Chip key={capability} label={capability} size="small" />
+              ))}
+            </Box>
+            
+            <Grid container spacing={2}>
+              {Object.entries(agent.metrics).map(([key, value]) => (
+                <Grid item xs={6} key={key}>
+                  <Paper className="metric-item">
+                    <Typography variant="h6" className="metric-value">
+                      {value}
+                    </Typography>
+                    <Typography variant="caption" className="metric-label">
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </Card>
+      );
+    });
 
-      const domains = ['all', ...new Set(agents.map(agent => agent.domain))];
+    // Agent Details Dialog Component
+    const AgentDetailsDialog = React.memo(function AgentDetailsDialog({ 
+      agent, 
+      open, 
+      onClose,
+      onMetricsUpdate 
+    }) {
+      const [metrics, setMetrics] = React.useState(agent.metrics);
+
+      const handleMetricsUpdate = React.useCallback(() => {
+        onMetricsUpdate(agent.id, metrics);
+      }, [agent.id, metrics, onMetricsUpdate]);
+
+      return (
+        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+          <DialogTitle>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                {agent.name.charAt(0)}
+              </Avatar>
+              {agent.name}
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h6" gutterBottom>
+                  Details
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon><Icon>category</Icon></ListItemIcon>
+                    <ListItemText primary="Type" secondary={agent.type} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon>domain</Icon></ListItemIcon>
+                    <ListItemText primary="Domain" secondary={agent.domain} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon>info</Icon></ListItemIcon>
+                    <ListItemText primary="Version" secondary={agent.version} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon>schedule</Icon></ListItemIcon>
+                    <ListItemText primary="Last Active" secondary={agent.lastActive} />
+                  </ListItem>
+                </List>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h6" gutterBottom>
+                  Metrics
+                </Typography>
+                {Object.entries(metrics).map(([key, value]) => (
+                  <Box key={key} sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </Typography>
+                    <TextField
+                      type="number"
+                      value={value}
+                      onChange={(e) => setMetrics(prev => ({
+                        ...prev,
+                        [key]: parseFloat(e.target.value)
+                      }))}
+                      size="small"
+                      fullWidth
+                    />
+                  </Box>
+                ))}
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose}>Close</Button>
+            <Button onClick={handleMetricsUpdate} variant="contained">
+              Update Metrics
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    });
+
+    // Main Agent Browser Component
+    function AgentBrowser() {
+      const {
+        agents,
+        selectedAgent,
+        setSelectedAgent,
+        isLoading,
+        error,
+        updateAgentStatus,
+        updateAgentMetrics
+      } = useAgentManagement();
+
+      const {
+        searchQuery,
+        setSearchQuery,
+        activeFilters,
+        toggleFilter,
+        filterAgents
+      } = useAgentFilters();
+
+      const filteredAgents = React.useMemo(() => 
+        filterAgents(agents),
+        [agents, filterAgents]
+      );
 
       return (
         <Box sx={{ p: 3 }}>
           <Typography variant="h4" gutterBottom>
             Agent Browser
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Browse, search, and manage AI agents in the SafeAI ecosystem
+          <Typography variant="subtitle1" color="text.secondary" paragraph>
+            Monitor and manage SafeAI agents
           </Typography>
 
-          <Instructions />
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-          <div className="search-controls">
+          <Paper sx={{ p: 2, mb: 3 }}>
             <TextField
               fullWidth
               variant="outlined"
               placeholder="Search agents..."
               value={searchQuery}
-              onChange={handleSearch}
-              className="search-bar"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: <Icon sx={{ mr: 1 }}>search</Icon>
+              }}
             />
-            
-            <div className="filter-chips">
-              {domains.map(domain => (
-                <Chip
-                  key={domain}
-                  label={domain.charAt(0).toUpperCase() + domain.slice(1)}
-                  onClick={() => handleDomainFilter(domain)}
-                  color={selectedDomain === domain ? 'primary' : 'default'}
-                />
-              ))}
-            </div>
-          </div>
+          </Paper>
 
-          <Tabs 
-            value={tabValue} 
-            onChange={handleTabChange}
-            className="demo-tabs"
-          >
-            <Tab label="Overview" />
-            <Tab label="Browse Agents" />
-            <Tab label="Analytics" />
-            <Tab label="Documentation" />
-          </Tabs>
-          
-          {/* Overview Tab */}
-          {tabValue === 0 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Welcome to the Agent Browser</Typography>
-                <Typography variant="body1" paragraph>
-                  The Agent Browser provides a comprehensive interface for exploring and managing AI agents 
-                  in the SafeAI ecosystem. Browse through different agents, monitor their performance, 
-                  and understand their capabilities.
-                </Typography>
-                
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Browse Agents</Typography>
-                        <Typography variant="body2">
-                          Explore different types of AI agents and their capabilities
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Monitor Performance</Typography>
-                        <Typography variant="body2">
-                          Track agent metrics and system health in real-time
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card className="interactive-element">
-                      <CardContent>
-                        <Typography variant="h6" color="primary">Manage Agents</Typography>
-                        <Typography variant="body2">
-                          Deploy, configure, and manage agent instances
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Browse Agents Tab */}
-          {tabValue === 1 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <div className="agent-grid">
-                  {filteredAgents.map(agent => (
-                    <Card 
-                      key={agent.id} 
-                      className="agent-card interactive-element"
-                      onClick={() => handleAgentClick(agent)}
-                    >
-                      <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                          <Typography variant="h6">{agent.name}</Typography>
-                          <Chip 
-                            size="small" 
-                            label={agent.status} 
-                            color={agent.status === 'Active' ? 'success' : 'default'} 
-                          />
-                        </Box>
-                        <Chip size="small" label={agent.domain} sx={{ mb: 2 }} />
-                        <Typography variant="body2" paragraph>
-                          {agent.description}
-                        </Typography>
-                        
-                        <div className="agent-metrics">
-                          <div className="metric-item">
-                            <Typography className="metric-value">{agent.metrics.tasksCompleted}</Typography>
-                            <Typography className="metric-label">Tasks Completed</Typography>
-                          </div>
-                          <div className="metric-item">
-                            <Typography className="metric-value">{agent.metrics.successRate}%</Typography>
-                            <Typography className="metric-label">Success Rate</Typography>
-                          </div>
-                          <div className="metric-item">
-                            <Typography className="metric-value">{agent.metrics.avgResponseTime}s</Typography>
-                            <Typography className="metric-label">Avg Response Time</Typography>
-                          </div>
-                          <div className="metric-item">
-                            <Typography className="metric-value">{agent.metrics.uptime}%</Typography>
-                            <Typography className="metric-label">Uptime</Typography>
-                          </div>
-                        </div>
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Box sx={{ mt: 2 }}>
-                          <Typography variant="caption" color="text.secondary">
-                            Capabilities:
-                          </Typography>
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-                            {agent.capabilities.map((cap, idx) => (
-                              <Chip 
-                                key={idx} 
-                                label={cap} 
-                                size="small" 
-                                sx={{ bgcolor: 'rgba(0,0,0,0.3)' }} 
-                              />
-                            ))}
-                          </Box>
-                        </Box>
-                      </CardContent>
-                    </Card>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Filters
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              {['Type', 'Domain', 'Status'].map(category => (
+                <React.Fragment key={category}>
+                  {Array.from(new Set(agents.map(a => a[category.toLowerCase()]))).map(value => (
+                    <Chip
+                      key={value}
+                      label={value}
+                      onClick={() => toggleFilter(category.toLowerCase(), value)}
+                      color={activeFilters[category.toLowerCase()].includes(value) ? 'primary' : 'default'}
+                    />
                   ))}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Analytics Tab */}
-          {tabValue === 2 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Agent Analytics</Typography>
-                <Typography variant="body1" paragraph>
-                  Monitor agent performance and system metrics in real-time.
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Resource Usage</Typography>
-                        <Box sx={{ mt: 2 }}>
-                          {agents.map(agent => (
-                            <Box key={agent.id} sx={{ mb: 2 }}>
-                              <Typography variant="subtitle2">{agent.name}</Typography>
-                              <LinearProgress 
-                                variant="determinate" 
-                                value={agent.resourceUsage.cpu} 
-                                sx={{ mb: 1 }}
-                              />
-                              <Typography variant="caption">
-                                CPU: {agent.resourceUsage.cpu}% | Memory: {agent.resourceUsage.memory}% | Network: {agent.resourceUsage.network}%
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>Performance Metrics</Typography>
-                        <Box sx={{ mt: 2 }}>
-                          {agents.map(agent => (
-                            <Box key={agent.id} sx={{ mb: 2 }}>
-                              <Typography variant="subtitle2">{agent.name}</Typography>
-                              <Typography variant="body2">
-                                Tasks Completed: {agent.metrics.tasksCompleted}
-                              </Typography>
-                              <Typography variant="body2">
-                                Success Rate: {agent.metrics.successRate}%
-                              </Typography>
-                              <Typography variant="body2">
-                                Average Response Time: {agent.metrics.avgResponseTime}s
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
+                </React.Fragment>
+              ))}
+            </Box>
+          </Box>
+
+          {isLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid container spacing={3}>
+              {filteredAgents.map(agent => (
+                <Grid item xs={12} sm={6} md={4} key={agent.id}>
+                  <AgentCard
+                    agent={agent}
+                    onSelect={() => setSelectedAgent(agent)}
+                    onStatusChange={updateAgentStatus}
+                  />
                 </Grid>
-              </div>
-            </div>
-          )}
-          
-          {/* Documentation Tab */}
-          {tabValue === 3 && (
-            <div className="demo-tab-content">
-              <div className="demo-section">
-                <Typography variant="h5" gutterBottom>Agent Browser Documentation</Typography>
-                <Typography variant="body1" paragraph>
-                  Learn how to use the Agent Browser and understand its features.
-                </Typography>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Key Features:</Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>search</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Agent Search"
-                      secondary="Search agents by name, capability, or domain"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>analytics</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Performance Monitoring"
-                      secondary="Track agent metrics and system health"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>settings</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Agent Management"
-                      secondary="Configure and manage agent instances"
-                    />
-                  </ListItem>
-                </List>
-                
-                <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Example Usage:</Typography>
-                <div className="code-block">
-                  {`// Example: Deploying a new agent
-const deployAgent = async (agentConfig) => {
-  try {
-    const response = await api.deployAgent(agentConfig);
-    return response;
-  } catch (error) {
-    console.error('Failed to deploy agent:', error);
-    throw error;
-  }
-};
-
-// Example: Monitoring agent metrics
-const monitorAgent = (agentId) => {
-  return api.getAgentMetrics(agentId);
-};`}
-                </div>
-              </div>
-            </div>
+              ))}
+            </Grid>
           )}
 
-          {/* Agent Details Dialog */}
-          <Dialog 
-            open={!!selectedAgent} 
-            onClose={() => setSelectedAgent(null)}
-            className="agent-details-dialog"
-            maxWidth="md"
-            fullWidth
-          >
-            {selectedAgent && (
-              <>
-                <DialogTitle>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Avatar sx={{ bgcolor: 'primary.main' }}>
-                      {selectedAgent.name.charAt(0)}
-                    </Avatar>
-                    <Typography variant="h6">{selectedAgent.name}</Typography>
-                  </Box>
-                </DialogTitle>
-                <DialogContent className="agent-details-content">
-                  <div className="agent-details-section">
-                    <Typography variant="subtitle1" gutterBottom>Overview</Typography>
-                    <Typography variant="body2" paragraph>
-                      {selectedAgent.description}
-                    </Typography>
-                    <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                      <Chip label={selectedAgent.type} size="small" />
-                      <Chip label={selectedAgent.domain} size="small" />
-                      <Chip label={`v${selectedAgent.version}`} size="small" />
-                    </Box>
-                  </div>
-
-                  <div className="agent-details-section">
-                    <Typography variant="subtitle1" gutterBottom>Capabilities</Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {selectedAgent.capabilities.map((cap, idx) => (
-                        <Chip key={idx} label={cap} size="small" />
-                      ))}
-                    </Box>
-                  </div>
-
-                  <div className="agent-details-section">
-                    <Typography variant="subtitle1" gutterBottom>Performance Metrics</Typography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">Tasks Completed</Typography>
-                        <Typography variant="h6">{selectedAgent.metrics.tasksCompleted}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">Success Rate</Typography>
-                        <Typography variant="h6">{selectedAgent.metrics.successRate}%</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">Avg Response Time</Typography>
-                        <Typography variant="h6">{selectedAgent.metrics.avgResponseTime}s</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body2">Uptime</Typography>
-                        <Typography variant="h6">{selectedAgent.metrics.uptime}%</Typography>
-                      </Grid>
-                    </Grid>
-                  </div>
-
-                  <div className="agent-details-section">
-                    <Typography variant="subtitle1" gutterBottom>Resource Usage</Typography>
-                    <Box sx={{ mt: 1 }}>
-                      <Typography variant="body2">CPU Usage</Typography>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={selectedAgent.resourceUsage.cpu} 
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="body2">Memory Usage</Typography>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={selectedAgent.resourceUsage.memory} 
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="body2">Network Usage</Typography>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={selectedAgent.resourceUsage.network} 
-                      />
-                    </Box>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setSelectedAgent(null)}>Close</Button>
-                  <Button variant="contained" color="primary">
-                    Configure Agent
-                  </Button>
-                </DialogActions>
-              </>
-            )}
-          </Dialog>
+          {selectedAgent && (
+            <AgentDetailsDialog
+              agent={selectedAgent}
+              open={!!selectedAgent}
+              onClose={() => setSelectedAgent(null)}
+              onMetricsUpdate={updateAgentMetrics}
+            />
+          )}
         </Box>
       );
     }
