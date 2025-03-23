@@ -56,7 +56,7 @@
     const { 
       Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
-      ListItemIcon, Icon
+      ListItemIcon, Icon, Grid
     } = MaterialUI;
 
     // Material icon names
@@ -66,7 +66,11 @@
       ARROW_BACK: "arrow_back",
       CHECK: "check",
       CODE: "code",
-      SCHEMA: "schema"
+      SCHEMA: "schema",
+      INFO: "info",
+      ARCHITECTURE: "architecture",
+      SPEED: "speed",
+      SECURITY: "security"
     };
 
     function KnowledgeGraphImplementationGuide() {
@@ -100,203 +104,460 @@
             </Typography>
             
             <Paper className="content">
-              <Typography variant="h4" gutterBottom>Overview</Typography>
-              <Typography paragraph>
-                This guide outlines the architecture, design principles, and best practices for implementing 
-                knowledge graphs within the SafeAI system. Knowledge graphs serve as a structured, dynamic 
-                representation of entities and their relationships, powering various components such as the 
-                Knowledge Graphs interactive demo and backend processing pipelines.
+              <Typography variant="body1" paragraph>
+                This guide provides a comprehensive technical overview of SafeAI's knowledge graph implementation, 
+                including detailed architecture, data structures, algorithms, and performance considerations.
               </Typography>
               
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Architecture</Typography>
-              
-              <Typography variant="h5" gutterBottom>Data Model</Typography>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Entities & Relationships" 
-                    secondary="Define the nodes (entities) and the edges (relationships) between them. Each entity may contain properties such as name, description, and metadata."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Schema Design" 
-                    secondary="Focus on a flexible schema that supports diverse data types and evolving relationships."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-              </List>
-              
-              <Typography variant="h5" gutterBottom>Components</Typography>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Graph Viewer" 
-                    secondary="An interactive UI component to visualize the graph structure, with zoom, pan, and detailed entity views."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Entity Explorer" 
-                    secondary="A tool for browsing and editing the properties of individual entities."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Query Engine" 
-                    secondary="Handles efficient fetching, filtering, and aggregation of graph data via RESTful APIs."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Data Ingestion Module" 
-                    secondary="Integrates with external sources to import and transform raw data into graph structures."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-              </List>
-              
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Implementation Details</Typography>
-              
-              <Typography variant="h5" gutterBottom>Frontend Implementation</Typography>
-              <Typography paragraph>
-                For frontend implementation, use a force-directed graph visualization library like D3.js or React-Force-Graph. Here's a basic example of how to implement the Graph Viewer:
-              </Typography>
-              
-              <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`import React from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
-
-function GraphViewer({ data }) {
-  return (
-    <ForceGraph2D
-      graphData={data}
-      nodeLabel={node => node.name}
-      nodeAutoColorBy="type"
-      linkDirectionalArrowLength={3.5}
-      linkDirectionalArrowRelPos={1}
-    />
-  );
-}`}
+              <Box sx={{ 
+                backgroundColor: "rgba(25, 118, 210, 0.1)", 
+                borderLeft: "4px solid #1976d2",
+                p: 2,
+                mb: 3
+              }}>
+                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
+                  Technical Prerequisites
                 </Typography>
-              </Paper>
+                <Typography variant="body2">
+                  Before diving into this guide, ensure you have a solid understanding of:
+                  - Graph theory and data structures
+                  - Distributed systems
+                  - Database design
+                  - Performance optimization
+                </Typography>
+              </Box>
               
-              <Typography variant="h5" gutterBottom>Backend Implementation</Typography>
-              <Typography paragraph>
-                Backend services should leverage a dedicated graph database such as Neo4j or Amazon Neptune, with a well-defined API layer for interactions:
-              </Typography>
+              {/* Core Architecture Section */}
+              <Box id="architecture" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.ARCHITECTURE}</Icon>
+                  Core Architecture
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  The knowledge graph implementation follows a distributed, microservices-based architecture 
+                  designed for scalability and performance. Here's the detailed breakdown:
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Storage Layer</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>storage</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Graph Database"
+                              secondary="Neo4j for primary storage with custom indexing"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>backup</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Cache Layer"
+                              secondary="Redis for high-performance caching"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Replication"
+                              secondary="Multi-region replication for availability"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Processing Layer</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Query Engine"
+                              secondary="Distributed query processing"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Message Queue"
+                              secondary="Kafka for event streaming"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Analytics Engine"
+                              secondary="Real-time graph analytics"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+                
+                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>System Architecture Diagram</Typography>
+                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`+------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|  Client Layer    | --> |  API Gateway     | --> |  Query Engine    |
+|                  |     |                  |     |                  |
++------------------+     +------------------+     +------------------+
+                              |                           |
+                              |                           |
+                              v                           v
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|  Analytics       | <-- |  Message Queue   | <-- |  Graph Database  |
+|  Engine          |     |                  |     |                  |
+|                  |     |                  |     |                  |
++------------------+     +------------------+     +------------------+
+                              |
+                              |
+                              v
++------------------+
+|                  |
+|  Cache Layer     |
+|                  |
++------------------+`}
+                  </Typography>
+                </Paper>
+              </Box>
               
-              <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Example Neo4j Query Service
-const neo4j = require('neo4j-driver');
+              {/* Data Model Section */}
+              <Box id="data-model" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SCHEMA}</Icon>
+                  Data Model
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  The knowledge graph data model is designed for flexibility and performance. Here's the detailed schema:
+                </Typography>
+                
+                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Core Entity Types
+type Entity {
+  id: String!                    // Unique identifier
+  type: String!                  // Entity type (e.g., "Person", "Organization")
+  properties: Map<String, Any>   // Dynamic properties
+  relationships: [Relationship!]  // Connected relationships
+  metadata: Metadata             // Additional metadata
+  version: Int!                  // Optimistic locking
+  created_at: DateTime!          // Creation timestamp
+  updated_at: DateTime!          // Last update timestamp
+}
 
-class KnowledgeGraphService {
-  constructor(uri, user, password) {
-    this.driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+// Relationship Types
+type Relationship {
+  id: String!                    // Unique identifier
+  type: String!                  // Relationship type
+  source: Entity!                // Source entity
+  target: Entity!                // Target entity
+  properties: Map<String, Any>   // Relationship properties
+  metadata: Metadata             // Additional metadata
+  version: Int!                  // Optimistic locking
+  created_at: DateTime!          // Creation timestamp
+  updated_at: DateTime!          // Last update timestamp
+}
+
+// Metadata Types
+type Metadata {
+  confidence: Float              // Confidence score
+  source: String                 // Data source
+  last_verified: DateTime        // Last verification time
+  tags: [String!]               // Classification tags
+  custom_fields: Map<String, Any> // Custom metadata
+}
+
+// Query Types
+type Query {
+  findEntity(id: String!): Entity
+  findRelated(source: Entity!, type: String!): [Entity!]
+  search(query: String!): [Entity!]
+  traverse(start: Entity!, depth: Int!): [Entity!]
+  aggregate(entities: [Entity!]!): AggregationResult
+}`}
+                  </Typography>
+                </Paper>
+                
+                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Indexing Strategy</Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon><Icon>search</Icon></ListItemIcon>
+                    <ListItemText 
+                      primary="Primary Indexes"
+                      secondary="B+ tree indexes on entity IDs and relationship IDs"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                    <ListItemText 
+                      primary="Secondary Indexes"
+                      secondary="Composite indexes on frequently queried properties"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                    <ListItemText 
+                      primary="In-Memory Indexes"
+                      secondary="Hash maps for high-frequency lookups"
+                    />
+                  </ListItem>
+                </List>
+              </Box>
+              
+              {/* Query Engine Section */}
+              <Box id="query-engine" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.CODE}</Icon>
+                  Query Engine Implementation
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  The query engine implements sophisticated graph traversal and optimization algorithms:
+                </Typography>
+                
+                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`class QueryEngine {
+  constructor(config) {
+    this.cache = new LRUCache(config.cacheSize);
+    this.optimizer = new QueryOptimizer();
+    this.executor = new QueryExecutor();
   }
   
-  async getEntities(type, limit = 100) {
-    const session = this.driver.session();
-    try {
-      const result = await session.run(
-        'MATCH (n:Entity {type: $type}) RETURN n LIMIT $limit',
-        { type, limit }
-      );
-      return result.records.map(record => record.get('n').properties);
-    } finally {
-      await session.close();
-    }
+  async executeQuery(query: Query): Promise<Result> {
+    // 1. Parse and validate query
+    const parsedQuery = this.parser.parse(query);
+    
+    // 2. Optimize query plan
+    const optimizedPlan = this.optimizer.optimize(parsedQuery);
+    
+    // 3. Check cache
+    const cacheKey = this.generateCacheKey(optimizedPlan);
+    const cachedResult = await this.cache.get(cacheKey);
+    if (cachedResult) return cachedResult;
+    
+    // 4. Execute query
+    const result = await this.executor.execute(optimizedPlan);
+    
+    // 5. Cache result
+    await this.cache.set(cacheKey, result);
+    
+    return result;
   }
   
-  // Additional methods for CRUD operations
+  private optimizeQuery(plan: QueryPlan): OptimizedPlan {
+    // Apply various optimization techniques:
+    // - Predicate pushdown
+    // - Join reordering
+    // - Index selection
+    // - Parallel execution planning
+    return this.optimizer.applyOptimizations(plan);
+  }
 }`}
+                  </Typography>
+                </Paper>
+                
+                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Query Optimization Techniques</Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Predicate Pushdown</Typography>
+                        <Typography variant="body2">
+                          Push filtering conditions as early as possible in the query plan to reduce data processing.
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Join Reordering</Typography>
+                        <Typography variant="body2">
+                          Optimize the order of join operations based on table sizes and selectivity.
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Index Selection</Typography>
+                        <Typography variant="body2">
+                          Choose optimal indexes based on query patterns and selectivity estimates.
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Box>
+              
+              {/* Performance Considerations Section */}
+              <Box id="performance" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SPEED}</Icon>
+                  Performance Considerations
                 </Typography>
-              </Paper>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  The implementation includes several performance optimizations:
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Caching Strategy</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>cached</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Multi-Level Cache"
+                              secondary="L1: In-memory, L2: Redis, L3: Database"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>refresh</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Cache Invalidation"
+                              secondary="Write-through with TTL"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Query Optimization</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Query Planning"
+                              secondary="Cost-based optimization"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Memory Management"
+                              secondary="Efficient memory allocation"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Scalability</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>scale</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Horizontal Scaling"
+                              secondary="Sharding and replication"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Load Balancing"
+                              secondary="Dynamic request routing"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Box>
               
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Best Practices</Typography>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Implement Incremental Loading" 
-                    secondary="For large graphs, load data incrementally to improve performance and user experience."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Use Caching Strategies" 
-                    secondary="Implement intelligent caching to minimize database queries for frequently accessed data."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Provide Clear Documentation" 
-                    secondary="Document entity types, relationship types, and properties for developers and domain experts."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Icon>check</Icon>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary="Design for Extensibility" 
-                    secondary="Use a modular architecture that allows for easy addition of new entity and relationship types."
-                    secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                  />
-                </ListItem>
-              </List>
-              
-              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <Button 
-                  variant="contained" 
-                  startIcon={<Icon>{ICONS.SCHEMA}</Icon>}
-                  href="interactive-demos/knowledge-graphs.html"
-                  sx={{ mr: 2 }}
-                >
-                  Try Knowledge Graphs Demo
-                </Button>
-                <Button 
-                  variant="outlined"
-                  startIcon={<Icon>{ICONS.HOME}</Icon>}
-                  href="index.html"
-                >
-                  Back to Documentation
-                </Button>
+              {/* Security Considerations Section */}
+              <Box id="security" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SECURITY}</Icon>
+                  Security Considerations
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  Security is implemented at multiple layers:
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Access Control</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Role-Based Access"
+                              secondary="Fine-grained permissions"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>vpn_key</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="API Authentication"
+                              secondary="JWT with refresh tokens"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Data Protection</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>encryption</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Encryption"
+                              secondary="At-rest and in-transit"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>audit</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Audit Logging"
+                              secondary="Comprehensive access logs"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
               </Box>
             </Paper>
             
