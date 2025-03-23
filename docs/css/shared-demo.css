@@ -1,3 +1,17 @@
+/* CSS Custom Properties for theming */
+:root {
+  --primary-color: #2196f3;
+  --primary-dark: #1976d2;
+  --text-color: #fff;
+  --bg-color: #121212;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --error-color: #f44336;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --animation-duration: 0.3s;
+}
+
 /* Common styles for all SafeAI interactive demos */
 
 /* Base styles */
@@ -5,10 +19,12 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  background-color: #121212;
-  color: #fff;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Layout */
@@ -16,6 +32,8 @@ html, body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Typography */
@@ -24,16 +42,20 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
   font-weight: 500;
   line-height: 1.2;
+  color: var(--text-color);
 }
 
 /* Cards */
 .card {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  -webkit-transition: transform var(--animation-duration) ease, box-shadow var(--animation-duration) ease;
+  -moz-transition: transform var(--animation-duration) ease, box-shadow var(--animation-duration) ease;
+  transition: transform var(--animation-duration) ease, box-shadow var(--animation-duration) ease;
+  will-change: transform, box-shadow;
 }
 
 .card:hover {
@@ -52,18 +74,27 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  -webkit-transition: all var(--animation-duration) ease;
+  -moz-transition: all var(--animation-duration) ease;
+  transition: all var(--animation-duration) ease;
   border: none;
   outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .button-primary {
-  background-color: #2196f3;
+  background-color: var(--primary-color);
   color: white;
 }
 
 .button-primary:hover {
-  background-color: #1976d2;
+  background-color: var(--primary-dark);
 }
 
 .button-secondary {
@@ -84,21 +115,26 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
+  color: var(--text-color);
 }
 
 .form-input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: white;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   font-size: 16px;
+  -webkit-transition: border-color var(--animation-duration) ease;
+  -moz-transition: border-color var(--animation-duration) ease;
+  transition: border-color var(--animation-duration) ease;
 }
 
 .form-input:focus {
-  border-color: #2196f3;
+  border-color: var(--primary-color);
   outline: none;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
 }
 
 /* Tables */
@@ -106,18 +142,22 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  background-color: var(--card-bg);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .table th,
 .table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table th {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Lists */
@@ -129,11 +169,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .list-item {
   padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
+  -webkit-transition: background-color var(--animation-duration) ease;
+  -moz-transition: background-color var(--animation-duration) ease;
+  transition: background-color var(--animation-duration) ease;
 }
 
 .list-item:last-child {
   border-bottom: none;
+}
+
+.list-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Alerts */
@@ -141,24 +188,26 @@ h1, h2, h3, h4, h5, h6 {
   padding: 12px 16px;
   border-radius: 4px;
   margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .alert-success {
   background-color: rgba(76, 175, 80, 0.1);
   border: 1px solid rgba(76, 175, 80, 0.2);
-  color: #4caf50;
+  color: var(--success-color);
 }
 
 .alert-error {
   background-color: rgba(244, 67, 54, 0.1);
   border: 1px solid rgba(244, 67, 54, 0.2);
-  color: #f44336;
+  color: var(--error-color);
 }
 
 .alert-warning {
   background-color: rgba(255, 152, 0, 0.1);
   border: 1px solid rgba(255, 152, 0, 0.2);
-  color: #ff9800;
+  color: var(--warning-color);
 }
 
 /* Loading states */
@@ -174,8 +223,23 @@ h1, h2, h3, h4, h5, h6 {
   height: 40px;
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  border-top-color: #2196f3;
+  border-top-color: var(--primary-color);
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
+  will-change: transform;
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spin {
+  to {
+    -moz-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
@@ -185,8 +249,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
+    max-width: 540px;
     padding: 16px;
   }
   
@@ -197,51 +274,92 @@ h1, h2, h3, h4, h5, h6 {
   .table {
     display: block;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .button {
+    width: 100%;
+    margin-bottom: 8px;
   }
 }
 
 /* Dark mode optimizations */
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: #121212;
-  }
-  
-  .card {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-  
-  .form-input {
-    background-color: rgba(255, 255, 255, 0.05);
+  :root {
+    --bg-color: #121212;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-color: #fff;
   }
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
     animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
     transition: none !important;
   }
 }
 
 /* Focus styles */
 :focus {
-  outline: 2px solid #2196f3;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
 
 /* Print styles */
 @media print {
+  :root {
+    --bg-color: white;
+    --card-bg: white;
+    --border-color: #ddd;
+    --text-color: black;
+  }
+
   body {
-    background-color: white;
-    color: black;
+    background-color: var(--bg-color);
+    color: var(--text-color);
   }
   
   .card {
-    border: 1px solid #ddd;
-    background-color: white;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    break-inside: avoid;
   }
   
   .button {
     display: none;
+  }
+
+  .table {
+    border: 1px solid var(--border-color);
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid var(--border-color);
+  }
+
+  .alert {
+    border: 1px solid var(--border-color);
   }
 } 
