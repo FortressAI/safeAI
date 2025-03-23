@@ -20,6 +20,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
+    #root {
+      min-height: 100vh;
+      background-color: #121212;
+    }
+    
     .metric-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -268,17 +273,29 @@
       palette: {
         mode: 'dark',
         primary: {
-          main: '#2196f3',
+          main: '#90caf9',
         },
         secondary: {
-          main: '#f50057',
+          main: '#f48fb1',
         },
         background: {
           default: '#121212',
-          paper: 'rgba(255, 255, 255, 0.05)',
+          paper: '#1e1e1e',
         },
+        text: {
+          primary: '#ffffff',
+          secondary: 'rgba(255, 255, 255, 0.7)',
+        }
       },
       components: {
+        MuiCssBaseline: {
+          styleOverrides: {
+            body: {
+              backgroundColor: '#121212',
+              color: '#ffffff'
+            }
+          }
+        },
         MuiCard: {
           styleOverrides: {
             root: {
@@ -287,6 +304,15 @@
               WebkitBackdropFilter: 'blur(10px)',
               borderRadius: 8,
               border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiPaper: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
             },
           },
         },
@@ -301,6 +327,10 @@
         },
       },
     });
+
+    // Add CSS variables for gradient colors
+    document.documentElement.style.setProperty('--primary-color', '#90caf9');
+    document.documentElement.style.setProperty('--secondary-color', '#f48fb1');
 
     // Metric Card Component
     function MetricCard({ label, value, trend, icon }) {
@@ -393,46 +423,128 @@
 
       const initializeCharts = () => {
         // Activity Chart
-        const activityTrace = {
-          x: activityData.map(d => d.time),
-          y: activityData.map(d => d.ethics),
-          name: 'Ethics',
-          type: 'scatter',
-          mode: 'lines+markers',
-          line: { color: '#4CAF50' }
-        };
-
-        const activityLayout = {
-          title: 'Agent Activity',
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#fff' },
-          showlegend: true,
-          legend: { font: { color: '#fff' } }
-        };
-
-        Plotly.newPlot('activityChart', [activityTrace], activityLayout);
+        const activityCtx = document.getElementById('activityChart');
+        if (activityCtx) {
+          new Chart(activityCtx, {
+            type: 'line',
+            data: {
+              labels: activityData.map(d => `${d.time}:00`),
+              datasets: [{
+                label: 'Ethics',
+                data: activityData.map(d => d.ethics),
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                tension: 0.4
+              }, {
+                label: 'Math',
+                data: activityData.map(d => d.math),
+                borderColor: '#2196F3',
+                backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                title: {
+                  display: true,
+                  text: 'Agent Activity',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                y: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                }
+              }
+            }
+          });
+        }
 
         // Resource Chart
-        const resourceTrace = {
-          x: resourceData.map(d => d.time),
-          y: resourceData.map(d => d.cpu),
-          name: 'CPU Usage',
-          type: 'scatter',
-          mode: 'lines',
-          line: { color: '#2196F3' }
-        };
-
-        const resourceLayout = {
-          title: 'System Resources',
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#fff' },
-          showlegend: true,
-          legend: { font: { color: '#fff' } }
-        };
-
-        Plotly.newPlot('resourceChart', [resourceTrace], resourceLayout);
+        const resourceCtx = document.getElementById('resourceChart');
+        if (resourceCtx) {
+          new Chart(resourceCtx, {
+            type: 'line',
+            data: {
+              labels: resourceData.map(d => `${d.time}s`),
+              datasets: [{
+                label: 'CPU Usage',
+                data: resourceData.map(d => d.cpu),
+                borderColor: '#2196F3',
+                backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                tension: 0.4
+              }, {
+                label: 'Memory',
+                data: resourceData.map(d => d.memory),
+                borderColor: '#F44336',
+                backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                tension: 0.4
+              }, {
+                label: 'Network',
+                data: resourceData.map(d => d.network),
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                title: {
+                  display: true,
+                  text: 'System Resources',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                y: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                }
+              }
+            }
+          });
+        }
       };
 
       return (
@@ -478,45 +590,15 @@
                   />
                   <CardContent>
                     <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          CPU Usage
-                        </Typography>
-                        <LinearProgress 
-                          variant="determinate" 
-                          value={systemHealth.cpu} 
-                          sx={{ height: 8, borderRadius: 4 }}
-                        />
+                      <Grid item xs={12} md={6}>
+                        <div style={{ height: '300px', marginBottom: '20px' }}>
+                          <canvas id="activityChart"></canvas>
+                        </div>
                       </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Memory Usage
-                        </Typography>
-                        <LinearProgress 
-                          variant="determinate" 
-                          value={systemHealth.memory} 
-                          sx={{ height: 8, borderRadius: 4 }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Storage Usage
-                        </Typography>
-                        <LinearProgress 
-                          variant="determinate" 
-                          value={systemHealth.storage} 
-                          sx={{ height: 8, borderRadius: 4 }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Network Status
-                        </Typography>
-                        <LinearProgress 
-                          variant="determinate" 
-                          value={systemHealth.network} 
-                          sx={{ height: 8, borderRadius: 4 }}
-                        />
+                      <Grid item xs={12} md={6}>
+                        <div style={{ height: '300px' }}>
+                          <canvas id="resourceChart"></canvas>
+                        </div>
                       </Grid>
                     </Grid>
                   </CardContent>
