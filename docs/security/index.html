@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Journeys - SafeAI Documentation</title>
+  <title>Security - SafeAI Documentation</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -36,33 +36,36 @@
     .section {
       margin-bottom: 32px;
     }
-    .journey-card {
+    .security-card {
       background-color: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 16px;
       margin: 16px 0;
       transition: transform 0.2s ease-in-out;
     }
-    .journey-card:hover {
+    .security-card:hover {
       transform: translateY(-2px);
     }
-    .step {
-      margin: 12px 0;
-      padding: 12px;
-      background-color: rgba(255, 255, 255, 0.05);
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
       border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 16px 0;
     }
-    .step-number {
+    .security-level {
       display: inline-block;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      background-color: #3f51b5;
-      color: white;
-      border-radius: 50%;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
       margin-right: 8px;
     }
+    .level-critical { background-color: #f44336; color: white; }
+    .level-high { background-color: #ff9800; color: white; }
+    .level-medium { background-color: #ffeb3b; color: black; }
+    .level-low { background-color: #4caf50; color: white; }
   </style>
 </head>
 <body>
@@ -72,7 +75,7 @@
     const { 
       Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
-      ListItemIcon, Icon, Grid, Chip
+      ListItemIcon, Icon, Grid, Chip, Alert
     } = MaterialUI;
 
     // Material icon names
@@ -84,22 +87,35 @@
       CODE: "code",
       SCHEMA: "schema",
       INFO: "info",
-      ARCHITECTURE: "architecture",
-      SPEED: "speed",
+      API: "api",
+      LOCK: "lock",
       SECURITY: "security",
-      OVERVIEW: "overview",
-      IMPLEMENTATION: "implementation",
-      SCHOOL: "school",
-      WORK: "work",
-      SCIENCE: "science",
-      BUSINESS: "business",
-      MEDICAL: "medical_services",
-      EDUCATION: "education",
-      RESEARCH: "science",
-      DEVELOPMENT: "code"
+      DOCS: "description",
+      PLAY: "play_arrow",
+      DOWNLOAD: "download",
+      UPLOAD: "upload",
+      SEARCH: "search",
+      FILTER: "filter_list",
+      SORT: "sort",
+      REFRESH: "refresh",
+      DELETE: "delete",
+      EDIT: "edit",
+      ADD: "add",
+      REMOVE: "remove",
+      SAVE: "save",
+      CANCEL: "cancel",
+      WARNING: "warning",
+      ERROR: "error",
+      SUCCESS: "check_circle",
+      SHIELD: "security",
+      KEY: "key",
+      FINGERPRINT: "fingerprint",
+      ENCRYPTION: "encryption",
+      MONITORING: "monitoring",
+      AUDIT: "audit"
     };
 
-    function UserJourneys() {
+    function SecurityGuide() {
       return (
         <Box>
           <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -115,7 +131,7 @@
                 <Icon>{ICONS.ARROW_BACK}</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                User Journeys
+                Security Guide
               </Typography>
               <Button color="inherit" href="../index.html">
                 <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
@@ -126,99 +142,58 @@
           
           <Container>
             <Typography variant="h4" gutterBottom>
-              SafeAI User Journeys
+              SafeAI Security Guide
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" paragraph>
-              Explore step-by-step guides for common use cases and workflows with SafeAI.
+              Comprehensive security documentation and best practices for SafeAI.
             </Typography>
 
+            <Alert severity="info" sx={{ mb: 4 }}>
+              <Typography variant="body1">
+                This guide provides essential information about SafeAI's security features, 
+                best practices, and compliance requirements.
+              </Typography>
+            </Alert>
+
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Learning & Education
+                Security Overview
               </Typography>
               
-              <div className="journey-card">
+              <div className="security-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.SCHOOL}</Icon>
-                  Student Learning Journey
+                  <Icon sx={{ mr: 1 }}>{ICONS.SHIELD}</Icon>
+                  Core Security Features
                 </Typography>
                 <Typography paragraph>
-                  Learn how to use SafeAI for academic research and learning.
+                  SafeAI implements multiple layers of security:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
+                      <Icon>{ICONS.ENCRYPTION}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Starting Point"
-                      secondary="Understanding basic concepts and interface navigation"
+                      primary="End-to-End Encryption"
+                      secondary="All data is encrypted in transit and at rest"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
+                      <Icon>{ICONS.FINGERPRINT}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Learning Process"
-                      secondary="Using interactive demos and guided tutorials"
+                      primary="Multi-Factor Authentication"
+                      secondary="Enhanced login security with multiple verification methods"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
+                      <Icon>{ICONS.MONITORING}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Results"
-                      secondary="Applying knowledge to academic projects"
-                    />
-                  </ListItem>
-                </List>
-                <Box sx={{ mt: 2 }}>
-                  <Button 
-                    variant="contained" 
-                    startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
-                    href="../interactive-demos/index.html"
-                  >
-                    Try Interactive Demos
-                  </Button>
-                </Box>
-              </div>
-
-              <div className="journey-card">
-                <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.EDUCATION}</Icon>
-                  Teacher Integration Journey
-                </Typography>
-                <Typography paragraph>
-                  Integrate SafeAI into your teaching curriculum.
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Starting Point"
-                      secondary="Reviewing educational use cases and examples"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Learning Process"
-                      secondary="Creating custom learning materials and exercises"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Results"
-                      secondary="Implementing SafeAI in classroom activities"
+                      primary="Real-time Monitoring"
+                      secondary="Continuous security monitoring and threat detection"
                     />
                   </ListItem>
                 </List>
@@ -227,16 +202,16 @@
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Business Applications
+                Authentication & Authorization
               </Typography>
               
-              <div className="journey-card">
+              <div className="security-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.BUSINESS}</Icon>
-                  Business Integration Journey
+                  <Icon sx={{ mr: 1 }}>{ICONS.KEY}</Icon>
+                  Authentication Methods
                 </Typography>
                 <Typography paragraph>
-                  Implement SafeAI in your business operations.
+                  SafeAI supports multiple authentication methods:
                 </Typography>
                 <List>
                   <ListItem>
@@ -244,8 +219,8 @@
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Starting Point"
-                      secondary="Identifying business use cases and requirements"
+                      primary="API Keys"
+                      secondary="Secure API access with key-based authentication"
                     />
                   </ListItem>
                   <ListItem>
@@ -253,29 +228,29 @@
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Learning Process"
-                      secondary="Configuring SafeAI for business needs"
+                      primary="OAuth 2.0"
+                      secondary="Standard OAuth2 authentication flow"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
+                      <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Results"
-                      secondary="Deploying and monitoring business solutions"
+                      primary="SAML"
+                      secondary="Enterprise SSO integration"
                     />
                   </ListItem>
                 </List>
               </div>
 
-              <div className="journey-card">
+              <div className="security-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.MEDICAL}</Icon>
-                  Healthcare Implementation Journey
+                  <Icon sx={{ mr: 1 }}>{ICONS.LOCK}</Icon>
+                  Role-Based Access Control
                 </Typography>
                 <Typography paragraph>
-                  Deploy SafeAI in healthcare settings.
+                  Granular access control through roles:
                 </Typography>
                 <List>
                   <ListItem>
@@ -283,8 +258,8 @@
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Starting Point"
-                      secondary="Understanding healthcare-specific requirements"
+                      primary="Admin"
+                      secondary="Full system access and management"
                     />
                   </ListItem>
                   <ListItem>
@@ -292,17 +267,17 @@
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Learning Process"
-                      secondary="Implementing HIPAA-compliant solutions"
+                      primary="Developer"
+                      secondary="API access and development tools"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
+                      <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Results"
-                      secondary="Deploying healthcare applications"
+                      primary="User"
+                      secondary="Basic platform access"
                     />
                   </ListItem>
                 </List>
@@ -311,16 +286,16 @@
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Research & Development
+                Data Security
               </Typography>
               
-              <div className="journey-card">
+              <div className="security-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.RESEARCH}</Icon>
-                  Research Journey
+                  <Icon sx={{ mr: 1 }}>{ICONS.ENCRYPTION}</Icon>
+                  Data Protection
                 </Typography>
                 <Typography paragraph>
-                  Use SafeAI for academic and industrial research.
+                  Comprehensive data security measures:
                 </Typography>
                 <List>
                   <ListItem>
@@ -328,8 +303,8 @@
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Starting Point"
-                      secondary="Setting up research environment"
+                      primary="Encryption"
+                      secondary="AES-256 encryption for all data"
                     />
                   </ListItem>
                   <ListItem>
@@ -337,29 +312,74 @@
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Learning Process"
-                      secondary="Using advanced features for research"
+                      primary="Backup"
+                      secondary="Regular automated backups"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
+                      <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Results"
-                      secondary="Publishing research findings"
+                      primary="Data Retention"
+                      secondary="Configurable data retention policies"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Compliance & Auditing
+              </Typography>
+              
+              <div className="security-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.AUDIT}</Icon>
+                  Audit Logging
+                </Typography>
+                <Typography paragraph>
+                  Comprehensive audit trail capabilities:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Access Logs"
+                      secondary="Detailed access and authentication logs"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Activity Tracking"
+                      secondary="User and system activity monitoring"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Compliance Reports"
+                      secondary="Automated compliance reporting"
                     />
                   </ListItem>
                 </List>
               </div>
 
-              <div className="journey-card">
+              <div className="security-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.DEVELOPMENT}</Icon>
-                  Development Journey
+                  <Icon sx={{ mr: 1 }}>{ICONS.CHECK}</Icon>
+                  Compliance Standards
                 </Typography>
                 <Typography paragraph>
-                  Build custom applications with SafeAI.
+                  SafeAI adheres to multiple compliance standards:
                 </Typography>
                 <List>
                   <ListItem>
@@ -367,8 +387,8 @@
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Starting Point"
-                      secondary="Understanding the development environment"
+                      primary="GDPR"
+                      secondary="EU data protection regulations"
                     />
                   </ListItem>
                   <ListItem>
@@ -376,17 +396,62 @@
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Learning Process"
-                      secondary="Building and testing applications"
+                      primary="SOC 2"
+                      secondary="Service organization controls"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SPEED}</Icon>
+                      <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Results"
-                      secondary="Deploying production applications"
+                      primary="ISO 27001"
+                      secondary="Information security management"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Security Best Practices
+              </Typography>
+              
+              <div className="security-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.WARNING}</Icon>
+                  Critical Security Guidelines
+                </Typography>
+                <Typography paragraph>
+                  Essential security practices:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Password Management"
+                      secondary="Use strong, unique passwords and password managers"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="API Security"
+                      secondary="Secure API key storage and rotation"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Access Control"
+                      secondary="Implement least privilege access"
                     />
                   </ListItem>
                 </List>
@@ -399,9 +464,9 @@
                 color="primary"
                 size="large"
                 href="../interactive-demos/index.html"
-                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+                startIcon={<Icon>{ICONS.PLAY}</Icon>}
               >
-                Try Interactive Demos
+                Try Security Interactive Examples
               </Button>
             </Box>
           </Container>
@@ -409,7 +474,7 @@
       );
     }
 
-    ReactDOM.render(<UserJourneys />, document.getElementById('root'));
+    ReactDOM.render(<SecurityGuide />, document.getElementById('root'));
   </script>
 </body>
 </html> 

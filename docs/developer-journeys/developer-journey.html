@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -17,14 +17,14 @@
     body { 
       margin: 0; 
       padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
     }
     #root { 
       max-width: 1200px; 
       margin: 0 auto; 
-      padding: 20px;
+      padding: 2rem;
     }
     .content {
       background-color: rgba(255, 255, 255, 0.05);
@@ -33,23 +33,49 @@
       padding: 24px;
       margin-top: 24px;
     }
-    code {
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 2px 6px;
+    .section {
+      margin-bottom: 32px;
+    }
+    .journey-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      transition: transform 0.2s ease-in-out;
+    }
+    .journey-card:hover {
+      transform: translateY(-2px);
+    }
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
       border-radius: 4px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 16px 0;
+    }
+    .step-number {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background-color: #1976d2;
+      color: white;
+      border-radius: 50%;
+      margin-right: 8px;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
+    const MaterialUI = window['MaterialUI'];
     const { 
       Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
-      ListItemIcon, Icon, Stepper, Step, StepLabel, StepContent
+      ListItemIcon, Icon, Grid, Chip, Stepper, Step, StepLabel
     } = MaterialUI;
 
     // Material icon names
@@ -59,10 +85,38 @@
       ARROW_BACK: "arrow_back",
       CHECK: "check",
       CODE: "code",
-      DEVELOPER_MODE: "developer_mode"
+      SCHEMA: "schema",
+      INFO: "info",
+      API: "api",
+      LOCK: "lock",
+      SECURITY: "security",
+      DOCS: "description",
+      PLAY: "play_arrow",
+      DOWNLOAD: "download",
+      UPLOAD: "upload",
+      SEARCH: "search",
+      FILTER: "filter_list",
+      SORT: "sort",
+      REFRESH: "refresh",
+      DELETE: "delete",
+      EDIT: "edit",
+      ADD: "add",
+      REMOVE: "remove",
+      SAVE: "save",
+      CANCEL: "cancel",
+      SETTINGS: "settings",
+      BUG_REPORT: "bug_report",
+      CODE_OFF: "code_off",
+      CODE_ON: "code"
     };
 
     function DeveloperJourney() {
+      const [activeStep, setActiveStep] = React.useState(0);
+
+      const handleStepClick = (step) => {
+        setActiveStep(step);
+      };
+
       return (
         <Box>
           <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -88,215 +142,296 @@
           </AppBar>
           
           <Container>
-            <Typography variant="h3" component="h1" gutterBottom>
-              Developer Journey
+            <Typography variant="h4" gutterBottom>
+              SafeAI Developer Journey
             </Typography>
-            
-            <Paper className="content">
-              <Typography paragraph>
-                This guide outlines the path for developers working with the SafeAI platform, from initial setup to advanced development.
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              A comprehensive guide for developers integrating with SafeAI's platform.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Getting Started
               </Typography>
               
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Overview</Typography>
-              <Typography paragraph>
-                Welcome to the SafeAI developer journey! This guide will help you understand how to develop, integrate, and contribute to the SafeAI platform.
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.SETTINGS}</Icon>
+                  Prerequisites
+                </Typography>
+                <Typography paragraph>
+                  Before you begin developing with SafeAI, ensure you have:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Development Environment"
+                      secondary="Node.js, Python, or Java development environment"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="API Access"
+                      secondary="SafeAI API key and credentials"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Requirements"
+                      secondary="Understanding of API security best practices"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Development Phases
               </Typography>
               
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Getting Started</Typography>
-              
-              <Stepper orientation="vertical" sx={{ 
-                mt: 2, 
-                "& .MuiStepLabel-root": { color: "white" },
-                "& .MuiStepIcon-root": { color: "#4caf50" },
-                "& .MuiStepConnector-line": { borderColor: "rgba(255,255,255,0.1)" }
-              }}>
-                <Step active={true}>
-                  <StepLabel>Development Environment</StepLabel>
-                  <StepContent>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Set up development tools" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Configure local environment" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Install dependencies" />
-                      </ListItem>
-                    </List>
-                  </StepContent>
+              <Stepper activeStep={activeStep} alternativeLabel>
+                <Step onClick={() => handleStepClick(0)}>
+                  <StepLabel>Setup & Configuration</StepLabel>
                 </Step>
-                
-                <Step active={true}>
-                  <StepLabel>Platform Access</StepLabel>
-                  <StepContent>
-                    <Typography variant="subtitle1" gutterBottom>Developer Account</Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Register as a developer" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Set up API access" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Configure development settings" />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Initial Setup</Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Clone repositories" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Set up development tools" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Configure local environment" />
-                      </ListItem>
-                    </List>
-                  </StepContent>
+                <Step onClick={() => handleStepClick(1)}>
+                  <StepLabel>Integration</StepLabel>
                 </Step>
-                
-                <Step active={true}>
-                  <StepLabel>First Development Steps</StepLabel>
-                  <StepContent>
-                    <Typography variant="subtitle1" gutterBottom>Codebase Exploration</Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Review architecture" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Understand codebase" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Learn development patterns" />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Basic Development</Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Create first component" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Set up testing environment" />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText primary="Make initial contribution" />
-                      </ListItem>
-                    </List>
-                  </StepContent>
+                <Step onClick={() => handleStepClick(2)}>
+                  <StepLabel>Testing</StepLabel>
+                </Step>
+                <Step onClick={() => handleStepClick(3)}>
+                  <StepLabel>Deployment</StepLabel>
                 </Step>
               </Stepper>
-              
-              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Development Path</Typography>
-              
-              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
-                <CardContent>
-                  <Typography variant="h5" gutterBottom>Core Development</Typography>
-                  <List>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Understanding architecture" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Working with APIs" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Data models and structures" />
-                    </ListItem>
-                  </List>
-                </CardContent>
-              </Card>
-              
-              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
-                <CardContent>
-                  <Typography variant="h5" gutterBottom>Advanced Development</Typography>
-                  <List>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Implementing complex features" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Framework optimization" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Security enhancements" />
-                    </ListItem>
-                  </List>
-                </CardContent>
-              </Card>
-              
-              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
-                <CardContent>
-                  <Typography variant="h5" gutterBottom>Integration & Extension</Typography>
-                  <List>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Custom plugin development" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="Third-party integrations" />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                      <ListItemText primary="API extensions" />
-                    </ListItem>
-                  </List>
-                </CardContent>
-              </Card>
-              
-              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <Button 
-                  variant="contained" 
-                  startIcon={<Icon>{ICONS.CODE}</Icon>}
-                  href="../knowledge-graph-implementation.html"
-                  sx={{ mr: 2 }}
-                >
-                  Knowledge Graph Implementation
-                </Button>
-                <Button 
-                  variant="outlined"
-                  startIcon={<Icon>{ICONS.HOME}</Icon>}
-                  href="../index.html"
-                >
-                  Back to Documentation
-                </Button>
-              </Box>
-            </Paper>
-            
-            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
-              <Typography variant="body2">
-                Last updated: {new Date().toLocaleDateString()}
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <span className="step-number">1</span>
+                  Setup & Configuration
+                </Typography>
+                <Typography paragraph>
+                  Initial setup and configuration steps:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Environment Setup"
+                      secondary="Configure development environment and dependencies"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="API Configuration"
+                      secondary="Set up API keys and authentication"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Setup"
+                      secondary="Configure security settings and access controls"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <span className="step-number">2</span>
+                  Integration
+                </Typography>
+                <Typography paragraph>
+                  Integrating SafeAI into your application:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="API Integration"
+                      secondary="Implement API calls and endpoints"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Data Handling"
+                      secondary="Process and manage data flows"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Error Handling"
+                      secondary="Implement robust error handling"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <span className="step-number">3</span>
+                  Testing
+                </Typography>
+                <Typography paragraph>
+                  Testing your integration:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Unit Testing"
+                      secondary="Test individual components"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Integration Testing"
+                      secondary="Test end-to-end workflows"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Testing"
+                      secondary="Verify security measures"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <span className="step-number">4</span>
+                  Deployment
+                </Typography>
+                <Typography paragraph>
+                  Deploying your integration:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Production Setup"
+                      secondary="Configure production environment"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Monitoring"
+                      secondary="Set up monitoring and alerts"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Maintenance"
+                      secondary="Plan for ongoing maintenance"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Best Practices
               </Typography>
+              
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.CHECK}</Icon>
+                  Development Guidelines
+                </Typography>
+                <Typography paragraph>
+                  Follow these best practices for optimal development:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CODE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Code Quality"
+                      secondary="Maintain clean, documented code"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security"
+                      secondary="Follow security best practices"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.BUG_REPORT}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Testing"
+                      secondary="Comprehensive testing coverage"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="../interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY}</Icon>}
+              >
+                Try Interactive Development Examples
+              </Button>
             </Box>
           </Container>
         </Box>
       );
     }
 
-    // Render the application
     ReactDOM.render(<DeveloperJourney />, document.getElementById('root'));
   </script>
 </body>
