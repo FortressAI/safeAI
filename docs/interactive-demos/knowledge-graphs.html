@@ -196,6 +196,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
     const { 
       Box, Typography, Button, Card, CardContent, 
       Tabs, Tab, Grid, Divider, AppBar, Toolbar,
@@ -203,7 +204,8 @@
       TextField, Dialog, DialogTitle, DialogContent, DialogActions,
       List, ListItem, ListItemText, ListItemIcon, Container,
       CircularProgress, Alert, Stack, FormControl,
-      useTheme, ThemeProvider, createTheme, CssBaseline
+      useTheme, ThemeProvider, createTheme, CssBaseline,
+      Icon, alpha
     } = MaterialUI;
 
     // Create theme configuration
@@ -512,9 +514,11 @@
           .nodeRelSize(6)
           .linkColor('color')
           .linkWidth(2)
-          .onNodeClick((node) => setSelectedNode(node))
-          .d3Force('charge').strength(-100)
-          .d3Force('link').distance(100);
+          .onNodeClick((node) => setSelectedNode(node));
+
+        // Configure forces
+        Graph.d3Force('charge').strength(-100);
+        Graph.d3Force('link').distance(100);
 
         // Store graph instance for controls
         window.graphInstance = Graph;
