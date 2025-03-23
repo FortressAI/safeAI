@@ -151,273 +151,15 @@
             <Typography variant="h4" gutterBottom>
               SafeAIcoin Economic Model
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary" paragraph>
-              A comprehensive guide to SafeAIcoin's economic model, tokenomics, and value distribution.
+            <Typography variant="subtitle1" paragraph>
+              A comprehensive guide to SafeAIcoin's economic model, focusing on domain expert ownership, platform sustainability, and ethical AI governance.
             </Typography>
 
             <Alert severity="info" sx={{ mb: 4 }}>
               <Typography variant="body1">
-                SafeAIcoin is designed to create a sustainable ecosystem that rewards all participants 
-                while maintaining ethical AI development and deployment.
+                SafeAIcoin powers a decentralized ecosystem where domain experts own and monetize their knowledge through AI agents while maintaining high ethical standards.
               </Typography>
             </Alert>
-
-            <div className="section">
-              <Typography variant="h5" gutterBottom>
-                Platform Economics
-              </Typography>
-              
-              <div className="economics-card">
-                <Typography variant="h6" gutterBottom>
-                  <span className="token-badge badge-platform">Platform</span>
-                  Token Distribution
-                </Typography>
-                <Typography paragraph>
-                  Initial token allocation designed for long-term sustainability:
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.TOKEN}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Platform Reserve"
-                      secondary="40% - For platform development and operations"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.REWARD}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Domain Expert Pool"
-                      secondary="30% - For expert contributions and knowledge"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.ETHICS}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Ethics KG Reserve"
-                      secondary="15% - For ethical control mechanisms"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SCALE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Ecosystem Growth"
-                      secondary="15% - For community development and adoption"
-                    />
-                  </ListItem>
-                </List>
-              </div>
-
-              <div className="economics-card">
-                <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.VALUE}</Icon>
-                  Value Generation & Transaction Examples
-                </Typography>
-                <Typography paragraph>
-                  Platform value is generated through multiple revenue streams and transaction types:
-                </Typography>
-                
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  FreePress Domain Expert Case Study
-                </Typography>
-                <Typography paragraph>
-                  A FreePress domain expert specializing in media ethics and fact-checking:
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.TOKEN}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Knowledge Contribution"
-                      secondary="Earns 100 SafeAIcoins per validated fact-check entry"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.REWARD}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Ethical Validation"
-                      secondary="Receives 50 SafeAIcoins for each ethical review of AI-generated content"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.VALUE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Platform Revenue"
-                      secondary="Platform charges 20% fee on all expert transactions"
-                    />
-                  </ListItem>
-                </List>
-                <Typography paragraph>
-                  Example Transaction Flow:
-                </Typography>
-                <div className="code-block">
-                  {`// Example: Fact-checking a news article
-1. User requests fact-check: 10 SafeAIcoins
-2. Expert performs validation: 100 SafeAIcoins
-3. Platform fee (20%): 22 SafeAIcoins
-4. Expert net earnings: 88 SafeAIcoins
-5. Platform revenue: 22 SafeAIcoins`}
-                </div>
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Legal Domain Expert Case Study
-                </Typography>
-                <Typography paragraph>
-                  A legal expert specializing in AI compliance and regulations:
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.TOKEN}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Compliance Review"
-                      secondary="Earns 200 SafeAIcoins per regulatory compliance assessment"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.REWARD}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Legal Framework Updates"
-                      secondary="Receives 150 SafeAIcoins for updating legal knowledge graphs"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.VALUE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Platform Revenue"
-                      secondary="Platform charges 25% fee on high-value legal transactions"
-                    />
-                  </ListItem>
-                </List>
-                <Typography paragraph>
-                  Example Transaction Flow:
-                </Typography>
-                <div className="code-block">
-                  {`// Example: Regulatory compliance assessment
-1. Client requests assessment: 50 SafeAIcoins
-2. Expert performs review: 200 SafeAIcoins
-3. Platform fee (25%): 62.5 SafeAIcoins
-4. Expert net earnings: 187.5 SafeAIcoins
-5. Platform revenue: 62.5 SafeAIcoins`}
-                </div>
-              </div>
-
-              <div className="economics-card">
-                <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.SCALE}</Icon>
-                  Growth Opportunities & Market Impact
-                </Typography>
-                <Typography paragraph>
-                  Detailed analysis of market opportunities and growth potential:
-                </Typography>
-                
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Market Size & Valuation
-                </Typography>
-                <Typography paragraph>
-                  Target market valuation: $300-500 million based on:
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.VALUE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Knowledge Graph Value"
-                      secondary="$150M - Value of specialized knowledge and expertise"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SCALE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Platform Revenue"
-                      secondary="$100M - Transaction fees and service revenue"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.ETHICS}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Ethical AI Market"
-                      secondary="$50M - Value of ethical AI validation and compliance"
-                    />
-                  </ListItem>
-                </List>
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Growth Drivers
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SCALE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Network Effects"
-                      secondary="Value increases exponentially with each new domain expert and knowledge contribution"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.VALUE}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Market Expansion"
-                      secondary="Growing demand for ethical AI solutions across industries"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.ETHICS}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Regulatory Compliance"
-                      secondary="Increasing need for AI systems to meet ethical and legal standards"
-                    />
-                  </ListItem>
-                </List>
-
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Revenue Projections
-                </Typography>
-                <div className="code-block">
-                  {`// Year 1
-- Platform Revenue: $10M
-- Expert Earnings: $40M
-- Total Transaction Volume: $50M
-
-// Year 2
-- Platform Revenue: $25M
-- Expert Earnings: $100M
-- Total Transaction Volume: $125M
-
-// Year 3
-- Platform Revenue: $50M
-- Expert Earnings: $200M
-- Total Transaction Volume: $250M`}
-                </div>
-              </div>
-            </div>
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
@@ -427,37 +169,40 @@
               <div className="economics-card">
                 <Typography variant="h6" gutterBottom>
                   <span className="token-badge badge-expert">Expert</span>
-                  Reward Structure
+                  Ownership & Revenue Model
                 </Typography>
                 <Typography paragraph>
-                  Domain experts earn tokens through:
+                  Domain experts in the SafeAI ecosystem are true owners of their intellectual property and AI agents. The platform operates on a simple revenue-sharing model where experts keep 90% of their earnings, with only a 10% platform fee for infrastructure and maintenance.
+                </Typography>
+                <Typography paragraph>
+                  Key ownership features from our smart contracts:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
+                      <Icon>{ICONS.TOKEN}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Knowledge Contribution"
-                      secondary="Tokens for contributing domain expertise"
+                      primary="Full IP Ownership"
+                      secondary="Experts retain complete ownership of their Knowledge Graph agents and content"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
+                      <Icon>{ICONS.REWARD}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Quality Assurance"
-                      secondary="Tokens for validating and improving knowledge"
+                      primary="Direct Wallet Integration"
+                      secondary="Payments go directly to expert wallets with automated platform fee handling"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SECURITY}</Icon>
+                      <Icon>{ICONS.VALUE}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Ethics Oversight"
-                      secondary="Tokens for maintaining ethical standards"
+                      primary="Flexible Pricing"
+                      secondary="Experts set their own agent usage fees and content pricing"
                     />
                   </ListItem>
                 </List>
@@ -465,158 +210,77 @@
 
               <div className="economics-card">
                 <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.REWARD}</Icon>
-                  Incentive Mechanisms
+                  <Icon sx={{ mr: 1 }}>{ICONS.VALUE}</Icon>
+                  Real-World Examples
+                </Typography>
+                
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  FreePress Domain Expert
                 </Typography>
                 <Typography paragraph>
-                  Expert incentives are structured to:
+                  Based on our FreePressContract.sol implementation:
                 </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Encourage Quality"
-                      secondary="Higher rewards for high-quality contributions"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Promote Collaboration"
-                      secondary="Rewards for cross-domain knowledge sharing"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SECURITY}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Maintain Ethics"
-                      secondary="Incentives for ethical oversight"
-                    />
-                  </ListItem>
-                </List>
-              </div>
-            </div>
+                <div className="code-block">
+                  {`// Example: Content Monetization
+1. Expert publishes verified content: NFT minted to expert's wallet
+2. User purchases license: 100 SafeAIcoins
+3. Platform fee (5%): 5 SafeAIcoins
+4. Expert earnings (95%): 95 SafeAIcoins
+5. Reputation tracking: Automatically updated on-chain
 
-            <div className="section">
-              <Typography variant="h5" gutterBottom>
-                End-User Economics
-              </Typography>
-              
-              <div className="economics-card">
-                <Typography variant="h6" gutterBottom>
-                  <span className="token-badge badge-user">User</span>
-                  Cost Structure
+// Additional Revenue Streams
+- Knowledge Graph contributions
+- AI agent usage fees
+- Ethical validation services`}
+                </div>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Knowledge Graph Integration
                 </Typography>
                 <Typography paragraph>
-                  End-user costs are designed to be:
+                  Based on KnowledgeGraphBase.sol implementation:
                 </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Accessible"
-                      secondary="Flexible pricing tiers for different needs"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Transparent"
-                      secondary="Clear cost breakdown and usage metrics"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SECURITY}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Value-Based"
-                      secondary="Costs aligned with value received"
-                    />
-                  </ListItem>
-                </List>
+                <div className="code-block">
+                  {`// Agent Creation & Monetization
+1. Expert creates specialized agent
+2. Sets usage fee: expertDefinedFee SafeAIcoins
+3. Platform fee (10%): expertDefinedFee * 0.10
+4. Expert earnings (90%): expertDefinedFee * 0.90
+5. Performance tracking: usageCount and successCount
+
+// Automated Features
+- Direct wallet payments
+- Usage analytics
+- Success rate tracking
+- Reputation system`}
+                </div>
               </div>
 
-              <div className="economics-card">
-                <Typography variant="h6" gutterBottom>
-                  <Icon sx={{ mr: 1 }}>{ICONS.COST}</Icon>
-                  Usage Models
-                </Typography>
-                <Typography paragraph>
-                  Flexible usage options:
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Pay-Per-Use"
-                      secondary="Token-based transaction model"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Subscription"
-                      secondary="Fixed token amounts for regular access"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SECURITY}</Icon>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Enterprise"
-                      secondary="Customized token packages for organizations"
-                    />
-                  </ListItem>
-                </List>
-              </div>
-            </div>
-
-            <div className="section">
-              <Typography variant="h5" gutterBottom>
-                Ethics Knowledge Graph
-              </Typography>
-              
               <div className="economics-card">
                 <Typography variant="h6" gutterBottom>
                   <Icon sx={{ mr: 1 }}>{ICONS.ETHICS}</Icon>
-                  Control Mechanisms
+                  Ethical Governance
                 </Typography>
                 <Typography paragraph>
-                  The Ethics KG serves as a critical control mechanism:
+                  Based on EthicsKG.sol implementation:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
+                      <Icon>{ICONS.SHIELD}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Governance"
-                      secondary="Token-weighted voting on ethical standards"
+                      primary="Automated Ethics Scoring"
+                      secondary="Real-time ethical evaluation of AI agents and content"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
+                      <Icon>{ICONS.BALANCE}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Compliance"
-                      secondary="Automated ethical compliance checks"
+                      primary="Principle Weighting"
+                      secondary="Dynamic weighting system for ethical principles"
                     />
                   </ListItem>
                   <ListItem>
@@ -624,25 +288,103 @@
                       <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
                     <ListItemText 
-                      primary="Transparency"
-                      secondary="Public verification of ethical practices"
+                      primary="Compliance Tracking"
+                      secondary="Continuous monitoring of ethical standards"
                     />
                   </ListItem>
                 </List>
               </div>
             </div>
 
-            <Box sx={{ mt: 4, textAlign: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                href="../interactive-demos/index.html"
-                startIcon={<Icon>{ICONS.PLAY}</Icon>}
-              >
-                Try Economics Interactive Examples
-              </Button>
-            </Box>
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Platform Economics
+              </Typography>
+              
+              <div className="economics-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.TOKEN}</Icon>
+                  Fee Structure
+                </Typography>
+                <Typography paragraph>
+                  The platform maintains minimal fees to ensure sustainability while maximizing expert earnings:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.VALUE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Graph Agents"
+                      secondary="10% platform fee on agent usage"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Content Licensing"
+                      secondary="5% platform fee on content sales"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical Validation"
+                      secondary="No additional fees for ethical compliance"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Growth Strategy
+              </Typography>
+              
+              <div className="economics-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.SCALE}</Icon>
+                  Market Opportunity
+                </Typography>
+                <Typography paragraph>
+                  Our growth strategy focuses on three key areas:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.VALUE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Domain Expert Network"
+                      secondary="Growing network of experts creating and monetizing specialized AI agents"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCALE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Graph Expansion"
+                      secondary="Continuous growth of domain-specific knowledge and AI capabilities"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical AI Leadership"
+                      secondary="Setting industry standards for ethical AI development"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
           </Container>
         </Box>
       );
