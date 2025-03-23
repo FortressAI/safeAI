@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Journeys - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Container, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Card, CardContent, Grid
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      PERSON: "person",
+      MAP: "map",
+      TIMELINE: "timeline",
+      START: "play_circle",
+      GUIDE: "menu_book"
+    };
+
+    function UserJourneys() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="../index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                User Journeys
+              </Typography>
+              <Button color="inherit" href="../index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              User Journeys
+            </Typography>
+            
+            <Paper className="content">
+              <Typography variant="body1" paragraph>
+                Explore different user journeys and scenarios to understand how to effectively use the SafeAI platform.
+                Each journey provides a step-by-step guide tailored to specific use cases and user roles.
+              </Typography>
+              
+              <Grid container spacing={4} sx={{ mt: 2 }}>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(25, 118, 210, 0.1)', border: '1px solid rgba(25, 118, 210, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#1976d2' }}>{ICONS.PERSON}</Icon>
+                        <Typography variant="h5">New User Journey</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        A comprehensive guide for new users getting started with SafeAI. Learn about basic setup,
+                        platform navigation, and essential features.
+                      </Typography>
+                      <Button 
+                        variant="contained" 
+                        startIcon={<Icon>{ICONS.START}</Icon>}
+                        href="new-user-journey.html"
+                        sx={{ mt: 2 }}
+                      >
+                        Start Journey
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', border: '1px solid rgba(46, 125, 50, 0.3)' }}>
+                    <CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon sx={{ mr: 2, color: '#2e7d32' }}>{ICONS.MAP}</Icon>
+                        <Typography variant="h5">User Journey Maps</Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        Detailed maps showing different user paths through the platform, including common workflows
+                        and advanced use cases.
+                      </Typography>
+                      <Button 
+                        variant="contained" 
+                        startIcon={<Icon>{ICONS.GUIDE}</Icon>}
+                        href="user-journey-maps.html"
+                        sx={{ mt: 2 }}
+                      >
+                        View Maps
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the app
+    ReactDOM.render(
+      <UserJourneys />,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html> 
