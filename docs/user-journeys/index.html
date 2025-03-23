@@ -10,10 +10,9 @@
   <!-- Babel for JSX transpiling -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Material-UI CDN -->
-  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <link rel="stylesheet" href="../css/shared-demo.css" />
   <style>
     body { 
       margin: 0; 
@@ -34,6 +33,25 @@
       padding: 24px;
       margin-top: 24px;
     }
+    .section {
+      margin-bottom: 32px;
+    }
+    .journey-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 16px 0;
+      transition: transform 0.2s;
+    }
+    .journey-card:hover {
+      transform: translateY(-4px);
+    }
+    .step {
+      margin: 16px 0;
+      padding: 16px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -41,9 +59,9 @@
   <script type="text/babel">
     const MaterialUI = window['MaterialUI'];
     const { 
-      Box, Typography, Container, AppBar, Toolbar, 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
-      ListItemIcon, Icon, Card, CardContent, Grid
+      ListItemIcon, Icon, Grid, Avatar
     } = MaterialUI;
 
     // Material icon names
@@ -51,11 +69,25 @@
       MENU: "menu",
       HOME: "home",
       ARROW_BACK: "arrow_back",
-      PERSON: "person",
-      MAP: "map",
-      TIMELINE: "timeline",
-      START: "play_circle",
-      GUIDE: "menu_book"
+      CHECK: "check",
+      CODE: "code",
+      SCHEMA: "schema",
+      INFO: "info",
+      ARCHITECTURE: "architecture",
+      SPEED: "speed",
+      SECURITY: "security",
+      OVERVIEW: "overview",
+      IMPLEMENTATION: "implementation",
+      PLAY_ARROW: "play_arrow",
+      SEARCH: "search",
+      HELP: "help",
+      QUESTION_ANSWER: "question_answer",
+      TROUBLESHOOT: "troubleshoot",
+      SCHOOL: "school",
+      BUSINESS: "business",
+      SCIENCE: "science",
+      CODE: "code",
+      ARROW_FORWARD: "arrow_forward"
     };
 
     function UserJourneys() {
@@ -84,74 +116,177 @@
           </AppBar>
           
           <Container>
-            <Typography variant="h3" component="h1" gutterBottom>
-              User Journeys
+            <Typography variant="h4" gutterBottom>
+              Real Stories, Real Success
             </Typography>
-            
-            <Paper className="content">
-              <Typography variant="body1" paragraph>
-                Explore different user journeys and scenarios to understand how to effectively use the SafeAI platform.
-                Each journey provides a step-by-step guide tailored to specific use cases and user roles.
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              Discover how different users are leveraging SafeAI to solve their unique challenges.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Student Learning Journey
               </Typography>
               
-              <Grid container spacing={4} sx={{ mt: 2 }}>
-                <Grid item xs={12} md={6}>
-                  <Card sx={{ backgroundColor: 'rgba(25, 118, 210, 0.1)', border: '1px solid rgba(25, 118, 210, 0.3)' }}>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Icon sx={{ mr: 2, color: '#1976d2' }}>{ICONS.PERSON}</Icon>
-                        <Typography variant="h5">New User Journey</Typography>
-                      </Box>
-                      <Typography variant="body1" paragraph>
-                        A comprehensive guide for new users getting started with SafeAI. Learn about basic setup,
-                        platform navigation, and essential features.
-                      </Typography>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>{ICONS.START}</Icon>}
-                        href="new-user-journey.html"
-                        sx={{ mt: 2 }}
-                      >
-                        Start Journey
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
+              <div className="journey-card">
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Avatar sx={{ mr: 2, bgcolor: '#1976d2' }}>
+                    <Icon>{ICONS.SCHOOL}</Icon>
+                  </Avatar>
+                  <Typography variant="h6">Sarah's Math Learning Journey</Typography>
+                </Box>
                 
-                <Grid item xs={12} md={6}>
-                  <Card sx={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', border: '1px solid rgba(46, 125, 50, 0.3)' }}>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Icon sx={{ mr: 2, color: '#2e7d32' }}>{ICONS.MAP}</Icon>
-                        <Typography variant="h5">User Journey Maps</Typography>
-                      </Box>
-                      <Typography variant="body1" paragraph>
-                        Detailed maps showing different user paths through the platform, including common workflows
-                        and advanced use cases.
-                      </Typography>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>{ICONS.GUIDE}</Icon>}
-                        href="user-journey-maps.html"
-                        sx={{ mt: 2 }}
-                      >
-                        View Maps
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </Paper>
+                <Typography paragraph>
+                  Sarah, a high school student, struggled with advanced mathematics. Here's how SafeAI helped her:
+                </Typography>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Starting Point
+                  </Typography>
+                  <Typography>
+                    Sarah started by using our Math Problem Solver demo to understand complex equations.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Learning Process
+                  </Typography>
+                  <Typography>
+                    The system provided step-by-step explanations and practice problems tailored to her level.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Results
+                  </Typography>
+                  <Typography>
+                    Sarah improved her grades and developed a deeper understanding of mathematical concepts.
+                  </Typography>
+                </div>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Business Application Journey
+              </Typography>
+              
+              <div className="journey-card">
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Avatar sx={{ mr: 2, bgcolor: '#2e7d32' }}>
+                    <Icon>{ICONS.BUSINESS}</Icon>
+                  </Avatar>
+                  <Typography variant="h6">Mike's Business Analysis Journey</Typography>
+                </Box>
+                
+                <Typography paragraph>
+                  Mike, a business analyst, needed to understand complex market trends. Here's how SafeAI assisted him:
+                </Typography>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Starting Point
+                  </Typography>
+                  <Typography>
+                    Mike used our Knowledge Graph Explorer to analyze market data and trends.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Learning Process
+                  </Typography>
+                  <Typography>
+                    The system helped him identify patterns and make data-driven decisions.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Results
+                  </Typography>
+                  <Typography>
+                    Mike improved his analysis accuracy and saved time on research tasks.
+                  </Typography>
+                </div>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Research Journey
+              </Typography>
+              
+              <div className="journey-card">
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Avatar sx={{ mr: 2, bgcolor: '#ed6c02' }}>
+                    <Icon>{ICONS.SCIENCE}</Icon>
+                  </Avatar>
+                  <Typography variant="h6">Dr. Chen's Research Journey</Typography>
+                </Box>
+                
+                <Typography paragraph>
+                  Dr. Chen, a researcher, needed to analyze complex scientific data. Here's how SafeAI supported her:
+                </Typography>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Starting Point
+                  </Typography>
+                  <Typography>
+                    Dr. Chen used our Knowledge Graph Explorer to analyze research papers and data.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Learning Process
+                  </Typography>
+                  <Typography>
+                    The system helped her identify connections between different research areas.
+                  </Typography>
+                </div>
+                
+                <div className="step">
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>{ICONS.ARROW_FORWARD}</Icon>
+                    Results
+                  </Typography>
+                  <Typography>
+                    Dr. Chen discovered new research directions and accelerated her analysis.
+                  </Typography>
+                </div>
+              </div>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="../interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+              >
+                Try Interactive Demos
+              </Button>
+            </Box>
           </Container>
         </Box>
       );
     }
 
-    // Render the app
-    ReactDOM.render(
-      <UserJourneys />,
-      document.getElementById('root')
-    );
+    ReactDOM.render(<UserJourneys />, document.getElementById('root'));
   </script>
 </body>
 </html> 

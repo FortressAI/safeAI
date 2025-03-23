@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Knowledge Graph Implementation Guide - SafeAI Documentation</title>
+  <title>Understanding Knowledge Graphs - SafeAI Documentation</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -33,26 +33,21 @@
       padding: 24px;
       margin-top: 24px;
     }
-    code {
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
+    .section {
+      margin-bottom: 32px;
     }
-    pre {
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 16px;
+    .example-box {
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Courier New', monospace;
+      padding: 16px;
+      margin: 16px 0;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Import Material-UI components
+    const MaterialUI = window['MaterialUI'];
     const { 
       Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
@@ -75,7 +70,7 @@
       IMPLEMENTATION: "implementation"
     };
 
-    function KnowledgeGraphImplementationGuide() {
+    function KnowledgeGraphGuide() {
       return (
         <Box>
           <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -91,7 +86,7 @@
                 <Icon>{ICONS.ARROW_BACK}</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Knowledge Graph Implementation Guide
+                Understanding Knowledge Graphs
               </Typography>
               <Button color="inherit" href="index.html">
                 <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
@@ -101,367 +96,240 @@
           </AppBar>
           
           <Container>
-            <Typography variant="h3" component="h1" gutterBottom>
-              Knowledge Graph Implementation Guide
+            <Typography variant="h4" gutterBottom>
+              Welcome to Knowledge Graphs
             </Typography>
-            
-            <Paper className="content">
-              <Typography variant="body1" paragraph>
-                This guide provides a comprehensive technical overview of SafeAI's knowledge graph implementation, 
-                including detailed architecture, data structures, algorithms, and performance considerations.
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              Learn how our intelligent system connects and understands information to help you solve problems.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                What is a Knowledge Graph?
               </Typography>
-              
-              <Box sx={{ 
-                backgroundColor: "rgba(25, 118, 210, 0.1)", 
-                borderLeft: "4px solid #1976d2",
-                p: 2,
-                mb: 3
-              }}>
-                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
-                  Technical Prerequisites
-                </Typography>
-                <Typography variant="body2">
-                  Before diving into this guide, ensure you have a solid understanding of:
-                  - Graph theory and data structures
-                  - Distributed systems
-                  - Database design
-                  - Performance optimization
-                </Typography>
-              </Box>
-              
-              {/* Overview Section */}
-              <Box id="overview" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.OVERVIEW}</Icon>
-                  Knowledge Graph Overview
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  The Knowledge Graph interface provides a powerful way to visualize and manage relationships between different pieces of information. Here's how to use it effectively:
-                </Typography>
-
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>schema</Icon>
-                          Graph Structure
-                        </Typography>
-                        <Typography variant="body2" paragraph>
-                          The knowledge graph is organized into:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>circle</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Entities"
-                              secondary="Individual pieces of information (e.g., products, users, documents)"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>call_split</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Relationships"
-                              secondary="Connections between entities (e.g., &quot;belongs to&quot;, &quot;created by&quot;)"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>label</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Properties"
-                              secondary="Attributes and metadata for entities and relationships"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>visibility</Icon>
-                          Visualization Tools
-                        </Typography>
-                        <Typography variant="body2" paragraph>
-                          The interface provides several ways to explore the graph:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>zoom_in</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Interactive Graph View"
-                              secondary="Zoom, pan, and explore relationships visually"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>search</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Search and Filter"
-                              secondary="Find specific entities or relationship patterns"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Analytics Dashboard"
-                              secondary="View graph statistics and insights"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-
-                <Box sx={{ my: 4 }}>
-                  <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+              <Typography paragraph>
+                Think of a knowledge graph as a digital map of information, where:
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                  <Card>
                     <CardContent>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6" gutterBottom>Graph Structure</Typography>
-                          <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0.3)', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`Entity1 (Person)
-  ├── works_at -> Entity2 (Company)
-  └── has_skill -> Entity3 (Skill)
-
-Entity2 (Company)
-  ├── located_in -> Entity4 (Location)
-  └── develops -> Entity5 (Product)
-
-Entity3 (Skill)
-  └── related_to -> Entity6 (Domain)`}
-                            </Typography>
-                          </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6" gutterBottom>Properties</Typography>
-                          <List>
-                            <ListItem>
-                              <ListItemIcon><Icon>person</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Entity Properties"
-                                secondary="Name, Type, Description, Metadata"
-                              />
-                            </ListItem>
-                            <ListItem>
-                              <ListItemIcon><Icon>link</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Relationship Properties"
-                                secondary="Type, Strength, Direction, Timestamp"
-                              />
-                            </ListItem>
-                            <ListItem>
-                              <ListItemIcon><Icon>label</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Custom Properties"
-                                secondary="User-defined attributes and values"
-                              />
-                            </ListItem>
-                          </List>
-                        </Grid>
-                      </Grid>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.SCHEMA}</Icon>
+                        Information Points
+                      </Typography>
+                      <Typography>
+                        Each piece of information is like a location on a map. It could be a fact, a concept, or an idea.
+                      </Typography>
                     </CardContent>
                   </Card>
-                </Box>
-              </Box>
-
-              {/* Implementation Details Section */}
-              <Box id="implementation" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.IMPLEMENTATION}</Icon>
-                  Implementation Details
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-
-                <Typography variant="body1" paragraph>
-                  The knowledge graph implementation provides several key features for managing and querying your data:
-                </Typography>
-
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>storage</Icon>
-                          Data Storage
-                        </Typography>
-                        <Typography variant="body2" paragraph>
-                          Your knowledge graph data is stored securely using:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>database</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Neo4j Database"
-                              secondary="Native graph database for efficient relationship storage"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Redis Cache"
-                              secondary="Fast in-memory caching for frequently accessed data"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>backup</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Backup System"
-                              secondary="Regular backups and point-in-time recovery"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>speed</Icon>
-                          Performance
-                        </Typography>
-                        <Typography variant="body2" paragraph>
-                          Optimized for fast querying and updates:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>bolt</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Indexing"
-                              secondary="Efficient lookup of entities and relationships"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Caching"
-                              secondary="Smart caching of frequently accessed data"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>scale</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Scalability"
-                              secondary="Horizontal scaling for large datasets"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>security</Icon>
-                          Security
-                        </Typography>
-                        <Typography variant="body2" paragraph>
-                          Built-in security features:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>lock</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Access Control"
-                              secondary="Fine-grained permissions for data access"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>encryption</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Encryption"
-                              secondary="Data encryption at rest and in transit"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>audit</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Audit Logging"
-                              secondary="Track all changes and access patterns"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
                 </Grid>
-
-                <Box sx={{ my: 4 }}>
-                  <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                <Grid item xs={12} md={4}>
+                  <Card>
                     <CardContent>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6" gutterBottom>Data Storage</Typography>
-                          <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0.3)', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`Database Schema:
-  - Nodes (Entities)
-    ├── id: UUID
-    ├── type: String
-    ├── properties: JSON
-    └── created_at: Timestamp
-
-  - Relationships
-    ├── id: UUID
-    ├── type: String
-    ├── source: Node
-    ├── target: Node
-    └── properties: JSON`}
-                            </Typography>
-                          </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6" gutterBottom>Performance Optimization</Typography>
-                          <List>
-                            <ListItem>
-                              <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Indexing Strategy"
-                                secondary="B-tree indexes on frequently queried fields"
-                              />
-                            </ListItem>
-                            <ListItem>
-                              <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Caching Layer"
-                                secondary="Redis cache for hot data"
-                              />
-                            </ListItem>
-                            <ListItem>
-                              <ListItemIcon><Icon>scale</Icon></ListItemIcon>
-                              <ListItemText 
-                                primary="Sharding"
-                                secondary="Horizontal partitioning for large datasets"
-                              />
-                            </ListItem>
-                          </List>
-                        </Grid>
-                      </Grid>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.CHECK}</Icon>
+                        Connections
+                      </Typography>
+                      <Typography>
+                        Like roads between cities, connections show how different pieces of information relate to each other.
+                      </Typography>
                     </CardContent>
                   </Card>
-                </Box>
-              </Box>
-            </Paper>
-            
-            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
-              <Typography variant="body2">
-                Last updated: {new Date().toLocaleDateString()}
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
+                        Understanding
+                      </Typography>
+                      <Typography>
+                        The system uses these connections to understand context and find relevant information quickly.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                How It Helps You
               </Typography>
+              
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Finding Related Information
+                </Typography>
+                <Typography paragraph>
+                  When you ask a question, our system:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Looks for relevant information points in the knowledge map" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Follows connections to find related information" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Combines everything to give you a complete answer" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Solving Problems
+                </Typography>
+                <Typography paragraph>
+                  The system can:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Find patterns in information to solve similar problems" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Learn from past solutions to improve future answers" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Ensure solutions follow ethical guidelines" />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Real-World Examples
+              </Typography>
+              
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        Math Problem Solving
+                      </Typography>
+                      <Typography paragraph>
+                        When solving a math problem:
+                      </Typography>
+                      <List>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.SEARCH}</Icon></ListItemIcon>
+                          <ListItemText primary="The system finds similar problems it has solved before" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.SCHEMA}</Icon></ListItemIcon>
+                          <ListItemText primary="It connects the steps and methods used in those solutions" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                          <ListItemText primary="It adapts the best approach to solve your specific problem" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        Understanding Ethics
+                      </Typography>
+                      <Typography paragraph>
+                        When dealing with ethical questions:
+                      </Typography>
+                      <List>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.SECURITY}</Icon></ListItemIcon>
+                          <ListItemText primary="The system checks against ethical principles" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
+                          <ListItemText primary="It considers different perspectives and viewpoints" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
+                          <ListItemText primary="It provides balanced, well-reasoned recommendations" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Getting Started
+              </Typography>
+              <Typography paragraph>
+                You don't need to be a technical expert to use our knowledge graph system. The interface is designed to be intuitive and user-friendly. You can:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SEARCH}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Ask questions in plain language" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Get clear, helpful answers" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="See how the system reached its conclusions" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Learn from the explanations provided" />
+                </ListItem>
+              </List>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="interactive-demos/knowledge-graphs.html"
+                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+              >
+                Try Interactive Demo
+              </Button>
             </Box>
           </Container>
         </Box>
       );
     }
 
-    // Render the application
-    ReactDOM.render(<KnowledgeGraphImplementationGuide />, document.getElementById('root'));
+    ReactDOM.render(<KnowledgeGraphGuide />, document.getElementById('root'));
   </script>
 </body>
 </html> 

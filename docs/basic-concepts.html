@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Basic Concepts - SafeAI Documentation</title>
+  <title>Understanding SafeAI - Documentation</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
@@ -33,12 +33,14 @@
       padding: 24px;
       margin-top: 24px;
     }
-    code {
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
+    .section {
+      margin-bottom: 32px;
+    }
+    .example-box {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
     }
   </style>
 </head>
@@ -95,7 +97,7 @@
                 <Icon>{ICONS.ARROW_BACK}</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Core Technical Concepts
+                Understanding SafeAI
               </Typography>
               <Button color="inherit" href="index.html">
                 <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
@@ -103,827 +105,209 @@
               </Button>
             </Toolbar>
           </AppBar>
-          
+
           <Container>
-            <Typography variant="h3" component="h1" gutterBottom>
-              Core Technical Concepts
+            <Typography variant="h4" gutterBottom>
+              Welcome to SafeAI
             </Typography>
-            
-            <Paper className="content">
-              <Typography variant="body1" paragraph>
-                This guide provides a comprehensive understanding of SafeAI's core technical concepts, 
-                architecture, and implementation details. Each section builds upon fundamental principles 
-                to create a complete picture of how SafeAI works.
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              A powerful system that helps you solve problems using intelligent agents and connected knowledge.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                What Makes SafeAI Special?
+              </Typography>
+              <Typography paragraph>
+                SafeAI is like having a team of expert assistants who work together to help you. Each assistant has special knowledge and skills, and they can:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SMART_TOY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Learn and Adapt"
+                    secondary="They get better at helping you over time, learning from each interaction."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Connect Information"
+                    secondary="They can find related information quickly and use it to solve problems."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary="Work Ethically"
+                    secondary="They follow ethical guidelines and explain their decisions clearly."
+                  />
+                </ListItem>
+              </List>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                How It Works
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.DATA_OBJECT}</Icon>
+                        Knowledge Base
+                      </Typography>
+                      <Typography>
+                        Think of this as a digital brain that stores information in a connected way. It's like a map where each piece of information is a location, and the connections are roads between them.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.SMART_TOY}</Icon>
+                        Intelligent Agents
+                      </Typography>
+                      <Typography>
+                        These are like expert assistants who can navigate the knowledge map, find information, and work together to solve problems.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom>
+                        <Icon sx={{ mr: 1 }}>{ICONS.SPEED}</Icon>
+                        Learning System
+                      </Typography>
+                      <Typography>
+                        The system watches how problems are solved and gets better over time, just like how people learn from experience.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Real-World Examples
               </Typography>
               
-              <Box sx={{ 
-                backgroundColor: "rgba(25, 118, 210, 0.1)", 
-                borderLeft: "4px solid #1976d2",
-                p: 2,
-                mb: 3
-              }}>
-                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
-                  Technical Prerequisites
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Solving Math Problems
                 </Typography>
-                <Typography variant="body2">
-                  Before diving into these concepts, ensure you have a solid understanding of:
-                  - Machine Learning fundamentals
-                  - Graph theory and data structures
-                  - Distributed systems
-                  - Security principles
+                <Typography paragraph>
+                  When you give our system a math problem:
                 </Typography>
-              </Box>
-              
-              {/* System Architecture Section */}
-              <Box id="architecture" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.ARCHITECTURE}</Icon>
-                  System Architecture
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  SafeAI's architecture is built on a distributed, microservices-based design that ensures 
-                  scalability, reliability, and safety. Here's a detailed breakdown of the core components:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Core Services</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Agent Service"
-                              secondary="Manages AI agent lifecycle, execution, and monitoring"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Knowledge Service"
-                              secondary="Handles knowledge graph management and querying"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Safety Service"
-                              secondary="Implements safety checks and content filtering"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Monitoring Service"
-                              secondary="Tracks system health and performance metrics"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Data Flow</Typography>
-                        <Typography variant="body2" paragraph>
-                          The system follows a clear data flow pattern:
-                        </Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>input</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Input Processing"
-                              secondary="Requests are validated and normalized"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Service Coordination"
-                              secondary="Services communicate via message queues"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Safety Checks"
-                              secondary="Content is validated against safety rules"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>output</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Response Generation"
-                              secondary="Results are formatted and returned"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-                
-                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Architecture Diagram</Typography>
-                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`+------------------+     +------------------+     +------------------+
-|                  |     |                  |     |                  |
-|  Client Request  | --> |  API Gateway     | --> |  Agent Service   |
-|                  |     |                  |     |                  |
-+------------------+     +------------------+     +------------------+
-                              |                           |
-                              |                           |
-                              v                           v
-+------------------+     +------------------+     +------------------+
-|                  |     |                  |     |                  |
-|  Knowledge       | <-- |  Message Queue   | <-- |  Safety Service  |
-|  Service         |     |                  |     |                  |
-|                  |     |                  |     |                  |
-+------------------+     +------------------+     +------------------+
-                              |
-                              |
-                              v
-+------------------+
-|                  |
-|  Monitoring      |
-|  Service         |
-|                  |
-+------------------+`}
-                  </Typography>
-                </Paper>
-              </Box>
-              
-              {/* Core Components Section */}
-              <Box id="components" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.COMPONENTS}</Icon>
-                  Core Components
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  SafeAI's interface is organized into several key components that work together to provide a complete AI management experience:
-                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Math agents analyze the problem and look for similar problems they've solved before" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SMART_TOY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="They work together to find the solution, using their combined knowledge" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="They explain their steps in plain language, so you can understand how they solved it" />
+                  </ListItem>
+                </List>
+              </div>
 
-                {/* Agent Service Section */}
-                <Accordion sx={{ mb: 2 }}>
-                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Agent Management</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography variant="body1" paragraph>
-                      The Agent Management interface allows you to:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Create New Agents"
-                          secondary="Use the intuitive wizard to set up new AI agents"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>settings</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Configure Settings"
-                          secondary="Adjust agent behavior and capabilities"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Monitor Performance"
-                          secondary="Track agent activity and metrics"
-                        />
-                      </ListItem>
-                    </List>
-                    <Box sx={{ mb: 2 }}>
-                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
-                        <CardContent>
-                          <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Agent Management</Typography>
-                              <List>
-                                <ListItem>
-                                  <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Create New Agents"
-                                    secondary="Use the intuitive wizard to set up new AI agents"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>settings</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Configure Settings"
-                                    secondary="Adjust agent behavior and capabilities"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Monitor Performance"
-                                    secondary="Track agent activity and metrics"
-                                  />
-                                </ListItem>
-                              </List>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>add_circle</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Create New Agent
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>settings</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Configure Settings
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>analytics</Icon>}
-                                fullWidth
-                              >
-                                View Analytics
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Understanding Ethics
+                </Typography>
+                <Typography paragraph>
+                  When dealing with ethical questions:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.POLICY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Ethics agents examine the situation and check against ethical principles" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="They consider different perspectives and provide balanced recommendations" />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
 
-                {/* Knowledge Service Section */}
-                <Accordion sx={{ mb: 2 }}>
-                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Knowledge Management</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography variant="body1" paragraph>
-                      The Knowledge Management interface provides tools to:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>upload_file</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Upload Documents"
-                          secondary="Add PDFs, text files, and other documents"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Manage Structured Data"
-                          secondary="Import and organize data in various formats"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>search</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Search and Query"
-                          secondary="Find specific information in your knowledge base"
-                        />
-                      </ListItem>
-                    </List>
-                    <Box sx={{ mb: 2 }}>
-                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
-                        <CardContent>
-                          <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Knowledge Management</Typography>
-                              <List>
-                                <ListItem>
-                                  <ListItemIcon><Icon>upload_file</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Upload Documents"
-                                    secondary="Add PDFs, text files, and other documents"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Manage Structured Data"
-                                    secondary="Import and organize data in various formats"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>search</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Search and Query"
-                                    secondary="Find specific information in your knowledge base"
-                                  />
-                                </ListItem>
-                              </List>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>upload_file</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Upload Documents
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>data_object</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Import Data
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>search</Icon>}
-                                fullWidth
-                              >
-                                Search Knowledge Base
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Getting Started
+              </Typography>
+              <Typography paragraph>
+                You don't need to be a technical expert to use SafeAI. The interface is designed to be intuitive and user-friendly. You can:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SEARCH}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Ask questions in plain language" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Get clear, helpful answers" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SMART_TOY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="See how the system reached its conclusions" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.ADD_CIRCLE}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Learn from the explanations provided" />
+                </ListItem>
+              </List>
+            </div>
 
-                {/* Safety Service Section */}
-                <Accordion sx={{ mb: 2 }}>
-                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Safety Controls</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography variant="body1" paragraph>
-                      The Safety Controls interface enables you to:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Set Content Filters"
-                          secondary="Configure rules for content moderation"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Manage Rate Limits"
-                          secondary="Control request frequency and usage"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>warning</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Monitor Alerts"
-                          secondary="Track safety violations and incidents"
-                        />
-                      </ListItem>
-                    </List>
-                    <Box sx={{ mb: 2 }}>
-                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
-                        <CardContent>
-                          <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Safety Controls</Typography>
-                              <List>
-                                <ListItem>
-                                  <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Content Filtering"
-                                    secondary="Configure rules for content moderation"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Rate Limiting"
-                                    secondary="Control request frequency and usage"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>warning</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Monitor Alerts"
-                                    secondary="Track safety violations and incidents"
-                                  />
-                                </ListItem>
-                              </List>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>security</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Configure Filters
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>speed</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Set Rate Limits
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>warning</Icon>}
-                                fullWidth
-                              >
-                                View Alerts
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-
-                {/* Monitoring Service Section */}
-                <Accordion>
-                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">System Monitoring</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography variant="body1" paragraph>
-                      The System Monitoring interface helps you:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="View Analytics"
-                          secondary="Track performance metrics and usage"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Set Up Alerts"
-                          secondary="Configure notifications for important events"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>history</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Review Logs"
-                          secondary="Access detailed activity logs"
-                        />
-                      </ListItem>
-                    </List>
-                    <Box sx={{ mb: 2 }}>
-                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
-                        <CardContent>
-                          <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>System Monitoring</Typography>
-                              <List>
-                                <ListItem>
-                                  <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="View Analytics"
-                                    secondary="Track performance metrics and usage"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Set Up Alerts"
-                                    secondary="Configure notifications for important events"
-                                  />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon><Icon>history</Icon></ListItemIcon>
-                                  <ListItemText 
-                                    primary="Review Logs"
-                                    secondary="Access detailed activity logs"
-                                  />
-                                </ListItem>
-                              </List>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>analytics</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                View Analytics
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>notifications</Icon>}
-                                fullWidth
-                                sx={{ mb: 2 }}
-                              >
-                                Configure Alerts
-                              </Button>
-                              <Button
-                                variant="outlined"
-                                startIcon={<Icon>history</Icon>}
-                                fullWidth
-                              >
-                                View Logs
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-              
-              {/* Implementation Details Section */}
-              <Box id="implementation" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.CODE}</Icon>
-                  Implementation Details
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Understanding the implementation details is crucial for working with SafeAI. 
-                  Here are the key technical aspects:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">API Design</Typography>
-                        <Typography variant="body2" paragraph>
-                          SafeAI uses a RESTful API with GraphQL support:
-                        </Typography>
-                        <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                          <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`# REST API Example
-POST /api/v1/agents
-{
-  "name": "Research Assistant",
-  "capabilities": ["text_analysis"],
-  "safety_config": {
-    "max_tokens": 1000
-  }
-}
-
-# GraphQL Query Example
-query {
-  agent(id: "agent_123") {
-    name
-    capabilities
-    safety_config {
-      max_tokens
-    }
-  }
-}`}
-                          </Typography>
-                        </Paper>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Data Models</Typography>
-                        <Typography variant="body2" paragraph>
-                          Core data structures and their relationships:
-                        </Typography>
-                        <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                          <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`class Agent:
-    def __init__(self, config: AgentConfig):
-        self.id = generate_uuid()
-        self.name = config.name
-        self.capabilities = config.capabilities
-        self.safety_config = config.safety_config
-        self.state = AgentState()
-        self.metrics = AgentMetrics()
-
-class AgentState:
-    def __init__(self):
-        self.current_task = None
-        self.context = {}
-        self.last_active = datetime.now()
-        self.status = AgentStatus.IDLE`}
-                          </Typography>
-                        </Paper>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              {/* Performance Considerations Section */}
-              <Box id="performance" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SPEED}</Icon>
-                  Performance Considerations
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Understanding performance characteristics is essential for building efficient SafeAI applications:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Resource Management</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Memory Usage"
-                              secondary="Optimize agent memory allocation"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="CPU Utilization"
-                              secondary="Balance processing load"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>storage</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Storage Efficiency"
-                              secondary="Optimize knowledge graph storage"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Scalability</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>scale</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Horizontal Scaling"
-                              secondary="Distribute load across services"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Load Balancing"
-                              secondary="Optimize request distribution"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>cached</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Caching Strategy"
-                              secondary="Implement efficient caching"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Monitoring</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Metrics Collection"
-                              secondary="Track performance indicators"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>warning</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Alert Thresholds"
-                              secondary="Set performance alerts"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>trending_up</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Trend Analysis"
-                              secondary="Monitor performance trends"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              {/* Security Considerations Section */}
-              <Box id="security" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SECURITY}</Icon>
-                  Security Considerations
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Security is a fundamental aspect of SafeAI. Here are the key security considerations:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Authentication & Authorization</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>key</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="API Authentication"
-                              secondary="JWT-based authentication"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Role-Based Access"
-                              secondary="Fine-grained permissions"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>vpn_key</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Key Management"
-                              secondary="Secure key storage and rotation"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Data Protection</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>encryption</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Data Encryption"
-                              secondary="At-rest and in-transit encryption"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>backup</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Data Backup"
-                              secondary="Regular backup procedures"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>privacy</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Privacy Controls"
-                              secondary="Data access and retention policies"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Paper>
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+              >
+                Try Interactive Demos
+              </Button>
+            </Box>
           </Container>
         </Box>
       );
     }
 
-    // Render the application
     ReactDOM.render(<BasicConcepts />, document.getElementById('root'));
   </script>
 </body>
