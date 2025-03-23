@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Understanding Knowledge Graphs - SafeAI Documentation</title>
+  <title>Knowledge Graph Implementation Guide - SafeAI Documentation</title>
   <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -17,14 +17,14 @@
     body { 
       margin: 0; 
       padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
     }
     #root { 
       max-width: 1200px; 
       margin: 0 auto; 
-      padding: 20px;
+      padding: 2rem;
     }
     .content {
       background-color: rgba(255, 255, 255, 0.05);
@@ -41,6 +41,14 @@
       border-radius: 8px;
       padding: 16px;
       margin: 16px 0;
+    }
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
     }
   </style>
 </head>
@@ -105,113 +113,198 @@
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                What is a Knowledge Graph?
+                Understanding Knowledge Graphs in SafeAI
               </Typography>
               <Typography paragraph>
-                Think of a knowledge graph as a digital map of information, where:
+                SafeAI's Knowledge Graph implementation is a powerful system that combines traditional knowledge graphs with autonomous agents, blockchain technology, and decentralized governance. This guide explains how it works and how to use it effectively.
               </Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.SCHEMA}</Icon>
-                        Information Points
-                      </Typography>
-                      <Typography>
-                        Each piece of information is like a location on a map. It could be a fact, a concept, or an idea.
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.CHECK}</Icon>
-                        Connections
-                      </Typography>
-                      <Typography>
-                        Like roads between cities, connections show how different pieces of information relate to each other.
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
-                        Understanding
-                      </Typography>
-                      <Typography>
-                        The system uses these connections to understand context and find relevant information quickly.
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
             </div>
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                How It Helps You
+                What is an Agentic Knowledge Graph?
+              </Typography>
+              <Typography paragraph>
+                An Agentic Knowledge Graph (AKG) in SafeAI is a dynamic system that:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Integrates executable agent code with knowledge representation" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Uses blockchain-audited licensing for transparency" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Implements decentralized governance for continuous improvement" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Provides self-evolving decision-support capabilities" />
+                </ListItem>
+              </List>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Core Components
               </Typography>
               
               <div className="example-box">
                 <Typography variant="h6" gutterBottom>
-                  Finding Related Information
+                  1. Knowledge Graph Structure
                 </Typography>
                 <Typography paragraph>
-                  When you ask a question, our system:
+                  Each AKG is defined by:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SEARCH}</Icon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Looks for relevant information points in the knowledge map" />
+                    <ListItemText primary="Domain-specific knowledge and relationships" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SCHEMA}</Icon>
+                      <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Follows connections to find related information" />
+                    <ListItemText primary="Dynamic agent definitions and capabilities" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Combines everything to give you a complete answer" />
+                    <ListItemText primary="Training and evaluation examples" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Security and validation endpoints" />
                   </ListItem>
                 </List>
+                <Typography paragraph>
+                  The GUI provides an intuitive interface to explore and manage these components through the Knowledge Explorer panel.
+                </Typography>
               </div>
 
               <div className="example-box">
                 <Typography variant="h6" gutterBottom>
-                  Solving Problems
+                  2. Agent System
                 </Typography>
                 <Typography paragraph>
-                  The system can:
+                  Agents in the system:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Find patterns in information to solve similar problems" />
+                    <ListItemText primary="Are defined with specific capabilities and code" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Learn from past solutions to improve future answers" />
+                    <ListItemText primary="Include success metrics and usage tracking" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.SECURITY}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Ensure solutions follow ethical guidelines" />
+                    <ListItemText primary="Have blockchain-based transaction fees" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Follow ethical guidelines and approval criteria" />
+                  </ListItem>
+                </List>
+                <Typography paragraph>
+                  The Agent Control Panel in the GUI allows you to monitor and manage agents in real-time, with visual feedback on their status and performance.
+                </Typography>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  3. Blockchain Integration
+                </Typography>
+                <Typography paragraph>
+                  The system uses blockchain for:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Auditing agent interactions and decisions" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Managing microtransactions and licensing" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Recording governance actions" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Ensuring transparency and accountability" />
+                  </ListItem>
+                </List>
+                <Typography paragraph>
+                  The Dashboard provides real-time visualization of blockchain transactions and governance activities.
+                </Typography>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  4. User Interface Components
+                </Typography>
+                <Typography paragraph>
+                  The GUI is designed to make complex operations simple and intuitive:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Interactive Knowledge Explorer for browsing and searching" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Real-time Dashboard with system status and metrics" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Agent Control Panel for monitoring and management" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Results Viewer for clear solution presentation" />
                   </ListItem>
                 </List>
               </div>
@@ -219,63 +312,80 @@
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Real-World Examples
+                Implementation Details
               </Typography>
               
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        Math Problem Solving
-                      </Typography>
-                      <Typography paragraph>
-                        When solving a math problem:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.SEARCH}</Icon></ListItemIcon>
-                          <ListItemText primary="The system finds similar problems it has solved before" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.SCHEMA}</Icon></ListItemIcon>
-                          <ListItemText primary="It connects the steps and methods used in those solutions" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText primary="It adapts the best approach to solve your specific problem" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        Understanding Ethics
-                      </Typography>
-                      <Typography paragraph>
-                        When dealing with ethical questions:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.SECURITY}</Icon></ListItemIcon>
-                          <ListItemText primary="The system checks against ethical principles" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText primary="It considers different perspectives and viewpoints" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText primary="It provides balanced, well-reasoned recommendations" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Knowledge Graph Definition
+                </Typography>
+                <Typography paragraph>
+                  Each AKG is defined by a JSON file with the following structure:
+                </Typography>
+                <div className="code-block">
+                  {`{
+  "domain": "DomainName",
+  "description": "Domain-specific description",
+  "endpoints": {
+    "security": "https://example.com/security",
+    "validation": "https://example.com/validation",
+    "monitoring": "https://example.com/monitoring"
+  },
+  "agents": [
+    {
+      "name": "AgentName",
+      "category": "Category",
+      "description": "Agent description",
+      "agent_code": "def generateCandidate(input) { ... }",
+      "creatorWallet": "0x...",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{...}"
+    }
+  ]
+}`}
+                </div>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Agent Structure
+                </Typography>
+                <Typography paragraph>
+                  Each agent includes:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Name and category for identification" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Executable code for processing inputs" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Blockchain wallet for transactions" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Success metrics and usage tracking" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Ethical guidelines and approval criteria" />
+                  </ListItem>
+                </List>
+              </div>
             </div>
 
             <div className="section">
@@ -283,32 +393,79 @@
                 Getting Started
               </Typography>
               <Typography paragraph>
-                You don't need to be a technical expert to use our knowledge graph system. The interface is designed to be intuitive and user-friendly. You can:
+                The GUI makes it easy to work with our knowledge graph system. Here's how to get started:
               </Typography>
               <List>
                 <ListItem>
                   <ListItemIcon>
                     <Icon>{ICONS.SEARCH}</Icon>
                   </ListItemIcon>
-                  <ListItemText primary="Ask questions in plain language" />
+                  <ListItemText primary="Open the Dashboard to see your system overview" />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <Icon>{ICONS.INFO}</Icon>
                   </ListItemIcon>
-                  <ListItemText primary="Get clear, helpful answers" />
+                  <ListItemText primary="Use the Knowledge Explorer to find information" />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <Icon>{ICONS.SCHEMA}</Icon>
                   </ListItemIcon>
-                  <ListItemText primary="See how the system reached its conclusions" />
+                  <ListItemText primary="Monitor agents through the Control Panel" />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <Icon>{ICONS.CHECK}</Icon>
                   </ListItemIcon>
-                  <ListItemText primary="Learn from the explanations provided" />
+                  <ListItemText primary="View results in the Results Viewer" />
+                </ListItem>
+              </List>
+              <Typography paragraph>
+                The interface guides you through each step, with helpful tooltips and contextual information.
+              </Typography>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Best Practices
+              </Typography>
+              <Typography paragraph>
+                Keep agent code focused and efficient, maintain clear documentation, regularly update training examples, monitor blockchain transactions, and follow ethical guidelines strictly.
+              </Typography>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Need Help?
+              </Typography>
+              <Typography paragraph>
+                For additional support:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SEARCH}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Check the interactive demos" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Review example implementations" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Consult the community forums" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Contact technical support" />
                 </ListItem>
               </List>
             </div>

@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <!-- Babel for JSX transpiling -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   <!-- Material-UI CDN -->
   <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -17,14 +17,14 @@
     body { 
       margin: 0; 
       padding: 0; 
-      font-family: Roboto, sans-serif; 
-      background-color: #121212;
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
     }
     #root { 
       max-width: 1200px; 
       margin: 0 auto; 
-      padding: 20px;
+      padding: 2rem;
     }
     .content {
       background-color: rgba(255, 255, 255, 0.05);
@@ -41,6 +41,14 @@
       border-radius: 8px;
       padding: 16px;
       margin: 16px 0;
+    }
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
     }
   </style>
 </head>
@@ -67,12 +75,7 @@
       SPEED: "speed",
       SECURITY: "security",
       OVERVIEW: "overview",
-      IMPLEMENTATION: "implementation",
-      PLAY_ARROW: "play_arrow",
-      SEARCH: "search",
-      HELP: "help",
-      QUESTION_ANSWER: "question_answer",
-      TROUBLESHOOT: "troubleshoot"
+      IMPLEMENTATION: "implementation"
     };
 
     function UserGuide() {
@@ -102,134 +105,153 @@
           
           <Container>
             <Typography variant="h4" gutterBottom>
-              Welcome to the SafeAI User Guide
+              Welcome to SafeAI
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" paragraph>
-              Learn how to use SafeAI effectively with our step-by-step guide.
+              Learn how to use our intuitive interface to interact with the Agentic Knowledge Graph system.
             </Typography>
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Common Tasks
-              </Typography>
-              
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.SEARCH}</Icon>
-                        Asking Questions
-                      </Typography>
-                      <Typography paragraph>
-                        To get help from SafeAI:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText primary="Type your question in plain language" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText primary="Be specific about what you need help with" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.SCHEMA}</Icon></ListItemIcon>
-                          <ListItemText primary="Provide any relevant context or details" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
-                        Understanding Answers
-                      </Typography>
-                      <Typography paragraph>
-                        When you get an answer:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText primary="Read the explanation carefully" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText primary="Look for examples or steps provided" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.SCHEMA}</Icon></ListItemIcon>
-                          <ListItemText primary="Ask follow-up questions if needed" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </div>
-
-            <div className="section">
-              <Typography variant="h5" gutterBottom>
-                Tips for Success
+                Main Interface Components
               </Typography>
               
               <div className="example-box">
                 <Typography variant="h6" gutterBottom>
-                  Getting Better Answers
+                  1. Dashboard
                 </Typography>
                 <Typography paragraph>
-                  To get the most helpful responses:
+                  Your central command center for:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
+                      <Icon>{ICONS.OVERVIEW}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="System overview and status" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Performance metrics and analytics" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Blockchain transaction monitoring" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Be clear and specific in your questions" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.SCHEMA}</Icon>
-                    </ListItemIcon>
-                    <ListItemText primary="Provide relevant context or background" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Icon>{ICONS.CHECK}</Icon>
-                    </ListItemIcon>
-                    <ListItemText primary="Break down complex problems into smaller parts" />
+                    <ListItemText primary="Quick access to common tasks" />
                   </ListItem>
                 </List>
               </div>
 
               <div className="example-box">
                 <Typography variant="h6" gutterBottom>
-                  Making the Most of SafeAI
+                  2. Knowledge Explorer
                 </Typography>
                 <Typography paragraph>
-                  To get the best experience:
+                  Navigate and interact with your knowledge graph:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.SEARCH}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Try different ways of asking your questions" />
+                    <ListItemText primary="Search and browse information" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Visualize relationships" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.INFO}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Use the interactive demos to learn by doing" />
+                    <ListItemText primary="Add and edit knowledge" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Save helpful answers for future reference" />
+                    <ListItemText primary="Validate information" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  3. Agent Control Panel
+                </Typography>
+                <Typography paragraph>
+                  Manage your AI agents:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Start and stop agents" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Monitor performance" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Configure settings" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CODE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View agent logs" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  4. Results Viewer
+                </Typography>
+                <Typography paragraph>
+                  Understand and work with solutions:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View detailed solutions" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="See reasoning steps" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Export results" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Review ethical considerations" />
                   </ListItem>
                 </List>
               </div>
@@ -237,83 +259,145 @@
 
             <div className="section">
               <Typography variant="h5" gutterBottom>
-                Troubleshooting
+                Common Tasks
               </Typography>
               
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.TROUBLESHOOT}</Icon>
-                        Common Issues
-                      </Typography>
-                      <Typography paragraph>
-                        If you're having trouble:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Unclear Answers"
-                            secondary="Try rephrasing your question or providing more context"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Missing Information"
-                            secondary="Ask follow-up questions to get more details"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Technical Problems"
-                            secondary="Check your internet connection and try refreshing the page"
-                          />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        <Icon sx={{ mr: 1 }}>{ICONS.HELP}</Icon>
-                        Getting Help
-                      </Typography>
-                      <Typography paragraph>
-                        When you need assistance:
-                      </Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Check the Basic Concepts Guide"
-                            secondary="Learn about how SafeAI works"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Try Interactive Demos"
-                            secondary="Learn by doing with our example applications"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.INFO}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Contact Support"
-                            secondary="Get help from our team when needed"
-                          />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Finding Information
+                </Typography>
+                <Typography paragraph>
+                  Use the Knowledge Explorer to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Enter your search query" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Browse related information" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View detailed explanations" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Save useful findings" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Solving Problems
+                </Typography>
+                <Typography paragraph>
+                  Work with agents to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Describe your problem" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Select appropriate agents" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Monitor the solution process" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Review and validate results" />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Tips for Success
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Start with the Dashboard to understand your system's status" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SEARCH}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Use the Knowledge Explorer's search and browse features" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Monitor agent performance in the Control Panel" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Review blockchain transactions for transparency" />
+                </ListItem>
+              </List>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Need Help?
+              </Typography>
+              <Typography paragraph>
+                For additional support:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Check the interactive demos" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Review the knowledge graph implementation guide" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Consult the community forums" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Contact technical support" />
+                </ListItem>
+              </List>
             </div>
 
             <Box sx={{ mt: 4, textAlign: 'center' }}>
