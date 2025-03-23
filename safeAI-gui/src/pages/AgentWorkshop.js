@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Typography, 
   Grid, 
@@ -83,6 +83,9 @@ import {
   Error as ErrorIcon,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -137,418 +140,157 @@ const steps = [
   },
 ];
 
+// Add agent interface
+const defaultAgent = {
+  id: '',
+  name: '',
+  description: '',
+  type: 'llm',
+  capabilities: [],
+  securityLevel: 'high',
+  ethicalConstraints: [],
+  promptTemplate: '',
+  scriptContent: '',
+  blockchainEnabled: true,
+  version: '1.0.0',
+  createdAt: '',
+  updatedAt: '',
+};
+
 const AgentWorkshop = () => {
   const theme = useTheme();
-  const [tabValue, setTabValue] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  
+  // State management
+  const [agent, setAgent] = useState(defaultAgent);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
   
-  // Form states
-  const [agentDescription, setAgentDescription] = useState('');
-  const [agentType, setAgentType] = useState('llm');
-  const [activeStep, setActiveStep] = useState(0);
-  
-  // Blockchain validation states
-  const [blockchainEnabled, setBlockchainEnabled] = useState(true);
-  const [blockchainValidationStatus, setBlockchainValidationStatus] = useState(null);
-  const [isValidatingBlockchain, setIsValidatingBlockchain] = useState(false);
-  const [validationSteps, setValidationSteps] = useState([
-    { label: 'Verify Agent Identity', completed: false, error: false },
-    { label: 'Check Blockchain Connection', completed: false, error: false },
-    { label: 'Validate Smart Contract', completed: false, error: false },
-    { label: 'Register Agent', completed: false, error: false },
-  ]);
-  const [activeValidationStep, setActiveValidationStep] = useState(0);
+  // Load agent if editing
+  useEffect(() => {
+    if (id) {
+      loadAgent(id);
+    }
+  }, [id]);
 
-  // Script/Prompt editing states
-  const [editablePrompt, setEditablePrompt] = useState('');
-  const [isEditingPrompt, setIsEditingPrompt] = useState(false);
-  const [promptValidationError, setPromptValidationError] = useState(null);
-  const [scriptContent, setScriptContent] = useState(
-  `import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.logging.Log
-import com.safeai.agent.AgentContext
-
-class SecurityAnalyzerAgent {
-    private final GraphDatabaseService db
-    private final Log log
-    
-    SecurityAnalyzerAgent(AgentContext context) {
-        this.db = context.graphDb
-        this.log = context.log
+  // Load agent function
+  const loadAgent = async (agentId) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`/api/agents/${agentId}`);
+      setAgent(response.data);
+      enqueueSnackbar('Agent loaded successfully', { variant: 'success' });
+    } catch (error) {
+      enqueueSnackbar('Failed to load agent', { variant: 'error' });
+    } finally {
+      setIsLoading(false);
     }
-    
-    def analyze(Map params) {
-        log.info("Starting security analysis")
-        
-        // Agent implementation logic here
-        
-        return [
-            status: "success",
-            findings: []
-        ]
-    }
-}`);
-  const [scriptValidationResults, setScriptValidationResults] = useState(null);
-  const [isValidatingScript, setIsValidatingScript] = useState(false);
-  
-  // Template selection states
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [templateSearchQuery, setTemplateSearchQuery] = useState('');
-  
-  // Example generated agent details
-  const generatedAgent = {
-    name: 'SecurityAnalyzer',
-    type: 'llm',
-    description: 'This agent analyzes code for security vulnerabilities, checking for common issues such as SQL injection, XSS, and buffer overflows. It provides detailed explanations of found vulnerabilities and suggests specific fixes.',
-    capabilities: ['threat_detection', 'data_validation', 'compliance_check'],
-    effectiveness_threshold: 0.85,
-    ethics_guidelines: 'Follow established security best practices. Do not provide destructive exploit code. Always prioritize data protection.',
-    security: {
-      input_validation: true,
-      output_validation: true,
-      resource_monitoring: true
-    },
-    prompt_template: 'Analyze the following code for security vulnerabilities:\n\n{{code}}\n\nProvide a detailed report with:\n1. Identified vulnerabilities\n2. Severity rating\n3. Recommended fixes\n4. Security best practices'
-  };
-  
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
-  
-  const handleAgentTypeChange = (event) => {
-    setAgentType(event.target.value);
-  };
-  
-  // Function to validate LLM prompt
-  const validatePrompt = (prompt) => {
-    // Check for placeholders
-    if (!prompt.includes('{{') || !prompt.includes('}}')) {
-      return "Warning: No input placeholders found. Your prompt should use {{variable}} syntax.";
-    }
-    
-    // Check for instruction clarity
-    if (prompt.length < 50) {
-      return "Warning: Prompt seems too short. Consider providing more detailed instructions.";
-    }
-    
-    return null;
   };
 
-  // Function to validate Groovy script
-  const validateGroovyScript = () => {
-    setIsValidatingScript(true);
-    
-    // Simulate script validation
-    setTimeout(() => {
-      const hasError = Math.random() < 0.3; // 30% chance of error for demo
-      
-      if (hasError) {
-        setScriptValidationResults({
-          valid: false,
-          errors: [
-            { line: 15, message: "Missing semicolon at end of statement" },
-            { line: 22, message: "Method 'analyze' should return a Map" }
-          ]
-        });
+  // Save agent function
+  const saveAgent = async () => {
+    setIsSaving(true);
+    try {
+      if (id) {
+        await axios.put(`/api/agents/${id}`, agent);
+        enqueueSnackbar('Agent updated successfully', { variant: 'success' });
       } else {
-        setScriptValidationResults({
-          valid: true,
-          warnings: [
-            { line: 12, message: "Consider adding null check for parameters" }
-          ]
-        });
+        const response = await axios.post('/api/agents', agent);
+        enqueueSnackbar('Agent created successfully', { variant: 'success' });
+        navigate(`/agent-workshop/${response.data.id}`);
       }
-      
-      setIsValidatingScript(false);
-    }, 2000);
+    } catch (error) {
+      enqueueSnackbar('Failed to save agent', { variant: 'error' });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  // Handle prompt editing
-  const handlePromptChange = (e) => {
-    const newPrompt = e.target.value;
-    setEditablePrompt(newPrompt);
-    setPromptValidationError(validatePrompt(newPrompt));
-  };
-
-  // Handle script content change
-  const handleScriptChange = (e) => {
-    setScriptContent(e.target.value);
-    setScriptValidationResults(null); // Reset validation when script changes
-  };
-
-  // Save edited prompt
-  const savePromptChanges = () => {
-    // In a real app, this would update the generatedAgent object
-    setIsEditingPrompt(false);
-  };
-  
-  // Simulate blockchain validation
-  const simulateBlockchainValidation = () => {
-    return new Promise((resolve) => {
-      setIsValidatingBlockchain(true);
-      setBlockchainValidationStatus('validating');
-      setActiveValidationStep(0);
-      
-      // Reset all steps
-      setValidationSteps(steps => steps.map(step => ({
-        ...step,
-        completed: false,
-        error: false
-      })));
-      
-      // Simulate the validation process with steps
-      setTimeout(() => {
-        // Step 1: Verify Agent Identity
-        setValidationSteps(steps => {
-          const newSteps = [...steps];
-          newSteps[0].completed = true;
-          return newSteps;
-        });
-        setActiveValidationStep(1);
-        
-        setTimeout(() => {
-          // Step 2: Check Blockchain Connection
-          setValidationSteps(steps => {
-            const newSteps = [...steps];
-            newSteps[1].completed = true;
-            return newSteps;
-          });
-          setActiveValidationStep(2);
-          
-          setTimeout(() => {
-            // Step 3: Validate Smart Contract
-            setValidationSteps(steps => {
-              const newSteps = [...steps];
-              newSteps[2].completed = true;
-              return newSteps;
-            });
-            setActiveValidationStep(3);
-            
-            setTimeout(() => {
-              // Step 4: Register Agent
-              setValidationSteps(steps => {
-                const newSteps = [...steps];
-                newSteps[3].completed = true;
-                return newSteps;
-              });
-              
-              // Final result
-              setBlockchainValidationStatus('validated');
-              setIsValidatingBlockchain(false);
-              resolve();
-            }, 1000);
-          }, 1000);
-        }, 1000);
-      }, 1000);
-    });
-  };
-  
-  // Enhanced create agent function with blockchain validation
-  const handleCreateAgentWithBlockchain = async () => {
-    setLoading(true);
-    setError(null);
+  // Delete agent function
+  const deleteAgent = async () => {
+    if (!window.confirm('Are you sure you want to delete this agent?')) return;
     
     try {
-      // First validate on blockchain if enabled
-      if (blockchainEnabled) {
-        await simulateBlockchainValidation();
-      }
-      
-      // Simulate API call to create agent
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setLoading(false);
-      setSuccess(true);
-      setActiveStep(2);
-    } catch (err) {
-      setLoading(false);
-      setError('Failed to create agent: ' + err.message);
+      await axios.delete(`/api/agents/${id}`);
+      enqueueSnackbar('Agent deleted successfully', { variant: 'success' });
+      navigate('/agent-workshop');
+    } catch (error) {
+      enqueueSnackbar('Failed to delete agent', { variant: 'error' });
     }
   };
-  
-  const handleCreateAgent = async () => {
-    // Use the enhanced blockchain version
-    await handleCreateAgentWithBlockchain();
+
+  // Handle form changes
+  const handleChange = (field) => (event) => {
+    setAgent(prev => ({
+      ...prev,
+      [field]: event.target.value,
+      updatedAt: new Date().toISOString()
+    }));
   };
-  
+
+  // Handle capability selection
+  const handleCapabilityToggle = (capabilityId) => {
+    setAgent(prev => {
+      const capabilities = prev.capabilities.includes(capabilityId)
+        ? prev.capabilities.filter(id => id !== capabilityId)
+        : [...prev.capabilities, capabilityId];
+      return {
+        ...prev,
+        capabilities,
+        updatedAt: new Date().toISOString()
+      };
+    });
+  };
+
+  // Handle ethical constraint selection
+  const handleConstraintToggle = (constraint) => {
+    setAgent(prev => {
+      const ethicalConstraints = prev.ethicalConstraints.includes(constraint)
+        ? prev.ethicalConstraints.filter(c => c !== constraint)
+        : [...prev.ethicalConstraints, constraint];
+      return {
+        ...prev,
+        ethicalConstraints,
+        updatedAt: new Date().toISOString()
+      };
+    });
+  };
+
+  // Handle blockchain toggle
+  const handleBlockchainToggle = (event) => {
+    setAgent(prev => ({
+      ...prev,
+      blockchainEnabled: event.target.checked,
+      updatedAt: new Date().toISOString()
+    }));
+  };
+
+  // Handle next step
   const handleNext = () => {
-    if (activeStep === 0) {
-      // Move to preview step
-      setActiveStep(1);
-      setShowPreview(true);
-      
-      // If LLM agent, set editable prompt
-      if (agentType === 'llm') {
-        setEditablePrompt(generatedAgent.prompt_template);
-      }
-    } else if (activeStep === 1) {
-      // Create the agent with blockchain validation
-      handleCreateAgentWithBlockchain();
+    if (activeStep === steps.length - 1) {
+      saveAgent();
+    } else {
+      setActiveStep(prev => prev + 1);
     }
   };
-  
+
+  // Handle back step
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
-    if (activeStep === 1) {
-      setShowPreview(false);
-    }
+    setActiveStep(prev => prev - 1);
   };
-  
+
+  // Handle reset
   const handleReset = () => {
-    setAgentDescription('');
-    setAgentType('llm');
+    setAgent(defaultAgent);
     setActiveStep(0);
-    setSuccess(false);
     setShowPreview(false);
-    setBlockchainValidationStatus(null);
   };
-  
-  // Blockchain validation component
-  const BlockchainValidationSection = () => (
-    <Card variant="outlined" sx={{ mt: 2 }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <NetworkIcon color="primary" sx={{ mr: 1 }} />
-          <Typography variant="h6">
-            Blockchain Validation
-          </Typography>
-        </Box>
-        
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={blockchainEnabled}
-                onChange={(e) => setBlockchainEnabled(e.target.checked)}
-                color="primary"
-              />
-            }
-            label="Register agent on blockchain (recommended for production)"
-          />
-        </FormGroup>
-        
-        {blockchainEnabled && (
-          <>
-            <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
-              Your agent will be registered on the blockchain, ensuring transparency and auditability.
-            </Alert>
-            
-            {blockchainValidationStatus === 'validating' && (
-              <Box sx={{ mt: 2 }}>
-                <Stepper activeStep={activeValidationStep} orientation="vertical">
-                  {validationSteps.map((step, index) => (
-                    <Step key={step.label} completed={step.completed}>
-                      <StepLabel 
-                        error={step.error}
-                        StepIconProps={{
-                          icon: step.completed ? <CheckIcon color="success" /> : index + 1,
-                        }}
-                      >
-                        {step.label}
-                      </StepLabel>
-                      {activeValidationStep === index && (
-                        <StepContent>
-                          <LinearProgress sx={{ mt: 1, mb: 1 }} />
-                        </StepContent>
-                      )}
-                    </Step>
-                  ))}
-                </Stepper>
-              </Box>
-            )}
-            
-            {blockchainValidationStatus === 'validated' && (
-              <Box sx={{ mt: 2, p: 2, bgcolor: alpha('#43a047', 0.05), borderRadius: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CheckIcon color="success" sx={{ mr: 1 }} />
-                  <Typography variant="subtitle1" color="success.main">
-                    Blockchain Validation Complete
-                  </Typography>
-                </Box>
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  Your agent is ready to be registered on the blockchain during creation.
-                </Typography>
-                <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
-                  <Chip 
-                    icon={<StarIcon />} 
-                    label="Verified" 
-                    color="success" 
-                    size="small"
-                    variant="outlined"
-                    sx={{ mr: 1 }} 
-                  />
-                  <Typography variant="caption" color="text.secondary">
-                    Transaction hash: 0x7e8f9a...1b2c3d
-                  </Typography>
-                </Box>
-              </Box>
-            )}
-          </>
-        )}
-      </CardContent>
-    </Card>
-  );
-  
-  // LLM Prompt editing component
-  const LLMPromptEditor = () => (
-    <Card variant="outlined">
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <CodeIcon color="primary" sx={{ mr: 1 }} />
-            <Typography variant="h6">
-              LLM Prompt Template
-            </Typography>
-          </Box>
-          <Button
-            startIcon={isEditingPrompt ? <SaveIcon /> : <EditIcon />}
-            size="small"
-            onClick={() => isEditingPrompt ? savePromptChanges() : setIsEditingPrompt(true)}
-          >
-            {isEditingPrompt ? 'Save Changes' : 'Edit Prompt'}
-          </Button>
-        </Box>
-        
-        <TextField
-          multiline
-          rows={10}
-          value={isEditingPrompt ? editablePrompt : generatedAgent.prompt_template}
-          onChange={handlePromptChange}
-          fullWidth
-          variant="outlined"
-          InputProps={{
-            readOnly: !isEditingPrompt,
-            sx: { fontFamily: 'monospace' }
-          }}
-        />
-        
-        {isEditingPrompt && promptValidationError && (
-          <Alert severity="warning" sx={{ mt: 2 }}>
-            {promptValidationError}
-          </Alert>
-        )}
-        
-        {isEditingPrompt && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="subtitle2" gutterBottom>
-              Available Variables
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              <Chip label="{{code}}" size="small" onClick={() => setEditablePrompt(p => p + '{{code}}')} />
-              <Chip label="{{context}}" size="small" onClick={() => setEditablePrompt(p => p + '{{context}}')} />
-              <Chip label="{{request}}" size="small" onClick={() => setEditablePrompt(p => p + '{{request}}')} />
-            </Box>
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-              Click on variables to insert them at the cursor position
-            </Typography>
-          </Box>
-        )}
-      </CardContent>
-    </Card>
-  );
-  
+
+  // Render step content
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
@@ -557,15 +299,15 @@ class SecurityAnalyzerAgent {
             <TextField
               fullWidth
               label="Agent Name"
-              value={agentDescription}
-              onChange={(e) => setAgentDescription(e.target.value)}
+              value={agent.name}
+              onChange={handleChange('name')}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label="Description"
-              value={agentDescription}
-              onChange={(e) => setAgentDescription(e.target.value)}
+              value={agent.description}
+              onChange={handleChange('description')}
               multiline
               rows={3}
               sx={{ mb: 2 }}
@@ -573,8 +315,8 @@ class SecurityAnalyzerAgent {
             <FormControl fullWidth>
               <InputLabel>Agent Type</InputLabel>
               <Select
-                value={agentType}
-                onChange={(e) => setAgentType(e.target.value)}
+                value={agent.type}
+                onChange={handleChange('type')}
                 label="Agent Type"
               >
                 {agentTypes.map((type) => (
@@ -598,31 +340,26 @@ class SecurityAnalyzerAgent {
                   <Card
                     sx={{
                       cursor: 'pointer',
-                      background: agentType === 'script' && agentDescription.includes(capability.name)
+                      background: agent.capabilities.includes(capability.id)
                         ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`
                         : 'transparent',
-                      border: `1px solid ${agentType === 'script' && agentDescription.includes(capability.name)
+                      border: `1px solid ${agent.capabilities.includes(capability.id)
                         ? alpha(theme.palette.primary.main, 0.2)
                         : alpha(theme.palette.common.white, 0.1)}`,
                       '&:hover': {
                         borderColor: alpha(theme.palette.primary.main, 0.3),
                       },
                     }}
-                    onClick={() => {
-                      const newDescription = agentDescription.includes(capability.name)
-                        ? agentDescription.replace(capability.name, '').trim()
-                        : `${agentDescription} ${capability.name}`.trim();
-                      setAgentDescription(newDescription);
-                    }}
+                    onClick={() => handleCapabilityToggle(capability.id)}
                   >
                     <CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
                           sx={{
-                            bgcolor: agentType === 'script' && agentDescription.includes(capability.name)
+                            bgcolor: agent.capabilities.includes(capability.id)
                               ? alpha(theme.palette.primary.main, 0.1)
                               : alpha(theme.palette.common.white, 0.1),
-                            color: agentType === 'script' && agentDescription.includes(capability.name)
+                            color: agent.capabilities.includes(capability.id)
                               ? theme.palette.primary.main
                               : theme.palette.text.secondary,
                           }}
@@ -652,12 +389,8 @@ class SecurityAnalyzerAgent {
             <FormControl fullWidth sx={{ mb: 3 }}>
               <InputLabel>Security Level</InputLabel>
               <Select
-                value={agentType === 'script' ? 'medium' : 'high'}
-                onChange={(e) => {
-                  if (agentType === 'script') {
-                    setAgentType('script');
-                  }
-                }}
+                value={agent.securityLevel}
+                onChange={handleChange('securityLevel')}
                 label="Security Level"
               >
                 <MenuItem value="low">Low</MenuItem>
@@ -675,43 +408,33 @@ class SecurityAnalyzerAgent {
                   <Card
                     sx={{
                       cursor: 'pointer',
-                      background: agentType === 'script' && agentDescription.includes(constraint)
+                      background: agent.ethicalConstraints.includes(constraint)
                         ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`
                         : 'transparent',
-                      border: `1px solid ${agentType === 'script' && agentDescription.includes(constraint)
+                      border: `1px solid ${agent.ethicalConstraints.includes(constraint)
                         ? alpha(theme.palette.primary.main, 0.2)
                         : alpha(theme.palette.common.white, 0.1)}`,
                       '&:hover': {
                         borderColor: alpha(theme.palette.primary.main, 0.3),
                       },
                     }}
-                    onClick={() => {
-                      const newDescription = agentDescription.includes(constraint)
-                        ? agentDescription.replace(constraint, '').trim()
-                        : `${agentDescription} ${constraint}`.trim();
-                      setAgentDescription(newDescription);
-                    }}
+                    onClick={() => handleConstraintToggle(constraint)}
                   >
                     <CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
                           sx={{
-                            bgcolor: agentType === 'script' && agentDescription.includes(constraint)
+                            bgcolor: agent.ethicalConstraints.includes(constraint)
                               ? alpha(theme.palette.primary.main, 0.1)
                               : alpha(theme.palette.common.white, 0.1),
-                            color: agentType === 'script' && agentDescription.includes(constraint)
+                            color: agent.ethicalConstraints.includes(constraint)
                               ? theme.palette.primary.main
                               : theme.palette.text.secondary,
                           }}
                         >
-                          <PsychologyIcon />
+                          <SecurityIcon />
                         </Avatar>
-                        <Box>
-                          <Typography variant="subtitle1">{constraint}</Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Apply {constraint.toLowerCase()} constraints
-                          </Typography>
-                        </Box>
+                        <Typography variant="subtitle1">{constraint}</Typography>
                       </Box>
                     </CardContent>
                   </Card>
@@ -723,97 +446,37 @@ class SecurityAnalyzerAgent {
       case 3:
         return (
           <Box sx={{ mt: 2 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              Test Results
-            </Typography>
-            <Grid container spacing={2}>
-              {[
-                { name: 'Security Scan', status: 'success' },
-                { name: 'Ethics Validation', status: 'success' },
-                { name: 'Performance Test', status: 'warning' },
-                { name: 'Integration Test', status: 'error' },
-              ].map((test) => (
-                <Grid item xs={12} sm={6} key={test.name}>
-                  <Card
-                    sx={{
-                      background: `linear-gradient(135deg, ${alpha(
-                        test.status === 'success'
-                          ? theme.palette.success.main
-                          : test.status === 'warning'
-                          ? theme.palette.warning.main
-                          : theme.palette.error.main,
-                        0.1
-                      )} 0%, ${alpha(
-                        test.status === 'success'
-                          ? theme.palette.success.main
-                          : test.status === 'warning'
-                          ? theme.palette.warning.main
-                          : theme.palette.error.main,
-                        0.05
-                      )} 100%)`,
-                      border: `1px solid ${alpha(
-                        test.status === 'success'
-                          ? theme.palette.success.main
-                          : test.status === 'warning'
-                          ? theme.palette.warning.main
-                          : theme.palette.error.main,
-                        0.2
-                      )}`,
-                    }}
-                  >
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Avatar
-                          sx={{
-                            bgcolor: alpha(
-                              test.status === 'success'
-                                ? theme.palette.success.main
-                                : test.status === 'warning'
-                                ? theme.palette.warning.main
-                                : theme.palette.error.main,
-                              0.1
-                            ),
-                            color:
-                              test.status === 'success'
-                                ? theme.palette.success.main
-                                : test.status === 'warning'
-                                ? theme.palette.warning.main
-                                : theme.palette.error.main,
-                          }}
-                        >
-                          {test.status === 'success' ? (
-                            <CheckIcon />
-                          ) : test.status === 'warning' ? (
-                            <WarningIcon />
-                          ) : (
-                            <ErrorIcon />
-                          )}
-                        </Avatar>
-                        <Box>
-                          <Typography variant="subtitle1">{test.name}</Typography>
-                          <Typography
-                            variant="body2"
-                            color={
-                              test.status === 'success'
-                                ? 'success.main'
-                                : test.status === 'warning'
-                                ? 'warning.main'
-                                : 'error.main'
-                            }
-                          >
-                            {test.status === 'success'
-                              ? 'Passed'
-                              : test.status === 'warning'
-                              ? 'Warning'
-                              : 'Failed'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
+            {agent.type === 'llm' ? (
+              <TextField
+                fullWidth
+                label="Prompt Template"
+                value={agent.promptTemplate}
+                onChange={handleChange('promptTemplate')}
+                multiline
+                rows={6}
+                sx={{ mb: 2 }}
+              />
+            ) : (
+              <TextField
+                fullWidth
+                label="Script Content"
+                value={agent.scriptContent}
+                onChange={handleChange('scriptContent')}
+                multiline
+                rows={6}
+                sx={{ mb: 2 }}
+              />
+            )}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={agent.blockchainEnabled}
+                  onChange={handleBlockchainToggle}
+                  color="primary"
+                />
+              }
+              label="Enable Blockchain Verification"
+            />
           </Box>
         );
       default:
@@ -827,76 +490,81 @@ class SecurityAnalyzerAgent {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Box>
           <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
-            Agent Workshop
+            {id ? 'Edit Agent' : 'Create New Agent'}
           </Typography>
           <Typography color="text.secondary">
-            Create and configure your AI agents
+            {id ? 'Modify your existing agent' : 'Configure a new AI agent'}
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-            '&:hover': {
-              background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-            },
-          }}
-        >
-          Save Agent
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          {id && (
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={deleteAgent}
+            >
+              Delete
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={saveAgent}
+            disabled={isSaving}
+            sx={{
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+              '&:hover': {
+                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+              },
+            }}
+          >
+            {isSaving ? 'Saving...' : 'Save Agent'}
+          </Button>
+        </Box>
       </Box>
 
       {/* Stepper */}
-      <Paper
-        sx={{
-          p: 3,
-          background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(
-            theme.palette.background.paper,
-            0.95
-          )} 100%)`,
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-        }}
-      >
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={step.label}>
-              <StepLabel
-                StepIconProps={{
-                  sx: {
-                    color: activeStep >= index ? theme.palette.primary.main : theme.palette.text.secondary,
-                  },
-                }}
+      <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+        {steps.map((step) => (
+          <Step key={step.label}>
+            <StepLabel>
+              <Typography variant="subtitle2">{step.label}</Typography>
+            </StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+
+      {/* Content */}
+      <Card sx={{ p: 3 }}>
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {renderStepContent(activeStep)}
+            
+            {/* Navigation */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+              <Button
+                variant="outlined"
+                onClick={handleBack}
+                disabled={activeStep === 0}
               >
-                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                  {step.label}
-                </Typography>
-              </StepLabel>
-              <StepContent>
-                <Typography color="text.secondary" sx={{ mb: 2 }}>
-                  {step.description}
-                </Typography>
-                {renderStepContent(index)}
-                <Box sx={{ mt: 2 }}>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mr: 1 }}
-                    disabled={index === steps.length - 1}
-                  >
-                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                  </Button>
-                  <Button disabled={index === 0} onClick={handleBack}>
-                    Back
-                  </Button>
-                </Box>
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-      </Paper>
+                Back
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                disabled={activeStep === steps.length - 1 && isSaving}
+              >
+                {activeStep === steps.length - 1 ? 'Save' : 'Next'}
+              </Button>
+            </Box>
+          </>
+        )}
+      </Card>
     </Box>
   );
 };
