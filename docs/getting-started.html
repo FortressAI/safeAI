@@ -263,10 +263,15 @@
       BUG_REPORT: "bug_report",
       QUESTION_ANSWER: "question_answer",
       CHEVRON_RIGHT: "chevron_right",
-      INFO: "info"
+      INFO: "info",
+      COMPUTER: "computer",
+      DOWNLOAD: "download",
+      ARROW_FORWARD: "arrow_forward"
     };
 
     function GettingStarted() {
+      const [currentSection, setCurrentSection] = React.useState('prerequisites');
+      
       return (
         <Box>
           <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -293,191 +298,380 @@
           
           <Container>
             <Typography variant="h3" component="h1" gutterBottom>
-              Quick Start Guide
+              Getting Started with SafeAI
             </Typography>
             
             <Paper className="content">
-              <Typography variant="h4" gutterBottom>Welcome to SafeAI</Typography>
-              <Typography paragraph>
-                SafeAI is a powerful platform that helps you build and manage AI agents safely and effectively. 
-                This guide will get you up and running in minutes.
+              <Typography variant="body1" paragraph>
+                Welcome to SafeAI! This guide will help you understand the technical foundations and implementation details 
+                of the SafeAI platform. Whether you're a developer, researcher, or AI practitioner, you'll find comprehensive 
+                information to help you build and work with safe, reliable AI systems.
               </Typography>
-
+              
               <Box sx={{ 
-                backgroundColor: "rgba(76, 175, 80, 0.1)", 
-                borderLeft: "4px solid #4caf50",
+                backgroundColor: "rgba(25, 118, 210, 0.1)", 
+                borderLeft: "4px solid #1976d2",
                 p: 2,
                 mb: 3
               }}>
                 <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
                   <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
-                  What You'll Learn
+                  Learning Path
                 </Typography>
                 <Typography variant="body2">
-                  By the end of this guide, you'll be able to:
+                  This documentation is designed to be read in sequence. Each section builds upon the previous ones, 
+                  providing a comprehensive understanding of SafeAI's architecture and implementation.
                 </Typography>
-                <List dense>
-                  <ListItem>
-                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
-                    <ListItemText primary="Set up your first AI agent" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
-                    <ListItemText primary="Configure basic safety settings" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
-                    <ListItemText primary="Run your first task" />
-                  </ListItem>
-                </List>
               </Box>
+              
+              {/* Prerequisites Section */}
+              <Box id="prerequisites" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SCHOOL}</Icon>
+                  Prerequisites
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  Before diving into SafeAI, you should have a solid understanding of:
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Core Technologies</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Programming Fundamentals"
+                              secondary="Python, JavaScript, and basic software engineering concepts"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Data Structures"
+                              secondary="Graphs, trees, and basic algorithms"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>cloud</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Cloud Computing"
+                              secondary="Basic understanding of cloud services and APIs"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">AI & ML Concepts</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>psychology</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Machine Learning Basics"
+                              secondary="Neural networks, training, and inference"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="AI Safety"
+                              secondary="Basic concepts of AI alignment and safety"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Data Analysis"
+                              secondary="Working with datasets and metrics"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Box>
+              
+              {/* System Requirements Section */}
+              <Box id="system-requirements" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.COMPUTER}</Icon>
+                  System Requirements
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  To work with SafeAI, you'll need:
+                </Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Hardware</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="RAM"
+                              secondary="Minimum 16GB, recommended 32GB"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>storage</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Storage"
+                              secondary="At least 100GB free space"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="CPU"
+                              secondary="8+ cores recommended"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Software</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>terminal</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Operating System"
+                              secondary="Linux, macOS, or Windows 10+"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Python"
+                              secondary="Version 3.8 or higher"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>dns</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Internet Connection"
+                              secondary="Stable broadband required"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6">Development Tools</Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="IDE"
+                              secondary="VS Code or PyCharm recommended"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>git</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Version Control"
+                              secondary="Git for source control"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>docker</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Containerization"
+                              secondary="Docker for container management"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Box>
+              
+              {/* Installation Section */}
+              <Box id="installation" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.DOWNLOAD}</Icon>
+                  Installation
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  Follow these steps to set up your SafeAI development environment:
+                </Typography>
+                
+                <Stepper orientation="vertical">
+                  <Step>
+                    <StepLabel>Set Up Python Environment</StepLabel>
+                    <StepContent>
+                      <Typography paragraph>
+                        Create a new Python virtual environment and install required packages:
+                      </Typography>
+                      <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                        <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`# Create virtual environment
+python -m venv safeai-env
 
-              <Stepper activeStep={0} orientation="vertical">
-                <Step>
-                  <StepLabel>Install SafeAI</StepLabel>
-                  <StepContent>
-                    <Typography paragraph>
-                      First, let's install SafeAI. Open your terminal and run:
-                    </Typography>
-                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <code>pip install safeai</code>
-                    </Paper>
-                    <Typography paragraph>
-                      Once installed, verify the installation:
-                    </Typography>
-                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <code>safeai --version</code>
+# Activate virtual environment
+# On Windows:
+safeai-env\\Scripts\\activate
+# On macOS/Linux:
+source safeai-env/bin/activate
+
+# Install SafeAI and dependencies
+pip install safeai
+pip install -r requirements.txt`}
+                      </Typography>
                     </Paper>
                   </StepContent>
                 </Step>
-
+                
                 <Step>
-                  <StepLabel>Create Your First Agent</StepLabel>
+                  <StepLabel>Configure Environment Variables</StepLabel>
                   <StepContent>
                     <Typography paragraph>
-                      Let's create a simple agent that can help with basic tasks. Create a new file called `my_agent.py`:
+                      Set up your environment variables for API keys and configuration:
                     </Typography>
-                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <code>
-                        from safeai import Agent, SafetyConfig<br/>
-                        <br/>
-                        # Create a basic safety configuration<br/>
-                        safety_config = SafetyConfig(<br/>
-                        &nbsp;&nbsp;max_tokens=1000,<br/>
-                        &nbsp;&nbsp;temperature=0.7,<br/>
-                        &nbsp;&nbsp;safety_checks=True<br/>
-                        )<br/>
-                        <br/>
-                        # Initialize your agent<br/>
-                        agent = Agent(<br/>
-                        &nbsp;&nbsp;name="MyFirstAgent",<br/>
-                        &nbsp;&nbsp;safety_config=safety_config<br/>
-                        )<br/>
-                        <br/>
-                        # Test your agent<br/>
-                        response = agent.run("Hello! Can you help me with a simple task?")<br/>
-                        print(response)
-                      </code>
-                    </Paper>
-                    <Typography paragraph>
-                      Run your agent:
-                    </Typography>
-                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
-                      <code>python my_agent.py</code>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`# Create .env file
+SAFEAI_API_KEY=your_api_key_here
+SAFEAI_ENVIRONMENT=development
+SAFEAI_LOG_LEVEL=INFO`}
+                      </Typography>
                     </Paper>
                   </StepContent>
                 </Step>
-
+                
                 <Step>
-                  <StepLabel>Configure Safety Settings</StepLabel>
+                  <StepLabel>Verify Installation</StepLabel>
                   <StepContent>
                     <Typography paragraph>
-                      SafeAI comes with built-in safety features. Let's configure them for your use case:
+                      Run the verification script to ensure everything is set up correctly:
                     </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Content Filtering"
-                          secondary="Automatically filters harmful or inappropriate content"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>verified_user</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Output Validation"
-                          secondary="Ensures responses meet safety criteria"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>history</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Activity Logging"
-                          secondary="Tracks all agent actions for review"
-                        />
-                      </ListItem>
-                    </List>
-                    <Typography paragraph>
-                      These settings are enabled by default, but you can customize them in your agent's configuration.
-                    </Typography>
-                  </StepContent>
-                </Step>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`# Run verification
+python -m safeai.verify
 
-                <Step>
-                  <StepLabel>Next Steps</StepLabel>
-                  <StepContent>
-                    <Typography paragraph>
-                      Congratulations! You've created your first SafeAI agent. Here's what you can do next:
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Typography variant="h6">Explore Interactive Demos</Typography>
-                            <Typography variant="body2">
-                              Try our <a href="interactive-demos/dashboard.html" style={{ color: '#90caf9' }}>interactive demos</a> to see SafeAI in action.
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Typography variant="h6">Read the User Guide</Typography>
-                            <Typography variant="body2">
-                              Learn more in our <a href="user-guide.html" style={{ color: '#90caf9' }}>comprehensive user guide</a>.
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Typography variant="h6">Join the Community</Typography>
-                            <Typography variant="body2">
-                              Get help and share experiences in our <a href="community/index.html" style={{ color: '#90caf9' }}>community forum</a>.
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    </Grid>
+# Expected output:
+# ✓ Python environment verified
+# ✓ Dependencies installed
+# ✓ API connection successful
+# ✓ Database connection successful`}
+                      </Typography>
+                    </Paper>
                   </StepContent>
                 </Step>
               </Stepper>
-            </Paper>
-          </Container>
-        </Box>
-      );
-    }
-
-    // Render the app with ThemeProvider
-    ReactDOM.render(
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <GettingStarted />
-      </ThemeProvider>,
-      document.getElementById('root')
+            </Box>
+            
+            {/* Next Steps Section */}
+            <Box id="next-steps" sx={{ mb: 6 }}>
+              <Typography variant="h4" gutterBottom>
+                <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.ARROW_FORWARD}</Icon>
+                Next Steps
+              </Typography>
+              <Divider sx={{ mb: 3 }} />
+              
+              <Typography variant="body1" paragraph>
+                Now that you have SafeAI installed, here's what to explore next:
+              </Typography>
+              
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6">Core Concepts</Typography>
+                      <Typography variant="body2" paragraph>
+                        Understand the fundamental concepts and architecture:
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        href="basic-concepts.html"
+                        startIcon={<Icon>book</Icon>}
+                      >
+                        Read Basic Concepts
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6">Interactive Demos</Typography>
+                      <Typography variant="body2" paragraph>
+                        Try out SafeAI features hands-on:
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        href="interactive-demos/index.html"
+                        startIcon={<Icon>play_arrow</Icon>}
+                      >
+                        Launch Demos
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6">Technical Deep Dives</Typography>
+                      <Typography variant="body2" paragraph>
+                        Explore detailed implementation guides:
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        href="knowledge-graph-implementation.html"
+                        startIcon={<Icon>code</Icon>}
+                      >
+                        View Implementation Guide
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Box>
+          </Paper>
+        </Container>
+      </Box>
     );
+  }
+
+  // Render the app with ThemeProvider
+  ReactDOM.render(
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <GettingStarted />
+    </ThemeProvider>,
+    document.getElementById('root')
+  );
   </script>
 </body>
 </html> 
