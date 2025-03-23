@@ -71,7 +71,10 @@
       COMPONENTS: "components",
       CODE: "code",
       SPEED: "speed",
-      EXPAND: "expand"
+      EXPAND: "expand",
+      ADD_CIRCLE: "add_circle",
+      UPLOAD_FILE: "upload_file",
+      SEARCH: "search"
     };
 
     function BasicConcepts() {
@@ -265,227 +268,386 @@
                 <Divider sx={{ mb: 3 }} />
                 
                 <Typography variant="body1" paragraph>
-                  Each core component of SafeAI has specific responsibilities and interfaces. Here's a detailed look at how they work together:
+                  SafeAI's interface is organized into several key components that work together to provide a complete AI management experience:
                 </Typography>
 
-                {/* Agent Service Example */}
+                {/* Agent Service Section */}
                 <Accordion sx={{ mb: 2 }}>
                   <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Agent Service</Typography>
+                    <Typography variant="h6">Agent Management</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body1" paragraph>
-                      The Agent Service manages the lifecycle of AI agents. Here's how to create and configure an agent:
+                      The Agent Management interface allows you to:
                     </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Create a new agent
-const agent = new Agent({
-  name: "CustomerServiceBot",
-  capabilities: ["chat", "knowledge_access", "task_execution"],
-  safety: {
-    contentFilter: true,
-    rateLimit: 100,
-    maxTokens: 1000
-  },
-  knowledge: {
-    sources: ["customer_docs", "product_catalog"],
-    updateFrequency: "daily"
-  }
-});
-
-// Configure agent behavior
-agent.setBehavior({
-  personality: "professional",
-  tone: "friendly",
-  responseStyle: "concise"
-});
-
-// Add custom capabilities
-agent.addCapability({
-  name: "order_processing",
-  handler: async (order) => {
-    // Process order logic
-    return await processOrder(order);
-  }
-});
-
-// Start the agent
-await agent.start();`}
-                      </Typography>
-                    </Paper>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Create New Agents"
+                          secondary="Use the intuitive wizard to set up new AI agents"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>settings</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Configure Settings"
+                          secondary="Adjust agent behavior and capabilities"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Monitor Performance"
+                          secondary="Track agent activity and metrics"
+                        />
+                      </ListItem>
+                    </List>
+                    <Box sx={{ mb: 2 }}>
+                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <CardContent>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Agent Management</Typography>
+                              <List>
+                                <ListItem>
+                                  <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Create New Agents"
+                                    secondary="Use the intuitive wizard to set up new AI agents"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>settings</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Configure Settings"
+                                    secondary="Adjust agent behavior and capabilities"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Monitor Performance"
+                                    secondary="Track agent activity and metrics"
+                                  />
+                                </ListItem>
+                              </List>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>add_circle</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Create New Agent
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>settings</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Configure Settings
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>analytics</Icon>}
+                                fullWidth
+                              >
+                                View Analytics
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
 
-                {/* Knowledge Service Example */}
+                {/* Knowledge Service Section */}
                 <Accordion sx={{ mb: 2 }}>
                   <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Knowledge Service</Typography>
+                    <Typography variant="h6">Knowledge Management</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body1" paragraph>
-                      The Knowledge Service manages the knowledge graph and provides query capabilities:
+                      The Knowledge Management interface provides tools to:
                     </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Initialize knowledge service
-const knowledgeService = new KnowledgeService({
-  storage: "neo4j",
-  cache: "redis",
-  replication: true
-});
-
-// Add knowledge to the graph
-await knowledgeService.addEntity({
-  type: "Product",
-  properties: {
-    id: "PROD001",
-    name: "Premium Widget",
-    price: 99.99,
-    category: "Electronics"
-  }
-});
-
-// Create relationships
-await knowledgeService.createRelationship({
-  type: "BELONGS_TO",
-  source: "PROD001",
-  target: "CAT001",
-  properties: {
-    addedDate: new Date()
-  }
-});
-
-// Query knowledge
-const results = await knowledgeService.query({
-  match: {
-    pattern: [
-      { type: "Product", properties: { category: "Electronics" } },
-      { type: "BELONGS_TO" },
-      { type: "Category" }
-    ]
-  },
-  return: ["product", "category"]
-});`}
-                      </Typography>
-                    </Paper>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>upload_file</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Upload Documents"
+                          secondary="Add PDFs, text files, and other documents"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Manage Structured Data"
+                          secondary="Import and organize data in various formats"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>search</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Search and Query"
+                          secondary="Find specific information in your knowledge base"
+                        />
+                      </ListItem>
+                    </List>
+                    <Box sx={{ mb: 2 }}>
+                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <CardContent>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Knowledge Management</Typography>
+                              <List>
+                                <ListItem>
+                                  <ListItemIcon><Icon>upload_file</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Upload Documents"
+                                    secondary="Add PDFs, text files, and other documents"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Manage Structured Data"
+                                    secondary="Import and organize data in various formats"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>search</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Search and Query"
+                                    secondary="Find specific information in your knowledge base"
+                                  />
+                                </ListItem>
+                              </List>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>upload_file</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Upload Documents
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>data_object</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Import Data
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>search</Icon>}
+                                fullWidth
+                              >
+                                Search Knowledge Base
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
 
-                {/* Safety Service Example */}
+                {/* Safety Service Section */}
                 <Accordion sx={{ mb: 2 }}>
                   <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Safety Service</Typography>
+                    <Typography variant="h6">Safety Controls</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body1" paragraph>
-                      The Safety Service implements content filtering and safety checks:
+                      The Safety Controls interface enables you to:
                     </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Configure safety service
-const safetyService = new SafetyService({
-  contentFilter: {
-    enabled: true,
-    rules: [
-      {
-        type: "harmful_content",
-        action: "block",
-        threshold: 0.8
-      },
-      {
-        type: "sensitive_data",
-        action: "redact",
-        patterns: ["\\b\\d{16}\\b"] // Credit card numbers
-      }
-    ]
-  },
-  rateLimiting: {
-    enabled: true,
-    maxRequests: 100,
-    windowMs: 60000
-  }
-});
-
-// Check content safety
-const result = await safetyService.checkContent({
-  text: "User input text",
-  context: {
-    userId: "USER001",
-    agentId: "AGENT001"
-  }
-});
-
-// Handle safety violations
-if (result.violations.length > 0) {
-  await safetyService.handleViolation({
-    type: result.violations[0].type,
-    severity: result.violations[0].severity,
-    action: result.violations[0].action,
-    context: result.context
-  });
-}`}
-                      </Typography>
-                    </Paper>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Set Content Filters"
+                          secondary="Configure rules for content moderation"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Manage Rate Limits"
+                          secondary="Control request frequency and usage"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Monitor Alerts"
+                          secondary="Track safety violations and incidents"
+                        />
+                      </ListItem>
+                    </List>
+                    <Box sx={{ mb: 2 }}>
+                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <CardContent>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Safety Controls</Typography>
+                              <List>
+                                <ListItem>
+                                  <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Content Filtering"
+                                    secondary="Configure rules for content moderation"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Rate Limiting"
+                                    secondary="Control request frequency and usage"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Monitor Alerts"
+                                    secondary="Track safety violations and incidents"
+                                  />
+                                </ListItem>
+                              </List>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>security</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Configure Filters
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>speed</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Set Rate Limits
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>warning</Icon>}
+                                fullWidth
+                              >
+                                View Alerts
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
 
-                {/* Monitoring Service Example */}
+                {/* Monitoring Service Section */}
                 <Accordion>
                   <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                    <Typography variant="h6">Monitoring Service</Typography>
+                    <Typography variant="h6">System Monitoring</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body1" paragraph>
-                      The Monitoring Service tracks system health and performance:
+                      The System Monitoring interface helps you:
                     </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Set up monitoring
-const monitoringService = new MonitoringService({
-  metrics: {
-    enabled: true,
-    collectionInterval: 60000,
-    retention: "7d"
-  },
-  alerts: {
-    enabled: true,
-    channels: ["email", "slack"]
-  }
-});
-
-// Track custom metrics
-await monitoringService.trackMetric({
-  name: "agent_response_time",
-  value: 150,
-  tags: {
-    agentId: "AGENT001",
-    requestType: "chat"
-  }
-});
-
-// Set up alerts
-await monitoringService.createAlert({
-  name: "high_error_rate",
-  condition: {
-    metric: "error_rate",
-    operator: ">",
-    threshold: 0.05
-  },
-  action: {
-    type: "notify",
-    channels: ["slack"],
-    message: "Error rate exceeded threshold"
-  }
-});
-
-// Get performance insights
-const insights = await monitoringService.getInsights({
-  timeframe: "24h",
-  metrics: ["response_time", "error_rate", "usage"]
-});`}
-                      </Typography>
-                    </Paper>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="View Analytics"
+                          secondary="Track performance metrics and usage"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Set Up Alerts"
+                          secondary="Configure notifications for important events"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>history</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Review Logs"
+                          secondary="Access detailed activity logs"
+                        />
+                      </ListItem>
+                    </List>
+                    <Box sx={{ mb: 2 }}>
+                      <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                        <CardContent>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>System Monitoring</Typography>
+                              <List>
+                                <ListItem>
+                                  <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="View Analytics"
+                                    secondary="Track performance metrics and usage"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Set Up Alerts"
+                                    secondary="Configure notifications for important events"
+                                  />
+                                </ListItem>
+                                <ListItem>
+                                  <ListItemIcon><Icon>history</Icon></ListItemIcon>
+                                  <ListItemText 
+                                    primary="Review Logs"
+                                    secondary="Access detailed activity logs"
+                                  />
+                                </ListItem>
+                              </List>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                              <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>analytics</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                View Analytics
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>notifications</Icon>}
+                                fullWidth
+                                sx={{ mb: 2 }}
+                              >
+                                Configure Alerts
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                startIcon={<Icon>history</Icon>}
+                                fullWidth
+                              >
+                                View Logs
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
               </Box>
