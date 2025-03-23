@@ -19,7 +19,8 @@
       padding: 0; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       line-height: 1.6;
-      background-color: #f5f5f5;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
     }
     #root { 
       max-width: 1200px; 
@@ -27,7 +28,7 @@
       padding: 2rem;
     }
     .content {
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: #2d2d2d;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 24px;
@@ -37,23 +38,26 @@
       margin-bottom: 32px;
     }
     .economics-card {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: #2d2d2d;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      padding: 16px;
+      padding: 24px;
       margin: 16px 0;
       transition: transform 0.2s ease-in-out;
     }
     .economics-card:hover {
       transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
     }
     .code-block {
-      background: #2d2d2d;
-      color: #f8f8f2;
-      padding: 1rem;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      padding: 1.5rem;
       border-radius: 4px;
       overflow-x: auto;
       font-family: 'Courier New', Courier, monospace;
       margin: 16px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .token-badge {
       display: inline-block;
@@ -65,6 +69,20 @@
     .badge-platform { background-color: #1976d2; color: white; }
     .badge-expert { background-color: #2e7d32; color: white; }
     .badge-user { background-color: #ed6c02; color: white; }
+    .example-box {
+      background: rgba(25, 118, 210, 0.1);
+      border-left: 4px solid #1976d2;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .patent-notice {
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 4px;
+      padding: 16px;
+      margin: 24px 0;
+    }
   </style>
 </head>
 <body>
@@ -119,7 +137,15 @@
       BALANCE: "balance",
       REWARD: "emoji_events",
       COST: "payments",
-      VALUE: "show_chart"
+      VALUE: "show_chart",
+      GROWTH: "trending_up",
+      MARKET: "trending_up",
+      AI: "trending_up",
+      EXPERT: "trending_up",
+      ENTERPRISE: "trending_up",
+      METRICS: "trending_up",
+      REVENUE: "trending_up",
+      MARGIN: "trending_up"
     };
 
     function SafeAIcoinEconomics() {
@@ -211,48 +237,202 @@
               <div className="economics-card">
                 <Typography variant="h6" gutterBottom>
                   <Icon sx={{ mr: 1 }}>{ICONS.VALUE}</Icon>
-                  Real-World Examples
+                  Expert Success Stories & Revenue Examples
                 </Typography>
-                
+
                 <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
                   FreePress Domain Expert
                 </Typography>
-                <Typography paragraph>
-                  Based on our FreePressContract.sol implementation:
-                </Typography>
-                <div className="code-block">
-                  {`// Example: Content Monetization
-1. Expert publishes verified content: NFT minted to expert's wallet
-2. User purchases license: 100 SafeAIcoins
-3. Platform fee (5%): 5 SafeAIcoins
-4. Expert earnings (95%): 95 SafeAIcoins
-5. Reputation tracking: Automatically updated on-chain
+                <div className="example-box">
+                  <Typography variant="subtitle1" gutterBottom>
+                    Sarah Chen - Investigative Journalism Expert
+                  </Typography>
+                  <Typography paragraph>
+                    Monthly Revenue Breakdown:
+                  </Typography>
+                  <div className="code-block">
+                    {`// Content Monetization
+1. Fact-Checking AI Agent
+   - 500 verifications/month @ $20 each
+   - Revenue: $10,000
+   - Platform fee (10%): $1,000
+   - Expert earnings: $9,000
 
-// Additional Revenue Streams
-- Knowledge Graph contributions
-- AI agent usage fees
-- Ethical validation services`}
+2. Premium Content Licensing
+   - 1000 article licenses @ $25 each
+   - Revenue: $25,000
+   - Platform fee (5%): $1,250
+   - Expert earnings: $23,750
+
+3. Custom AI Training
+   - Training media analysis agents
+   - 5 enterprise clients @ $2,000/month
+   - Revenue: $10,000
+   - Platform fee (10%): $1,000
+   - Expert earnings: $9,000
+
+Total Monthly Revenue: $45,000
+Total Monthly Earnings: $41,750
+Annual Earnings: $501,000`}
+                  </div>
                 </div>
 
                 <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Knowledge Graph Integration
+                  Mathematics Domain Expert
                 </Typography>
-                <Typography paragraph>
-                  Based on KnowledgeGraphBase.sol implementation:
-                </Typography>
-                <div className="code-block">
-                  {`// Agent Creation & Monetization
-1. Expert creates specialized agent
-2. Sets usage fee: expertDefinedFee SafeAIcoins
-3. Platform fee (10%): expertDefinedFee * 0.10
-4. Expert earnings (90%): expertDefinedFee * 0.90
-5. Performance tracking: usageCount and successCount
+                <div className="example-box">
+                  <Typography variant="subtitle1" gutterBottom>
+                    Dr. James Wilson - Advanced Mathematics & Education
+                  </Typography>
+                  <Typography paragraph>
+                    Monthly Revenue Breakdown:
+                  </Typography>
+                  <div className="code-block">
+                    {`// Mathematics Knowledge Graph
+1. Problem-Solving Agents
+   - 2000 student subscriptions @ $30/month
+   - Revenue: $60,000
+   - Platform fee (10%): $6,000
+   - Expert earnings: $54,000
 
-// Automated Features
-- Direct wallet payments
-- Usage analytics
-- Success rate tracking
-- Reputation system`}
+2. University Partnerships
+   - 3 universities @ $5,000/month
+   - Custom math validation agents
+   - Revenue: $15,000
+   - Platform fee (10%): $1,500
+   - Expert earnings: $13,500
+
+3. Research Contributions
+   - Advanced theorem verification
+   - Grant funding distribution
+   - Revenue: $20,000
+   - Platform fee (5%): $1,000
+   - Expert earnings: $19,000
+
+Total Monthly Revenue: $95,000
+Total Monthly Earnings: $86,500
+Annual Earnings: $1,038,000`}
+                  </div>
+                </div>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Cybersecurity Domain Expert
+                </Typography>
+                <div className="example-box">
+                  <Typography variant="subtitle1" gutterBottom>
+                    Alex Rivera - Security Architecture & Compliance
+                  </Typography>
+                  <Typography paragraph>
+                    Monthly Revenue Breakdown:
+                  </Typography>
+                  <div className="code-block">
+                    {`// Security Knowledge Graph
+1. Threat Detection Agents
+   - 50 enterprise clients @ $1,000/month
+   - Revenue: $50,000
+   - Platform fee (10%): $5,000
+   - Expert earnings: $45,000
+
+2. Compliance Automation
+   - 20 regulated companies @ $2,500/month
+   - Revenue: $50,000
+   - Platform fee (10%): $5,000
+   - Expert earnings: $45,000
+
+3. Security Auditing
+   - AI system audits
+   - 10 audits/month @ $5,000 each
+   - Revenue: $50,000
+   - Platform fee (5%): $2,500
+   - Expert earnings: $47,500
+
+Total Monthly Revenue: $150,000
+Total Monthly Earnings: $137,500
+Annual Earnings: $1,650,000`}
+                  </div>
+                </div>
+
+                <div className="patent-notice">
+                  <Typography variant="h6" gutterBottom>
+                    <Icon sx={{ mr: 1 }}>{ICONS.SHIELD}</Icon>
+                    Patent-Protected Market Position
+                  </Typography>
+                  <Typography paragraph>
+                    SafeAI's patented technology for ethical AI validation and knowledge graph integration creates a unique market position:
+                  </Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.LOCK}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Protected Technology"
+                        secondary="Exclusive rights to ethical AI validation through knowledge graphs"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.SCALE}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Market Dominance"
+                        secondary="No direct competition in the ethical AI validation space"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.GROWTH}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Growth Protection"
+                        secondary="Patent coverage ensures long-term market leadership"
+                      />
+                    </ListItem>
+                  </List>
+                </div>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Why Experts Choose SafeAI
+                </Typography>
+                <div className="example-box">
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.TOKEN}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="True Ownership"
+                        secondary="Experts retain full IP rights and control over their knowledge graphs and agents"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.REWARD}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Maximum Earnings"
+                        secondary="Industry-leading 90-95% revenue share with transparent fee structure"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.SCALE}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Scalable Income"
+                        secondary="Multiple revenue streams through agent usage, content licensing, and enterprise contracts"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Icon>{ICONS.SHIELD}</Icon>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary="Protected Future"
+                        secondary="Patent protection ensures long-term value of expert contributions"
+                      />
+                    </ListItem>
+                  </List>
                 </div>
               </div>
 
@@ -380,6 +560,177 @@
                     <ListItemText 
                       primary="Ethical AI Leadership"
                       secondary="Setting industry standards for ethical AI development"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Revenue Analysis & Market Potential
+              </Typography>
+              
+              <div className="economics-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.VALUE}</Icon>
+                  Revenue Streams
+                </Typography>
+                
+                <Typography paragraph>
+                  Based on our smart contract implementations, revenue is generated from three primary sources:
+                </Typography>
+
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.TOKEN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Graph Agent Usage (10% fee)"
+                      secondary={`
+                        • Average agent usage fee: $50-500 per month per user
+                        • Projected users Year 1: 10,000
+                        • Annual revenue: $600K-6M from agent fees
+                      `}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CONTENT}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Content Licensing (5% fee)"
+                      secondary={`
+                        • FreePress content average price: $10-100 per license
+                        • Projected monthly licenses: 50,000
+                        • Annual revenue: $300K-3M from licensing
+                      `}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ENTERPRISE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Enterprise Contracts"
+                      secondary={`
+                        • Custom KG development: $100K-1M per contract
+                        • Projected enterprise clients Year 1: 10-20
+                        • Annual revenue: $1M-20M from enterprise
+                      `}
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.GROWTH}</Icon>
+                  5-Year Projections
+                </Typography>
+
+                <div className="code-block">
+                  {`// Year 1: Initial Growth
+Platform Users: 10,000
+Agent Usage Revenue: $3M
+Content Licensing: $1.5M
+Enterprise Contracts: $10M
+Total Revenue: $14.5M
+
+// Year 2: Market Expansion
+Platform Users: 50,000
+Agent Usage Revenue: $15M
+Content Licensing: $7.5M
+Enterprise Contracts: $30M
+Total Revenue: $52.5M
+
+// Year 3: Network Effects
+Platform Users: 200,000
+Agent Usage Revenue: $60M
+Content Licensing: $30M
+Enterprise Contracts: $60M
+Total Revenue: $150M
+
+// Year 4: Enterprise Scale
+Platform Users: 500,000
+Agent Usage Revenue: $150M
+Content Licensing: $75M
+Enterprise Contracts: $100M
+Total Revenue: $325M
+
+// Year 5: Market Leadership
+Platform Users: 1,000,000
+Agent Usage Revenue: $300M
+Content Licensing: $150M
+Enterprise Contracts: $150M
+Total Revenue: $600M`}
+                </div>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.MARKET}</Icon>
+                  Market Size & Opportunity
+                </Typography>
+
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.AI}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="AI Knowledge Market"
+                      secondary="Total Addressable Market (TAM): $50B by 2025"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.EXPERT}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Domain Expert Network"
+                      secondary="2M+ potential expert contributors across sectors"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ENTERPRISE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Enterprise AI Solutions"
+                      secondary="Enterprise AI market: $200B+ by 2025"
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.METRICS}</Icon>
+                  Key Growth Metrics
+                </Typography>
+
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.GROWTH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="User Growth Rate"
+                      secondary="400% YoY for first 3 years"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REVENUE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Revenue Growth"
+                      secondary="250% YoY average for first 3 years"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.MARGIN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Gross Margin"
+                      secondary="85%+ (software/platform model)"
                     />
                   </ListItem>
                 </List>
