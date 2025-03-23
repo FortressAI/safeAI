@@ -75,7 +75,10 @@
       SPEED: "speed",
       SECURITY: "security",
       OVERVIEW: "overview",
-      IMPLEMENTATION: "implementation"
+      IMPLEMENTATION: "implementation",
+      TOKEN: "token",
+      REWARD: "reward",
+      ETHICS: "ethics"
     };
 
     function KnowledgeGraphGuide() {
@@ -276,37 +279,40 @@
 
               <div className="example-box">
                 <Typography variant="h6" gutterBottom>
-                  4. User Interface Components
+                  4. SafeAIcoin Integration
                 </Typography>
                 <Typography paragraph>
-                  The GUI is designed to make complex operations simple and intuitive:
+                  The knowledge graph system integrates with SafeAIcoin for:
                 </Typography>
                 <List>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SEARCH}</Icon>
+                      <Icon>{ICONS.TOKEN}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Interactive Knowledge Explorer for browsing and searching" />
+                    <ListItemText primary="Transaction fees for knowledge updates" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.INFO}</Icon>
+                      <Icon>{ICONS.REWARD}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Real-time Dashboard with system status and metrics" />
+                    <ListItemText primary="Rewards for knowledge contributions" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
-                      <Icon>{ICONS.SECURITY}</Icon>
+                      <Icon>{ICONS.ETHICS}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Agent Control Panel for monitoring and management" />
+                    <ListItemText primary="Ethical validation incentives" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <Icon>{ICONS.CHECK}</Icon>
                     </ListItemIcon>
-                    <ListItemText primary="Results Viewer for clear solution presentation" />
+                    <ListItemText primary="Governance participation" />
                   </ListItem>
                 </List>
+                <Typography paragraph>
+                  The system automatically handles token transactions through smart contracts, ensuring transparent and secure knowledge graph operations.
+                </Typography>
               </div>
             </div>
 
