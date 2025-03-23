@@ -56,7 +56,7 @@
       IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
       ListItemIcon, Icon, Tabs, Tab, Accordion, AccordionSummary, 
       AccordionDetails, TextField, Grid, Chip, Table, TableBody, 
-      TableCell, TableContainer, TableHead, TableRow
+      TableCell, TableContainer, TableHead, TableRow, Card, CardContent, Stepper, Step, StepLabel, StepContent
     } = MaterialUI;
 
     // Material icon names
@@ -104,7 +104,7 @@
                 <Icon>{ICONS.ARROW_BACK}</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                User Guide
+                SafeAI User Guide
               </Typography>
               <Button color="inherit" href="index.html">
                 <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
@@ -143,32 +143,32 @@
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.AGENT}</Icon>}
                       iconPosition="start" 
-                      label="Agent Browser" 
-                      value="agent-browser" 
+                      label="Create Agents" 
+                      value="create-agents" 
                     />
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.KNOWLEDGE}</Icon>}
                       iconPosition="start" 
-                      label="Knowledge Graphs" 
-                      value="knowledge-graphs" 
+                      label="Add Knowledge" 
+                      value="add-knowledge" 
                     />
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.SECURITY}</Icon>}
                       iconPosition="start" 
-                      label="Security Center" 
-                      value="security-center" 
+                      label="Safety Settings" 
+                      value="safety-settings" 
                     />
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.PROFILE}</Icon>}
                       iconPosition="start" 
-                      label="User Profile" 
-                      value="user-profile" 
+                      label="Monitor & Control" 
+                      value="monitor-control" 
                     />
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.SETTINGS}</Icon>}
                       iconPosition="start" 
-                      label="Settings" 
-                      value="settings" 
+                      label="Advanced Settings" 
+                      value="advanced-settings" 
                     />
                     <Tab 
                       icon={<Icon fontSize="small">{ICONS.HELP}</Icon>}
@@ -203,14 +203,14 @@
               
               <Grid item xs={12} md={9}>
                 <Typography variant="h3" component="h1" gutterBottom>
-                  SafeAI Platform User Guide
+                  SafeAI User Guide
                 </Typography>
                 
                 <Paper className="content">
                   <Typography variant="body1" paragraph>
-                    This comprehensive guide will walk you through all the features and functionality of the SafeAI platform.
-                    Whether you're new to AI systems or an experienced practitioner, you'll find detailed instructions
-                    and best practices to help you maximize your use of SafeAI.
+                    Welcome to the SafeAI User Guide! This guide will help you get the most out of SafeAI by walking you through 
+                    practical tasks and real-world examples. Whether you're building your first AI agent or managing a complex 
+                    system, you'll find step-by-step instructions here.
                   </Typography>
                   
                   <Box sx={{ 
@@ -224,9 +224,8 @@
                       Before You Begin
                     </Typography>
                     <Typography variant="body2">
-                      If you haven't already set up your account and explored the basic concepts, 
-                      please refer to the <a href="getting-started.html" style={{ color: '#90caf9' }}>Getting Started</a> guide and 
-                      <a href="basic-concepts.html" style={{ color: '#90caf9' }}> Basic Concepts</a> documentation.
+                      Make sure you've completed the <a href="getting-started.html" style={{ color: '#90caf9' }}>Getting Started Guide</a> 
+                      and understand the <a href="basic-concepts.html" style={{ color: '#90caf9' }}>Basic Concepts</a> before proceeding.
                     </Typography>
                   </Box>
                   
@@ -234,514 +233,428 @@
                   <Box id="dashboard" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.DASHBOARD}</Icon>
-                      Dashboard
+                      Dashboard Overview
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      The Dashboard is your central hub for monitoring and managing your SafeAI environment. It provides 
-                      an overview of system health, active agents, recent activities, and important metrics.
+                      The Dashboard is your command center for managing all your AI agents. Here's what you can do:
                     </Typography>
                     
-                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Dashboard Components</Typography>
-                    
-                    <Accordion sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                      mb: 2,
-                      '&:before': { display: 'none' }
-                    }}>
-                      <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                        <Typography>System Health Panel</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography paragraph>
-                          The System Health Panel displays the current status of all SafeAI subsystems.
-                        </Typography>
-                        <List dense>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Status Indicators" 
-                              secondary="Color-coded indicators showing the health of each subsystem"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">history</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Historical Data" 
-                              secondary="Click on any indicator to view historical performance data"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">notifications</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Alert Configuration" 
-                              secondary="Configure alerts by clicking the settings icon in the panel header"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                    
-                    <Accordion sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                      mb: 2,
-                      '&:before': { display: 'none' }
-                    }}>
-                      <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                        <Typography>Active Agents Panel</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography paragraph>
-                          The Active Agents Panel shows all currently running AI agents in your environment.
-                        </Typography>
-                        <List dense>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">smart_toy</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Agent Cards" 
-                              secondary="Each card shows an agent's status, tasks, and resource usage"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">pause_circle</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Agent Controls" 
-                              secondary="Pause, resume, or terminate agents directly from their cards"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">sort</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Sorting & Filtering" 
-                              secondary="Use the dropdown menus to sort and filter the agent list"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                    
-                    <Accordion sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                      mb: 2,
-                      '&:before': { display: 'none' }
-                    }}>
-                      <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                        <Typography>Recent Activities Panel</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography paragraph>
-                          The Recent Activities Panel shows a timeline of events in your SafeAI environment.
-                        </Typography>
-                        <List dense>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">history</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Activity Timeline" 
-                              secondary="Chronological list of system and agent activities"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">filter_list</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Activity Filters" 
-                              secondary="Filter activities by type, agent, or time period"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">open_in_new</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Detailed View" 
-                              secondary="Click any activity to view detailed information"
-                              secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                            />
-                          </ListItem>
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Dashboard Customization</Typography>
-                    <Typography paragraph>
-                      You can customize your Dashboard in several ways:
-                    </Typography>
-                    
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>dashboard_customize</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Layout Customization" 
-                          secondary="Drag and drop panels to rearrange the dashboard layout"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>visibility</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Panel Visibility" 
-                          secondary="Show or hide panels using the View menu in the top-right corner"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>tune</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Metric Configuration" 
-                          secondary="Customize which metrics appear in each panel through Settings"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                    </List>
-                    
-                    <Box sx={{ 
-                      backgroundColor: "rgba(255, 193, 7, 0.1)", 
-                      borderLeft: "4px solid #ffc107",
-                      p: 2,
-                      mt: 3
-                    }}>
-                      <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Icon sx={{ mr: 1 }}>{ICONS.WARNING}</Icon>
-                        Dashboard Performance
-                      </Typography>
-                      <Typography variant="body2">
-                        If you have many agents running simultaneously, your Dashboard may experience performance slowdowns.
-                        Consider using filters to limit the number of displayed agents or activities.
-                      </Typography>
-                    </Box>
-                    
-                    <Box sx={{ mt: 3, textAlign: 'center' }}>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>play_arrow</Icon>}
-                        href="interactive-demos/dashboard.html"
-                      >
-                        Try Dashboard Demo
-                      </Button>
-                    </Box>
-                  </Box>
-                  
-                  {/* Agent Browser Section */}
-                  <Box id="agent-browser" sx={{ mb: 6 }}>
-                    <Typography variant="h4" gutterBottom>
-                      <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.AGENT}</Icon>
-                      Agent Browser
-                    </Typography>
-                    <Divider sx={{ mb: 3 }} />
-                    
-                    <Typography variant="body1" paragraph>
-                      The Agent Browser allows you to discover, test, and deploy pre-built AI agents. You can browse agents by category,
-                      review their capabilities, and evaluate their performance before adding them to your environment.
-                    </Typography>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Finding Agents</Typography>
-                    
-                    <Grid container spacing={2} sx={{ mb: 3 }}>
+                    <Grid container spacing={2}>
                       <Grid item xs={12} md={6}>
-                        <Paper sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
-                          <Typography variant="subtitle1" gutterBottom>Search</Typography>
-                          <Typography variant="body2" paragraph>
-                            Use the search bar to find agents by name, capability, or keyword.
-                          </Typography>
-                          <TextField 
-                            fullWidth
-                            variant="outlined"
-                            placeholder="Search agents..."
-                            size="small"
-                            sx={{
-                              '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                  borderColor: 'rgba(255, 255, 255, 0.23)',
-                                },
-                                '&:hover fieldset': {
-                                  borderColor: 'rgba(255, 255, 255, 0.5)',
-                                },
-                              }
-                            }}
-                          />
-                        </Paper>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Quick Actions</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
+                                <ListItemText primary="Create New Agent" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>upload_file</Icon></ListItemIcon>
+                                <ListItemText primary="Upload Knowledge Base" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>settings</Icon></ListItemIcon>
+                                <ListItemText primary="Configure Settings" />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
                       </Grid>
+                      
                       <Grid item xs={12} md={6}>
-                        <Paper sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
-                          <Typography variant="subtitle1" gutterBottom>Categories</Typography>
-                          <Typography variant="body2" paragraph>
-                            Browse agents by specialized categories.
-                          </Typography>
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            <Chip label="Data Analysis" size="small" />
-                            <Chip label="Research" size="small" />
-                            <Chip label="Content Creation" size="small" />
-                            <Chip label="Process Automation" size="small" />
-                            <Chip label="Decision Support" size="small" />
-                          </Box>
-                        </Paper>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">System Status</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>check_circle</Icon></ListItemIcon>
+                                <ListItemText primary="Active Agents" secondary="3 running" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                <ListItemText primary="System Health" secondary="All systems operational" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>history</Icon></ListItemIcon>
+                                <ListItemText primary="Recent Activity" secondary="Last updated 5 minutes ago" />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
                       </Grid>
                     </Grid>
-                    
-                    <Typography variant="h6" gutterBottom>Agent Details</Typography>
-                    <Typography paragraph>
-                      When you select an agent, you'll see detailed information about its:
-                    </Typography>
-                    
-                    <TableContainer component={Paper} sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell sx={{ fontWeight: 'bold', color: 'white' }}>Category</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold', color: 'white' }}>Description</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Capabilities</TableCell>
-                            <TableCell>What tasks the agent can perform and its strengths</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Knowledge Base</TableCell>
-                            <TableCell>Which knowledge graphs the agent can access and utilize</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Resource Requirements</TableCell>
-                            <TableCell>Computational and memory resources needed to run the agent</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Security Clearance</TableCell>
-                            <TableCell>What permission level the agent requires to operate</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Performance Metrics</TableCell>
-                            <TableCell>Benchmarks and real-world performance statistics</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>User Ratings</TableCell>
-                            <TableCell>Feedback and ratings from other users</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>Testing Agents</Typography>
-                    <Typography paragraph>
-                      Before deploying an agent, you can test it in a sandbox environment:
-                    </Typography>
-                    
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>science</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Sandbox Environment" 
-                          secondary="Interact with the agent in an isolated environment with simulated data"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>compare_arrows</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Input/Output Testing" 
-                          secondary="Test specific inputs and verify the agent's responses"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>settings</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Configuration Testing" 
-                          secondary="Experiment with different agent settings to optimize performance"
-                          secondaryTypographyProps={{ style: { color: 'rgba(255, 255, 255, 0.7)' } }}
-                        />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Deploying Agents</Typography>
-                    <Typography paragraph>
-                      Once you're satisfied with an agent's performance, you can deploy it:
-                    </Typography>
-                    
-                    <Accordion sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                      mb: 2,
-                      '&:before': { display: 'none' }
-                    }}>
-                      <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                        <Typography>Quick Deployment</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography paragraph>
-                          For standard use cases, you can deploy an agent with default settings:
-                        </Typography>
-                        <List dense>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">add_circle</Icon></ListItemIcon>
-                            <ListItemText primary="Click the 'Deploy' button on the agent detail page" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
-                            <ListItemText primary="Review and accept the default configuration" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">play_arrow</Icon></ListItemIcon>
-                            <ListItemText primary="The agent will be deployed and appear in your Dashboard" />
-                          </ListItem>
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                    
-                    <Accordion sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                      mb: 2,
-                      '&:before': { display: 'none' }
-                    }}>
-                      <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
-                        <Typography>Custom Deployment</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography paragraph>
-                          For specialized needs, you can customize the agent before deployment:
-                        </Typography>
-                        <List dense>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">add_circle</Icon></ListItemIcon>
-                            <ListItemText primary="Click 'Custom Deploy' on the agent detail page" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">tune</Icon></ListItemIcon>
-                            <ListItemText primary="Adjust parameters such as resource allocation, permissions, and integration points" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">dataset</Icon></ListItemIcon>
-                            <ListItemText primary="Specify which knowledge graphs the agent should access" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">schedule</Icon></ListItemIcon>
-                            <ListItemText primary="Set up scheduling or event triggers" />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon fontSize="small">play_arrow</Icon></ListItemIcon>
-                            <ListItemText primary="Deploy the customized agent" />
-                          </ListItem>
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                    
-                    <Box sx={{ 
-                      backgroundColor: "rgba(129, 199, 132, 0.1)", 
-                      borderLeft: "4px solid #81c784",
-                      p: 2,
-                      mb: 3,
-                      mt: 3
-                    }}>
-                      <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Icon sx={{ mr: 1 }}>{ICONS.NOTE}</Icon>
-                        Best Practice
-                      </Typography>
-                      <Typography variant="body2">
-                        When deploying a new agent, start with limited permissions and gradually increase them
-                        as you confirm the agent behaves as expected. This follows the principle of least privilege
-                        and helps maintain system security.
-                      </Typography>
-                    </Box>
-                    
-                    <Box sx={{ mt: 3, textAlign: 'center' }}>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>play_arrow</Icon>}
-                        href="interactive-demos/agent-browser.html"
-                      >
-                        Try Agent Browser Demo
-                      </Button>
-                    </Box>
                   </Box>
                   
-                  {/* Additional sections would be added here - Knowledge Graphs, Security Center, etc. */}
+                  {/* Create Agents Section */}
+                  <Box id="create-agents" sx={{ mb: 6 }}>
+                    <Typography variant="h4" gutterBottom>
+                      <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.AGENT}</Icon>
+                      Creating AI Agents
+                    </Typography>
+                    <Divider sx={{ mb: 3 }} />
+                    
+                    <Typography variant="body1" paragraph>
+                      Let's create your first AI agent. Here's a step-by-step guide:
+                    </Typography>
+                    
+                    <Stepper orientation="vertical">
+                      <Step>
+                        <StepLabel>Choose Agent Type</StepLabel>
+                        <StepContent>
+                          <Typography paragraph>
+                            Select the type of agent you want to create:
+                          </Typography>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} md={4}>
+                              <Card sx={{ height: '100%', cursor: 'pointer' }}>
+                                <CardContent>
+                                  <Typography variant="h6">Customer Service</Typography>
+                                  <Typography variant="body2">
+                                    Help customers with questions and support
+                                  </Typography>
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                              <Card sx={{ height: '100%', cursor: 'pointer' }}>
+                                <CardContent>
+                                  <Typography variant="h6">Data Analysis</Typography>
+                                  <Typography variant="body2">
+                                    Process and analyze data
+                                  </Typography>
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                              <Card sx={{ height: '100%', cursor: 'pointer' }}>
+                                <CardContent>
+                                  <Typography variant="h6">Content Creation</Typography>
+                                  <Typography variant="body2">
+                                    Generate and edit content
+                                  </Typography>
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                          </Grid>
+                        </StepContent>
+                      </Step>
+                      
+                      <Step>
+                        <StepLabel>Configure Agent</StepLabel>
+                        <StepContent>
+                          <Typography paragraph>
+                            Set up your agent's basic settings:
+                          </Typography>
+                          <TextField
+                            fullWidth
+                            label="Agent Name"
+                            margin="normal"
+                            placeholder="e.g., Customer Support Bot"
+                          />
+                          <TextField
+                            fullWidth
+                            label="Description"
+                            margin="normal"
+                            multiline
+                            rows={3}
+                            placeholder="What will this agent do?"
+                          />
+                        </StepContent>
+                      </Step>
+                      
+                      <Step>
+                        <StepLabel>Add Capabilities</StepLabel>
+                        <StepContent>
+                          <Typography paragraph>
+                            Choose what your agent can do:
+                          </Typography>
+                          <List>
+                            <ListItem>
+                              <ListItemIcon><Icon>chat</Icon></ListItemIcon>
+                              <ListItemText primary="Chat with Users" />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>search</Icon></ListItemIcon>
+                              <ListItemText primary="Search Knowledge Base" />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
+                              <ListItemText primary="Generate Reports" />
+                            </ListItem>
+                          </List>
+                        </StepContent>
+                      </Step>
+                    </Stepper>
+                  </Box>
                   
-                  {/* Knowledge Graphs Section */}
-                  <Box id="knowledge-graphs" sx={{ mb: 6 }}>
+                  {/* Add Knowledge Section */}
+                  <Box id="add-knowledge" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.KNOWLEDGE}</Icon>
-                      Knowledge Graphs
+                      Adding Knowledge to Your Agent
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      Knowledge Graphs are structured representations of information that help AI agents understand 
-                      relationships between concepts. This section covers how to explore, use, and contribute to
-                      knowledge graphs in the SafeAI platform.
+                      Your agent needs knowledge to be effective. Here's how to add it:
                     </Typography>
                     
-                    <Box sx={{ textAlign: 'center', mt: 3, mb: 3 }}>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>play_arrow</Icon>}
-                        href="interactive-demos/knowledge-graphs.html"
-                      >
-                        Try Knowledge Graph Demo
-                      </Button>
-                      <Typography variant="caption" display="block" sx={{ mt: 1, color: 'text.secondary' }}>
-                        For detailed information, see the <a href="KnowledgeGraph_Implementation_Guide.html" style={{ color: '#90caf9' }}>Knowledge Graph Implementation Guide</a>
-                      </Typography>
-                    </Box>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={6}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Upload Documents</Typography>
+                            <Typography variant="body2" paragraph>
+                              Upload PDFs, Word docs, or text files:
+                            </Typography>
+                            <Button
+                              variant="outlined"
+                              startIcon={<Icon>upload_file</Icon>}
+                              fullWidth
+                            >
+                              Choose Files
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      
+                      <Grid item xs={12} md={6}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Add URLs</Typography>
+                            <Typography variant="body2" paragraph>
+                              Import content from websites:
+                            </Typography>
+                            <TextField
+                              fullWidth
+                              label="Website URL"
+                              placeholder="https://example.com"
+                              margin="normal"
+                            />
+                            <Button
+                              variant="outlined"
+                              startIcon={<Icon>add_link</Icon>}
+                              fullWidth
+                            >
+                              Add URL
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    </Grid>
                   </Box>
                   
-                  {/* Security Center Section */}
-                  <Box id="security-center" sx={{ mb: 6 }}>
+                  {/* Safety Settings Section */}
+                  <Box id="safety-settings" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SECURITY}</Icon>
-                      Security Center
+                      Configuring Safety Settings
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      The Security Center provides tools to monitor, analyze, and ensure the safety of your AI operations.
-                      This section guides you through security settings, monitoring tools, and best practices.
+                      Keep your AI safe and controlled with these settings:
                     </Typography>
                     
-                    <Box sx={{ textAlign: 'center', mt: 3, mb: 3 }}>
-                      <Button 
-                        variant="contained" 
-                        startIcon={<Icon>play_arrow</Icon>}
-                        href="interactive-demos/security-center.html"
-                      >
-                        Try Security Center Demo
-                      </Button>
-                    </Box>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={4}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Content Filtering</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>filter_list</Icon></ListItemIcon>
+                                <ListItemText primary="Block Harmful Content" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                <ListItemText primary="Flag Sensitive Topics" />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      
+                      <Grid item xs={12} md={4}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Usage Limits</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>timer</Icon></ListItemIcon>
+                                <ListItemText primary="Time Restrictions" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>data_usage</Icon></ListItemIcon>
+                                <ListItemText primary="Resource Limits" />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      
+                      <Grid item xs={12} md={4}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Emergency Controls</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>stop</Icon></ListItemIcon>
+                                <ListItemText primary="Emergency Stop" />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>restart_alt</Icon></ListItemIcon>
+                                <ListItemText primary="Reset Agent" />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    </Grid>
                   </Box>
                   
-                  {/* User Profile Section */}
-                  <Box id="user-profile" sx={{ mb: 6 }}>
+                  {/* Monitor & Control Section */}
+                  <Box id="monitor-control" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.PROFILE}</Icon>
-                      User Profile
+                      Monitoring & Controlling Your Agents
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      Your User Profile contains your account information, preferences, and authentication settings.
-                      This section explains how to manage your profile and customize your experience.
+                      Keep track of your agents and manage their behavior:
                     </Typography>
+                    
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={6}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Activity Monitor</Typography>
+                            <TableContainer>
+                              <Table>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>Time</TableCell>
+                                    <TableCell>Action</TableCell>
+                                    <TableCell>Status</TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  <TableRow>
+                                    <TableCell>2:30 PM</TableCell>
+                                    <TableCell>User Query</TableCell>
+                                    <TableCell>Completed</TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                    <TableCell>2:25 PM</TableCell>
+                                    <TableCell>Knowledge Update</TableCell>
+                                    <TableCell>Success</TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </TableContainer>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      
+                      <Grid item xs={12} md={6}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Performance Metrics</Typography>
+                            <List>
+                              <ListItem>
+                                <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                                <ListItemText 
+                                  primary="Response Time"
+                                  secondary="Average: 1.2 seconds"
+                                />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>check_circle</Icon></ListItemIcon>
+                                <ListItemText 
+                                  primary="Success Rate"
+                                  secondary="98.5%"
+                                />
+                              </ListItem>
+                              <ListItem>
+                                <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                <ListItemText 
+                                  primary="Safety Checks"
+                                  secondary="All passed"
+                                />
+                              </ListItem>
+                            </List>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    </Grid>
                   </Box>
                   
-                  {/* Settings Section */}
-                  <Box id="settings" sx={{ mb: 6 }}>
+                  {/* Advanced Settings Section */}
+                  <Box id="advanced-settings" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SETTINGS}</Icon>
-                      Settings
+                      Advanced Settings
                     </Typography>
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      The Settings section allows you to configure global options for your SafeAI environment.
-                      This includes notification preferences, display options, and integration settings.
+                      Fine-tune your agent's behavior with advanced settings:
                     </Typography>
+                    
+                    <Accordion>
+                      <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                        <Typography>Model Parameters</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography paragraph>
+                          Adjust the AI model's behavior:
+                        </Typography>
+                        <TextField
+                          fullWidth
+                          label="Temperature"
+                          type="number"
+                          defaultValue={0.7}
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="Max Tokens"
+                          type="number"
+                          defaultValue={1000}
+                          margin="normal"
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                    
+                    <Accordion>
+                      <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                        <Typography>Integration Settings</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography paragraph>
+                          Connect with external services:
+                        </Typography>
+                        <TextField
+                          fullWidth
+                          label="API Key"
+                          type="password"
+                          margin="normal"
+                        />
+                        <TextField
+                          fullWidth
+                          label="Webhook URL"
+                          margin="normal"
+                        />
+                      </AccordionDetails>
+                    </Accordion>
                   </Box>
                   
                   {/* Troubleshooting Section */}
-                  <Box id="troubleshooting" sx={{ mb: 3 }}>
+                  <Box id="troubleshooting" sx={{ mb: 6 }}>
                     <Typography variant="h4" gutterBottom>
                       <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.HELP}</Icon>
                       Troubleshooting
@@ -749,46 +662,60 @@
                     <Divider sx={{ mb: 3 }} />
                     
                     <Typography variant="body1" paragraph>
-                      If you encounter issues with the SafeAI platform, this section provides common solutions
-                      and guidance on how to resolve problems. For additional help, please contact our support team.
+                      Common issues and how to fix them:
                     </Typography>
                     
-                    <Box sx={{ mt: 2 }}>
-                      <Button 
-                        variant="outlined" 
-                        startIcon={<Icon>contact_support</Icon>}
-                        href="support/contact.html"
-                      >
-                        Contact Support
-                      </Button>
-                    </Box>
-                  </Box>
-                  
-                  <Divider sx={{ mt: 6, mb: 3 }} />
-                  
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button 
-                      variant="outlined"
-                      startIcon={<Icon>arrow_back</Icon>}
-                      href="basic-concepts.html"
-                    >
-                      Basic Concepts
-                    </Button>
-                    <Button 
-                      variant="outlined"
-                      endIcon={<Icon>arrow_forward</Icon>}
-                      href="faq.html"
-                    >
-                      FAQ
-                    </Button>
+                    <Accordion>
+                      <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                        <Typography>Agent Not Responding</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography paragraph>
+                          If your agent stops responding:
+                        </Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>refresh</Icon></ListItemIcon>
+                            <ListItemText primary="Check system status" />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>restart_alt</Icon></ListItemIcon>
+                            <ListItemText primary="Restart the agent" />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>error</Icon></ListItemIcon>
+                            <ListItemText primary="Check error logs" />
+                          </ListItem>
+                        </List>
+                      </AccordionDetails>
+                    </Accordion>
+                    
+                    <Accordion>
+                      <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                        <Typography>Knowledge Base Issues</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography paragraph>
+                          If your agent's knowledge seems incorrect:
+                        </Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>update</Icon></ListItemIcon>
+                            <ListItemText primary="Verify knowledge base" />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemText primary="Reindex content" />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>delete</Icon></ListItemIcon>
+                            <ListItemText primary="Clear and rebuild" />
+                          </ListItem>
+                        </List>
+                      </AccordionDetails>
+                    </Accordion>
                   </Box>
                 </Paper>
-                
-                <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
-                  <Typography variant="body2">
-                    Last updated: {new Date().toLocaleDateString()}
-                  </Typography>
-                </Box>
               </Grid>
             </Grid>
           </Container>
