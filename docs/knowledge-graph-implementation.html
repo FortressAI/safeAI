@@ -559,6 +559,279 @@ type Query {
                   </Grid>
                 </Grid>
               </Box>
+
+              {/* Practical Examples Section */}
+              <Box id="examples" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.CODE}</Icon>
+                  Practical Examples
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Typography variant="body1" paragraph>
+                  Here are practical examples of how to work with SafeAI's knowledge graph system:
+                </Typography>
+
+                {/* Example 1: Creating a Knowledge Graph */}
+                <Card sx={{ mb: 4 }}>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>Example 1: Creating a Knowledge Graph</Typography>
+                    <Typography variant="body1" paragraph>
+                      This example shows how to create and populate a knowledge graph for a customer service agent:
+                    </Typography>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Create a new knowledge graph
+const customerServiceGraph = new KnowledgeGraph({
+  name: "customer_service",
+  description: "Customer service knowledge base"
+});
+
+// Define entity types
+customerServiceGraph.addEntityType({
+  name: "Customer",
+  properties: {
+    id: "string",
+    name: "string",
+    email: "string",
+    subscription: "string",
+    lastContact: "datetime"
+  }
+});
+
+customerServiceGraph.addEntityType({
+  name: "Product",
+  properties: {
+    id: "string",
+    name: "string",
+    category: "string",
+    price: "number",
+    stock: "number"
+  }
+});
+
+// Define relationship types
+customerServiceGraph.addRelationshipType({
+  name: "PURCHASED",
+  properties: {
+    date: "datetime",
+    quantity: "number",
+    price: "number"
+  }
+});
+
+// Add sample data
+const customer = await customerServiceGraph.createEntity({
+  type: "Customer",
+  properties: {
+    id: "CUST001",
+    name: "John Doe",
+    email: "john@example.com",
+    subscription: "premium",
+    lastContact: new Date()
+  }
+});
+
+const product = await customerServiceGraph.createEntity({
+  type: "Product",
+  properties: {
+    id: "PROD001",
+    name: "Premium Widget",
+    category: "Electronics",
+    price: 99.99,
+    stock: 50
+  }
+});
+
+// Create relationship
+await customerServiceGraph.createRelationship({
+  type: "PURCHASED",
+  source: customer.id,
+  target: product.id,
+  properties: {
+    date: new Date(),
+    quantity: 2,
+    price: 199.98
+  }
+});`}
+                      </Typography>
+                    </Paper>
+                  </CardContent>
+                </Card>
+
+                {/* Example 2: Querying the Knowledge Graph */}
+                <Card sx={{ mb: 4 }}>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>Example 2: Querying the Knowledge Graph</Typography>
+                    <Typography variant="body1" paragraph>
+                      Learn how to query the knowledge graph using different patterns:
+                    </Typography>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Find all products purchased by a customer
+const customerPurchases = await customerServiceGraph.query({
+  match: {
+    pattern: [
+      { type: "Customer", id: "CUST001" },
+      { type: "PURCHASED" },
+      { type: "Product" }
+    ]
+  },
+  return: ["product"]
+});
+
+// Find customers who purchased products in a specific category
+const categoryCustomers = await customerServiceGraph.query({
+  match: {
+    pattern: [
+      { type: "Customer" },
+      { type: "PURCHASED" },
+      { type: "Product", properties: { category: "Electronics" } }
+    ]
+  },
+  return: ["customer"]
+});
+
+// Find related products based on purchase history
+const relatedProducts = await customerServiceGraph.query({
+  match: {
+    pattern: [
+      { type: "Product", id: "PROD001" },
+      { type: "PURCHASED" },
+      { type: "Customer" },
+      { type: "PURCHASED" },
+      { type: "Product" }
+    ]
+  },
+  return: ["product"],
+  where: "product.id != 'PROD001'"
+});`}
+                      </Typography>
+                    </Paper>
+                  </CardContent>
+                </Card>
+
+                {/* Example 3: Agent Integration */}
+                <Card sx={{ mb: 4 }}>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>Example 3: Agent Integration</Typography>
+                    <Typography variant="body1" paragraph>
+                      See how to integrate the knowledge graph with an AI agent:
+                    </Typography>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Create an agent with knowledge graph access
+const customerServiceAgent = new Agent({
+  name: "CustomerServiceBot",
+  capabilities: ["knowledge_graph_access"],
+  knowledgeGraph: customerServiceGraph
+});
+
+// Example prompt for the agent
+const prompt = \`You are a customer service agent with access to our knowledge graph.
+Customer John Doe (ID: CUST001) is asking about their recent purchase.
+Please check their purchase history and provide relevant information.
+
+Available actions:
+1. Query customer details
+2. Check purchase history
+3. Find related products
+4. Generate personalized recommendations\`;
+
+// Agent response using knowledge graph
+const response = await customerServiceAgent.process(prompt, {
+  context: {
+    customerId: "CUST001",
+    query: "What did I purchase recently?"
+  }
+});
+
+// Example response structure
+{
+  customer: {
+    name: "John Doe",
+    lastPurchase: "2024-03-15",
+    totalSpent: 199.98
+  },
+  recentPurchases: [
+    {
+      product: "Premium Widget",
+      date: "2024-03-15",
+      quantity: 2,
+      price: 199.98
+    }
+  ],
+  recommendations: [
+    {
+      product: "Premium Widget Pro",
+      reason: "Based on purchase history"
+    }
+  ]
+}`}
+                      </Typography>
+                    </Paper>
+                  </CardContent>
+                </Card>
+
+                {/* Example 4: Advanced Features */}
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>Example 4: Advanced Features</Typography>
+                    <Typography variant="body1" paragraph>
+                      Explore advanced knowledge graph features:
+                    </Typography>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Temporal queries
+const purchaseHistory = await customerServiceGraph.query({
+  match: {
+    pattern: [
+      { type: "Customer", id: "CUST001" },
+      { type: "PURCHASED" },
+      { type: "Product" }
+    ]
+  },
+  where: "relationship.date >= '2024-01-01'",
+  orderBy: "relationship.date DESC"
+});
+
+// Path finding
+const productRecommendations = await customerServiceGraph.findPaths({
+  start: { type: "Product", id: "PROD001" },
+  end: { type: "Product" },
+  maxDepth: 3,
+  where: "path.length > 1"
+});
+
+// Graph analytics
+const analytics = await customerServiceGraph.analyze({
+  metrics: [
+    "degree_centrality",
+    "betweenness_centrality",
+    "clustering_coefficient"
+  ],
+  nodes: { type: "Product" }
+});
+
+// Knowledge graph updates
+await customerServiceGraph.update({
+  operation: "MERGE",
+  pattern: [
+    { type: "Customer", id: "CUST001" },
+    { type: "PURCHASED" },
+    { type: "Product", id: "PROD002" }
+  ],
+  properties: {
+    date: new Date(),
+    quantity: 1,
+    price: 99.99
+  }
+});`}
+                      </Typography>
+                    </Paper>
+                  </CardContent>
+                </Card>
+              </Box>
             </Paper>
             
             <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>

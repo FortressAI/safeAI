@@ -70,7 +70,8 @@
       ARCHITECTURE: "architecture",
       COMPONENTS: "components",
       CODE: "code",
-      SPEED: "speed"
+      SPEED: "speed",
+      EXPAND: "expand"
     };
 
     function BasicConcepts() {
@@ -264,183 +265,225 @@
                 <Divider sx={{ mb: 3 }} />
                 
                 <Typography variant="body1" paragraph>
-                  Each component in SafeAI is designed with specific responsibilities and interfaces. 
-                  Here's a detailed look at the key components:
+                  Each core component of SafeAI has specific responsibilities and interfaces. Here's a detailed look at how they work together:
                 </Typography>
-                
-                <Accordion>
-                  <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
-                    <Typography>Agent Service</Typography>
+
+                {/* Agent Service Example */}
+                <Accordion sx={{ mb: 2 }}>
+                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
+                    <Typography variant="h6">Agent Service</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography paragraph>
-                      The Agent Service is responsible for managing AI agents throughout their lifecycle:
+                    <Typography variant="body1" paragraph>
+                      The Agent Service manages the lifecycle of AI agents. Here's how to create and configure an agent:
                     </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Agent Creation"
-                          secondary="Initializes new agents with specified configurations"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>play_arrow</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Execution Engine"
-                          secondary="Runs agent tasks and manages resource allocation"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="State Management"
-                          secondary="Maintains agent state and context"
-                        />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>Example Agent Configuration</Typography>
                     <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
                       <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`{
-  "agent_id": "agent_123",
-  "name": "Research Assistant",
-  "capabilities": [
-    "text_analysis",
-    "data_processing",
-    "knowledge_query"
-  ],
-  "safety_config": {
-    "max_tokens": 1000,
-    "temperature": 0.7,
-    "safety_checks": true,
-    "content_filtering": true
+{`// Create a new agent
+const agent = new Agent({
+  name: "CustomerServiceBot",
+  capabilities: ["chat", "knowledge_access", "task_execution"],
+  safety: {
+    contentFilter: true,
+    rateLimit: 100,
+    maxTokens: 1000
   },
-  "resource_limits": {
-    "memory": "4GB",
-    "cpu": "2 cores",
-    "timeout": "30s"
+  knowledge: {
+    sources: ["customer_docs", "product_catalog"],
+    updateFrequency: "daily"
   }
-}`}
+});
+
+// Configure agent behavior
+agent.setBehavior({
+  personality: "professional",
+  tone: "friendly",
+  responseStyle: "concise"
+});
+
+// Add custom capabilities
+agent.addCapability({
+  name: "order_processing",
+  handler: async (order) => {
+    // Process order logic
+    return await processOrder(order);
+  }
+});
+
+// Start the agent
+await agent.start();`}
                       </Typography>
                     </Paper>
                   </AccordionDetails>
                 </Accordion>
-                
-                <Accordion>
-                  <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
-                    <Typography>Knowledge Service</Typography>
+
+                {/* Knowledge Service Example */}
+                <Accordion sx={{ mb: 2 }}>
+                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
+                    <Typography variant="h6">Knowledge Service</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography paragraph>
+                    <Typography variant="body1" paragraph>
                       The Knowledge Service manages the knowledge graph and provides query capabilities:
                     </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>storage</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Graph Database"
-                          secondary="Stores and manages knowledge relationships"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>search</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Query Engine"
-                          secondary="Processes and optimizes knowledge queries"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>sync</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Data Integration"
-                          secondary="Handles data ingestion and updates"
-                        />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>Knowledge Graph Schema</Typography>
                     <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
                       <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`type Entity {
-  id: String!
-  type: String!
-  properties: Map<String, Any>
-  relationships: [Relationship!]
-}
+{`// Initialize knowledge service
+const knowledgeService = new KnowledgeService({
+  storage: "neo4j",
+  cache: "redis",
+  replication: true
+});
 
-type Relationship {
-  type: String!
-  source: Entity!
-  target: Entity!
-  properties: Map<String, Any>
-}
+// Add knowledge to the graph
+await knowledgeService.addEntity({
+  type: "Product",
+  properties: {
+    id: "PROD001",
+    name: "Premium Widget",
+    price: 99.99,
+    category: "Electronics"
+  }
+});
 
-type Query {
-  findEntity(id: String!): Entity
-  findRelated(source: Entity!, type: String!): [Entity!]
-  search(query: String!): [Entity!]
+// Create relationships
+await knowledgeService.createRelationship({
+  type: "BELONGS_TO",
+  source: "PROD001",
+  target: "CAT001",
+  properties: {
+    addedDate: new Date()
+  }
+});
+
+// Query knowledge
+const results = await knowledgeService.query({
+  match: {
+    pattern: [
+      { type: "Product", properties: { category: "Electronics" } },
+      { type: "BELONGS_TO" },
+      { type: "Category" }
+    ]
+  },
+  return: ["product", "category"]
+});`}
+                      </Typography>
+                    </Paper>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Safety Service Example */}
+                <Accordion sx={{ mb: 2 }}>
+                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
+                    <Typography variant="h6">Safety Service</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body1" paragraph>
+                      The Safety Service implements content filtering and safety checks:
+                    </Typography>
+                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
+                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`// Configure safety service
+const safetyService = new SafetyService({
+  contentFilter: {
+    enabled: true,
+    rules: [
+      {
+        type: "harmful_content",
+        action: "block",
+        threshold: 0.8
+      },
+      {
+        type: "sensitive_data",
+        action: "redact",
+        patterns: ["\\b\\d{16}\\b"] // Credit card numbers
+      }
+    ]
+  },
+  rateLimiting: {
+    enabled: true,
+    maxRequests: 100,
+    windowMs: 60000
+  }
+});
+
+// Check content safety
+const result = await safetyService.checkContent({
+  text: "User input text",
+  context: {
+    userId: "USER001",
+    agentId: "AGENT001"
+  }
+});
+
+// Handle safety violations
+if (result.violations.length > 0) {
+  await safetyService.handleViolation({
+    type: result.violations[0].type,
+    severity: result.violations[0].severity,
+    action: result.violations[0].action,
+    context: result.context
+  });
 }`}
                       </Typography>
                     </Paper>
                   </AccordionDetails>
                 </Accordion>
-                
+
+                {/* Monitoring Service Example */}
                 <Accordion>
-                  <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
-                    <Typography>Safety Service</Typography>
+                  <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
+                    <Typography variant="h6">Monitoring Service</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography paragraph>
-                      The Safety Service implements comprehensive safety measures:
+                    <Typography variant="body1" paragraph>
+                      The Monitoring Service tracks system health and performance:
                     </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>security</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Content Filtering"
-                          secondary="Validates content against safety rules"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>monitor</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Behavior Monitoring"
-                          secondary="Tracks agent actions and patterns"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>warning</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Alert System"
-                          secondary="Generates alerts for safety violations"
-                        />
-                      </ListItem>
-                    </List>
-                    
-                    <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>Safety Rules Example</Typography>
                     <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
                       <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`{
-  "rules": [
-    {
-      "id": "harmful_content",
-      "type": "content_filter",
-      "pattern": "harmful|dangerous|illegal",
-      "action": "block",
-      "severity": "high"
-    },
-    {
-      "id": "resource_limit",
-      "type": "usage_monitor",
-      "metric": "memory_usage",
-      "threshold": "90%",
-      "action": "warn",
-      "severity": "medium"
-    }
-  ]
-}`}
+{`// Set up monitoring
+const monitoringService = new MonitoringService({
+  metrics: {
+    enabled: true,
+    collectionInterval: 60000,
+    retention: "7d"
+  },
+  alerts: {
+    enabled: true,
+    channels: ["email", "slack"]
+  }
+});
+
+// Track custom metrics
+await monitoringService.trackMetric({
+  name: "agent_response_time",
+  value: 150,
+  tags: {
+    agentId: "AGENT001",
+    requestType: "chat"
+  }
+});
+
+// Set up alerts
+await monitoringService.createAlert({
+  name: "high_error_rate",
+  condition: {
+    metric: "error_rate",
+    operator: ">",
+    threshold: 0.05
+  },
+  action: {
+    type: "notify",
+    channels: ["slack"],
+    message: "Error rate exceeded threshold"
+  }
+});
+
+// Get performance insights
+const insights = await monitoringService.getInsights({
+  timeframe: "24h",
+  metrics: ["response_time", "error_rate", "usage"]
+});`}
                       </Typography>
                     </Paper>
                   </AccordionDetails>
