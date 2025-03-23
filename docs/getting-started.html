@@ -200,7 +200,7 @@
       ListItemIcon, Chip, Alert, Stepper, Step, StepLabel,
       useTheme, ThemeProvider, createTheme, CssBaseline,
       Icon, InputAdornment, Link, Breadcrumbs, TextField,
-      StepContent
+      StepContent, Accordion, AccordionSummary, AccordionDetails
     } = MaterialUI;
 
     // Create theme configuration
@@ -266,7 +266,9 @@
       INFO: "info",
       COMPUTER: "computer",
       DOWNLOAD: "download",
-      ARROW_FORWARD: "arrow_forward"
+      ARROW_FORWARD: "arrow_forward",
+      WELCOME: "welcome",
+      NEXT: "next"
     };
 
     function GettingStarted() {
@@ -303,9 +305,7 @@
             
             <Paper className="content">
               <Typography variant="body1" paragraph>
-                Welcome to SafeAI! This guide will help you understand the technical foundations and implementation details 
-                of the SafeAI platform. Whether you're a developer, researcher, or AI practitioner, you'll find comprehensive 
-                information to help you build and work with safe, reliable AI systems.
+                Welcome to SafeAI! This guide will help you get started with our platform. Follow these steps to set up your environment and create your first AI agent.
               </Typography>
               
               <Box sx={{ 
@@ -324,74 +324,419 @@
                 </Typography>
               </Box>
               
-              {/* Prerequisites Section */}
-              <Box id="prerequisites" sx={{ mb: 6 }}>
+              {/* Welcome Section */}
+              <Box id="welcome" sx={{ mb: 6 }}>
                 <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SCHOOL}</Icon>
-                  Prerequisites
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.WELCOME}</Icon>
+                  Welcome to SafeAI
                 </Typography>
                 <Divider sx={{ mb: 3 }} />
                 
                 <Typography variant="body1" paragraph>
-                  Before diving into SafeAI, you should have a solid understanding of:
+                  Welcome to SafeAI! This guide will help you get started with our platform. Follow these steps to set up your environment and create your first AI agent.
                 </Typography>
+
+                <Stepper activeStep={0} orientation="vertical" sx={{ mt: 4 }}>
+                  <Step>
+                    <StepLabel>Access the Dashboard</StepLabel>
+                    <StepContent>
+                      <Typography variant="body2" paragraph>
+                        1. Log in to your SafeAI account at https://app.safeai.com
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        2. You'll be taken to the main dashboard where you can see your agents and system status
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                          <CardContent>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="h6" gutterBottom>System Status</Typography>
+                                <List>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>check_circle</Icon></ListItemIcon>
+                                    <ListItemText primary="Active Agents" secondary="3 running" />
+                                  </ListItem>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                    <ListItemText primary="System Health" secondary="All systems operational" />
+                                  </ListItem>
+                                </List>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                                <List>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>add_circle</Icon></ListItemIcon>
+                                    <ListItemText primary="Create New Agent" />
+                                  </ListItem>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>settings</Icon></ListItemIcon>
+                                    <ListItemText primary="Configure Settings" />
+                                  </ListItem>
+                                </List>
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </StepContent>
+                  </Step>
+
+                  <Step>
+                    <StepLabel>Configure Your Environment</StepLabel>
+                    <StepContent>
+                      <Typography variant="body2" paragraph>
+                        1. Click on the "Settings" icon in the top navigation bar
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        2. In the Settings panel, configure your:
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                          <CardContent>
+                            <Accordion>
+                              <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                                <Typography>Profile Information</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <TextField
+                                  fullWidth
+                                  label="Name"
+                                  margin="normal"
+                                  defaultValue="John Doe"
+                                />
+                                <TextField
+                                  fullWidth
+                                  label="Email"
+                                  margin="normal"
+                                  defaultValue="john@example.com"
+                                />
+                              </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                              <AccordionSummary expandIcon={<Icon>expand_more</Icon>}>
+                                <Typography>Notification Settings</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <List>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
+                                    <ListItemText primary="Email Notifications" />
+                                  </ListItem>
+                                  <ListItem>
+                                    <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                    <ListItemText primary="System Alerts" />
+                                  </ListItem>
+                                </List>
+                              </AccordionDetails>
+                            </Accordion>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </StepContent>
+                  </Step>
+
+                  <Step>
+                    <StepLabel>Create Your First Agent</StepLabel>
+                    <StepContent>
+                      <Typography variant="body2" paragraph>
+                        1. Click the "Create Agent" button on the dashboard
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        2. Follow the agent creation wizard:
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                          <CardContent>
+                            <Stepper activeStep={0} orientation="vertical">
+                              <Step>
+                                <StepLabel>Basic Information</StepLabel>
+                                <StepContent>
+                                  <TextField
+                                    fullWidth
+                                    label="Agent Name"
+                                    margin="normal"
+                                    defaultValue="Research Assistant"
+                                  />
+                                  <TextField
+                                    fullWidth
+                                    label="Description"
+                                    margin="normal"
+                                    multiline
+                                    rows={3}
+                                    defaultValue="An AI assistant for research tasks"
+                                  />
+                                </StepContent>
+                              </Step>
+                              <Step>
+                                <StepLabel>Capabilities</StepLabel>
+                                <StepContent>
+                                  <List>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>search</Icon></ListItemIcon>
+                                      <ListItemText primary="Web Search" />
+                                    </ListItem>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>description</Icon></ListItemIcon>
+                                      <ListItemText primary="Document Analysis" />
+                                    </ListItem>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
+                                      <ListItemText primary="Data Processing" />
+                                    </ListItem>
+                                  </List>
+                                </StepContent>
+                              </Step>
+                              <Step>
+                                <StepLabel>Safety Settings</StepLabel>
+                                <StepContent>
+                                  <List>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                                      <ListItemText primary="Content Filtering" />
+                                    </ListItem>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                                      <ListItemText primary="Rate Limiting" />
+                                    </ListItem>
+                                    <ListItem>
+                                      <ListItemIcon><Icon>warning</Icon></ListItemIcon>
+                                      <ListItemText primary="Safety Checks" />
+                                    </ListItem>
+                                  </List>
+                                </StepContent>
+                              </Step>
+                            </Stepper>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </StepContent>
+                  </Step>
+
+                  <Step>
+                    <StepLabel>Add Knowledge to Your Agent</StepLabel>
+                    <StepContent>
+                      <Typography variant="body2" paragraph>
+                        1. Select your agent from the dashboard
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        2. Click on the "Knowledge" tab
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        3. Add knowledge using these methods:
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                          <CardContent>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} md={4}>
+                                <Card sx={{ height: '100%' }}>
+                                  <CardContent>
+                                    <Typography variant="h6">Upload Documents</Typography>
+                                    <Button
+                                      variant="outlined"
+                                      startIcon={<Icon>upload_file</Icon>}
+                                      fullWidth
+                                      sx={{ mt: 2 }}
+                                    >
+                                      Choose Files
+                                    </Button>
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                              <Grid item xs={12} md={4}>
+                                <Card sx={{ height: '100%' }}>
+                                  <CardContent>
+                                    <Typography variant="h6">Import Data</Typography>
+                                    <Button
+                                      variant="outlined"
+                                      startIcon={<Icon>data_object</Icon>}
+                                      fullWidth
+                                      sx={{ mt: 2 }}
+                                    >
+                                      Connect Source
+                                    </Button>
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                              <Grid item xs={12} md={4}>
+                                <Card sx={{ height: '100%' }}>
+                                  <CardContent>
+                                    <Typography variant="h6">Manual Entry</Typography>
+                                    <Button
+                                      variant="outlined"
+                                      startIcon={<Icon>edit_note</Icon>}
+                                      fullWidth
+                                      sx={{ mt: 2 }}
+                                    >
+                                      Add Content
+                                    </Button>
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </StepContent>
+                  </Step>
+
+                  <Step>
+                    <StepLabel>Test Your Agent</StepLabel>
+                    <StepContent>
+                      <Typography variant="body2" paragraph>
+                        1. Click the "Test" button on your agent's page
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        2. Use the test interface to:
+                      </Typography>
+                      <Box sx={{ mb: 2 }}>
+                        <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                          <CardContent>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} md={8}>
+                                <TextField
+                                  fullWidth
+                                  label="Send a message to your agent"
+                                  multiline
+                                  rows={3}
+                                  defaultValue="What can you tell me about quantum computing?"
+                                />
+                              </Grid>
+                              <Grid item xs={12} md={4}>
+                                <Button
+                                  variant="contained"
+                                  startIcon={<Icon>send</Icon>}
+                                  fullWidth
+                                  sx={{ height: '100%' }}
+                                >
+                                  Send Message
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="h6" gutterBottom>Response</Typography>
+                                <Paper sx={{ p: 2, bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                                  <Typography>
+                                    Quantum computing is a type of computing that harnesses the collective properties of quantum states to perform calculations. It uses quantum bits (qubits) which can exist in multiple states simultaneously, unlike classical bits that can only be 0 or 1.
+                                  </Typography>
+                                </Paper>
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Box>
+                    </StepContent>
+                  </Step>
+                </Stepper>
+              </Box>
+
+              {/* Next Steps Section */}
+              <Box id="next-steps" sx={{ mb: 6 }}>
+                <Typography variant="h4" gutterBottom>
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.NEXT}</Icon>
+                  Next Steps
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
                 
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
+                <Typography variant="body1" paragraph>
+                  Now that you've created your first agent, here are some recommended next steps:
+                </Typography>
+
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={4}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Core Technologies</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>school</Icon>
+                          Learn More
+                        </Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>menu_book</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Programming Fundamentals"
-                              secondary="Python, JavaScript, and basic software engineering concepts"
+                              primary="Read Documentation"
+                              secondary="Explore detailed guides and tutorials"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>data_object</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>video_library</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Data Structures"
-                              secondary="Graphs, trees, and basic algorithms"
+                              primary="Watch Tutorials"
+                              secondary="View video guides and examples"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>cloud</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>forum</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Cloud Computing"
-                              secondary="Basic understanding of cloud services and APIs"
+                              primary="Join Community"
+                              secondary="Connect with other users"
                             />
                           </ListItem>
                         </List>
                       </CardContent>
                     </Card>
                   </Grid>
-                  
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={4}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">AI & ML Concepts</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>extension</Icon>
+                          Explore Features
+                        </Typography>
                         <List>
                           <ListItem>
                             <ListItemIcon><Icon>psychology</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Machine Learning Basics"
-                              secondary="Neural networks, training, and inference"
+                              primary="Advanced Capabilities"
+                              secondary="Discover powerful agent features"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>integration_instructions</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="AI Safety"
-                              secondary="Basic concepts of AI alignment and safety"
+                              primary="Integrations"
+                              secondary="Connect with other tools"
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Data Analysis"
-                              secondary="Working with datasets and metrics"
+                              primary="Analytics"
+                              secondary="Track agent performance"
+                            />
+                          </ListItem>
+                        </List>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>support</Icon>
+                          Get Help
+                        </Typography>
+                        <List>
+                          <ListItem>
+                            <ListItemIcon><Icon>help</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Help Center"
+                              secondary="Find answers to common questions"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>email</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Contact Support"
+                              secondary="Get assistance from our team"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>bug_report</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Report Issues"
+                              secondary="Help improve SafeAI"
                             />
                           </ListItem>
                         </List>
@@ -400,278 +745,20 @@
                   </Grid>
                 </Grid>
               </Box>
-              
-              {/* System Requirements Section */}
-              <Box id="system-requirements" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.COMPUTER}</Icon>
-                  System Requirements
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  To work with SafeAI, you'll need:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Hardware</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="RAM"
-                              secondary="Minimum 16GB, recommended 32GB"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>storage</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Storage"
-                              secondary="At least 100GB free space"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="CPU"
-                              secondary="8+ cores recommended"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Software</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>terminal</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Operating System"
-                              secondary="Linux, macOS, or Windows 10+"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Python"
-                              secondary="Version 3.8 or higher"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>dns</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Internet Connection"
-                              secondary="Stable broadband required"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Development Tools</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>code</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="IDE"
-                              secondary="VS Code or PyCharm recommended"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>git</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Version Control"
-                              secondary="Git for source control"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>docker</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Containerization"
-                              secondary="Docker for container management"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              {/* Installation Section */}
-              <Box id="installation" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.DOWNLOAD}</Icon>
-                  Installation
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Follow these steps to set up your SafeAI development environment:
-                </Typography>
-                
-                <Stepper orientation="vertical">
-                  <Step>
-                    <StepLabel>Set Up Python Environment</StepLabel>
-                    <StepContent>
-                      <Typography paragraph>
-                        Create a new Python virtual environment and install required packages:
-                      </Typography>
-                      <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                        <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`# Create virtual environment
-python -m venv safeai-env
+            </Paper>
+          </Container>
+        </Box>
+      );
+    }
 
-# Activate virtual environment
-# On Windows:
-safeai-env\\Scripts\\activate
-# On macOS/Linux:
-source safeai-env/bin/activate
-
-# Install SafeAI and dependencies
-pip install safeai
-pip install -r requirements.txt`}
-                      </Typography>
-                    </Paper>
-                  </StepContent>
-                </Step>
-                
-                <Step>
-                  <StepLabel>Configure Environment Variables</StepLabel>
-                  <StepContent>
-                    <Typography paragraph>
-                      Set up your environment variables for API keys and configuration:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`# Create .env file
-SAFEAI_API_KEY=your_api_key_here
-SAFEAI_ENVIRONMENT=development
-SAFEAI_LOG_LEVEL=INFO`}
-                      </Typography>
-                    </Paper>
-                  </StepContent>
-                </Step>
-                
-                <Step>
-                  <StepLabel>Verify Installation</StepLabel>
-                  <StepContent>
-                    <Typography paragraph>
-                      Run the verification script to ensure everything is set up correctly:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`# Run verification
-python -m safeai.verify
-
-# Expected output:
-# ✓ Python environment verified
-# ✓ Dependencies installed
-# ✓ API connection successful
-# ✓ Database connection successful`}
-                      </Typography>
-                    </Paper>
-                  </StepContent>
-                </Step>
-              </Stepper>
-            </Box>
-            
-            {/* Next Steps Section */}
-            <Box id="next-steps" sx={{ mb: 6 }}>
-              <Typography variant="h4" gutterBottom>
-                <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.ARROW_FORWARD}</Icon>
-                Next Steps
-              </Typography>
-              <Divider sx={{ mb: 3 }} />
-              
-              <Typography variant="body1" paragraph>
-                Now that you have SafeAI installed, here's what to explore next:
-              </Typography>
-              
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                  <Card sx={{ height: '100%' }}>
-                    <CardContent>
-                      <Typography variant="h6">Core Concepts</Typography>
-                      <Typography variant="body2" paragraph>
-                        Understand the fundamental concepts and architecture:
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        href="basic-concepts.html"
-                        startIcon={<Icon>book</Icon>}
-                      >
-                        Read Basic Concepts
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12} md={4}>
-                  <Card sx={{ height: '100%' }}>
-                    <CardContent>
-                      <Typography variant="h6">Interactive Demos</Typography>
-                      <Typography variant="body2" paragraph>
-                        Try out SafeAI features hands-on:
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        href="interactive-demos/index.html"
-                        startIcon={<Icon>play_arrow</Icon>}
-                      >
-                        Launch Demos
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12} md={4}>
-                  <Card sx={{ height: '100%' }}>
-                    <CardContent>
-                      <Typography variant="h6">Technical Deep Dives</Typography>
-                      <Typography variant="body2" paragraph>
-                        Explore detailed implementation guides:
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        href="knowledge-graph-implementation.html"
-                        startIcon={<Icon>code</Icon>}
-                      >
-                        View Implementation Guide
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </Box>
-          </Paper>
-        </Container>
-      </Box>
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <GettingStarted />
+      </ThemeProvider>,
+      document.getElementById('root')
     );
-  }
-
-  // Render the app with ThemeProvider
-  ReactDOM.render(
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <GettingStarted />
-    </ThemeProvider>,
-    document.getElementById('root')
-  );
   </script>
 </body>
 </html> 

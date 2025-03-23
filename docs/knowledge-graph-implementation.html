@@ -70,7 +70,9 @@
       INFO: "info",
       ARCHITECTURE: "architecture",
       SPEED: "speed",
-      SECURITY: "security"
+      SECURITY: "security",
+      OVERVIEW: "overview",
+      IMPLEMENTATION: "implementation"
     };
 
     function KnowledgeGraphImplementationGuide() {
@@ -128,75 +130,85 @@
                 </Typography>
               </Box>
               
-              {/* Core Architecture Section */}
-              <Box id="architecture" sx={{ mb: 6 }}>
+              {/* Overview Section */}
+              <Box id="overview" sx={{ mb: 6 }}>
                 <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.ARCHITECTURE}</Icon>
-                  Core Architecture
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.OVERVIEW}</Icon>
+                  Knowledge Graph Overview
                 </Typography>
                 <Divider sx={{ mb: 3 }} />
                 
                 <Typography variant="body1" paragraph>
-                  The knowledge graph implementation follows a distributed, microservices-based architecture 
-                  designed for scalability and performance. Here's the detailed breakdown:
+                  The Knowledge Graph interface provides a powerful way to visualize and manage relationships between different pieces of information. Here's how to use it effectively:
                 </Typography>
-                
-                <Grid container spacing={2}>
+
+                <Grid container spacing={3}>
                   <Grid item xs={12} md={6}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Storage Layer</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>schema</Icon>
+                          Graph Structure
+                        </Typography>
+                        <Typography variant="body2" paragraph>
+                          The knowledge graph is organized into:
+                        </Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>storage</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>circle</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Graph Database"
-                              secondary="Neo4j for primary storage with custom indexing"
+                              primary="Entities"
+                              secondary="Individual pieces of information (e.g., products, users, documents)"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>backup</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>call_split</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Cache Layer"
-                              secondary="Redis for high-performance caching"
+                              primary="Relationships"
+                              secondary="Connections between entities (e.g., &quot;belongs to&quot;, &quot;created by&quot;)"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>label</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Replication"
-                              secondary="Multi-region replication for availability"
+                              primary="Properties"
+                              secondary="Attributes and metadata for entities and relationships"
                             />
                           </ListItem>
                         </List>
                       </CardContent>
                     </Card>
                   </Grid>
-                  
                   <Grid item xs={12} md={6}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Processing Layer</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>visibility</Icon>
+                          Visualization Tools
+                        </Typography>
+                        <Typography variant="body2" paragraph>
+                          The interface provides several ways to explore the graph:
+                        </Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>zoom_in</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Query Engine"
-                              secondary="Distributed query processing"
+                              primary="Interactive Graph View"
+                              secondary="Zoom, pan, and explore relationships visually"
                             />
                           </ListItem>
                           <ListItem>
-                            <ListItemIcon><Icon>sync</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>search</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Message Queue"
-                              secondary="Kafka for event streaming"
+                              primary="Search and Filter"
+                              secondary="Find specific entities or relationship patterns"
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemIcon><Icon>analytics</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Analytics Engine"
-                              secondary="Real-time graph analytics"
+                              primary="Analytics Dashboard"
+                              secondary="View graph statistics and insights"
                             />
                           </ListItem>
                         </List>
@@ -204,353 +216,175 @@
                     </Card>
                   </Grid>
                 </Grid>
-                
-                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>System Architecture Diagram</Typography>
-                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`+------------------+     +------------------+     +------------------+
-|                  |     |                  |     |                  |
-|  Client Layer    | --> |  API Gateway     | --> |  Query Engine    |
-|                  |     |                  |     |                  |
-+------------------+     +------------------+     +------------------+
-                              |                           |
-                              |                           |
-                              v                           v
-+------------------+     +------------------+     +------------------+
-|                  |     |                  |     |                  |
-|  Analytics       | <-- |  Message Queue   | <-- |  Graph Database  |
-|  Engine          |     |                  |     |                  |
-|                  |     |                  |     |                  |
-+------------------+     +------------------+     +------------------+
-                              |
-                              |
-                              v
-+------------------+
-|                  |
-|  Cache Layer     |
-|                  |
-+------------------+`}
-                  </Typography>
-                </Paper>
+
+                <Box sx={{ my: 4 }}>
+                  <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <CardContent>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6" gutterBottom>Graph Structure</Typography>
+                          <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0.3)', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`Entity1 (Person)
+  ├── works_at -> Entity2 (Company)
+  └── has_skill -> Entity3 (Skill)
+
+Entity2 (Company)
+  ├── located_in -> Entity4 (Location)
+  └── develops -> Entity5 (Product)
+
+Entity3 (Skill)
+  └── related_to -> Entity6 (Domain)`}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6" gutterBottom>Properties</Typography>
+                          <List>
+                            <ListItem>
+                              <ListItemIcon><Icon>person</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Entity Properties"
+                                secondary="Name, Type, Description, Metadata"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>link</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Relationship Properties"
+                                secondary="Type, Strength, Direction, Timestamp"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>label</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Custom Properties"
+                                secondary="User-defined attributes and values"
+                              />
+                            </ListItem>
+                          </List>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Box>
               </Box>
-              
-              {/* Data Model Section */}
-              <Box id="data-model" sx={{ mb: 6 }}>
+
+              {/* Implementation Details Section */}
+              <Box id="implementation" sx={{ mb: 6 }}>
                 <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SCHEMA}</Icon>
-                  Data Model
+                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.IMPLEMENTATION}</Icon>
+                  Implementation Details
                 </Typography>
                 <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  The knowledge graph data model is designed for flexibility and performance. Here's the detailed schema:
-                </Typography>
-                
-                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Core Entity Types
-type Entity {
-  id: String!                    // Unique identifier
-  type: String!                  // Entity type (e.g., "Person", "Organization")
-  properties: Map<String, Any>   // Dynamic properties
-  relationships: [Relationship!]  // Connected relationships
-  metadata: Metadata             // Additional metadata
-  version: Int!                  // Optimistic locking
-  created_at: DateTime!          // Creation timestamp
-  updated_at: DateTime!          // Last update timestamp
-}
 
-// Relationship Types
-type Relationship {
-  id: String!                    // Unique identifier
-  type: String!                  // Relationship type
-  source: Entity!                // Source entity
-  target: Entity!                // Target entity
-  properties: Map<String, Any>   // Relationship properties
-  metadata: Metadata             // Additional metadata
-  version: Int!                  // Optimistic locking
-  created_at: DateTime!          // Creation timestamp
-  updated_at: DateTime!          // Last update timestamp
-}
-
-// Metadata Types
-type Metadata {
-  confidence: Float              // Confidence score
-  source: String                 // Data source
-  last_verified: DateTime        // Last verification time
-  tags: [String!]               // Classification tags
-  custom_fields: Map<String, Any> // Custom metadata
-}
-
-// Query Types
-type Query {
-  findEntity(id: String!): Entity
-  findRelated(source: Entity!, type: String!): [Entity!]
-  search(query: String!): [Entity!]
-  traverse(start: Entity!, depth: Int!): [Entity!]
-  aggregate(entities: [Entity!]!): AggregationResult
-}`}
-                  </Typography>
-                </Paper>
-                
-                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Indexing Strategy</Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon><Icon>search</Icon></ListItemIcon>
-                    <ListItemText 
-                      primary="Primary Indexes"
-                      secondary="B+ tree indexes on entity IDs and relationship IDs"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                    <ListItemText 
-                      primary="Secondary Indexes"
-                      secondary="Composite indexes on frequently queried properties"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon><Icon>memory</Icon></ListItemIcon>
-                    <ListItemText 
-                      primary="In-Memory Indexes"
-                      secondary="Hash maps for high-frequency lookups"
-                    />
-                  </ListItem>
-                </List>
-              </Box>
-              
-              {/* Query Engine Section */}
-              <Box id="query-engine" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.CODE}</Icon>
-                  Query Engine Implementation
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
                 <Typography variant="body1" paragraph>
-                  The query engine implements sophisticated graph traversal and optimization algorithms:
+                  The knowledge graph implementation provides several key features for managing and querying your data:
                 </Typography>
-                
-                <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                  <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`class QueryEngine {
-  constructor(config) {
-    this.cache = new LRUCache(config.cacheSize);
-    this.optimizer = new QueryOptimizer();
-    this.executor = new QueryExecutor();
-  }
-  
-  async executeQuery(query: Query): Promise<Result> {
-    // 1. Parse and validate query
-    const parsedQuery = this.parser.parse(query);
-    
-    // 2. Optimize query plan
-    const optimizedPlan = this.optimizer.optimize(parsedQuery);
-    
-    // 3. Check cache
-    const cacheKey = this.generateCacheKey(optimizedPlan);
-    const cachedResult = await this.cache.get(cacheKey);
-    if (cachedResult) return cachedResult;
-    
-    // 4. Execute query
-    const result = await this.executor.execute(optimizedPlan);
-    
-    // 5. Cache result
-    await this.cache.set(cacheKey, result);
-    
-    return result;
-  }
-  
-  private optimizeQuery(plan: QueryPlan): OptimizedPlan {
-    // Apply various optimization techniques:
-    // - Predicate pushdown
-    // - Join reordering
-    // - Index selection
-    // - Parallel execution planning
-    return this.optimizer.applyOptimizations(plan);
-  }
-}`}
-                  </Typography>
-                </Paper>
-                
-                <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Query Optimization Techniques</Typography>
-                <Grid container spacing={2}>
+
+                <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Predicate Pushdown</Typography>
-                        <Typography variant="body2">
-                          Push filtering conditions as early as possible in the query plan to reduce data processing.
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>storage</Icon>
+                          Data Storage
                         </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Join Reordering</Typography>
-                        <Typography variant="body2">
-                          Optimize the order of join operations based on table sizes and selectivity.
+                        <Typography variant="body2" paragraph>
+                          Your knowledge graph data is stored securely using:
                         </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Index Selection</Typography>
-                        <Typography variant="body2">
-                          Choose optimal indexes based on query patterns and selectivity estimates.
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box>
-              
-              {/* Performance Considerations Section */}
-              <Box id="performance" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SPEED}</Icon>
-                  Performance Considerations
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  The implementation includes several performance optimizations:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Caching Strategy</Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>cached</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>database</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Multi-Level Cache"
-                              secondary="L1: In-memory, L2: Redis, L3: Database"
-                            />
-                          </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>refresh</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Cache Invalidation"
-                              secondary="Write-through with TTL"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Query Optimization</Typography>
-                        <List>
-                          <ListItem>
-                            <ListItemIcon><Icon>speed</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="Query Planning"
-                              secondary="Cost-based optimization"
+                              primary="Neo4j Database"
+                              secondary="Native graph database for efficient relationship storage"
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemIcon><Icon>memory</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Memory Management"
-                              secondary="Efficient memory allocation"
+                              primary="Redis Cache"
+                              secondary="Fast in-memory caching for frequently accessed data"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>backup</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Backup System"
+                              secondary="Regular backups and point-in-time recovery"
                             />
                           </ListItem>
                         </List>
                       </CardContent>
                     </Card>
                   </Grid>
-                  
                   <Grid item xs={12} md={4}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Scalability</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>speed</Icon>
+                          Performance
+                        </Typography>
+                        <Typography variant="body2" paragraph>
+                          Optimized for fast querying and updates:
+                        </Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>scale</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>bolt</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Horizontal Scaling"
-                              secondary="Sharding and replication"
+                              primary="Indexing"
+                              secondary="Efficient lookup of entities and relationships"
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemIcon><Icon>sync</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Load Balancing"
-                              secondary="Dynamic request routing"
+                              primary="Caching"
+                              secondary="Smart caching of frequently accessed data"
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon><Icon>scale</Icon></ListItemIcon>
+                            <ListItemText 
+                              primary="Scalability"
+                              secondary="Horizontal scaling for large datasets"
                             />
                           </ListItem>
                         </List>
                       </CardContent>
                     </Card>
                   </Grid>
-                </Grid>
-              </Box>
-              
-              {/* Security Considerations Section */}
-              <Box id="security" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.SECURITY}</Icon>
-                  Security Considerations
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Security is implemented at multiple layers:
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={4}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h6">Access Control</Typography>
+                        <Typography variant="h6" gutterBottom>
+                          <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>security</Icon>
+                          Security
+                        </Typography>
+                        <Typography variant="body2" paragraph>
+                          Built-in security features:
+                        </Typography>
                         <List>
                           <ListItem>
-                            <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                            <ListItemIcon><Icon>lock</Icon></ListItemIcon>
                             <ListItemText 
-                              primary="Role-Based Access"
-                              secondary="Fine-grained permissions"
+                              primary="Access Control"
+                              secondary="Fine-grained permissions for data access"
                             />
                           </ListItem>
-                          <ListItem>
-                            <ListItemIcon><Icon>vpn_key</Icon></ListItemIcon>
-                            <ListItemText 
-                              primary="API Authentication"
-                              secondary="JWT with refresh tokens"
-                            />
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="h6">Data Protection</Typography>
-                        <List>
                           <ListItem>
                             <ListItemIcon><Icon>encryption</Icon></ListItemIcon>
                             <ListItemText 
                               primary="Encryption"
-                              secondary="At-rest and in-transit"
+                              secondary="Data encryption at rest and in transit"
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemIcon><Icon>audit</Icon></ListItemIcon>
                             <ListItemText 
                               primary="Audit Logging"
-                              secondary="Comprehensive access logs"
+                              secondary="Track all changes and access patterns"
                             />
                           </ListItem>
                         </List>
@@ -558,279 +392,61 @@ type Query {
                     </Card>
                   </Grid>
                 </Grid>
-              </Box>
 
-              {/* Practical Examples Section */}
-              <Box id="examples" sx={{ mb: 6 }}>
-                <Typography variant="h4" gutterBottom>
-                  <Icon sx={{ verticalAlign: 'middle', mr: 1 }}>{ICONS.CODE}</Icon>
-                  Practical Examples
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Typography variant="body1" paragraph>
-                  Here are practical examples of how to work with SafeAI's knowledge graph system:
-                </Typography>
+                <Box sx={{ my: 4 }}>
+                  <Card sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <CardContent>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6" gutterBottom>Data Storage</Typography>
+                          <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0.3)', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
+{`Database Schema:
+  - Nodes (Entities)
+    ├── id: UUID
+    ├── type: String
+    ├── properties: JSON
+    └── created_at: Timestamp
 
-                {/* Example 1: Creating a Knowledge Graph */}
-                <Card sx={{ mb: 4 }}>
-                  <CardContent>
-                    <Typography variant="h5" gutterBottom>Example 1: Creating a Knowledge Graph</Typography>
-                    <Typography variant="body1" paragraph>
-                      This example shows how to create and populate a knowledge graph for a customer service agent:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Create a new knowledge graph
-const customerServiceGraph = new KnowledgeGraph({
-  name: "customer_service",
-  description: "Customer service knowledge base"
-});
-
-// Define entity types
-customerServiceGraph.addEntityType({
-  name: "Customer",
-  properties: {
-    id: "string",
-    name: "string",
-    email: "string",
-    subscription: "string",
-    lastContact: "datetime"
-  }
-});
-
-customerServiceGraph.addEntityType({
-  name: "Product",
-  properties: {
-    id: "string",
-    name: "string",
-    category: "string",
-    price: "number",
-    stock: "number"
-  }
-});
-
-// Define relationship types
-customerServiceGraph.addRelationshipType({
-  name: "PURCHASED",
-  properties: {
-    date: "datetime",
-    quantity: "number",
-    price: "number"
-  }
-});
-
-// Add sample data
-const customer = await customerServiceGraph.createEntity({
-  type: "Customer",
-  properties: {
-    id: "CUST001",
-    name: "John Doe",
-    email: "john@example.com",
-    subscription: "premium",
-    lastContact: new Date()
-  }
-});
-
-const product = await customerServiceGraph.createEntity({
-  type: "Product",
-  properties: {
-    id: "PROD001",
-    name: "Premium Widget",
-    category: "Electronics",
-    price: 99.99,
-    stock: 50
-  }
-});
-
-// Create relationship
-await customerServiceGraph.createRelationship({
-  type: "PURCHASED",
-  source: customer.id,
-  target: product.id,
-  properties: {
-    date: new Date(),
-    quantity: 2,
-    price: 199.98
-  }
-});`}
-                      </Typography>
-                    </Paper>
-                  </CardContent>
-                </Card>
-
-                {/* Example 2: Querying the Knowledge Graph */}
-                <Card sx={{ mb: 4 }}>
-                  <CardContent>
-                    <Typography variant="h5" gutterBottom>Example 2: Querying the Knowledge Graph</Typography>
-                    <Typography variant="body1" paragraph>
-                      Learn how to query the knowledge graph using different patterns:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Find all products purchased by a customer
-const customerPurchases = await customerServiceGraph.query({
-  match: {
-    pattern: [
-      { type: "Customer", id: "CUST001" },
-      { type: "PURCHASED" },
-      { type: "Product" }
-    ]
-  },
-  return: ["product"]
-});
-
-// Find customers who purchased products in a specific category
-const categoryCustomers = await customerServiceGraph.query({
-  match: {
-    pattern: [
-      { type: "Customer" },
-      { type: "PURCHASED" },
-      { type: "Product", properties: { category: "Electronics" } }
-    ]
-  },
-  return: ["customer"]
-});
-
-// Find related products based on purchase history
-const relatedProducts = await customerServiceGraph.query({
-  match: {
-    pattern: [
-      { type: "Product", id: "PROD001" },
-      { type: "PURCHASED" },
-      { type: "Customer" },
-      { type: "PURCHASED" },
-      { type: "Product" }
-    ]
-  },
-  return: ["product"],
-  where: "product.id != 'PROD001'"
-});`}
-                      </Typography>
-                    </Paper>
-                  </CardContent>
-                </Card>
-
-                {/* Example 3: Agent Integration */}
-                <Card sx={{ mb: 4 }}>
-                  <CardContent>
-                    <Typography variant="h5" gutterBottom>Example 3: Agent Integration</Typography>
-                    <Typography variant="body1" paragraph>
-                      See how to integrate the knowledge graph with an AI agent:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Create an agent with knowledge graph access
-const customerServiceAgent = new Agent({
-  name: "CustomerServiceBot",
-  capabilities: ["knowledge_graph_access"],
-  knowledgeGraph: customerServiceGraph
-});
-
-// Example prompt for the agent
-const prompt = \`You are a customer service agent with access to our knowledge graph.
-Customer John Doe (ID: CUST001) is asking about their recent purchase.
-Please check their purchase history and provide relevant information.
-
-Available actions:
-1. Query customer details
-2. Check purchase history
-3. Find related products
-4. Generate personalized recommendations\`;
-
-// Agent response using knowledge graph
-const response = await customerServiceAgent.process(prompt, {
-  context: {
-    customerId: "CUST001",
-    query: "What did I purchase recently?"
-  }
-});
-
-// Example response structure
-{
-  customer: {
-    name: "John Doe",
-    lastPurchase: "2024-03-15",
-    totalSpent: 199.98
-  },
-  recentPurchases: [
-    {
-      product: "Premium Widget",
-      date: "2024-03-15",
-      quantity: 2,
-      price: 199.98
-    }
-  ],
-  recommendations: [
-    {
-      product: "Premium Widget Pro",
-      reason: "Based on purchase history"
-    }
-  ]
-}`}
-                      </Typography>
-                    </Paper>
-                  </CardContent>
-                </Card>
-
-                {/* Example 4: Advanced Features */}
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" gutterBottom>Example 4: Advanced Features</Typography>
-                    <Typography variant="body1" paragraph>
-                      Explore advanced knowledge graph features:
-                    </Typography>
-                    <Paper sx={{ bgcolor: 'rgba(0, 0, 0, 0.3)', p: 2, my: 2, borderRadius: 2 }}>
-                      <Typography component="pre" sx={{ fontFamily: '"Courier New", monospace', overflowX: 'auto' }}>
-{`// Temporal queries
-const purchaseHistory = await customerServiceGraph.query({
-  match: {
-    pattern: [
-      { type: "Customer", id: "CUST001" },
-      { type: "PURCHASED" },
-      { type: "Product" }
-    ]
-  },
-  where: "relationship.date >= '2024-01-01'",
-  orderBy: "relationship.date DESC"
-});
-
-// Path finding
-const productRecommendations = await customerServiceGraph.findPaths({
-  start: { type: "Product", id: "PROD001" },
-  end: { type: "Product" },
-  maxDepth: 3,
-  where: "path.length > 1"
-});
-
-// Graph analytics
-const analytics = await customerServiceGraph.analyze({
-  metrics: [
-    "degree_centrality",
-    "betweenness_centrality",
-    "clustering_coefficient"
-  ],
-  nodes: { type: "Product" }
-});
-
-// Knowledge graph updates
-await customerServiceGraph.update({
-  operation: "MERGE",
-  pattern: [
-    { type: "Customer", id: "CUST001" },
-    { type: "PURCHASED" },
-    { type: "Product", id: "PROD002" }
-  ],
-  properties: {
-    date: new Date(),
-    quantity: 1,
-    price: 99.99
-  }
-});`}
-                      </Typography>
-                    </Paper>
-                  </CardContent>
-                </Card>
+  - Relationships
+    ├── id: UUID
+    ├── type: String
+    ├── source: Node
+    ├── target: Node
+    └── properties: JSON`}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6" gutterBottom>Performance Optimization</Typography>
+                          <List>
+                            <ListItem>
+                              <ListItemIcon><Icon>speed</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Indexing Strategy"
+                                secondary="B-tree indexes on frequently queried fields"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>memory</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Caching Layer"
+                                secondary="Redis cache for hot data"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <ListItemIcon><Icon>scale</Icon></ListItemIcon>
+                              <ListItemText 
+                                primary="Sharding"
+                                secondary="Horizontal partitioning for large datasets"
+                              />
+                            </ListItem>
+                          </List>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Box>
               </Box>
             </Paper>
             
