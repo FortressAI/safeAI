@@ -38,12 +38,12 @@
       margin-bottom: 32px;
     }
     .economics-card {
-      background-color: #2d2d2d;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      background: #1e1e1e;
+      color: #e0e0e0;
       padding: 24px;
+      border-radius: 8px;
       margin: 16px 0;
-      transition: transform 0.2s ease-in-out;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
     .economics-card:hover {
       transform: translateY(-2px);
@@ -70,18 +70,59 @@
     .badge-expert { background-color: #2e7d32; color: white; }
     .badge-user { background-color: #ed6c02; color: white; }
     .example-box {
-      background: rgba(25, 118, 210, 0.1);
-      border-left: 4px solid #1976d2;
+      background: #2a2a2a;
+      border-left: 4px solid #4CAF50;
       padding: 16px;
       margin: 16px 0;
-      border-radius: 0 4px 4px 0;
+      border-radius: 4px;
+    }
+    .revenue-breakdown {
+      background: #333333;
+      padding: 16px;
+      border-radius: 4px;
+      margin: 12px 0;
+    }
+    .revenue-breakdown h5 {
+      color: #4CAF50;
+      margin: 8px 0;
+      font-size: 1.1em;
+    }
+    .revenue-breakdown ul {
+      list-style-type: none;
+      padding-left: 16px;
+      margin: 8px 0;
+    }
+    .revenue-breakdown ul ul {
+      border-left: 2px solid #4a4a4a;
+      margin-left: 8px;
+      padding-left: 16px;
+    }
+    .revenue-breakdown li {
+      margin: 8px 0;
+      color: #d0d0d0;
     }
     .patent-notice {
-      background: rgba(76, 175, 80, 0.1);
-      border: 1px solid rgba(76, 175, 80, 0.3);
-      border-radius: 4px;
+      background: #2d2d2d;
       padding: 16px;
-      margin: 24px 0;
+      border-radius: 4px;
+      margin-top: 24px;
+      border: 1px solid #4a4a4a;
+    }
+    .MuiTypography-root {
+      color: #e0e0e0 !important;
+    }
+    .MuiListItemIcon-root {
+      color: #4CAF50 !important;
+    }
+    .MuiListItemText-primary {
+      color: #e0e0e0 !important;
+    }
+    .MuiListItemText-secondary {
+      color: #a0a0a0 !important;
+    }
+    .icon {
+      color: #4CAF50;
+      margin-right: 8px;
     }
   </style>
 </head>
@@ -193,6 +234,9 @@
               </Typography>
               
               <div className="economics-card">
+                <Typography variant="h4" gutterBottom sx={{ color: '#4CAF50', mb: 3 }}>
+                  SafeAIcoin Economics
+                </Typography>
                 <Typography variant="h6" gutterBottom>
                   <span className="token-badge badge-expert">Expert</span>
                   Ownership & Revenue Model
@@ -244,170 +288,141 @@
                   Our platform uses automated ethics validation and dynamic pricing based on domain risk/reward ratios. Here's how experts monetize their knowledge:
                 </Typography>
 
-                <div className="example-box">
-                  <Typography variant="h6">Initial Setup Costs</Typography>
-                  <ul>
-                    <li>Knowledge Graph Creation: 100 SafeAIcoins</li>
-                    <li>Ethics Validation: Automated (included in setup)</li>
-                    <li>Domain Risk Assessment: Automated based on EthicsKG.sol</li>
-                  </ul>
-                </div>
+                <div className="economics-section">
+                    <Typography variant="h5" gutterBottom sx={{ color: '#4CAF50', mt: 4 }}>
+                        Initial Setup & Validation
+                    </Typography>
+                    
+                    <div className="example-box">
+                        <Typography variant="subtitle1" gutterBottom sx={{ color: '#4CAF50' }}>
+                            Knowledge Graph Creation Cost
+                        </Typography>
+                        <ul className="setup-list">
+                            <li>Base Cost: 100 SafeAIcoins</li>
+                            <li>Includes:
+                                <ul>
+                                    <li>Automated Ethics Validation</li>
+                                    <li>Domain Risk Assessment</li>
+                                    <li>Initial Knowledge Graph Deployment</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
 
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Legal Knowledge Graph Example
-                </Typography>
-                <div className="example-box">
-                  <Typography variant="subtitle1" gutterBottom>
-                    Contract Review AI Agent
-                  </Typography>
-                  <div className="revenue-breakdown">
-                    <h5>Microtransaction Structure:</h5>
-                    <ul>
-                      <li>Base Review Cost: 0.1 SafeAIcoin per clause</li>
-                      <li>Risk Multiplier: 1.5-3x based on contract value
-                        <ul>
-                          <li>Low Risk (&lt; $10k contracts): 1.5x</li>
-                          <li>Medium Risk ($10k-$100k): 2x</li>
-                          <li>High Risk (&gt; $100k): 3x</li>
-                        </ul>
-                      </li>
-                      <li>Volume Example:
-                        <ul>
-                          <li>1000 clause reviews/day</li>
-                          <li>Average 20 clauses per contract</li>
-                          <li>Mixed risk distribution</li>
-                        </ul>
-                      </li>
-                      <li>Daily Revenue Breakdown:
-                        <ul>
-                          <li>Low Risk (40%): 400 reviews × 0.1 × 1.5 = 60 SafeAIcoins</li>
-                          <li>Medium Risk (35%): 350 reviews × 0.1 × 2.0 = 70 SafeAIcoins</li>
-                          <li>High Risk (25%): 250 reviews × 0.1 × 3.0 = 75 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                      <li>Platform Fee: 5% of each transaction</li>
-                      <li>Daily Totals:
-                        <ul>
-                          <li>Gross Revenue: 205 SafeAIcoins</li>
-                          <li>Platform Fee: 10.25 SafeAIcoins</li>
-                          <li>Expert Earnings: 194.75 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                    <Typography variant="h5" gutterBottom sx={{ color: '#4CAF50', mt: 4 }}>
+                        Domain Examples
+                    </Typography>
 
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Medical Knowledge Graph Example
-                </Typography>
-                <div className="example-box">
-                  <Typography variant="subtitle1" gutterBottom>
-                    Diagnostic Pattern Recognition Agent
-                  </Typography>
-                  <div className="revenue-breakdown">
-                    <h5>Microtransaction Structure:</h5>
-                    <ul>
-                      <li>Base Analysis Cost: 0.05 SafeAIcoin per data point</li>
-                      <li>Complexity Multiplier:
-                        <ul>
-                          <li>Basic Vitals: 1x</li>
-                          <li>Lab Results: 2x</li>
-                          <li>Imaging Analysis: 3x</li>
-                        </ul>
-                      </li>
-                      <li>Usage Example (24 hours):
-                        <ul>
-                          <li>5000 vital sign analyses</li>
-                          <li>2000 lab result interpretations</li>
-                          <li>500 imaging pattern analyses</li>
-                        </ul>
-                      </li>
-                      <li>Daily Revenue Calculation:
-                        <ul>
-                          <li>Vitals: 5000 × 0.05 × 1 = 250 SafeAIcoins</li>
-                          <li>Labs: 2000 × 0.05 × 2 = 200 SafeAIcoins</li>
-                          <li>Imaging: 500 × 0.05 × 3 = 75 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                      <li>Risk-Adjusted Fee: 10% (higher due to medical liability)
-                        <ul>
-                          <li>Gross Daily Revenue: 525 SafeAIcoins</li>
-                          <li>Platform Fee: 52.5 SafeAIcoins</li>
-                          <li>Expert Earnings: 472.5 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                    <div className="example-box">
+                        <Typography variant="h6" gutterBottom sx={{ color: '#4CAF50' }}>
+                            Legal Knowledge Graph
+                        </Typography>
+                        <div className="revenue-breakdown">
+                            <h5>Contract Review Pricing</h5>
+                            <ul>
+                                <li>Base Cost: 0.1 SafeAIcoin per clause</li>
+                                <li>Risk-Based Multipliers:
+                                    <ul>
+                                        <li>Low Risk (&lt; $10k): 1.5x</li>
+                                        <li>Medium Risk ($10k-$100k): 2x</li>
+                                        <li>High Risk (&gt; $100k): 3x</li>
+                                    </ul>
+                                </li>
+                            </ul>
 
-                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                  Content Validation Example
-                </Typography>
-                <div className="example-box">
-                  <Typography variant="subtitle1" gutterBottom>
-                    News Article Fact-Checking Agent
-                  </Typography>
-                  <div className="revenue-breakdown">
-                    <h5>View-Based Pricing:</h5>
-                    <ul>
-                      <li>Base Verification Cost: 0.01 SafeAIcoin per fact check</li>
-                      <li>View Multipliers:
-                        <ul>
-                          <li>1-1000 views: 1x</li>
-                          <li>1001-10000 views: 1.5x</li>
-                          <li>10001+ views: 2x</li>
-                        </ul>
-                      </li>
-                      <li>Example Article Performance:
-                        <ul>
-                          <li>100 facts verified</li>
-                          <li>First 1000 views: 100 × 0.01 × 1 = 1 SafeAIcoin</li>
-                          <li>Next 9000 views: 100 × 0.01 × 1.5 = 1.5 SafeAIcoins</li>
-                          <li>Next 40000 views: 100 × 0.01 × 2 = 2 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                      <li>Total Revenue per 50k Views:
-                        <ul>
-                          <li>Gross Revenue: 4.5 SafeAIcoins</li>
-                          <li>Platform Fee (5%): 0.225 SafeAIcoins</li>
-                          <li>Expert Earnings: 4.275 SafeAIcoins</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
+                            <h5>Usage Example (24h)</h5>
+                            <ul>
+                                <li>Volume: 1000 clause reviews
+                                    <ul>
+                                        <li>Low Risk (40%): 60 SafeAIcoins</li>
+                                        <li>Medium Risk (35%): 70 SafeAIcoins</li>
+                                        <li>High Risk (25%): 75 SafeAIcoins</li>
+                                    </ul>
+                                </li>
+                                <li>Daily Summary:
+                                    <ul>
+                                        <li>Gross Revenue: 205 SafeAIcoins</li>
+                                        <li>Platform Fee (5%): 10.25 SafeAIcoins</li>
+                                        <li>Expert Earnings: 194.75 SafeAIcoins</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="example-box">
+                        <Typography variant="h6" gutterBottom sx={{ color: '#4CAF50' }}>
+                            Medical Knowledge Graph
+                        </Typography>
+                        <div className="revenue-breakdown">
+                            <h5>Diagnostic Analysis Pricing</h5>
+                            <ul>
+                                <li>Base Cost: 0.05 SafeAIcoin per data point</li>
+                                <li>Complexity Multipliers:
+                                    <ul>
+                                        <li>Basic Vitals: 1x</li>
+                                        <li>Lab Results: 2x</li>
+                                        <li>Imaging Analysis: 3x</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <h5>Usage Example (24h)</h5>
+                            <ul>
+                                <li>Volume:
+                                    <ul>
+                                        <li>5000 vital sign analyses</li>
+                                        <li>2000 lab result interpretations</li>
+                                        <li>500 imaging pattern analyses</li>
+                                    </ul>
+                                </li>
+                                <li>Daily Summary:
+                                    <ul>
+                                        <li>Gross Revenue: 525 SafeAIcoins</li>
+                                        <li>Platform Fee (10%): 52.5 SafeAIcoins</li>
+                                        <li>Expert Earnings: 472.5 SafeAIcoins</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="patent-notice">
-                  <Typography variant="h6" gutterBottom>
-                    <Icon sx={{ mr: 1 }}>{ICONS.SHIELD}</Icon>
-                    Dynamic Pricing Benefits
-                  </Typography>
-                  <Typography paragraph>
-                    Our patent-protected dynamic pricing system ensures:
-                  </Typography>
-                  <List>
-                    <ListItem>
-                      <ListItemIcon><Icon>{ICONS.BALANCE}</Icon></ListItemIcon>
-                      <ListItemText 
-                        primary="Risk-Adjusted Pricing"
-                        secondary="Automatically adjusts fees based on domain risk and complexity"
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>{ICONS.ETHICS}</Icon></ListItemIcon>
-                      <ListItemText 
-                        primary="Ethical Validation"
-                        secondary="Continuous automated monitoring and scoring via EthicsKG"
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemIcon><Icon>{ICONS.SCALE}</Icon></ListItemIcon>
-                      <ListItemText 
-                        primary="Usage-Based Growth"
-                        secondary="Revenue scales with actual usage and value delivered"
-                      />
-                    </ListItem>
-                  </List>
+                    <Typography variant="h6" gutterBottom sx={{ color: '#4CAF50' }}>
+                        <Icon className="icon">verified</Icon>
+                        Dynamic Pricing System
+                    </Typography>
+                    
+                    <List>
+                        <ListItem>
+                            <ListItemIcon>
+                                <Icon>analytics</Icon>
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary="Usage-Based Growth"
+                                secondary="Revenue scales automatically with usage and value"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <Icon>security</Icon>
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary="Risk Assessment"
+                                secondary="Automatic price adjustment based on domain risk"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <Icon>gavel</Icon>
+                            </ListItemIcon>
+                            <ListItemText 
+                                primary="Ethics Validation"
+                                secondary="Continuous monitoring via EthicsKG"
+                            />
+                        </ListItem>
+                    </List>
                 </div>
               </div>
 
@@ -709,6 +724,174 @@ Total Revenue: $600M`}
                     />
                   </ListItem>
                 </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Financial Plan & Budget Allocation
+              </Typography>
+              
+              <div className="economics-card">
+                <Typography variant="h6" gutterBottom sx={{ color: '#4CAF50', mb: 3 }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.METRICS}</Icon>
+                  5-Year Budget Allocation from IPTO
+                </Typography>
+
+                <div className="revenue-breakdown">
+                  <h5>Initial Public Token Offering (IPTO)</h5>
+                  <ul>
+                    <li>Total Raised: $240M - $300M
+                      <ul>
+                        <li>Base Budget: $240M</li>
+                        <li>Strategic Reserve: Up to $60M</li>
+                      </ul>
+                    </li>
+                  </ul>
+
+                  <h5>Year 1: Foundation Building ($80M)</h5>
+                  <ul>
+                    <li>Core Infrastructure: $40M
+                      <ul>
+                        <li>Knowledge Graph Development: $20M</li>
+                        <li>AI Agent Framework: $12M</li>
+                        <li>Platform Architecture: $8M</li>
+                      </ul>
+                    </li>
+                    <li>Market Entry: $25M
+                      <ul>
+                        <li>Expert Network Development: $15M</li>
+                        <li>Initial Marketing: $6M</li>
+                        <li>Business Development: $4M</li>
+                      </ul>
+                    </li>
+                    <li>Operations: $15M
+                      <ul>
+                        <li>Team Building: $8M</li>
+                        <li>Security & Compliance: $4M</li>
+                        <li>Administrative: $3M</li>
+                      </ul>
+                    </li>
+                  </ul>
+
+                  <h5>Year 2: Market Development ($65M)</h5>
+                  <ul>
+                    <li>Technology Enhancement: $30M
+                      <ul>
+                        <li>Knowledge Graph Expansion: $15M</li>
+                        <li>Agent Capabilities: $10M</li>
+                        <li>Platform Scaling: $5M</li>
+                      </ul>
+                    </li>
+                    <li>Market Growth: $20M
+                      <ul>
+                        <li>Expert Acquisition: $10M</li>
+                        <li>Enterprise Partnerships: $6M</li>
+                        <li>Marketing: $4M</li>
+                      </ul>
+                    </li>
+                    <li>Operations: $15M
+                      <ul>
+                        <li>Team Expansion: $8M</li>
+                        <li>Security & Compliance: $4M</li>
+                        <li>Administrative: $3M</li>
+                      </ul>
+                    </li>
+                  </ul>
+
+                  <h5>Year 3: Scale & Revenue Focus ($45M)</h5>
+                  <ul>
+                    <li>Technology Optimization: $20M
+                      <ul>
+                        <li>Performance Enhancements: $12M</li>
+                        <li>Enterprise Features: $8M</li>
+                      </ul>
+                    </li>
+                    <li>Market Expansion: $15M
+                      <ul>
+                        <li>Geographic Expansion: $8M</li>
+                        <li>Industry Verticals: $7M</li>
+                      </ul>
+                    </li>
+                    <li>Operations: $10M
+                      <ul>
+                        <li>Team Operations: $6M</li>
+                        <li>Compliance & Security: $4M</li>
+                      </ul>
+                    </li>
+                  </ul>
+
+                  <h5>Year 4: Optimization ($30M)</h5>
+                  <ul>
+                    <li>Technology Refinement: $15M
+                      <ul>
+                        <li>AI Optimization: $8M</li>
+                        <li>Platform Efficiency: $7M</li>
+                      </ul>
+                    </li>
+                    <li>Market Consolidation: $10M
+                      <ul>
+                        <li>Key Account Growth: $6M</li>
+                        <li>Strategic Partnerships: $4M</li>
+                      </ul>
+                    </li>
+                    <li>Operations: $5M
+                      <ul>
+                        <li>Core Operations: $3M</li>
+                        <li>Compliance: $2M</li>
+                      </ul>
+                    </li>
+                  </ul>
+
+                  <h5>Year 5: Path to Profitability ($20M + Strategic Reserve)</h5>
+                  <ul>
+                    <li>Base Budget: $20M
+                      <ul>
+                        <li>Technology Maintenance: $10M</li>
+                        <li>Market Support: $6M</li>
+                        <li>Core Operations: $4M</li>
+                      </ul>
+                    </li>
+                    <li>Strategic Reserve Access: Up to $60M
+                      <ul>
+                        <li>Available for opportunities</li>
+                        <li>Market response needs</li>
+                        <li>Runway extension if needed</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="example-box">
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: '#4CAF50' }}>
+                    Path to Profitability
+                  </Typography>
+                  <ul>
+                    <li>Revenue Milestones
+                      <ul>
+                        <li>Year 1: Initial revenue from early adopters</li>
+                        <li>Year 2: 25% of operational costs covered by revenue</li>
+                        <li>Year 3: 50% of operational costs covered by revenue</li>
+                        <li>Year 4: 75% of operational costs covered by revenue</li>
+                        <li>Year 5: Full operational cost coverage + profit potential</li>
+                      </ul>
+                    </li>
+                    <li>Cost Optimization
+                      <ul>
+                        <li>Decreasing burn rate each year</li>
+                        <li>Increasing automation and efficiency</li>
+                        <li>Strategic use of reserve funds</li>
+                      </ul>
+                    </li>
+                    <li>Strategic Reserve ($60M)
+                      <ul>
+                        <li>Market Opportunities</li>
+                        <li>Runway Extension</li>
+                        <li>Emergency Fund</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </Container>
