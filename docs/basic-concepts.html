@@ -76,7 +76,12 @@
       EXPAND: "expand",
       ADD_CIRCLE: "add_circle",
       UPLOAD_FILE: "upload_file",
-      SEARCH: "search"
+      SEARCH: "search",
+      TOKEN: "token",
+      REWARD: "reward",
+      ETHICS: "ethics",
+      SCALE: "scale",
+      VALUE: "value"
     };
 
     function BasicConcepts() {
@@ -290,6 +295,141 @@
                   <ListItemText primary="Learn from the explanations provided" />
                 </ListItem>
               </List>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                SafeAIcoin Integration
+              </Typography>
+              <Typography paragraph>
+                SafeAIcoin is the native token that powers our ecosystem, enabling transparent and efficient value exchange:
+              </Typography>
+              
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Transaction Examples
+                </Typography>
+                <Typography paragraph>
+                  Real-world examples of SafeAIcoin in action:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.TOKEN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Media Fact-Checking"
+                      secondary="User pays 10 SafeAIcoins for fact-check, expert earns 100 SafeAIcoins, platform receives 20% fee"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Legal Compliance Review"
+                      secondary="Client pays 50 SafeAIcoins for assessment, expert earns 200 SafeAIcoins, platform receives 25% fee"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical AI Validation"
+                      secondary="Token-weighted voting on AI ethics standards, with minimum 1000 SafeAIcoins required for proposal submission"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Value Distribution
+                </Typography>
+                <Typography paragraph>
+                  SafeAIcoin enables fair value distribution across the ecosystem:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.TOKEN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Platform Operations"
+                      secondary="40% of tokens reserved for platform development and maintenance"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Expert Rewards"
+                      secondary="30% allocated for domain expert contributions and knowledge sharing"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethics Governance"
+                      secondary="15% reserved for ethical control mechanisms and validation"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCALE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ecosystem Growth"
+                      secondary="15% dedicated to community development and adoption"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Market Impact
+                </Typography>
+                <Typography paragraph>
+                  SafeAIcoin drives significant market value through:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.VALUE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Graph Value"
+                      secondary="$150M - Value of specialized knowledge and expertise"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCALE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Platform Revenue"
+                      secondary="$100M - Transaction fees and service revenue"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical AI Market"
+                      secondary="$50M - Value of ethical AI validation and compliance"
+                    />
+                  </ListItem>
+                </List>
+                <Typography paragraph>
+                  Target market valuation: $300-500 million based on projected growth and market opportunities.
+                </Typography>
+              </div>
             </div>
 
             <Box sx={{ mt: 4, textAlign: 'center' }}>
