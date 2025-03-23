@@ -262,24 +262,11 @@
       SETTINGS: "settings",
       BUG_REPORT: "bug_report",
       QUESTION_ANSWER: "question_answer",
-      CHEVRON_RIGHT: "chevron_right"
+      CHEVRON_RIGHT: "chevron_right",
+      INFO: "info"
     };
 
     function GettingStarted() {
-      const [searchQuery, setSearchQuery] = React.useState('');
-      const [searchResults, setSearchResults] = React.useState([]);
-      const [selectedTab, setSelectedTab] = React.useState(0);
-
-      const handleSearch = (event) => {
-        const query = event.target.value;
-        setSearchQuery(query);
-        // Implement search functionality here
-      };
-
-      const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
-      };
-
       return (
         <Box>
           <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -295,7 +282,7 @@
                 <Icon>{ICONS.ARROW_BACK}</Icon>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Getting Started
+                Getting Started with SafeAI
               </Typography>
               <Button color="inherit" href="index.html">
                 <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
@@ -305,471 +292,179 @@
           </AppBar>
           
           <Container>
-            {/* Breadcrumb Navigation */}
-            <Breadcrumbs className="breadcrumb">
-              <Link href="index.html" color="inherit">
-                <Icon sx={{ mr: 0.5 }}>{ICONS.HOME}</Icon>
-                Home
-              </Link>
-              <Icon>{ICONS.CHEVRON_RIGHT}</Icon>
-              <Typography color="text.primary">Getting Started</Typography>
-            </Breadcrumbs>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Quick Start Guide
+            </Typography>
+            
+            <Paper className="content">
+              <Typography variant="h4" gutterBottom>Welcome to SafeAI</Typography>
+              <Typography paragraph>
+                SafeAI is a powerful platform that helps you build and manage AI agents safely and effectively. 
+                This guide will get you up and running in minutes.
+              </Typography>
 
-            {/* Search Bar */}
-            <Box className="search-container">
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Search documentation..."
-                value={searchQuery}
-                onChange={handleSearch}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Icon>search</Icon>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              {searchResults.length > 0 && (
-                <Paper className="search-results">
-                  <List>
-                    {searchResults.map((result, index) => (
-                      <ListItem key={index} button>
-                        <ListItemText primary={result.title} secondary={result.description} />
+              <Box sx={{ 
+                backgroundColor: "rgba(76, 175, 80, 0.1)", 
+                borderLeft: "4px solid #4caf50",
+                p: 2,
+                mb: 3
+              }}>
+                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Icon sx={{ mr: 1 }}>{ICONS.INFO}</Icon>
+                  What You'll Learn
+                </Typography>
+                <Typography variant="body2">
+                  By the end of this guide, you'll be able to:
+                </Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                    <ListItemText primary="Set up your first AI agent" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                    <ListItemText primary="Configure basic safety settings" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon><Icon fontSize="small">check_circle</Icon></ListItemIcon>
+                    <ListItemText primary="Run your first task" />
+                  </ListItem>
+                </List>
+              </Box>
+
+              <Stepper activeStep={0} orientation="vertical">
+                <Step>
+                  <StepLabel>Install SafeAI</StepLabel>
+                  <StepContent>
+                    <Typography paragraph>
+                      First, let's install SafeAI. Open your terminal and run:
+                    </Typography>
+                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <code>pip install safeai</code>
+                    </Paper>
+                    <Typography paragraph>
+                      Once installed, verify the installation:
+                    </Typography>
+                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <code>safeai --version</code>
+                    </Paper>
+                  </StepContent>
+                </Step>
+
+                <Step>
+                  <StepLabel>Create Your First Agent</StepLabel>
+                  <StepContent>
+                    <Typography paragraph>
+                      Let's create a simple agent that can help with basic tasks. Create a new file called `my_agent.py`:
+                    </Typography>
+                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <code>
+                        from safeai import Agent, SafetyConfig<br/>
+                        <br/>
+                        # Create a basic safety configuration<br/>
+                        safety_config = SafetyConfig(<br/>
+                        &nbsp;&nbsp;max_tokens=1000,<br/>
+                        &nbsp;&nbsp;temperature=0.7,<br/>
+                        &nbsp;&nbsp;safety_checks=True<br/>
+                        )<br/>
+                        <br/>
+                        # Initialize your agent<br/>
+                        agent = Agent(<br/>
+                        &nbsp;&nbsp;name="MyFirstAgent",<br/>
+                        &nbsp;&nbsp;safety_config=safety_config<br/>
+                        )<br/>
+                        <br/>
+                        # Test your agent<br/>
+                        response = agent.run("Hello! Can you help me with a simple task?")<br/>
+                        print(response)
+                      </code>
+                    </Paper>
+                    <Typography paragraph>
+                      Run your agent:
+                    </Typography>
+                    <Paper sx={{ p: 2, bgcolor: 'rgba(0,0,0,0.2)' }}>
+                      <code>python my_agent.py</code>
+                    </Paper>
+                  </StepContent>
+                </Step>
+
+                <Step>
+                  <StepLabel>Configure Safety Settings</StepLabel>
+                  <StepContent>
+                    <Typography paragraph>
+                      SafeAI comes with built-in safety features. Let's configure them for your use case:
+                    </Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>security</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Content Filtering"
+                          secondary="Automatically filters harmful or inappropriate content"
+                        />
                       </ListItem>
-                    ))}
-                  </List>
-                </Paper>
-              )}
-            </Box>
-
-            <Grid container spacing={4}>
-              {/* Table of Contents */}
-              <Grid item xs={12} md={3}>
-                <Paper className="toc">
-                  <Typography variant="h6" className="toc-title">
-                    Table of Contents
-                  </Typography>
-                  <List className="toc-list">
-                    <ListItem className="toc-item">
-                      <Link href="#introduction" className="toc-link">
-                        Introduction
-                      </Link>
-                    </ListItem>
-                    <ListItem className="toc-item">
-                      <Link href="#system-requirements" className="toc-link">
-                        System Requirements
-                      </Link>
-                      <List className="toc-subitem">
-                        <ListItem>
-                          <Link href="#hardware-requirements" className="toc-link">
-                            Hardware Requirements
-                          </Link>
-                        </ListItem>
-                        <ListItem>
-                          <Link href="#software-requirements" className="toc-link">
-                            Software Requirements
-                          </Link>
-                        </ListItem>
-                      </List>
-                    </ListItem>
-                    <ListItem className="toc-item">
-                      <Link href="#account-setup" className="toc-link">
-                        Account Setup
-                      </Link>
-                    </ListItem>
-                    <ListItem className="toc-item">
-                      <Link href="#platform-navigation" className="toc-link">
-                        Platform Navigation
-                      </Link>
-                    </ListItem>
-                    <ListItem className="toc-item">
-                      <Link href="#first-steps" className="toc-link">
-                        First Steps
-                      </Link>
-                    </ListItem>
-                    <ListItem className="toc-item">
-                      <Link href="#next-steps" className="toc-link">
-                        Next Steps
-                      </Link>
-                    </ListItem>
-                  </List>
-                </Paper>
-              </Grid>
-
-              {/* Main Content */}
-              <Grid item xs={12} md={9}>
-                <Paper className="content">
-                  <Typography variant="h3" component="h1" gutterBottom>
-                    Getting Started with SafeAI
-                  </Typography>
-
-                  <Alert severity="info" sx={{ mb: 4 }}>
-                    Welcome to SafeAI! This guide will help you get started with the platform, from initial setup to your first interactions with AI agents and knowledge graphs.
-                  </Alert>
-
-                  <div className="content-section" id="introduction">
-                    <Typography variant="h4" gutterBottom>Introduction</Typography>
+                      <ListItem>
+                        <ListItemIcon><Icon>verified_user</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Output Validation"
+                          secondary="Ensures responses meet safety criteria"
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>history</Icon></ListItemIcon>
+                        <ListItemText 
+                          primary="Activity Logging"
+                          secondary="Tracks all agent actions for review"
+                        />
+                      </ListItem>
+                    </List>
                     <Typography paragraph>
-                      SafeAI is a powerful platform that combines advanced AI capabilities with robust security measures and blockchain-based governance. This guide will walk you through the essential steps to get started with the platform.
+                      These settings are enabled by default, but you can customize them in your agent's configuration.
                     </Typography>
+                  </StepContent>
+                </Step>
+
+                <Step>
+                  <StepLabel>Next Steps</StepLabel>
+                  <StepContent>
                     <Typography paragraph>
-                      Whether you're a developer, researcher, or business user, this guide will help you understand the core concepts and get up and running quickly.
+                      Congratulations! You've created your first SafeAI agent. Here's what you can do next:
                     </Typography>
-                  </div>
-
-                  <div className="content-section" id="system-requirements">
-                    <Typography variant="h4" gutterBottom>System Requirements</Typography>
-                    
-                    <div id="hardware-requirements">
-                      <Typography variant="h5" gutterBottom>Hardware Requirements</Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Processor" 
-                            secondary="Intel Core i5/AMD Ryzen 5 or better"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Memory" 
-                            secondary="8GB RAM minimum, 16GB recommended"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Storage" 
-                            secondary="20GB free space minimum"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Display" 
-                            secondary="1280x720 minimum resolution"
-                          />
-                        </ListItem>
-                      </List>
-                    </div>
-
-                    <div id="software-requirements">
-                      <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>Software Requirements</Typography>
-                      <List>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Web Browser" 
-                            secondary="Chrome, Firefox, Safari, or Edge (latest version)"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Web3 Wallet" 
-                            secondary="MetaMask or other compatible Web3 wallet"
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon><Icon>{ICONS.CHECK}</Icon></ListItemIcon>
-                          <ListItemText 
-                            primary="Internet Connection" 
-                            secondary="Stable broadband connection required"
-                          />
-                        </ListItem>
-                      </List>
-                    </div>
-
-                    <div className="note">
-                      <Typography variant="subtitle2" gutterBottom>
-                        <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>info</Icon>
-                        Note
-                      </Typography>
-                      <Typography variant="body2">
-                        While SafeAI can run on lower-spec systems, optimal performance is achieved with the recommended specifications.
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div className="content-section" id="account-setup">
-                    <Typography variant="h4" gutterBottom>Account Setup</Typography>
-                    
-                    <Stepper orientation="vertical" sx={{ 
-                      mt: 2, 
-                      "& .MuiStepLabel-root": { color: "white" },
-                      "& .MuiStepIcon-root": { color: "#2196f3" },
-                      "& .MuiStepConnector-line": { borderColor: "rgba(255,255,255,0.1)" }
-                    }}>
-                      <Step active={true}>
-                        <StepLabel>Visit the SafeAI platform</StepLabel>
-                        <StepContent>
-                          <Typography>
-                            Navigate to <Link href="https://console.safeai.com">console.safeai.com</Link>
-                          </Typography>
-                        </StepContent>
-                      </Step>
-                      <Step active={true}>
-                        <StepLabel>Click "Connect Wallet"</StepLabel>
-                        <StepContent>
-                          <Typography>
-                            Look for the "Connect Wallet" button in the upper right corner of the page
-                          </Typography>
-                        </StepContent>
-                      </Step>
-                      <Step active={true}>
-                        <StepLabel>Select your Web3 wallet</StepLabel>
-                        <StepContent>
-                          <Typography>
-                            Choose your preferred Web3 wallet (e.g., MetaMask) from the list of supported options
-                          </Typography>
-                        </StepContent>
-                      </Step>
-                      <Step active={true}>
-                        <StepLabel>Approve the connection</StepLabel>
-                        <StepContent>
-                          <Typography>
-                            Review and approve the connection request in your wallet
-                          </Typography>
-                        </StepContent>
-                      </Step>
-                      <Step active={true}>
-                        <StepLabel>Complete your profile</StepLabel>
-                        <StepContent>
-                          <Typography>
-                            Fill in your profile information and preferences
-                          </Typography>
-                        </StepContent>
-                      </Step>
-                    </Stepper>
-
-                    <div className="tip">
-                      <Typography variant="subtitle2" gutterBottom>
-                        <Icon sx={{ mr: 1, verticalAlign: 'middle' }}>lightbulb</Icon>
-                        Tip
-                      </Typography>
-                      <Typography variant="body2">
-                        Make sure to keep your wallet's private key secure and never share it with anyone.
-                      </Typography>
-                    </div>
-                  </div>
-
-                  <div className="content-section" id="platform-navigation">
-                    <Typography variant="h4" gutterBottom>Platform Navigation</Typography>
-                    
-                    <Typography paragraph>
-                      The SafeAI interface is designed to be intuitive and user-friendly. Here's a breakdown of the main components:
-                    </Typography>
-
-                    <Grid container spacing={3} sx={{ mt: 2 }}>
-                      <Grid item xs={12} md={6}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={4}>
                         <Card sx={{ height: '100%' }}>
                           <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Icon sx={{ mr: 1 }}>dashboard</Icon>
-                              <Typography variant="h6">Main Sidebar</Typography>
-                            </Box>
-                            <Typography variant="body2" color="text.secondary">
-                              Access to all major sections of the platform, including:
+                            <Typography variant="h6">Explore Interactive Demos</Typography>
+                            <Typography variant="body2">
+                              Try our <a href="interactive-demos/dashboard.html" style={{ color: '#90caf9' }}>interactive demos</a> to see SafeAI in action.
                             </Typography>
-                            <List>
-                              <ListItem>
-                                <ListItemIcon><Icon>dashboard</Icon></ListItemIcon>
-                                <ListItemText primary="Dashboard" />
-                              </ListItem>
-                              <ListItem>
-                                <ListItemIcon><Icon>psychology</Icon></ListItemIcon>
-                                <ListItemText primary="Knowledge Graphs" />
-                              </ListItem>
-                              <ListItem>
-                                <ListItemIcon><Icon>smart_toy</Icon></ListItemIcon>
-                                <ListItemText primary="Agent Workshop" />
-                              </ListItem>
-                            </List>
                           </CardContent>
                         </Card>
                       </Grid>
-
-                      <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={4}>
                         <Card sx={{ height: '100%' }}>
                           <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Icon sx={{ mr: 1 }}>menu</Icon>
-                              <Typography variant="h6">Top Navigation</Typography>
-                            </Box>
-                            <Typography variant="body2" color="text.secondary">
-                              Quick access to important features:
+                            <Typography variant="h6">Read the User Guide</Typography>
+                            <Typography variant="body2">
+                              Learn more in our <a href="user-guide.html" style={{ color: '#90caf9' }}>comprehensive user guide</a>.
                             </Typography>
-                            <List>
-                              <ListItem>
-                                <ListItemIcon><Icon>account_circle</Icon></ListItemIcon>
-                                <ListItemText primary="Account Settings" />
-                              </ListItem>
-                              <ListItem>
-                                <ListItemIcon><Icon>notifications</Icon></ListItemIcon>
-                                <ListItemText primary="Notifications" />
-                              </ListItem>
-                              <ListItem>
-                                <ListItemIcon><Icon>help</Icon></ListItemIcon>
-                                <ListItemText primary="Help & Support" />
-                              </ListItem>
-                            </List>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Card sx={{ height: '100%' }}>
+                          <CardContent>
+                            <Typography variant="h6">Join the Community</Typography>
+                            <Typography variant="body2">
+                              Get help and share experiences in our <a href="community/index.html" style={{ color: '#90caf9' }}>community forum</a>.
+                            </Typography>
                           </CardContent>
                         </Card>
                       </Grid>
                     </Grid>
-                  </div>
-
-                  <div className="content-section" id="first-steps">
-                    <Typography variant="h4" gutterBottom>First Steps</Typography>
-                    
-                    <Typography variant="h5" gutterBottom>1. Explore the Dashboard</Typography>
-                    <Typography paragraph>
-                      The Dashboard provides a comprehensive overview of your SafeAI ecosystem:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="System Health" 
-                          secondary="Monitor the status of connected services"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Active Agents" 
-                          secondary="View and manage your AI agents"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Knowledge Graphs" 
-                          secondary="Access and manage your knowledge graphs"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Recent Activity" 
-                          secondary="Track your recent interactions and updates"
-                        />
-                      </ListItem>
-                    </List>
-
-                    <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>2. Browse Available Agents</Typography>
-                    <Typography paragraph>
-                      Visit the Agent Browser to discover and interact with pre-built AI agents:
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Browse Categories" 
-                          secondary="Explore agents by category and use case"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="View Details" 
-                          secondary="Learn about each agent's capabilities and requirements"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
-                        <ListItemText 
-                          primary="Test Agents" 
-                          secondary="Try out agents in a safe environment"
-                        />
-                      </ListItem>
-                    </List>
-                  </div>
-
-                  <div className="content-section" id="next-steps">
-                    <Typography variant="h4" gutterBottom>Next Steps</Typography>
-                    
-                    <Typography paragraph>
-                      Now that you're familiar with the basics, here are some recommended next steps:
-                    </Typography>
-
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Icon sx={{ mr: 1, color: 'primary.main' }}>psychology</Icon>
-                              <Typography variant="h6">Knowledge Graphs</Typography>
-                            </Box>
-                            <Typography variant="body2" color="text.secondary">
-                              Learn how to create and manage knowledge graphs for your specific domain.
-                            </Typography>
-                            <Button 
-                              variant="text" 
-                              color="primary"
-                              href="knowledge-graph-implementation.html"
-                              startIcon={<Icon>arrow_forward</Icon>}
-                              sx={{ mt: 2 }}
-                            >
-                              Learn More
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Icon sx={{ mr: 1, color: 'primary.main' }}>smart_toy</Icon>
-                              <Typography variant="h6">Agent Workshop</Typography>
-                            </Box>
-                            <Typography variant="body2" color="text.secondary">
-                              Create and customize your own AI agents for specific tasks.
-                            </Typography>
-                            <Button 
-                              variant="text" 
-                              color="primary"
-                              href="agent-workshop.html"
-                              startIcon={<Icon>arrow_forward</Icon>}
-                              sx={{ mt: 2 }}
-                            >
-                              Learn More
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-
-                      <Grid item xs={12} md={4}>
-                        <Card sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Icon sx={{ mr: 1, color: 'primary.main' }}>security</Icon>
-                              <Typography variant="h6">Security Center</Typography>
-                            </Box>
-                            <Typography variant="body2" color="text.secondary">
-                              Configure security settings and monitor system health.
-                            </Typography>
-                            <Button 
-                              variant="text" 
-                              color="primary"
-                              href="security-center.html"
-                              startIcon={<Icon>arrow_forward</Icon>}
-                              sx={{ mt: 2 }}
-                            >
-                              Learn More
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </Paper>
-              </Grid>
-            </Grid>
+                  </StepContent>
+                </Step>
+              </Stepper>
+            </Paper>
           </Container>
         </Box>
       );
