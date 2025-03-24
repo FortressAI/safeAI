@@ -429,6 +429,9 @@ function Layout() {
             mx: 'auto',
             px: { xs: 2, sm: 3 },
             py: { xs: 2, sm: 3 },
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
           }}
         >
           <Outlet />
