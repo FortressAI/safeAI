@@ -428,9 +428,9 @@
           </AppBar>
 
           <Container maxWidth="lg">
-            <Grid container spacing={3}>
+          <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <Typography variant="h5" gutterBottom>
+              <Typography variant="h5" gutterBottom>
                   Workshop Steps
                 </Typography>
                 <Stepper activeStep={activeStep} orientation="vertical">
@@ -440,7 +440,7 @@
                         <Typography variant="subtitle1">{step.label}</Typography>
                         <Typography variant="body2" color="text.secondary">
                           {step.description}
-                        </Typography>
+              </Typography>
                       </StepLabel>
                     </Step>
                   ))}
@@ -448,8 +448,8 @@
               </Grid>
 
               <Grid item xs={12} md={8}>
-                <Card className="workshop-card">
-                  <CardContent>
+              <Card className="workshop-card">
+                <CardContent>
                     <Typography variant="h5" gutterBottom>
                       {steps[activeStep].label}
                     </Typography>
@@ -457,16 +457,16 @@
                     {getStepContent(activeStep)}
                     
                     <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
-                      <Button
+                    <Button
                         variant="outlined"
                         onClick={handleBack}
                         disabled={activeStep === 0}
                         startIcon={<span className="material-icons">arrow_back</span>}
                       >
                         Back
-                      </Button>
+                    </Button>
                       
-                      <Button
+                    <Button
                         variant="contained"
                         onClick={handleNext}
                         endIcon={<span className="material-icons">
@@ -474,11 +474,11 @@
                         </span>}
                       >
                         {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
             </Grid>
           </Container>
         </Box>

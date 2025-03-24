@@ -67,29 +67,86 @@ We welcome contributions to our documentation. Please see our [Contributing Guid
 ## Contact
 For questions or feedback about this documentation, please contact our documentation team at docs@safeai.com.
 
-## Serving Documentation Locally
+## Local Development Setup
 
-To properly view the interactive demos and documentation (especially if you see a blank screen when opening from disk), it is recommended to serve the docs folder with a local web server. You can use one of the following methods:
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Docker and Docker Compose (for containerized deployment)
 
-### Unix/Linux/MacOS
-1. Open a terminal and navigate to the `docs` directory.
-2. (Optional) If `serve_docs.sh` is not executable, run the following command to set the execute permission:
+### Running Documentation Locally
+
+To properly view the interactive demos and documentation (especially if you see a blank screen when opening from disk), it is recommended to serve the docs folder with a local web server.
+
+#### Unix/Linux/MacOS
+1. Open a terminal and navigate to the `docs` directory
+2. Make the serve script executable:
    ```bash
    chmod +x serve_docs.sh
    ```
-3. Run the following command:
+3. Run the server:
    ```bash
    ./serve_docs.sh
    ```
-4. Open your browser and navigate to `http://localhost:8000/interactive-demos/index.html`.
+4. Open your browser and navigate to `http://localhost:8000`
 
-### Windows
-1. Open a Command Prompt and navigate to the `docs` directory.
-2. Run the following command:
+#### Windows
+1. Open a Command Prompt and navigate to the `docs` directory
+2. Run the server:
    ```bat
    serve_docs.bat
    ```
-3. Open your browser and navigate to `http://localhost:8000/interactive-demos/index.html`.
+3. Open your browser and navigate to `http://localhost:8000`
+
+## Docker-Based Deployment
+
+SafeAI supports a streamlined Docker-based deployment approach that sets up all components automatically.
+
+### Quick Start
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/FortressAI/safeAI.git
+   cd safeAI
+   ```
+
+2. Run the deployment script:
+   ```bash
+   # For Unix/Linux/MacOS:
+   ./scripts/deploy.sh
+
+   # For Windows:
+   scripts/deploy.bat
+   ```
+
+### Access Points
+After deployment, you can access the following services:
+- SafeAI GUI: http://localhost:3001
+- Documentation: http://localhost:8080
+- Neo4j Browser: http://localhost:7474
+- Neo4j Bolt: bolt://localhost:7687
+
+### Container Management
+```bash
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Restart a specific service
+docker compose restart [service-name]
+```
+
+### Troubleshooting
+If you encounter any issues during deployment:
+1. Check the container logs using `docker compose logs`
+2. Ensure all required ports are available
+3. Verify Docker and Docker Compose are properly installed
+4. Check the [Troubleshooting Guide](support/troubleshooting.md) for common issues
 
 ---
 *Last updated: March 2024*
