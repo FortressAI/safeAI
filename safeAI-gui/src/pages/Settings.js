@@ -468,12 +468,8 @@ function Settings() {
             icon={<SettingsIcon />}
           />
           
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Settings
-            </Typography>
-            
-            <Box display="flex" gap={2}>
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start' }}>
               <Tooltip title="Save all settings">
                 <Button
                   variant="contained"
@@ -1162,7 +1158,7 @@ function Settings() {
                         </Table>
                       </TableContainer>
                       
-                      <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'flex-end' }}>
+                      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                         <Button
                           variant="text"
                           startIcon={<RefreshIcon />}

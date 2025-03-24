@@ -15,43 +15,44 @@ const PageHeader = ({
   return (
     <Box sx={{ 
       display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
+      flexDirection: 'column',
       mb: 4,
     }}>
-      <Box>
-        <Typography variant="h4" component="h1" sx={{ 
-          fontWeight: 600, 
-          mb: 1,
-          background: `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 100%)`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}>
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography color="text.secondary" variant="subtitle1">
-            {subtitle}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box>
+          <Typography variant="h4" component="h1" sx={{ 
+            fontWeight: 600, 
+            mb: 1,
+            background: `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            {title}
           </Typography>
-        )}
-      </Box>
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        {action}
-        {onRefresh && (
-          <Tooltip title="Refresh data">
-            <IconButton 
-              onClick={onRefresh}
-              sx={{
-                background: alpha(theme.palette.primary.main, 0.1),
-                '&:hover': {
-                  background: alpha(theme.palette.primary.main, 0.2),
-                }
-              }}
-            >
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+          {subtitle && (
+            <Typography color="text.secondary" variant="subtitle1">
+              {subtitle}
+            </Typography>
+          )}
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          {action}
+          {onRefresh && (
+            <Tooltip title="Refresh data">
+              <IconButton 
+                onClick={onRefresh}
+                sx={{
+                  background: alpha(theme.palette.primary.main, 0.1),
+                  '&:hover': {
+                    background: alpha(theme.palette.primary.main, 0.2),
+                  }
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -62,7 +63,7 @@ PageHeader.propTypes = {
   subtitle: PropTypes.string,
   onRefresh: PropTypes.func,
   action: PropTypes.node,
-  gradientColors: PropTypes.arrayOf(PropTypes.string),
+  gradientColors: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default PageHeader; 
