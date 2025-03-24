@@ -408,6 +408,8 @@ function Layout() {
           mt: '64px', // Height of AppBar
           minHeight: 'calc(100vh - 64px)',
           bgcolor: 'background.default',
+          marginLeft: '0px',
+          marginRight: 'auto',
           transition: theme.transitions.create(['width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -423,8 +425,8 @@ function Layout() {
       >
         <Box
           sx={{
-            maxWidth: '100%',
             width: '100%',
+            maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
