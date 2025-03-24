@@ -402,14 +402,16 @@ function Layout() {
       {/* Main content */}
       <Box
         component="main"
+        className="MuiBox-root css-1fbxgmf"
         sx={{
           flexGrow: 1,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: '100%',
+          maxWidth: '100%',
+          marginLeft: '0px',
+          marginRight: 'auto',
           mt: '64px', // Height of AppBar
           minHeight: 'calc(100vh - 64px)',
           bgcolor: 'background.default',
-          marginLeft: '0px',
-          marginRight: 'auto',
           transition: theme.transitions.create(['width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -424,10 +426,11 @@ function Layout() {
         }}
       >
         <Box
+          className="MuiBox-root css-19kzrtu"
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 3,
+            gap: '24px',
             width: '100%',
             maxWidth: '100%',
             height: 'auto',
