@@ -803,9 +803,9 @@ const AgentWorkshop = () => {
                 <Typography variant="body2">
                   Before deploying your agent, it's recommended to test it in a controlled environment.
                   This will help ensure that it functions as expected and meets your security requirements.
-                </Typography>
+                          </Typography>
               </Alert>
-            </Box>
+                        </Box>
           </Box>
         );
       default:
@@ -861,16 +861,16 @@ const AgentWorkshop = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Container maxWidth="lg">
         <Box sx={{ flexGrow: 1, py: 4 }}>
-          {/* Header */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-            <Box>
-              <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
                 {isEditMode ? 'Edit Agent' : 'Create New Agent'}
-              </Typography>
-              <Typography color="text.secondary">
+          </Typography>
+          <Typography color="text.secondary">
                 {isEditMode ? 'Modify your existing agent' : 'Configure a new AI agent'}
-              </Typography>
-            </Box>
+          </Typography>
+        </Box>
             <Box sx={{ display: 'flex', gap: 2 }}>
               <Button
                 variant="outlined"
@@ -894,19 +894,19 @@ const AgentWorkshop = () => {
                 </Button>
               )}
               
-              <Button
-                variant="contained"
-                startIcon={<SaveIcon />}
+        <Button
+          variant="contained"
+          startIcon={<SaveIcon />}
                 onClick={saveAgent}
                 disabled={isSaving}
                 aria-label="Save agent"
               >
                 {isSaving ? 'Saving...' : 'Save Agent'}
-              </Button>
+        </Button>
             </Box>
-          </Box>
+      </Box>
 
-          {/* Stepper */}
+      {/* Stepper */}
           <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
             {steps.map((step, index) => (
               <Step key={step.label} completed={activeStep > index}>
@@ -944,7 +944,7 @@ const AgentWorkshop = () => {
                 
                 {/* Navigation */}
                 <Box 
-                  sx={{ 
+        sx={{
                     display: 'flex', 
                     justifyContent: 'space-between', 
                     p: 3, 
@@ -971,17 +971,17 @@ const AgentWorkshop = () => {
                       Reset
                     </Button>
                     
-                    <Button
-                      variant="contained"
-                      onClick={handleNext}
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
                       disabled={activeStep === steps.length - 1 && isSaving}
                       endIcon={activeStep === steps.length - 1 ? <SaveIcon /> : <ArrowForwardIcon />}
                       aria-label={activeStep === steps.length - 1 ? "Save agent" : "Continue to next step"}
-                    >
+                  >
                       {activeStep === steps.length - 1 ? 'Save' : 'Next'}
-                    </Button>
-                  </Box>
+                  </Button>
                 </Box>
+    </Box>
               </>
             )}
           </Card>

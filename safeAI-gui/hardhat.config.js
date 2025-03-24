@@ -15,6 +15,7 @@ module.exports = {
   paths: {
     sources: "./src/contracts",
     artifacts: "./src/artifacts",
+    cache: "./cache",
   },
   networks: {
     hardhat: {

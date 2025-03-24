@@ -135,7 +135,13 @@ contract MathKG is KnowledgeGraphBase {
     /**
      * @dev Get mathematical concept details
      * @param conceptId The ID of the concept
-     * @return The concept details
+     * @return id The concept's ID
+     * @return name The concept's name
+     * @return description The concept's description
+     * @return category The concept's category
+     * @return notation The mathematical notation
+     * @return formalDefinition The formal definition
+     * @return metadata The concept's metadata
      */
     function getMathConcept(uint256 conceptId) external view mathConceptExists(conceptId) returns (
         uint256 id,
@@ -244,7 +250,13 @@ contract MathKG is KnowledgeGraphBase {
     /**
      * @dev Get math problem details
      * @param problemId The ID of the problem
-     * @return The problem details
+     * @return id The problem's ID
+     * @return title The problem's title
+     * @return description The problem's description
+     * @return difficulty The difficulty level
+     * @return solution The solution to the problem
+     * @return relatedConcepts Array of related concept IDs
+     * @return metadata The problem's metadata
      */
     function getMathProblem(uint256 problemId) external view mathProblemExists(problemId) returns (
         uint256 id,
@@ -252,6 +264,7 @@ contract MathKG is KnowledgeGraphBase {
         string memory description,
         string memory difficulty,
         string memory solution,
+        uint256[] memory relatedConcepts,
         string memory metadata
     ) {
         MathProblem memory problem = mathProblems[problemId];
@@ -261,6 +274,7 @@ contract MathKG is KnowledgeGraphBase {
             problem.description,
             problem.difficulty,
             problem.solution,
+            problem.relatedConcepts,
             problem.metadata
         );
     }
@@ -337,7 +351,11 @@ contract MathKG is KnowledgeGraphBase {
     /**
      * @dev Get math proof details
      * @param proofId The ID of the proof
-     * @return The proof details
+     * @return id The proof's ID
+     * @return title The proof's title
+     * @return description The proof's description
+     * @return proofSteps The proof's steps
+     * @return metadata The proof's metadata
      */
     function getMathProof(uint256 proofId) external view mathProofExists(proofId) returns (
         uint256 id,
