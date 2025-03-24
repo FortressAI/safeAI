@@ -20,7 +20,8 @@ import {
   CircularProgress,
   Tooltip,
   IconButton,
-  TextField
+  TextField,
+  Collapse
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import SearchIcon from '@mui/icons-material/Search';
@@ -30,7 +31,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as d3 from 'd3';
-import { TreeView, TreeItem } from '@mui/lab';
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
 
@@ -167,6 +167,47 @@ const nodeColors = {
   theorem: '#ff9800',
   example: '#9c27b0',
   relation: '#f44336'
+};
+
+// Custom TreeView component implementation
+const CustomTreeItem = ({ nodeId, label, children }) => {
+  const [expanded, setExpanded] = useState(false);
+  
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
+  
+  return (
+    <Box>
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          p: 1, 
+          cursor: 'pointer' 
+        }}
+        onClick={handleToggle}
+      >
+        <IconButton size="small" sx={{ mr: 1 }}>
+          {expanded ? <ExpandMoreIcon /> : <ChevronRightIcon />}
+        </IconButton>
+        {label}
+      </Box>
+      <Collapse in={expanded}>
+        <Box sx={{ pl: 4 }}>
+          {children}
+        </Box>
+      </Collapse>
+    </Box>
+  );
+};
+
+const CustomTreeView = ({ children }) => {
+  return (
+    <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
+      {children}
+    </Box>
+  );
 };
 
 const MathKnowledgeGraphVisualizer = () => {
@@ -715,12 +756,9 @@ const MathKnowledgeGraphVisualizer = () => {
                     <Typography variant="subtitle1" gutterBottom>
                       Related Theorems:
                     </Typography>
-                    <TreeView
-                      defaultCollapseIcon={<ExpandMoreIcon />}
-                      defaultExpandIcon={<ChevronRightIcon />}
-                    >
+                    <CustomTreeView>
                       {selectedConcept.theorems.map((theorem, idx) => (
-                        <TreeItem 
+                        <CustomTreeItem 
                           key={theorem.id} 
                           nodeId={theorem.id} 
                           label={
@@ -759,9 +797,9 @@ const MathKnowledgeGraphVisualizer = () => {
                               <InlineMath math={theorem.proof} />
                             </Paper>
                           </Box>
-                        </TreeItem>
+                        </CustomTreeItem>
                       ))}
-                    </TreeView>
+                    </CustomTreeView>
                   </Box>
                 )}
               </Paper>
