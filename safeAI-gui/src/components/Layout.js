@@ -404,7 +404,6 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: '64px', // Height of AppBar
           minHeight: 'calc(100vh - 64px)',
@@ -425,13 +424,11 @@ function Layout() {
         <Box
           sx={{
             maxWidth: '100%',
-            mx: 'auto',
-            px: { xs: 2, sm: 3 },
-            py: { xs: 2, sm: 3 },
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            width: '100%',
+            p: { xs: 2, sm: 3 },
           }}
         >
           <Outlet />
