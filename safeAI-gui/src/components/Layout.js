@@ -402,7 +402,6 @@ function Layout() {
       {/* Main content */}
       <Box
         component="main"
-        className="MuiBox-root css-1fbxgmf"
         sx={{
           flexGrow: 1,
           width: '100%',
@@ -426,7 +425,6 @@ function Layout() {
         }}
       >
         <Box
-          className="MuiBox-root css-19kzrtu"
           sx={{
             display: 'flex',
             flexDirection: 'column',
