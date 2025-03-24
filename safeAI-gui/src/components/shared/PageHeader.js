@@ -17,9 +17,15 @@ const PageHeader = ({
       display: 'flex', 
       flexDirection: 'column',
       mb: 4,
+      width: '100%',
     }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box>
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        width: '100%',
+      }}>
+        <Box sx={{ flex: 1 }}>
           <Typography variant="h4" component="h1" sx={{ 
             fontWeight: 600, 
             mb: 1,
@@ -35,7 +41,7 @@ const PageHeader = ({
             </Typography>
           )}
         </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, ml: 2 }}>
           {action}
           {onRefresh && (
             <Tooltip title="Refresh data">
