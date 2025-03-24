@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -41,6 +41,7 @@ import {
   Alert,
   FormControlLabel,
   Switch,
+  LinearProgress,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -80,8 +81,17 @@ import {
   Functions as MathIcon,
   Gavel as LogicIcon,
   Security as SafetyIcon,
+  Share as ShareIcon,
+  Download as DownloadIcon,
+  Upload as UploadIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from 'react-error-boundary';
+import PageHeader from '../components/shared/PageHeader';
+import TabPanel from '../components/shared/TabPanel';
+import ErrorFallback from '../components/shared/ErrorFallback';
+import MetricCard from '../components/shared/MetricCard';
 
 // Sample Knowledge Graphs
 const sampleKGs = [
@@ -209,7 +219,7 @@ const MetricCard = ({ title, value, icon, color, trend }) => {
   );
 };
 
-const GraphCard = ({ graph }) => {
+const GraphCard = ({ graph, onAction }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -219,6 +229,11 @@ const GraphCard = ({ graph }) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleAction = (action) => {
+    handleMenuClose();
+    onAction(action, graph);
   };
 
   return (
@@ -307,23 +322,30 @@ const GraphCard = ({ graph }) => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={() => handleAction('view')}>
+          <ListItemIcon>
+            <InfoIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>View Details</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => handleAction('edit')}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Edit Graph</ListItemText>
+          <ListItemText>Edit</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={() => handleAction('download')}>
           <ListItemIcon>
-            <RefreshIcon fontSize="small" />
+            <DownloadIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Update Graph</ListItemText>
+          <ListItemText>Download</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
+        <Divider />
+        <MenuItem onClick={() => handleAction('delete')} sx={{ color: 'error.main' }}>
           <ListItemIcon>
-            <DeleteIcon fontSize="small" />
+            <DeleteIcon fontSize="small" color="error" />
           </ListItemIcon>
-          <ListItemText>Delete Graph</ListItemText>
+          <ListItemText>Delete</ListItemText>
         </MenuItem>
       </Menu>
     </motion.div>
@@ -332,197 +354,217 @@ const GraphCard = ({ graph }) => {
 
 function KnowledgeGraphs() {
   const theme = useTheme();
-  const [activeTab, setActiveTab] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGraph, setSelectedGraph] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
+  const handleTabChange = useCallback((event, newValue) => {
+    setTabValue(newValue);
+  }, []);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = useCallback((event) => {
     setSearchQuery(event.target.value);
-  };
+  }, []);
 
-  const handleGraphClick = (graph) => {
-    setSelectedGraph(graph);
-    setDialogOpen(true);
-  };
+  const handleGraphAction = useCallback((action, graph) => {
+    console.log(`Action ${action} on graph:`, graph);
+    if (action === 'view') {
+      setSelectedGraph(graph);
+    }
+  }, []);
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
+  const handleDialogClose = useCallback(() => {
     setSelectedGraph(null);
-  };
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      // TODO: Implement actual refresh logic
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error('Failed to refresh graphs:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4" color="textPrimary">
-          Knowledge Graphs
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => setDialogOpen(true)}
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Box sx={{ flexGrow: 1, maxWidth: '100%' }}>
+        <PageHeader
+          title="Knowledge Graphs"
+          subtitle="Manage and monitor your knowledge graphs"
+          onRefresh={handleRefresh}
+          action={
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              }}
+            >
+              New Graph
+            </Button>
+          }
+        />
+
+        {isRefreshing && (
+          <LinearProgress 
+            sx={{ 
+              mb: 3,
+              borderRadius: 1,
+              backgroundColor: alpha(theme.palette.primary.main, 0.1),
+              '& .MuiLinearProgress-bar': {
+                borderRadius: 1,
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              },
+            }} 
+          />
+        )}
+
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          {metrics.map((metric) => (
+            <Grid item xs={12} sm={6} md={3} key={metric.title}>
+              <MetricCard {...metric} />
+            </Grid>
+          ))}
+        </Grid>
+
+        <Box sx={{ mb: 3 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search knowledge graphs..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: alpha(theme.palette.background.paper, 0.6),
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+              },
+            }}
+          />
+        </Box>
+
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
           sx={{
-            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-            '&:hover': {
-              background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+            mb: 3,
+            '& .MuiTabs-indicator': {
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
             },
           }}
         >
-          Create New Graph
-        </Button>
-      </Box>
+          <Tab label="All Graphs" />
+          <Tab label="Core" />
+          <Tab label="Extensions" />
+        </Tabs>
 
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={3}>
-          <MetricCard
-            title="Total Graphs"
-            value="4"
-            icon={<GraphIcon />}
-            color={theme.palette.primary.main}
-            trend="+1"
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <MetricCard
-            title="Total Nodes"
-            value="3,200"
-            icon={<NodeIcon />}
-            color={theme.palette.success.main}
-            trend="+150"
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <MetricCard
-            title="Total Edges"
-            value="8,700"
-            icon={<LinkIcon />}
-            color={theme.palette.info.main}
-            trend="+420"
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <MetricCard
-            title="Active Graphs"
-            value="4"
-            icon={<HubIcon />}
-            color={theme.palette.warning.main}
-            trend="0"
-          />
-        </Grid>
-      </Grid>
-
-      <Box mb={3}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search knowledge graphs..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 2,
-              bgcolor: alpha(theme.palette.background.paper, 0.8),
-              backdropFilter: 'blur(10px)',
-              '&:hover': {
-                bgcolor: alpha(theme.palette.background.paper, 0.9),
-              },
-            },
-          }}
-        />
-      </Box>
-
-      <Tabs
-        value={activeTab}
-        onChange={handleTabChange}
-        sx={{
-          mb: 3,
-          '& .MuiTabs-indicator': {
-            height: 3,
-            borderRadius: 3,
-            background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-          },
-        }}
-      >
-        <Tab label="All Graphs" />
-        <Tab label="Active" />
-        <Tab label="Archived" />
-      </Tabs>
-
-      <Grid container spacing={3}>
-        {sampleKGs.map((graph) => (
-          <Grid item xs={12} md={6} lg={4} key={graph.id}>
-            <GraphCard graph={graph} />
+        <TabPanel value={tabValue} index={0}>
+          <Grid container spacing={3}>
+            {sampleKGs.map((graph) => (
+              <Grid item xs={12} md={6} lg={4} key={graph.id}>
+                <GraphCard graph={graph} onAction={handleGraphAction} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </TabPanel>
 
-      <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 2,
-            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.paper, 0.95)} 100%)`,
-            backdropFilter: 'blur(10px)',
-          },
-        }}
-      >
-        <DialogTitle>
-          {selectedGraph ? 'Edit Knowledge Graph' : 'Create New Knowledge Graph'}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label="Graph Name"
-              variant="outlined"
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Description"
-              variant="outlined"
-              multiline
-              rows={3}
-              sx={{ mb: 2 }}
-            />
-            <FormControlLabel
-              control={<Switch defaultChecked />}
-              label="Active"
-              sx={{ mb: 2 }}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleDialogClose}
-            sx={{
-              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-              '&:hover': {
-                background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-              },
-            }}
-          >
-            {selectedGraph ? 'Save Changes' : 'Create Graph'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        <TabPanel value={tabValue} index={1}>
+          <Grid container spacing={3}>
+            {sampleKGs
+              .filter(graph => graph.status === 'active')
+              .map((graph) => (
+                <Grid item xs={12} md={6} lg={4} key={graph.id}>
+                  <GraphCard graph={graph} onAction={handleGraphAction} />
+                </Grid>
+              ))}
+          </Grid>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={2}>
+          <Grid container spacing={3}>
+            {sampleKGs
+              .filter(graph => graph.status !== 'active')
+              .map((graph) => (
+                <Grid item xs={12} md={6} lg={4} key={graph.id}>
+                  <GraphCard graph={graph} onAction={handleGraphAction} />
+                </Grid>
+              ))}
+          </Grid>
+        </TabPanel>
+
+        <Dialog
+          open={Boolean(selectedGraph)}
+          onClose={handleDialogClose}
+          maxWidth="md"
+          fullWidth
+        >
+          {selectedGraph && (
+            <>
+              <DialogTitle>
+                {selectedGraph.name}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  {selectedGraph.description}
+                </DialogContentText>
+                <TableContainer sx={{ mt: 2 }}>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Status</TableCell>
+                        <TableCell>
+                          <Chip
+                            size="small"
+                            label={selectedGraph.status}
+                            color={selectedGraph.status === 'active' ? 'success' : 'default'}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Nodes</TableCell>
+                        <TableCell>{selectedGraph.nodes.toLocaleString()}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Edges</TableCell>
+                        <TableCell>{selectedGraph.relationships.toLocaleString()}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Last Updated</TableCell>
+                        <TableCell>{selectedGraph.lastUpdated}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleDialogClose}>Close</Button>
+                <Button
+                  variant="contained"
+                  startIcon={<EditIcon />}
+                  onClick={() => handleGraphAction('edit', selectedGraph)}
+                >
+                  Edit
+                </Button>
+              </DialogActions>
+            </>
+          )}
+        </Dialog>
+      </Box>
+    </ErrorBoundary>
   );
 }
 

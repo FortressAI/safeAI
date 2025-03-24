@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Grid,
   Paper,
@@ -30,6 +30,9 @@ import {
   MoreVert as MoreVertIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import PageHeader from '../components/shared/PageHeader';
+import ErrorFallback from '../components/shared/ErrorFallback';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Sample data - replace with actual API calls
 const systemHealth = {
@@ -204,296 +207,215 @@ const ActivityItem = ({ activity }) => {
 
 function Dashboard() {
   const theme = useTheme();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      // TODO: Implement actual data refresh logic
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      {/* Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Box>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
-            Dashboard
-          </Typography>
-          <Typography color="text.secondary">
-            Welcome back! Here's what's happening with your system.
-          </Typography>
-        </Box>
-        <Tooltip title="Refresh data">
-          <IconButton>
-            <RefreshIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Box sx={{ flexGrow: 1, maxWidth: '100%' }}>
+        <PageHeader
+          title="Dashboard"
+          subtitle="Welcome back! Here's what's happening with your system."
+          onRefresh={handleRefresh}
+        />
 
-      {/* System Health */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6} lg={3}>
-          <MetricCard
-            title="CPU Usage"
-            value={`${systemHealth.cpu}%`}
-            icon={<SpeedIcon />}
-            color={theme.palette.primary.main}
-            trend="+2.5% from last hour"
+        {isRefreshing && (
+          <LinearProgress 
+            sx={{ 
+              mb: 3,
+              borderRadius: 1,
+              backgroundColor: alpha(theme.palette.primary.main, 0.1),
+              '& .MuiLinearProgress-bar': {
+                borderRadius: 1,
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              },
+            }} 
           />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
-          <MetricCard
-            title="Memory Usage"
-            value={`${systemHealth.memory}%`}
-            icon={<StorageIcon />}
-            color={theme.palette.success.main}
-            trend="-1.2% from last hour"
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
-          <MetricCard
-            title="Storage Usage"
-            value={`${systemHealth.storage}%`}
-            icon={<StorageIcon />}
-            color={theme.palette.warning.main}
-            trend="+5.3% from last week"
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
-          <MetricCard
-            title="Network Usage"
-            value={`${systemHealth.network}%`}
-            icon={<SpeedIcon />}
-            color={theme.palette.info.main}
-            trend="+8.1% from last hour"
-          />
-        </Grid>
-      </Grid>
+        )}
 
-      {/* Security Status */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={8}>
-          <Card
-            sx={{
+        {/* System Health */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <MetricCard
+              title="CPU Usage"
+              value={`${systemHealth.cpu}%`}
+              icon={<SpeedIcon />}
+              color={theme.palette.primary.main}
+              trend="+2.5% from last hour"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <MetricCard
+              title="Memory Usage"
+              value={`${systemHealth.memory}%`}
+              icon={<StorageIcon />}
+              color={theme.palette.success.main}
+              trend="-1.2% from last hour"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <MetricCard
+              title="Storage Usage"
+              value={`${systemHealth.storage}%`}
+              icon={<SmartToyIcon />}
+              color={theme.palette.warning.main}
+              trend="+5.3% from last week"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <MetricCard
+              title="Network Usage"
+              value={`${systemHealth.network}%`}
+              icon={<SecurityIcon />}
+              color={theme.palette.info.main}
+              trend="+8.1% from last hour"
+            />
+          </Grid>
+        </Grid>
+
+        {/* Security Status and Recent Activity */}
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={8}>
+            <Card sx={{ 
               height: '100%',
-              background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+              background: alpha(theme.palette.background.paper, 0.6),
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-            }}
-          >
-            <CardHeader
-              title="Security Status"
-              avatar={
-                <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: theme.palette.primary.main }}>
-                  <SecurityIcon />
-                </Avatar>
-              }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-            />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Active Threats
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                      {securityStatus.threats}
-                    </Typography>
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            }}>
+              <CardHeader
+                title={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <SecurityIcon sx={{ color: theme.palette.primary.main }} />
+                    <Typography variant="h6">Security Status</Typography>
                   </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Vulnerabilities
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                      {securityStatus.vulnerabilities}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12}>
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Compliance Score
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Box sx={{ flexGrow: 1, mr: 1 }}>
-                        <LinearProgress
-                          variant="determinate"
-                          value={securityStatus.compliance}
-                          sx={{
-                            height: 8,
-                            borderRadius: 4,
-                            bgcolor: alpha(theme.palette.primary.main, 0.1),
-                            '& .MuiLinearProgress-bar': {
-                              borderRadius: 4,
-                              background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
-                            },
-                          }}
-                        />
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">
-                        {securityStatus.compliance}%
+                }
+                action={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+              />
+              <Divider sx={{ borderColor: alpha(theme.palette.primary.main, 0.1) }} />
+              <CardContent>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ mb: 3 }}>
+                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                        Active Threats
+                      </Typography>
+                      <Typography variant="h3" component="div" sx={{
+                        color: securityStatus.threats > 0 ? theme.palette.error.main : theme.palette.success.main,
+                        fontWeight: 600,
+                      }}>
+                        {securityStatus.threats}
                       </Typography>
                     </Box>
-                  </Box>
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                        Vulnerabilities
+                      </Typography>
+                      <Typography variant="h3" component="div" sx={{
+                        color: securityStatus.vulnerabilities > 0 ? theme.palette.warning.main : theme.palette.success.main,
+                        fontWeight: 600,
+                      }}>
+                        {securityStatus.vulnerabilities}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                        Compliance Score
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ flexGrow: 1 }}>
+                          <LinearProgress
+                            variant="determinate"
+                            value={securityStatus.compliance}
+                            sx={{
+                              height: 8,
+                              borderRadius: 4,
+                              backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                              '& .MuiLinearProgress-bar': {
+                                borderRadius: 4,
+                                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                              },
+                            }}
+                          />
+                        </Box>
+                        <Typography variant="h6" color="primary" sx={{ fontWeight: 600 }}>
+                          {securityStatus.compliance}%
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <Card sx={{ 
               height: '100%',
-              background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.1)} 0%, ${alpha(theme.palette.success.main, 0.05)} 100%)`,
-              border: `1px solid ${alpha(theme.palette.success.main, 0.2)}`,
+              background: alpha(theme.palette.background.paper, 0.6),
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-            }}
-          >
-            <CardHeader
-              title="Recent Activity"
-              avatar={
-                <Avatar sx={{ bgcolor: alpha(theme.palette.success.main, 0.1), color: theme.palette.success.main }}>
-                  <InfoIcon />
-                </Avatar>
-              }
-            />
-            <CardContent>
-              {recentActivity.map((activity) => (
-                <ActivityItem key={activity.id} activity={activity} />
-              ))}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      {/* Knowledge Graphs & Agents */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Card
-            sx={{
-              height: '100%',
-              background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.1)} 0%, ${alpha(theme.palette.warning.main, 0.05)} 100%)`,
-              border: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            }}
-          >
-            <CardHeader
-              title="Knowledge Graphs"
-              avatar={
-                <Avatar sx={{ bgcolor: alpha(theme.palette.warning.main, 0.1), color: theme.palette.warning.main }}>
-                  <StorageIcon />
-                </Avatar>
-              }
-            />
-            <CardContent>
-              {knowledgeGraphs.map((graph) => (
-                <Box
-                  key={graph.name}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    p: 2,
-                    borderRadius: 2,
-                    mb: 1,
-                    background: alpha(theme.palette.common.white, 0.05),
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      background: alpha(theme.palette.common.white, 0.1),
-                    },
-                  }}
-                >
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      {graph.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {graph.nodes} nodes • {graph.edges} edges
-                    </Typography>
-                  </Box>
-                  <Chip
-                    label={graph.size}
-                    size="small"
-                    sx={{
-                      bgcolor: alpha(theme.palette.warning.main, 0.1),
-                      color: theme.palette.warning.main,
-                    }}
-                  />
-                </Box>
-              ))}
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card
-            sx={{
-              height: '100%',
-              background: `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)} 0%, ${alpha(theme.palette.info.main, 0.05)} 100%)`,
-              border: `1px solid ${alpha(theme.palette.info.main, 0.2)}`,
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            }}
-          >
-            <CardHeader
-              title="Active Agents"
-              avatar={
-                <Avatar sx={{ bgcolor: alpha(theme.palette.info.main, 0.1), color: theme.palette.info.main }}>
-                  <SmartToyIcon />
-                </Avatar>
-              }
-            />
-            <CardContent>
-              {agents.map((agent) => (
-                <Box
-                  key={agent.name}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    p: 2,
-                    borderRadius: 2,
-                    mb: 1,
-                    background: alpha(theme.palette.common.white, 0.05),
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      background: alpha(theme.palette.common.white, 0.1),
-                    },
-                  }}
-                >
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      {agent.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {agent.tasks} active tasks
-                    </Typography>
-                  </Box>
+              border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
+            }}>
+              <CardHeader
+                title={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Chip
-                      label={agent.status}
-                      size="small"
-                      sx={{
-                        bgcolor: agent.status === 'active'
-                          ? alpha(theme.palette.success.main, 0.1)
-                          : alpha(theme.palette.grey[500], 0.1),
-                        color: agent.status === 'active'
-                          ? theme.palette.success.main
-                          : theme.palette.grey[500],
-                      }}
-                    />
-                    <Typography variant="caption" color="text.secondary">
-                      {agent.performance}%
-                    </Typography>
+                    <InfoIcon sx={{ color: theme.palette.success.main }} />
+                    <Typography variant="h6">Recent Activity</Typography>
                   </Box>
+                }
+                action={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+              />
+              <Divider sx={{ borderColor: alpha(theme.palette.success.main, 0.1) }} />
+              <CardContent>
+                <Box sx={{ 
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: alpha(theme.palette.common.white, 0.1),
+                    borderRadius: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: alpha(theme.palette.common.white, 0.2),
+                    borderRadius: '4px',
+                    '&:hover': {
+                      background: alpha(theme.palette.common.white, 0.3),
+                    },
+                  },
+                }}>
+                  {recentActivity.map((activity) => (
+                    <ActivityItem key={activity.id} activity={activity} />
+                  ))}
                 </Box>
-              ))}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </ErrorBoundary>
   );
 }
 
