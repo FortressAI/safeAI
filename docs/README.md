@@ -91,6 +91,70 @@ To properly view the interactive demos and documentation (especially if you see 
    ```
 3. Open your browser and navigate to `http://localhost:8000/interactive-demos/index.html`.
 
+## Docker-Based Deployment
+
+SafeAI now supports a streamlined Docker-based deployment approach that sets up all components automatically. This includes the SafeAI GUI, documentation server, and Neo4j database with the SafeAI plugin.
+
+## Installation
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your system
+- Git for cloning the repository
+
+### Quick Start
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/FortressAI/safeAI.git
+   cd safeAI/safeAI-gui
+   ```
+
+2. Run the deployment script:
+   ```bash
+   # For Unix/Linux/MacOS:
+   ./deploy.sh
+
+   # For Windows:
+   deploy.bat
+   ```
+
+This will automatically:
+- Build and start all required containers
+- Set up the Neo4j database with the SafeAI plugin
+- Start the documentation server
+- Configure all necessary networking
+
+### Access Points
+After deployment, you can access the following services:
+- SafeAI GUI: http://localhost:3001
+- Documentation: http://localhost:8080
+- Neo4j Browser: http://localhost:7474
+- Neo4j Bolt: bolt://localhost:7687
+
+### Manual Container Management
+If you need to manage containers manually, you can use the following commands:
+```bash
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Restart a specific service
+docker compose restart [service-name]
+```
+
+### Troubleshooting
+If you encounter any issues during deployment:
+1. Check the container logs using `docker compose logs`
+2. Ensure all required ports are available
+3. Verify Docker and Docker Compose are properly installed
+4. Check the [Troubleshooting Guide](support/troubleshooting.md) for common issues
+
 ---
 *Last updated: March 2024*
 
