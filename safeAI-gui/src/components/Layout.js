@@ -404,23 +404,23 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
+          p: 3,
           width: '100%',
           maxWidth: '100%',
-          marginLeft: '0px',
-          marginRight: 'auto',
-          mt: '64px', // Height of AppBar
-          minHeight: 'calc(100vh - 64px)',
-          bgcolor: 'background.default',
-          transition: theme.transitions.create(['width'], {
+          height: 'auto',
+          minHeight: '100vh',
+          overflow: 'auto',
+          transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
+          marginLeft: 0,
           ...(open && {
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            transition: theme.transitions.create(['width'], {
-              easing: theme.transitions.easing.sharp,
+            transition: theme.transitions.create('margin', {
+              easing: theme.transitions.easing.easeOut,
               duration: theme.transitions.duration.enteringScreen,
             }),
+            marginLeft: drawerWidth,
           }),
         }}
       >
@@ -428,11 +428,11 @@ function Layout() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '24px',
+            gap: 3,
             width: '100%',
             maxWidth: '100%',
             height: 'auto',
-            p: { xs: 2, sm: 3 },
+            minHeight: '100%',
           }}
         >
           <Outlet />
