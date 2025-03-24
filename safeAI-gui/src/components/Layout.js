@@ -49,6 +49,7 @@ import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@mui/material';
+import ExternalLinks from './ExternalLinks';
 
 // Drawer width
 const drawerWidth = 280;
@@ -248,31 +249,18 @@ function Layout() {
               component="span" 
               sx={{ 
                 background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-                backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                fontWeight: 700,
-                mr: 1
+                fontWeight: 600,
+                letterSpacing: '-0.02em',
               }}
             >
               SafeAI
             </Box>
-            <Chip 
-              label="MANAGEMENT CONSOLE" 
-              size="small" 
-              sx={{ 
-                height: 20, 
-                fontSize: '0.65rem', 
-                fontWeight: 600,
-                letterSpacing: '0.5px',
-                background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-                color: 'white',
-                '& .MuiChip-label': {
-                  px: 1,
-                }
-              }}
-            />
           </Typography>
+          
+          {/* Add ExternalLinks component here */}
+          <ExternalLinks />
           
           {/* Notifications */}
           <Tooltip title="Notifications">

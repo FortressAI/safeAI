@@ -8,6 +8,12 @@ services:
       - "8545:8545"
     volumes:
       - ./src:/app/src
+    environment:
+      - REACT_APP_DOCS_URL=http://localhost:8080
+      - REACT_APP_NEO4J_BROWSER_URL=http://localhost:7474
+      - REACT_APP_NEO4J_BOLT_URL=bolt://localhost:7687
+      - REACT_APP_NEO4J_USERNAME=neo4j
+      - REACT_APP_NEO4J_PASSWORD=safeai123
     networks:
       - safeai-network
 
