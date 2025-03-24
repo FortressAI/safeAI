@@ -199,19 +199,20 @@ function Layout() {
     <Box 
       sx={{ 
         display: 'flex',
-        minHeight: '100vh',
-        bgcolor: 'background.default'
+        height: '100vh',
+        overflow: 'hidden'  // Prevent double scrollbars
       }}
     >
       {/* AppBar */}
       <AppBar
         position="fixed"
         sx={{
+          zIndex: theme.zIndex.drawer + 1,  // Ensure AppBar is above drawer
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
           ml: open ? `${drawerWidth}px` : 0,
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
+            duration: theme.transitions.duration.enteringScreen,
           }),
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
@@ -314,22 +315,25 @@ function Layout() {
       {/* Drawer */}
       <Drawer
         variant="permanent"
-        open={open}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: 'border-box',
+            position: 'relative',  // Change to relative positioning
+            height: '100%',
+            overflow: 'hidden',
             borderRight: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
             background: alpha(theme.palette.background.default, 0.8),
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
           },
         }}
+        open={open}
       >
-        <Toolbar sx={{ minHeight: 64 }} />
-        <Box sx={{ overflow: 'auto', py: 2 }}>
+        <Toolbar />  {/* Spacer for AppBar */}
+        <Box sx={{ overflow: 'auto', height: '100%' }}>
           <List>
             {navItems.map((item) => (
               <ListItem key={item.name} disablePadding sx={{ mb: 0.5 }}>
@@ -390,21 +394,15 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: '100%',
-          marginTop: '64px', // Height of AppBar
+          height: '100vh',
           overflow: 'auto',
+          position: 'relative',  // Enable proper stacking
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-          }}
-        >
+        <Toolbar />  {/* Spacer for AppBar */}
+        <Box sx={{ p: 3, flexGrow: 1 }}>
           <Outlet />
         </Box>
       </Box>
