@@ -87,7 +87,7 @@ public class MainPlugin {
                     config.load(new FileInputStream(configPath));
                     return true;
                 }
-        } catch (IOException e) {
+            } catch (IOException e) {
                 logger.log(Level.WARNING, "Error reading configuration from " + configPath + ": " + e.getMessage(), e);
             }
         }
@@ -105,11 +105,6 @@ public class MainPlugin {
         String apiKey = getConfigProperty("openai.api.key", "");
         if (apiKey.isEmpty() || apiKey.contains("${")) {
             logger.warning("OpenAI API Key not set. LLM features will be limited.");
-        }
-        
-        String adminApiKey = getConfigProperty("admin.api.key", "");
-        if (adminApiKey.isEmpty() || adminApiKey.contains("${")) {
-            logger.warning("Admin API Key not set. Please set admin.api.key with a secure value.");
         }
         
         // Check blockchain configuration
@@ -171,7 +166,6 @@ public class MainPlugin {
         // Print key configuration values for verification
         logger.info("Configuration summary:");
         logger.info("- API Key set: " + (!getConfigProperty("openai.api.key", "").isEmpty()));
-        logger.info("- Admin API Key set: " + (!getConfigProperty("admin.api.key", "").isEmpty()));
         logger.info("- Blockchain Endpoint: " + getConfigProperty("blockchain.endpoint", "Not configured"));
         logger.info("- LLM Model: " + getConfigProperty("llm.model", "gpt-4"));
         

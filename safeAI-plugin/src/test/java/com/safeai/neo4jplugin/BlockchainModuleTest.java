@@ -1,34 +1,34 @@
 package com.safeai.neo4jplugin;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigInteger;
 
-import com.safeai.neo4jplugin.blockchain.BlockchainConnector;
-import com.safeai.neo4jplugin.blockchain.SmartContractHandler;
-
-/**
- * Unit tests for BlockchainConnector and SmartContractHandler.
- */
 public class BlockchainModuleTest {
-    @Test
-    public void testBlockchainConnection() {
-        BlockchainConnector.initialize("https://test-blockchain.example.com");
-        assertNotNull(BlockchainConnector.getWeb3j());
+    private BlockchainModule blockchainModule;
+    
+    @BeforeEach
+    void setUp() {
+        blockchainModule = new BlockchainModule();
+        // Use a mock endpoint for testing
+        blockchainModule.initialize("mock://localhost:8545");
     }
-
+    
     @Test
-    public void testDeployContract() throws Exception {
-        // First initialize the blockchain connector
-        BlockchainConnector.initialize("https://test-blockchain.example.com");
+    void testBlockchainConnection() {
+        assertTrue(blockchainModule.isConnected());
+    }
+    
+    @Test
+    void testBlockchainOperations() {
+        // Test basic blockchain operations with mocked values
+        BigInteger blockNumber = blockchainModule.getBlockNumber();
+        assertNotNull(blockNumber);
+        assertTrue(blockNumber.compareTo(BigInteger.ZERO) >= 0);
         
-        // Create a new SmartContractHandler instance
-        // Note: You'll need to modify BlockchainConnector to have a constructor
-        // or modify SmartContractHandler to accept a different parameter
-        BlockchainConnector connector = new BlockchainConnector();
-        SmartContractHandler handler = new SmartContractHandler(connector);
-        
-        // Call the instance method
-        String contractAddress = handler.deployContract("contractBinaryExample").join();
-        assertNotNull(contractAddress);
+        BigInteger gasPrice = blockchainModule.getGasPrice();
+        assertNotNull(gasPrice);
+        assertTrue(gasPrice.compareTo(BigInteger.ZERO) > 0);
     }
 }

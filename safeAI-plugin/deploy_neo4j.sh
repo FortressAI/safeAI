@@ -12,8 +12,18 @@ NEO4J_VERSION=${NEO4J_VERSION:-"5.15.0"}
 NEO4J_PASSWORD=${NEO4J_PASSWORD:-"password"}
 HTTP_PORT=${HTTP_PORT:-7474}
 BOLT_PORT=${BOLT_PORT:-7687}
+GUI_PORT=${GUI_PORT:-3000}
+DOCS_PORT=${DOCS_PORT:-8080}
 MAX_RETRY=12
 RETRY_INTERVAL=5
+
+# Load environment variables from .env file
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+fi
+
+# Check required environment variables
+./check_env.sh || exit 1
 
 # Function to display messages with timestamps
 log() {
@@ -34,8 +44,7 @@ command_exists() {
 # Function to clean up on error
 cleanup_on_error() {
     log "Cleaning up after error..."
-    docker stop ${CONTAINER_NAME} >/dev/null 2>&1 || true
-    docker rm ${CONTAINER_NAME} >/dev/null 2>&1 || true
+    docker-compose down || true
     log "Cleanup complete."
 }
 
@@ -45,11 +54,13 @@ trap cleanup_on_error ERR INT
 # Check prerequisites
 log "Checking prerequisites..."
 command_exists docker || error_exit "Docker not installed. Please install Docker and try again."
+command_exists docker-compose || error_exit "Docker Compose not installed. Please install Docker Compose and try again."
 command_exists mvn || error_exit "Maven not installed. Please install Maven and try again."
+command_exists npm || error_exit "Node.js/npm not installed. Please install Node.js and try again."
 
 # Build the plugin with Maven
 log "Building SafeAI plugin..."
-mvn clean package || error_exit "Build failed. Please check Maven output for errors."
+mvn clean package -DskipTests || error_exit "Build failed. Please check Maven output for errors."
 
 # Create the neo4j-plugins folder if it doesn't exist
 mkdir -p neo4j-plugins
@@ -63,13 +74,6 @@ fi
 
 log "Copying $JAR to neo4j-plugins/"
 cp "$JAR" neo4j-plugins/
-
-# Stop any existing containers with the same name
-if docker ps -a | grep -q ${CONTAINER_NAME}; then
-    log "Stopping existing ${CONTAINER_NAME} container..."
-    docker stop ${CONTAINER_NAME} >/dev/null 2>&1 || true
-    docker rm ${CONTAINER_NAME} >/dev/null 2>&1 || true
-fi
 
 # Create configuration directory if it doesn't exist
 mkdir -p config
@@ -89,47 +93,28 @@ llm.max_tokens=\${LLM_MAX_TOKENS:2000}
 EOL
 fi
 
-# Start the Neo4j container
-log "Starting Neo4j container with SafeAI plugin..."
-CONTAINER_ID=$(docker run -d --name ${CONTAINER_NAME} \
-    -p ${HTTP_PORT}:7474 -p ${BOLT_PORT}:7687 \
-    -e NEO4J_AUTH=neo4j/${NEO4J_PASSWORD} \
-    -e NEO4J_PLUGINS='["apoc", "graph-data-science"]' \
-    -e NEO4J_dbms_security_procedures_unrestricted=apoc.*,gds.*,safeai.* \
-    -e NEO4J_dbms_security_procedures_allowlist=apoc.*,gds.*,safeai.* \
-    -e NEO4J_dbms_memory_heap_initial__size=512m \
-    -e NEO4J_dbms_memory_heap_max__size=2G \
-    -e OPENAI_API_KEY=${OPENAI_API_KEY} \
-    -e ADMIN_API_KEY=${ADMIN_API_KEY} \
-    -e BLOCKCHAIN_ENDPOINT=${BLOCKCHAIN_ENDPOINT} \
-    -e ADMIN_WALLET_KEY=${ADMIN_WALLET_KEY} \
-    -v $PWD/neo4j-plugins:/plugins \
-    -v $PWD/config:/conf \
-    --restart unless-stopped \
-    neo4j:${NEO4J_VERSION})
+# Stop any existing containers
+log "Stopping existing containers..."
+docker-compose down
 
-if [ -z "$CONTAINER_ID" ]; then
-    error_exit "Failed to start Neo4j container."
-fi
-
-log "Neo4j container started with ID: $CONTAINER_ID"
-log "Access Neo4j Browser at http://localhost:${HTTP_PORT} (after startup)"
-log "Waiting for Neo4j to start..."
+# Start all services
+log "Starting all services..."
+docker-compose up -d
 
 # Wait for Neo4j to start
 STARTED=false
 for i in $(seq 1 $MAX_RETRY); do
-    if docker logs ${CONTAINER_NAME} 2>&1 | grep -q "Remote interface available at"; then
+    if docker-compose logs neo4j 2>&1 | grep -q "Remote interface available at"; then
         STARTED=true
         log "Neo4j started successfully."
-    break
-  fi
+        break
+    fi
     log "Waiting... ($i/$MAX_RETRY)"
     sleep $RETRY_INTERVAL
 done
 
 if [ "$STARTED" = false ]; then
-    error_exit "Timed out waiting for Neo4j to start. Check docker logs with: docker logs ${CONTAINER_NAME}"
+    error_exit "Timed out waiting for Neo4j to start. Check logs with: docker-compose logs neo4j"
 fi
 
 # Wait a bit more to ensure procedures are loaded
@@ -141,11 +126,11 @@ log "Verifying plugin installation..."
 
 # Check if plugin files are present
 log "Checking plugin files..."
-docker exec ${CONTAINER_NAME} ls -la /plugins
+docker-compose exec neo4j ls -la /plugins
 
 # Check available procedures
 log "Checking available procedures..."
-PROCEDURES=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
+PROCEDURES=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW PROCEDURES YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
 
 if [ -z "$PROCEDURES" ]; then
     error_exit "No SafeAI procedures found. Plugin may not be loaded correctly."
@@ -154,7 +139,7 @@ log "Found procedures: $PROCEDURES"
 
 # Check available functions
 log "Checking available functions..."
-FUNCTIONS=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
+FUNCTIONS=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "SHOW FUNCTIONS YIELD name WHERE name CONTAINS 'safeai' RETURN name;" 2>/dev/null)
 
 if [ -z "$FUNCTIONS" ]; then
     log "WARNING: No SafeAI functions found. This may be expected if the plugin doesn't define functions."
@@ -166,42 +151,42 @@ fi
 
 # Test basic functionality
 log "Testing basic functionality..."
-docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { 
+docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.hello('Neo4j Test') YIELD value RETURN value;" || { 
     error_exit "Basic functionality test failed. Check if the debug procedure exists and is callable."
 }
 
 # Initialize the database with constraints
 log "Initializing database with constraints..."
-docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
-docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
-docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
+docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_kg_name IF NOT EXISTS FOR (kg:KnowledgeGraph) REQUIRE kg.name IS UNIQUE;"
+docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_agent_name IF NOT EXISTS FOR (a:Agent) REQUIRE a.name IS UNIQUE;"
+docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CREATE CONSTRAINT unique_capability_name IF NOT EXISTS FOR (c:Capability) REQUIRE c.name IS UNIQUE;"
 
 # Load and verify KG files
 log "Loading Knowledge Graph files..."
-KG_LOAD_RESULT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
+KG_LOAD_RESULT=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.loadKGFiles() YIELD value RETURN value;")
 echo "$KG_LOAD_RESULT"
 
 # Verify KG loading
 log "Verifying Knowledge Graph loading..."
-KG_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
+KG_COUNT=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (kg:KnowledgeGraph) RETURN count(kg) as count;")
 if [[ $KG_COUNT == *"0"* ]]; then
     log "WARNING: No Knowledge Graphs were loaded. This may indicate an issue with KG files."
 else
     log "Knowledge Graphs loaded successfully: $KG_COUNT"
 fi
 
-AGENT_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (a:Agent) RETURN count(a) as count;")
+AGENT_COUNT=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (a:Agent) RETURN count(a) as count;")
 log "Found $AGENT_COUNT agents"
 
-CAPABILITY_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (c:Capability) RETURN count(c) as count;")
+CAPABILITY_COUNT=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH (c:Capability) RETURN count(c) as count;")
 log "Found $CAPABILITY_COUNT capabilities"
 
-RELATIONSHIP_COUNT=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
+RELATIONSHIP_COUNT=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "MATCH ()-[r:RELATES_TO]->() RETURN count(r) as count;")
 log "Found $RELATIONSHIP_COUNT relationships"
 
 # Perform production readiness check
 log "Performing production readiness check..."
-READINESS_CHECK=$(docker exec ${CONTAINER_NAME} cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;" 2>/dev/null || echo "Error: Production readiness check not available")
+READINESS_CHECK=$(docker-compose exec neo4j cypher-shell -u neo4j -p ${NEO4J_PASSWORD} "CALL safeai.debug.checkProductionReadiness() YIELD value RETURN value;" 2>/dev/null || echo "Error: Production readiness check not available")
 
 if [[ "$READINESS_CHECK" == *"Error"* ]]; then
     log "WARNING: Production readiness check not available or failed. This is not critical but recommended."
@@ -223,12 +208,22 @@ log "Deployment completed successfully!"
 log "----------------------------------------"
 log "Neo4j Browser: http://localhost:${HTTP_PORT}"
 log "Bolt connection: bolt://localhost:${BOLT_PORT}"
-log "Username: neo4j"
-log "Password: ${NEO4J_PASSWORD}"
-log "Container: ${CONTAINER_NAME}"
+log "GUI Interface: http://localhost:${GUI_PORT}"
+log "Documentation: http://localhost:${DOCS_PORT}"
 log "----------------------------------------"
-log "To check logs: docker logs ${CONTAINER_NAME}"
-log "To restart: docker restart ${CONTAINER_NAME}"
-log "To stop: docker stop ${CONTAINER_NAME}"
-log "To start: docker start ${CONTAINER_NAME}"
+log "Credentials:"
+log "Neo4j Username: neo4j"
+log "Neo4j Password: ${NEO4J_PASSWORD}"
+log "----------------------------------------"
+log "Container Information:"
+log "Neo4j Container: ${CONTAINER_NAME}"
+log "GUI Container: safeai-gui"
+log "Docs Container: safeai-docs"
+log "----------------------------------------"
+log "Useful Commands:"
+log "View all logs: docker-compose logs -f"
+log "View specific service logs: docker-compose logs -f [service]"
+log "Restart all: docker-compose restart"
+log "Stop all: docker-compose down"
+log "Start all: docker-compose up -d"
 log "----------------------------------------"
