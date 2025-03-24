@@ -84,7 +84,8 @@ import {
   Error as ErrorIcon,
   ArrowBack as ArrowBackIcon,
   ArrowForward as ArrowForwardIcon,
-  Help as HelpIcon
+  Help as HelpIcon,
+  AddCircleOutline as AddCircleOutlineIcon
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
@@ -975,136 +976,217 @@ const AgentWorkshop = () => {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Container maxWidth="lg">
-        <Box sx={{ flexGrow: 1, py: 4 }}>
-          <PageHeader
-            title="Agent Workshop"
-            subtitle="Create and manage AI agents"
-            onRefresh={handleRefresh}
-            action={
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleCreateDialogOpen}
-                sx={{
-                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                }}
-              >
-                Create Agent
-              </Button>
-            }
-          />
+      <Box sx={{ width: '100%' }}>
+        <PageHeader
+          title="Agent Workshop"
+          subtitle="Create and manage intelligent agents"
+          icon={<SmartToyIcon />}
+        />
 
-          {isRefreshing && (
-            <LinearProgress 
-              sx={{ 
-                mb: 3,
-                borderRadius: 1,
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                '& .MuiLinearProgress-bar': {
-                  borderRadius: 1,
-                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                },
-              }} 
-            />
-          )}
-
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            {agentMetrics.map((metric) => (
-              <Grid item xs={12} sm={6} md={3} key={metric.title}>
-                <MetricCard {...metric} />
-              </Grid>
-            ))}
-          </Grid>
-
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            sx={{
+        {isRefreshing && (
+          <LinearProgress 
+            sx={{ 
               mb: 3,
-              '& .MuiTabs-indicator': {
+              borderRadius: 1,
+              backgroundColor: alpha(theme.palette.primary.main, 0.1),
+              '& .MuiLinearProgress-bar': {
+                borderRadius: 1,
                 background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
               },
-            }}
-          >
+            }} 
+          />
+        )}
+
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs value={tabValue} onChange={handleTabChange}>
             <Tab label="All Agents" />
             <Tab label="Running" />
             <Tab label="Idle" />
           </Tabs>
-
-          <TabPanel value={tabValue} index={0}>
-            <Grid container spacing={3}>
-              {agents.map((agent) => (
-                <Grid item xs={12} md={6} lg={4} key={agent.id}>
-                  <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
-                </Grid>
-              ))}
-            </Grid>
-          </TabPanel>
-
-          <TabPanel value={tabValue} index={1}>
-            <Grid container spacing={3}>
-              {agents
-                .filter(agent => agent.status === 'running')
-                .map((agent) => (
-                  <Grid item xs={12} md={6} lg={4} key={agent.id}>
-                    <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
-                  </Grid>
-                ))}
-            </Grid>
-          </TabPanel>
-
-          <TabPanel value={tabValue} index={2}>
-            <Grid container spacing={3}>
-              {agents
-                .filter(agent => agent.status === 'idle')
-                .map((agent) => (
-                  <Grid item xs={12} md={6} lg={4} key={agent.id}>
-                    <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
-                  </Grid>
-                ))}
-            </Grid>
-          </TabPanel>
-
-          <Dialog
-            open={isCreateDialogOpen}
-            onClose={handleCreateDialogClose}
-            maxWidth="sm"
-            fullWidth
-          >
-            <DialogTitle>Create New Agent</DialogTitle>
-            <DialogContent>
-              <Stepper activeStep={activeStep} orientation="vertical">
-                {stepsForNewAgent.map((step, index) => (
-                  <Step key={step.label}>
-                    <StepLabel>{step.label}</StepLabel>
-                    <StepContent>
-                      {step.content}
-                      <Box sx={{ mt: 2 }}>
-                        <Button
-                          variant="contained"
-                          onClick={index === stepsForNewAgent.length - 1 ? handleCreateDialogClose : handleNext}
-                          sx={{
-                            mr: 1,
-                            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                          }}
-                        >
-                          {index === stepsForNewAgent.length - 1 ? 'Create' : 'Continue'}
-                        </Button>
-                        {index > 0 && (
-                          <Button onClick={handleBack}>
-                            Back
-                          </Button>
-                        )}
-                      </Box>
-                    </StepContent>
-                  </Step>
-                ))}
-              </Stepper>
-            </DialogContent>
-          </Dialog>
         </Box>
-      </Container>
+
+        <TabPanel value={tabValue} index={0}>
+          <Grid container spacing={3}>
+            {agents.map((agent, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <AgentConfigCard
+                  name={agent.name}
+                  description={agent.description}
+                  status={agent.status}
+                  metrics={agent.metrics}
+                  onAction={(action) => handleAgentAction(action, agent)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={1}>
+          <Grid container spacing={3}>
+            {agents.filter(agent => agent.status === 'active').map((agent, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <AgentConfigCard
+                  name={agent.name}
+                  description={agent.description}
+                  status={agent.status}
+                  metrics={agent.metrics}
+                  onAction={(action) => handleAgentAction(action, agent)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={2}>
+          <Grid container spacing={3}>
+            {agents.filter(agent => agent.status === 'idle').map((agent, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <AgentConfigCard
+                  name={agent.name}
+                  description={agent.description}
+                  status={agent.status}
+                  metrics={agent.metrics}
+                  onAction={(action) => handleAgentAction(action, agent)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </TabPanel>
+
+        {/* Create Agent Dialog */}
+        <Dialog
+          open={isCreateDialogOpen}
+          onClose={handleCreateDialogClose}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AddCircleOutlineIcon color="primary" />
+              <Typography variant="h6">Create New Agent</Typography>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+              <Step>
+                <StepLabel>Basic Information</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Configuration</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Review</StepLabel>
+              </Step>
+            </Stepper>
+
+            {activeStep === 0 && (
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Agent Name"
+                    value={newAgent.name}
+                    onChange={(e) => setNewAgent({ ...newAgent, name: e.target.value })}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    label="Description"
+                    value={newAgent.description}
+                    onChange={(e) => setNewAgent({ ...newAgent, description: e.target.value })}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel>Type</InputLabel>
+                    <Select
+                      value={newAgent.type}
+                      onChange={(e) => setNewAgent({ ...newAgent, type: e.target.value })}
+                      label="Type"
+                    >
+                      <MenuItem value="task">Task Agent</MenuItem>
+                      <MenuItem value="monitor">Monitor Agent</MenuItem>
+                      <MenuItem value="analyzer">Analyzer Agent</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            )}
+
+            {activeStep === 1 && (
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    label="Configuration"
+                    value={newAgent.config}
+                    onChange={(e) => setNewAgent({ ...newAgent, config: e.target.value })}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={newAgent.autoStart}
+                        onChange={(e) => setNewAgent({ ...newAgent, autoStart: e.target.checked })}
+                      />
+                    }
+                    label="Auto-start on creation"
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {activeStep === 2 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>Review Configuration</Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle2" color="text.secondary">Name</Typography>
+                    <Typography>{newAgent.name}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle2" color="text.secondary">Type</Typography>
+                    <Typography>{newAgent.type}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary">Description</Typography>
+                    <Typography>{newAgent.description}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary">Configuration</Typography>
+                    <Typography>{newAgent.config}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary">Auto-start</Typography>
+                    <Typography>{newAgent.autoStart ? 'Yes' : 'No'}</Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
+            {activeStep > 0 && (
+              <Button onClick={handleBack}>Back</Button>
+            )}
+            {activeStep < 2 ? (
+              <Button variant="contained" onClick={handleNext}>
+                Next
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={handleCreate}>
+                Create
+              </Button>
+            )}
+          </DialogActions>
+        </Dialog>
+      </Box>
       
       {renderConfirmDialog()}
     </ErrorBoundary>
