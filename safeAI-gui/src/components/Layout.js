@@ -198,21 +198,17 @@ function Layout() {
   return (
     <Box 
       sx={{ 
-        display: 'flex', 
-        minHeight: '100vh', 
-        width: '100%',
-        maxWidth: '100vw',
-        overflow: 'hidden',
-        bgcolor: 'background.default' 
+        display: 'flex',
+        minHeight: '100vh',
+        bgcolor: 'background.default'
       }}
     >
       {/* AppBar */}
       <AppBar
         position="fixed"
         sx={{
-          zIndex: theme.zIndex.drawer + 1,
-          width: '100%',
-          maxWidth: '100vw',
+          width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
+          ml: open ? `${drawerWidth}px` : 0,
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -221,14 +217,6 @@ function Layout() {
           WebkitBackdropFilter: 'blur(10px)',
           background: alpha(theme.palette.background.default, 0.7),
           borderBottom: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-          ...(open && {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-          }),
         }}
         elevation={0}
       >
@@ -402,17 +390,10 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 2 },
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          minHeight: '100vh',
-          bgcolor: 'background.default',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
+          p: 3,
+          width: '100%',
+          marginTop: '64px', // Height of AppBar
+          overflow: 'auto',
         }}
       >
         <Box
@@ -422,7 +403,6 @@ function Layout() {
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
-            alignItems: 'flex-start',
           }}
         >
           <Outlet />
