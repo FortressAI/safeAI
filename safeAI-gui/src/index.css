@@ -28,7 +28,7 @@ code {
 /* Add responsive breakpoints for better mobile experience */
 @media (max-width: 600px) {
   .hide-on-mobile {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -38,7 +38,7 @@ code {
   color: white;
 }
 
-/* Scrollbar styling to match interactive demos */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -66,17 +66,17 @@ code {
   background: transparent;
 }
 
-/* Card Hover Effect matching interactive demos */
+/* Card Hover Effect */
 .MuiCard-root {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .MuiCard-root:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Subtle animation for buttons */
+/* Button animation */
 .MuiButton-root {
   position: relative;
   overflow: hidden;
@@ -99,7 +99,7 @@ code {
   transform: translateY(100%);
 }
 
-/* Dashboard card effects similar to interactive demos */
+/* Dashboard card effects */
 .dashboard-stat-card {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
@@ -107,7 +107,7 @@ code {
   backdrop-filter: blur(10px);
 }
 
-/* Glass morphism effect for certain components */
+/* Glass morphism effect */
 .glass-panel {
   background: rgba(30, 30, 30, 0.7);
   -webkit-backdrop-filter: blur(10px);
@@ -121,7 +121,7 @@ code {
   outline-offset: 2px;
 }
 
-/* Typography adjustments to match interactive demos */
+/* Typography adjustments */
 h1, h2, h3, h4, h5, h6, .MuiTypography-h1, .MuiTypography-h2, 
 .MuiTypography-h3, .MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6 {
   font-weight: 500;
