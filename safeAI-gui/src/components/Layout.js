@@ -51,8 +51,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@mui/material';
 import ExternalLinks from './ExternalLinks';
 
-// Drawer width
-const drawerWidth = 280;
+// Update drawer width for better proportions
+const drawerWidth = 260;
 
 function Layout() {
   const theme = useTheme();
@@ -196,7 +196,7 @@ function Layout() {
   const unreadCount = notifications.filter(n => !n.read).length;
   
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* AppBar */}
       <AppBar
         position="fixed"
@@ -208,6 +208,8 @@ function Layout() {
           }),
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
+          background: alpha(theme.palette.background.default, 0.7),
+          borderBottom: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
           ...(open && {
             marginLeft: drawerWidth,
             width: `calc(100% - ${drawerWidth}px)`,
@@ -220,8 +222,9 @@ function Layout() {
         elevation={0}
       >
         <Toolbar sx={{ 
-          borderBottom: `1px solid ${alpha(theme.palette.common.white, 0.07)}`,
+          minHeight: 64,
           px: { xs: 2, sm: 3 },
+          gap: 2,
         }}>
           <IconButton
             color="inherit"
@@ -229,12 +232,12 @@ function Layout() {
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
-              marginRight: 2,
               ...(open && { display: 'none' }),
             }}
           >
             <MenuIcon />
           </IconButton>
+          
           <Typography
             variant="h6"
             noWrap
@@ -243,6 +246,7 @@ function Layout() {
               flexGrow: 1,
               display: 'flex',
               alignItems: 'center',
+              gap: 1,
             }}
           >
             <Box 
@@ -253,45 +257,57 @@ function Layout() {
                 WebkitTextFillColor: 'transparent',
                 fontWeight: 600,
                 letterSpacing: '-0.02em',
+                fontSize: '1.25rem',
               }}
             >
               SafeAI
             </Box>
+            <Chip 
+              label="MANAGEMENT CONSOLE" 
+              size="small"
+              sx={{
+                height: 20,
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                background: alpha(theme.palette.primary.main, 0.1),
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                color: theme.palette.primary.main,
+              }}
+            />
           </Typography>
           
-          {/* Add ExternalLinks component here */}
           <ExternalLinks />
           
-          {/* Notifications */}
-          <Tooltip title="Notifications">
-            <IconButton
-              color="inherit"
-              onClick={handleNotificationsOpen}
-              sx={{ mr: 1 }}
-            >
-              <Badge badgeContent={unreadCount} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          
-          {/* User Menu */}
-          <Tooltip title="Account settings">
-            <IconButton
-              color="inherit"
-              onClick={handleUserMenuOpen}
-            >
-              <Avatar 
-                sx={{ 
-                  width: 32, 
-                  height: 32,
-                  background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-                }}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Tooltip title="Notifications">
+              <IconButton
+                color="inherit"
+                onClick={handleNotificationsOpen}
               >
-                <AccountCircleIcon />
-              </Avatar>
-            </IconButton>
-          </Tooltip>
+                <Badge badgeContent={unreadCount} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            
+            <Tooltip title="Account settings">
+              <IconButton
+                color="inherit"
+                onClick={handleUserMenuOpen}
+              >
+                <Avatar 
+                  sx={{ 
+                    width: 32, 
+                    height: 32,
+                    background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+                  }}
+                >
+                  <AccountCircleIcon />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Toolbar>
       </AppBar>
       
@@ -302,24 +318,41 @@ function Layout() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
+          whiteSpace: 'nowrap',
+          boxSizing: 'border-box',
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRight: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+            background: alpha(theme.palette.background.paper, 0.8),
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            transition: theme.transitions.create('width', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            ...(open ? {
+              width: drawerWidth,
+              overflowX: 'hidden',
+            } : {
+              width: theme.spacing(7),
+              overflowX: 'hidden',
+            }),
           },
         }}
       >
-        <Toolbar />
+        <Toolbar sx={{ minHeight: 64 }} />
         <Box sx={{ overflow: 'auto', py: 2 }}>
           <List>
             {navItems.map((item) => (
-              <ListItem key={item.name} disablePadding>
+              <ListItem key={item.name} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
                   selected={location.pathname === item.path}
                   onClick={() => navigate(item.path)}
                   sx={{
                     mx: 1,
                     borderRadius: 2,
+                    minHeight: 44,
                     '&.Mui-selected': {
                       background: `linear-gradient(135deg, ${alpha(item.color, 0.2)} 0%, ${alpha(item.color, 0.1)} 100%)`,
                       '&:hover': {
@@ -335,16 +368,22 @@ function Layout() {
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 40 }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: alpha(theme.palette.common.white, 0.7) }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 
                     primary={item.name}
-                    secondary={item.description}
+                    secondary={open ? item.description : null}
+                    primaryTypographyProps={{
+                      sx: { 
+                        fontWeight: 500,
+                        color: alpha(theme.palette.common.white, 0.9),
+                      }
+                    }}
                     secondaryTypographyProps={{
                       sx: { 
                         fontSize: '0.75rem',
-                        opacity: 0.7,
+                        color: alpha(theme.palette.common.white, 0.5),
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -359,28 +398,31 @@ function Layout() {
         </Box>
       </Drawer>
       
-      {/* Main Content */}
+      {/* Main content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          mt: '64px',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          pt: '64px',
+          pb: 3,
+          px: { xs: 2, sm: 3 },
+          ...(open ? {
+            ml: `${drawerWidth}px`,
+            width: `calc(100% - ${drawerWidth}px)`,
+          } : {
+            ml: `${theme.spacing(7)}px`,
+            width: `calc(100% - ${theme.spacing(7)}px)`,
+          }),
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        <Outlet />
       </Box>
 
       {/* Notifications Menu */}

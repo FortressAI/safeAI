@@ -91,6 +91,11 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
+import PageHeader from '../components/shared/PageHeader';
+import TabPanel from '../components/shared/TabPanel';
+import ErrorFallback from '../components/shared/ErrorFallback';
+import MetricCard from '../components/shared/MetricCard';
+import AgentConfigCard from '../components/shared/AgentConfigCard';
 
 /**
  * TabPanel component for displaying tab content
@@ -361,7 +366,15 @@ const AgentWorkshop = () => {
   const [timeoutId, setTimeoutId] = useState(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [validationEnabled, setValidationEnabled] = useState(false);
-  
+  const [tabValue, setTabValue] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [newAgent, setNewAgent] = useState({
+    name: '',
+    type: '',
+    description: '',
+  });
+
   // Load agent if editing
   useEffect(() => {
     if (id) {
@@ -594,6 +607,32 @@ const AgentWorkshop = () => {
     setShowPreview(prev => !prev);
   }, []);
 
+  const handleTabChange = useCallback((event, newValue) => {
+    setTabValue(newValue);
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      // TODO: Implement actual refresh logic
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error('Failed to refresh agents:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
+
+  const handleCreateDialogOpen = useCallback(() => {
+    setIsCreateDialogOpen(true);
+  }, []);
+
+  const handleCreateDialogClose = useCallback(() => {
+    setIsCreateDialogOpen(false);
+    setActiveStep(0);
+    setNewAgent({ name: '', type: '', description: '' });
+  }, []);
+
   // Render step content with improved separation of concerns
   const renderStepContent = useCallback((step) => {
     switch (step) {
@@ -803,9 +842,9 @@ const AgentWorkshop = () => {
                 <Typography variant="body2">
                   Before deploying your agent, it's recommended to test it in a controlled environment.
                   This will help ensure that it functions as expected and meets your security requirements.
-                          </Typography>
+                </Typography>
               </Alert>
-                        </Box>
+            </Box>
           </Box>
         );
       default:
@@ -857,134 +896,213 @@ const AgentWorkshop = () => {
     </Dialog>
   ), [confirmDialogOpen, isDeleting, deleteAgent]);
 
+  const stepsForNewAgent = [
+    {
+      label: 'Basic Information',
+      content: (
+        <Box sx={{ mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Agent Name"
+            value={newAgent.name}
+            onChange={(e) => setNewAgent({ ...newAgent, name: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Agent Type</InputLabel>
+            <Select
+              value={newAgent.type}
+              label="Agent Type"
+              onChange={(e) => setNewAgent({ ...newAgent, type: e.target.value })}
+            >
+              {agentTypes.map((type) => (
+                <MenuItem key={type.value} value={type.value}>
+                  {type.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            fullWidth
+            label="Description"
+            multiline
+            rows={3}
+            value={newAgent.description}
+            onChange={(e) => setNewAgent({ ...newAgent, description: e.target.value })}
+          />
+        </Box>
+      ),
+    },
+    {
+      label: 'Configuration',
+      content: (
+        <Box sx={{ mt: 2 }}>
+          {/* Add configuration fields here */}
+          <Typography color="text.secondary">
+            Configure agent parameters and capabilities
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      label: 'Review',
+      content: (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="subtitle1" gutterBottom>
+            Review your agent configuration
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                Name: {newAgent.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                Type: {agentTypes.find(t => t.value === newAgent.type)?.label}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                Description: {newAgent.description}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      ),
+    },
+  ];
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Container maxWidth="lg">
         <Box sx={{ flexGrow: 1, py: 4 }}>
-      {/* Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Box>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
-                {isEditMode ? 'Edit Agent' : 'Create New Agent'}
-          </Typography>
-          <Typography color="text.secondary">
-                {isEditMode ? 'Modify your existing agent' : 'Configure a new AI agent'}
-          </Typography>
-        </Box>
-            <Box sx={{ display: 'flex', gap: 2 }}>
+          <PageHeader
+            title="Agent Workshop"
+            subtitle="Create and manage AI agents"
+            onRefresh={handleRefresh}
+            action={
               <Button
-                variant="outlined"
-                startIcon={<ArrowBackIcon />}
-                onClick={handleCancel}
-                aria-label="Cancel and go back"
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleCreateDialogOpen}
+                sx={{
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                }}
               >
-                Cancel
+                Create Agent
               </Button>
-              
-              {isEditMode && (
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  onClick={confirmDelete}
-                  disabled={isDeleting}
-                  aria-label="Delete agent"
-                >
-                  {isDeleting ? 'Deleting...' : 'Delete'}
-                </Button>
-              )}
-              
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-                onClick={saveAgent}
-                disabled={isSaving}
-                aria-label="Save agent"
-              >
-                {isSaving ? 'Saving...' : 'Save Agent'}
-        </Button>
-            </Box>
-      </Box>
+            }
+          />
 
-      {/* Stepper */}
-          <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-            {steps.map((step, index) => (
-              <Step key={step.label} completed={activeStep > index}>
-                <StepLabel>
-                  <Typography variant="subtitle2">{step.label}</Typography>
-                </StepLabel>
-              </Step>
+          {isRefreshing && (
+            <LinearProgress 
+              sx={{ 
+                mb: 3,
+                borderRadius: 1,
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                '& .MuiLinearProgress-bar': {
+                  borderRadius: 1,
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                },
+              }} 
+            />
+          )}
+
+          <Grid container spacing={3} sx={{ mb: 4 }}>
+            {agentMetrics.map((metric) => (
+              <Grid item xs={12} sm={6} md={3} key={metric.title}>
+                <MetricCard {...metric} />
+              </Grid>
             ))}
-          </Stepper>
+          </Grid>
 
-          {/* Content */}
-          <Card sx={{ p: 0, overflow: 'hidden' }}>
-            {isLoading ? (
-              <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <CircularProgress size={48} />
-                <Typography variant="body1" sx={{ mt: 2 }}>
-                  Loading agent data...
-                </Typography>
-              </Box>
-            ) : (
-              <>
-                {/* Step Content */}
-                <Box sx={{ p: 3 }}>
-                  <Typography variant="h6" gutterBottom>
-                    {activeStepData.label}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {activeStepData.description}
-                  </Typography>
-                  
-                  <Divider sx={{ my: 2 }} />
-                  
-                  {renderStepContent(activeStep)}
-                </Box>
-                
-                {/* Navigation */}
-                <Box 
-        sx={{
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    p: 3, 
-                    bgcolor: alpha(theme.palette.background.paper, 0.03),
-                    borderTop: `1px solid ${alpha(theme.palette.divider, 0.1)}`
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    onClick={handleBack}
-                    disabled={activeStep === 0}
-                    startIcon={<ArrowBackIcon />}
-                    aria-label="Go back to previous step"
-                  >
-                    Back
-                  </Button>
-                  
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button
-                      variant="outlined"
-                      onClick={handleReset}
-                      aria-label="Reset all fields"
-                    >
-                      Reset
-                    </Button>
-                    
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                      disabled={activeStep === steps.length - 1 && isSaving}
-                      endIcon={activeStep === steps.length - 1 ? <SaveIcon /> : <ArrowForwardIcon />}
-                      aria-label={activeStep === steps.length - 1 ? "Save agent" : "Continue to next step"}
-                  >
-                      {activeStep === steps.length - 1 ? 'Save' : 'Next'}
-                  </Button>
-                </Box>
-    </Box>
-              </>
-            )}
-          </Card>
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            sx={{
+              mb: 3,
+              '& .MuiTabs-indicator': {
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              },
+            }}
+          >
+            <Tab label="All Agents" />
+            <Tab label="Running" />
+            <Tab label="Idle" />
+          </Tabs>
+
+          <TabPanel value={tabValue} index={0}>
+            <Grid container spacing={3}>
+              {agents.map((agent) => (
+                <Grid item xs={12} md={6} lg={4} key={agent.id}>
+                  <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
+                </Grid>
+              ))}
+            </Grid>
+          </TabPanel>
+
+          <TabPanel value={tabValue} index={1}>
+            <Grid container spacing={3}>
+              {agents
+                .filter(agent => agent.status === 'running')
+                .map((agent) => (
+                  <Grid item xs={12} md={6} lg={4} key={agent.id}>
+                    <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
+                  </Grid>
+                ))}
+            </Grid>
+          </TabPanel>
+
+          <TabPanel value={tabValue} index={2}>
+            <Grid container spacing={3}>
+              {agents
+                .filter(agent => agent.status === 'idle')
+                .map((agent) => (
+                  <Grid item xs={12} md={6} lg={4} key={agent.id}>
+                    <AgentConfigCard {...agent} onAction={(action) => handleAgentAction(action, agent)} />
+                  </Grid>
+                ))}
+            </Grid>
+          </TabPanel>
+
+          <Dialog
+            open={isCreateDialogOpen}
+            onClose={handleCreateDialogClose}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle>Create New Agent</DialogTitle>
+            <DialogContent>
+              <Stepper activeStep={activeStep} orientation="vertical">
+                {stepsForNewAgent.map((step, index) => (
+                  <Step key={step.label}>
+                    <StepLabel>{step.label}</StepLabel>
+                    <StepContent>
+                      {step.content}
+                      <Box sx={{ mt: 2 }}>
+                        <Button
+                          variant="contained"
+                          onClick={index === stepsForNewAgent.length - 1 ? handleCreateDialogClose : handleNext}
+                          sx={{
+                            mr: 1,
+                            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                          }}
+                        >
+                          {index === stepsForNewAgent.length - 1 ? 'Create' : 'Continue'}
+                        </Button>
+                        {index > 0 && (
+                          <Button onClick={handleBack}>
+                            Back
+                          </Button>
+                        )}
+                      </Box>
+                    </StepContent>
+                  </Step>
+                ))}
+              </Stepper>
+            </DialogContent>
+          </Dialog>
         </Box>
       </Container>
       
