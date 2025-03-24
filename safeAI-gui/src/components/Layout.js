@@ -403,26 +403,36 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          pt: '64px',
-          pb: 3,
-          px: { xs: 2, sm: 3 },
-          ...(open ? {
-            ml: `${drawerWidth}px`,
-            width: `calc(100% - ${drawerWidth}px)`,
-          } : {
-            ml: `${theme.spacing(7)}px`,
-            width: `calc(100% - ${theme.spacing(7)}px)`,
-          }),
-          transition: theme.transitions.create(['width', 'margin'], {
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          mt: '64px', // Height of AppBar
+          minHeight: 'calc(100vh - 64px)',
+          bgcolor: 'background.default',
+          transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+          ...(open && {
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            transition: theme.transitions.create(['margin', 'width'], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
           }),
         }}
       >
-        <Outlet />
+        <Box
+          sx={{
+            maxWidth: '100%',
+            mx: 'auto',
+            px: { xs: 2, sm: 3 },
+            py: { xs: 2, sm: 3 },
+          }}
+        >
+          <Outlet />
+        </Box>
       </Box>
 
       {/* Notifications Menu */}

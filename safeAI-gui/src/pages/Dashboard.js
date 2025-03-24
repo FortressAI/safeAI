@@ -15,6 +15,10 @@ import {
   Avatar,
   Chip,
   Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from '@mui/material';
 import {
   TrendingUp as TrendingUpIcon,
@@ -223,197 +227,112 @@ function Dashboard() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box sx={{ flexGrow: 1, maxWidth: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <PageHeader
           title="Dashboard"
-          subtitle="Welcome back! Here's what's happening with your system."
-          onRefresh={handleRefresh}
+          subtitle="System Overview"
+          icon={<DashboardIcon />}
         />
-
-        {isRefreshing && (
-          <LinearProgress 
-            sx={{ 
-              mb: 3,
-              borderRadius: 1,
-              backgroundColor: alpha(theme.palette.primary.main, 0.1),
-              '& .MuiLinearProgress-bar': {
-                borderRadius: 1,
-                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-              },
-            }} 
-          />
-        )}
-
-        {/* System Health */}
+        
+        {/* System Health Metrics */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <MetricCard
-              title="CPU Usage"
-              value={`${systemHealth.cpu}%`}
-              icon={<SpeedIcon />}
-              color={theme.palette.primary.main}
-              trend="+2.5% from last hour"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <MetricCard
-              title="Memory Usage"
-              value={`${systemHealth.memory}%`}
-              icon={<StorageIcon />}
-              color={theme.palette.success.main}
-              trend="-1.2% from last hour"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <MetricCard
-              title="Storage Usage"
-              value={`${systemHealth.storage}%`}
-              icon={<SmartToyIcon />}
-              color={theme.palette.warning.main}
-              trend="+5.3% from last week"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <MetricCard
-              title="Network Usage"
-              value={`${systemHealth.network}%`}
-              icon={<SecurityIcon />}
-              color={theme.palette.info.main}
-              trend="+8.1% from last hour"
-            />
-          </Grid>
+          {metrics.map((metric, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <MetricCard
+                title={metric.title}
+                value={metric.value}
+                icon={metric.icon}
+                color={metric.color}
+                trend={metric.trend}
+              />
+            </Grid>
+          ))}
         </Grid>
 
-        {/* Security Status and Recent Activity */}
-        <Grid container spacing={3}>
-          <Grid item xs={12} lg={8}>
-            <Card sx={{ 
-              height: '100%',
-              background: alpha(theme.palette.background.paper, 0.6),
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-            }}>
-              <CardHeader
-                title={
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SecurityIcon sx={{ color: theme.palette.primary.main }} />
-                    <Typography variant="h6">Security Status</Typography>
+        {/* Security Status */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.dark, 0.1)} 100%)`,
+            border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Security Status
+          </Typography>
+          <Grid container spacing={2}>
+            {securityChecks.map((check, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 1,
+                    bgcolor: 'background.paper',
+                    border: (theme) => `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    {check.icon}
+                    <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                      {check.title}
+                    </Typography>
                   </Box>
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-              />
-              <Divider sx={{ borderColor: alpha(theme.palette.primary.main, 0.1) }} />
-              <CardContent>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
-                    <Box sx={{ mb: 3 }}>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        Active Threats
-                      </Typography>
-                      <Typography variant="h3" component="div" sx={{
-                        color: securityStatus.threats > 0 ? theme.palette.error.main : theme.palette.success.main,
-                        fontWeight: 600,
-                      }}>
-                        {securityStatus.threats}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        Vulnerabilities
-                      </Typography>
-                      <Typography variant="h3" component="div" sx={{
-                        color: securityStatus.vulnerabilities > 0 ? theme.palette.warning.main : theme.palette.success.main,
-                        fontWeight: 600,
-                      }}>
-                        {securityStatus.vulnerabilities}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        Compliance Score
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ flexGrow: 1 }}>
-                          <LinearProgress
-                            variant="determinate"
-                            value={securityStatus.compliance}
-                            sx={{
-                              height: 8,
-                              borderRadius: 4,
-                              backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                              '& .MuiLinearProgress-bar': {
-                                borderRadius: 4,
-                                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                              },
-                            }}
-                          />
-                        </Box>
-                        <Typography variant="h6" color="primary" sx={{ fontWeight: 600 }}>
-                          {securityStatus.compliance}%
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <Card sx={{ 
-              height: '100%',
-              background: alpha(theme.palette.background.paper, 0.6),
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              border: `1px solid ${alpha(theme.palette.success.main, 0.1)}`,
-            }}>
-              <CardHeader
-                title={
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <InfoIcon sx={{ color: theme.palette.success.main }} />
-                    <Typography variant="h6">Recent Activity</Typography>
-                  </Box>
-                }
-                action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-              />
-              <Divider sx={{ borderColor: alpha(theme.palette.success.main, 0.1) }} />
-              <CardContent>
-                <Box sx={{ 
-                  maxHeight: 400, 
-                  overflow: 'auto',
-                  '&::-webkit-scrollbar': {
-                    width: '8px',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    background: alpha(theme.palette.common.white, 0.1),
-                    borderRadius: '4px',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    background: alpha(theme.palette.common.white, 0.2),
-                    borderRadius: '4px',
-                    '&:hover': {
-                      background: alpha(theme.palette.common.white, 0.3),
-                    },
-                  },
-                }}>
-                  {recentActivity.map((activity) => (
-                    <ActivityItem key={activity.id} activity={activity} />
-                  ))}
+                  <Typography variant="body2" color="text.secondary">
+                    {check.status}
+                  </Typography>
                 </Box>
-              </CardContent>
-            </Card>
+              </Grid>
+            ))}
           </Grid>
-        </Grid>
+        </Paper>
+
+        {/* Recent Activity */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.1)} 0%, ${alpha(theme.palette.background.paper, 0.05)} 100%)`,
+            border: (theme) => `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Recent Activity
+          </Typography>
+          <List>
+            {recentActivity.map((activity, index) => (
+              <ListItem
+                key={index}
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  borderRadius: 1,
+                  '&:hover': {
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                  },
+                }}
+              >
+                <ListItemAvatar>
+                  <Avatar sx={{ bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1) }}>
+                    {activity.icon}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={activity.title}
+                  secondary={activity.description}
+                  primaryTypographyProps={{ variant: 'subtitle2' }}
+                  secondaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  {activity.time}
+                </Typography>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </Box>
     </ErrorBoundary>
   );

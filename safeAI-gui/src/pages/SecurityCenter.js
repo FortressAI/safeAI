@@ -230,12 +230,11 @@ function SecurityCenter() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box sx={{ flexGrow: 1, maxWidth: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <PageHeader
           title="Security Center"
-          subtitle="Monitor and manage system security"
-          onRefresh={handleRefresh}
-          gradientColors={['#ef4444', '#dc2626']}
+          subtitle="System Security Overview"
+          icon={<SecurityIcon />}
         />
 
         {isRefreshing && (
@@ -243,36 +242,28 @@ function SecurityCenter() {
             sx={{ 
               mb: 3,
               borderRadius: 1,
-              backgroundColor: alpha(theme.palette.error.main, 0.1),
+              backgroundColor: alpha(theme.palette.primary.main, 0.1),
               '& .MuiLinearProgress-bar': {
                 borderRadius: 1,
-                background: `linear-gradient(90deg, ${theme.palette.error.main}, ${theme.palette.error.light})`,
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
               },
             }} 
           />
         )}
 
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{
-            mb: 3,
-            '& .MuiTabs-indicator': {
-              background: `linear-gradient(90deg, ${theme.palette.error.main}, ${theme.palette.error.light})`,
-            },
-          }}
-        >
-          <Tab label="Overview" />
-          <Tab label="Threats" />
-          <Tab label="Compliance" />
-          <Tab label="Settings" />
-        </Tabs>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs value={tabValue} onChange={handleTabChange}>
+            <Tab label="Overview" />
+            <Tab label="Threats" />
+            <Tab label="Compliance" />
+            <Tab label="Settings" />
+          </Tabs>
+        </Box>
 
-        {/* Overview Tab */}
         <TabPanel value={tabValue} index={0}>
           <Grid container spacing={3}>
-            {securityMetrics.map((metric) => (
-              <Grid item xs={12} sm={6} md={3} key={metric.name}>
+            {securityMetrics.map((metric, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
                 <MetricCard
                   title={metric.name}
                   value={`${metric.value}%`}
@@ -282,216 +273,181 @@ function SecurityCenter() {
                 />
               </Grid>
             ))}
-            <Grid item xs={12}>
-              <Card sx={{ 
-                background: alpha(theme.palette.background.paper, 0.6),
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
-              }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Security Check Results</Typography>
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Check</TableCell>
-                          <TableCell>Status</TableCell>
-                          <TableCell>Details</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {securityChecks.map((check) => (
-                          <TableRow key={check.id}>
-                            <TableCell>{check.name}</TableCell>
-                            <TableCell>
-                              <Chip
-                                icon={check.status === 'passed' ? <CheckIcon /> : <WarningIcon />}
-                                label={check.status}
-                                color={check.status === 'passed' ? 'success' : 'warning'}
-                                size="small"
-                              />
-                            </TableCell>
-                            <TableCell>{check.details}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Card>
-            </Grid>
           </Grid>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              mt: 4,
+              background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.primary.dark, 0.1)} 100%)`,
+              border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Security Check Results
+            </Typography>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Check</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Last Run</TableCell>
+                    <TableCell>Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {securityChecks.map((check, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{check.name}</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={check.status}
+                          color={check.status === 'passed' ? 'success' : 'error'}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>{check.details}</TableCell>
+                      <TableCell>{check.details}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         </TabPanel>
 
-        {/* Threats Tab */}
         <TabPanel value={tabValue} index={1}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Card sx={{ 
-                background: alpha(theme.palette.background.paper, 0.6),
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
-              }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Recent Threats</Typography>
-                  <List>
-                    {recentThreats.map((threat) => (
-                      <React.Fragment key={threat.id}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <Avatar sx={{ 
-                              bgcolor: alpha(
-                                threat.severity === 'high' ? theme.palette.error.main :
-                                threat.severity === 'medium' ? theme.palette.warning.main :
-                                theme.palette.info.main,
-                                0.1
-                              ),
-                              color: threat.severity === 'high' ? theme.palette.error.main :
-                                    threat.severity === 'medium' ? theme.palette.warning.main :
-                                    theme.palette.info.main,
-                            }}>
-                              <BugIcon />
-                            </Avatar>
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography variant="subtitle1">{threat.type}</Typography>
-                                <Chip
-                                  label={threat.severity}
-                                  size="small"
-                                  color={
-                                    threat.severity === 'high' ? 'error' :
-                                    threat.severity === 'medium' ? 'warning' : 'info'
-                                  }
-                                />
-                              </Box>
-                            }
-                            secondary={
-                              <>
-                                <Typography variant="body2">{threat.description}</Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                  {threat.timestamp} • {threat.source}
-                                </Typography>
-                              </>
-                            }
-                          />
-                          <Chip
-                            label={threat.status}
-                            size="small"
-                            color={threat.status === 'blocked' ? 'success' : 'warning'}
-                          />
-                        </ListItem>
-                        <Divider />
-                      </React.Fragment>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.error.main, 0.1)} 0%, ${alpha(theme.palette.error.dark, 0.1)} 100%)`,
+              border: (theme) => `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Recent Threats
+            </Typography>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Threat</TableCell>
+                    <TableCell>Severity</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentThreats.map((threat, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{threat.type}</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={threat.severity}
+                          color={threat.severity === 'high' ? 'error' : threat.severity === 'medium' ? 'warning' : 'success'}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>{threat.status}</TableCell>
+                      <TableCell>
+                        <IconButton size="small">
+                          <MoreVertIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         </TabPanel>
 
-        {/* Compliance Tab */}
         <TabPanel value={tabValue} index={2}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Card sx={{ 
-                background: alpha(theme.palette.background.paper, 0.6),
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
-              }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Compliance Requirements</Typography>
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Requirement</TableCell>
-                          <TableCell>Status</TableCell>
-                          <TableCell>Details</TableCell>
-                          <TableCell align="right">Actions</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {complianceRequirements.map((req) => (
-                          <TableRow key={req.id}>
-                            <TableCell>{req.name}</TableCell>
-                            <TableCell>
-                              <Chip
-                                icon={req.status === 'compliant' ? <CheckIcon /> : <WarningIcon />}
-                                label={req.status}
-                                color={req.status === 'compliant' ? 'success' : 'warning'}
-                                size="small"
-                              />
-                            </TableCell>
-                            <TableCell>{req.details}</TableCell>
-                            <TableCell align="right">
-                              <Button
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                                startIcon={<InfoIcon />}
-                              >
-                                Details
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Card>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.1)} 0%, ${alpha(theme.palette.info.dark, 0.1)} 100%)`,
+              border: (theme) => `1px solid ${alpha(theme.palette.info.main, 0.1)}`,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Compliance Status
+            </Typography>
+            <Grid container spacing={3}>
+              {complianceRequirements.map((check, index) => (
+                <Grid item xs={12} sm={6} key={index}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      borderRadius: 1,
+                      bgcolor: 'background.paper',
+                      border: (theme) => `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      {check.status === 'compliant' ? <CheckIcon /> : <WarningIcon />}
+                      <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                        {check.name}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary">
+                      {check.details}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
             </Grid>
-          </Grid>
+          </Paper>
         </TabPanel>
 
-        {/* Settings Tab */}
         <TabPanel value={tabValue} index={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Card sx={{ 
-                background: alpha(theme.palette.background.paper, 0.6),
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`,
-              }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>Security Settings</Typography>
-                  <List>
-                    {securitySettings.map((setting) => (
-                      <React.Fragment key={setting.id}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <Avatar sx={{ 
-                              bgcolor: alpha(theme.palette.primary.main, 0.1),
-                              color: theme.palette.primary.main,
-                            }}>
-                              <SecurityIcon />
-                            </Avatar>
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={setting.name}
-                            secondary={setting.description}
-                          />
-                          <Switch
-                            edge="end"
-                            checked={setting.enabled}
-                            color="primary"
-                          />
-                        </ListItem>
-                        <Divider />
-                      </React.Fragment>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              background: (theme) => `linear-gradient(135deg, ${alpha(theme.palette.grey[500], 0.1)} 0%, ${alpha(theme.palette.grey[700], 0.1)} 100%)`,
+              border: (theme) => `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Security Settings
+            </Typography>
+            <List>
+              {securitySettings.map((setting, index) => (
+                <ListItem
+                  key={index}
+                  sx={{
+                    py: 1.5,
+                    px: 2,
+                    borderRadius: 1,
+                    '&:hover': {
+                      bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary={setting.name}
+                    secondary={setting.description}
+                    primaryTypographyProps={{ variant: 'subtitle2' }}
+                    secondaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                  />
+                  <Switch
+                    checked={setting.enabled}
+                    onChange={() => handleSettingToggle(index)}
+                    color="primary"
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
         </TabPanel>
       </Box>
     </ErrorBoundary>

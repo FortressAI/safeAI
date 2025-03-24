@@ -374,10 +374,6 @@ function KnowledgeGraphs() {
     }
   }, []);
 
-  const handleDialogClose = useCallback(() => {
-    setSelectedGraph(null);
-  }, []);
-
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     try {
@@ -392,22 +388,11 @@ function KnowledgeGraphs() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box sx={{ flexGrow: 1, maxWidth: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <PageHeader
           title="Knowledge Graphs"
-          subtitle="Manage and monitor your knowledge graphs"
-          onRefresh={handleRefresh}
-          action={
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              sx={{
-                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-              }}
-            >
-              New Graph
-            </Button>
-          }
+          subtitle="Manage and explore knowledge graphs"
+          icon={<SchemaIcon />}
         />
 
         {isRefreshing && (
@@ -424,59 +409,22 @@ function KnowledgeGraphs() {
           />
         )}
 
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          {metrics.map((metric) => (
-            <Grid item xs={12} sm={6} md={3} key={metric.title}>
-              <MetricCard {...metric} />
-            </Grid>
-          ))}
-        </Grid>
-
-        <Box sx={{ mb: 3 }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search knowledge graphs..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: alpha(theme.palette.background.paper, 0.6),
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-              },
-            }}
-          />
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs value={tabValue} onChange={handleTabChange}>
+            <Tab label="All Graphs" />
+            <Tab label="Core" />
+            <Tab label="Extensions" />
+          </Tabs>
         </Box>
-
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          sx={{
-            mb: 3,
-            '& .MuiTabs-indicator': {
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-            },
-          }}
-        >
-          <Tab label="All Graphs" />
-          <Tab label="Core" />
-          <Tab label="Extensions" />
-        </Tabs>
 
         <TabPanel value={tabValue} index={0}>
           <Grid container spacing={3}>
-            {sampleKGs.map((graph) => (
-              <Grid item xs={12} md={6} lg={4} key={graph.id}>
-                <GraphCard graph={graph} onAction={handleGraphAction} />
+            {sampleKGs.map((graph, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <GraphCard
+                  graph={graph}
+                  onAction={(action) => handleGraphAction(action, graph)}
+                />
               </Grid>
             ))}
           </Grid>
@@ -484,84 +432,97 @@ function KnowledgeGraphs() {
 
         <TabPanel value={tabValue} index={1}>
           <Grid container spacing={3}>
-            {sampleKGs
-              .filter(graph => graph.status === 'active')
-              .map((graph) => (
-                <Grid item xs={12} md={6} lg={4} key={graph.id}>
-                  <GraphCard graph={graph} onAction={handleGraphAction} />
-                </Grid>
-              ))}
+            {sampleKGs.filter(graph => graph.status === 'active').map((graph, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <GraphCard
+                  graph={graph}
+                  onAction={(action) => handleGraphAction(action, graph)}
+                />
+              </Grid>
+            ))}
           </Grid>
         </TabPanel>
 
         <TabPanel value={tabValue} index={2}>
           <Grid container spacing={3}>
-            {sampleKGs
-              .filter(graph => graph.status !== 'active')
-              .map((graph) => (
-                <Grid item xs={12} md={6} lg={4} key={graph.id}>
-                  <GraphCard graph={graph} onAction={handleGraphAction} />
-                </Grid>
-              ))}
+            {sampleKGs.filter(graph => graph.status !== 'active').map((graph, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <GraphCard
+                  graph={graph}
+                  onAction={(action) => handleGraphAction(action, graph)}
+                />
+              </Grid>
+            ))}
           </Grid>
         </TabPanel>
 
         <Dialog
           open={Boolean(selectedGraph)}
-          onClose={handleDialogClose}
+          onClose={() => setSelectedGraph(null)}
           maxWidth="md"
           fullWidth
         >
-          {selectedGraph && (
-            <>
-              <DialogTitle>
-                {selectedGraph.name}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  {selectedGraph.description}
-                </DialogContentText>
-                <TableContainer sx={{ mt: 2 }}>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>Status</TableCell>
-                        <TableCell>
-                          <Chip
-                            size="small"
-                            label={selectedGraph.status}
-                            color={selectedGraph.status === 'active' ? 'success' : 'default'}
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Nodes</TableCell>
-                        <TableCell>{selectedGraph.nodes.toLocaleString()}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Edges</TableCell>
-                        <TableCell>{selectedGraph.relationships.toLocaleString()}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Last Updated</TableCell>
-                        <TableCell>{selectedGraph.lastUpdated}</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleDialogClose}>Close</Button>
-                <Button
-                  variant="contained"
-                  startIcon={<EditIcon />}
-                  onClick={() => handleGraphAction('edit', selectedGraph)}
-                >
-                  Edit
-                </Button>
-              </DialogActions>
-            </>
-          )}
+          <DialogTitle>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <SchemaIcon color="primary" />
+              <Typography variant="h6">{selectedGraph?.name}</Typography>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Status
+                  </Typography>
+                  <Chip
+                    label={selectedGraph?.status}
+                    color={selectedGraph?.status === 'active' ? 'success' : 'default'}
+                    size="small"
+                  />
+                </Box>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Nodes
+                  </Typography>
+                  <Typography variant="h6">{selectedGraph?.nodes}</Typography>
+                </Box>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Edges
+                  </Typography>
+                  <Typography variant="h6">{selectedGraph?.relationships}</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Size
+                  </Typography>
+                  <Typography variant="h6">{selectedGraph?.relationships.toLocaleString()}</Typography>
+                </Box>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Last Updated
+                  </Typography>
+                  <Typography variant="h6">{selectedGraph?.lastUpdated}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Type
+                  </Typography>
+                  <Chip
+                    label={selectedGraph?.status === 'active' ? 'Core' : 'Extension'}
+                    color={selectedGraph?.status === 'active' ? 'success' : 'default'}
+                    size="small"
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setSelectedGraph(null)}>Close</Button>
+          </DialogActions>
         </Dialog>
       </Box>
     </ErrorBoundary>
