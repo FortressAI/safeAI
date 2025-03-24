@@ -196,12 +196,23 @@ function Layout() {
   const unreadCount = notifications.filter(n => !n.read).length;
   
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        minHeight: '100vh', 
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        bgcolor: 'background.default' 
+      }}
+    >
       {/* AppBar */}
       <AppBar
         position="fixed"
         sx={{
           zIndex: theme.zIndex.drawer + 1,
+          width: '100%',
+          maxWidth: '100vw',
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -222,7 +233,8 @@ function Layout() {
         elevation={0}
       >
         <Toolbar sx={{ 
-          minHeight: 64,
+          minHeight: '64px',
+          width: '100%',
           px: { xs: 2, sm: 3 },
           gap: 2,
         }}>
@@ -318,27 +330,13 @@ function Layout() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          whiteSpace: 'nowrap',
-          boxSizing: 'border-box',
-          position: 'fixed',
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
             borderRight: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-            background: alpha(theme.palette.background.paper, 0.8),
+            background: alpha(theme.palette.background.default, 0.8),
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
-            transition: theme.transitions.create('width', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-            ...(open ? {
-              width: drawerWidth,
-              overflowX: 'hidden',
-            } : {
-              width: theme.spacing(7),
-              overflowX: 'hidden',
-            }),
           },
         }}
       >
@@ -399,22 +397,23 @@ function Layout() {
         </Box>
       </Drawer>
       
-      {/* Main content */}
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: '100%',
           maxWidth: '100%',
-          height: 'auto',
-          minHeight: '100vh',
+          height: '100vh',
           overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
           transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
           marginLeft: 0,
+          marginTop: '64px',
           ...(open && {
             transition: theme.transitions.create('margin', {
               easing: theme.transitions.easing.easeOut,
@@ -433,6 +432,7 @@ function Layout() {
             maxWidth: '100%',
             height: 'auto',
             minHeight: '100%',
+            p: { xs: 2, sm: 3 },
           }}
         >
           <Outlet />
