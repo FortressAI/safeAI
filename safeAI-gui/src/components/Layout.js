@@ -425,11 +425,12 @@ function Layout() {
       >
         <Box
           sx={{
-            width: '100%',
-            maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            gap: 3,
+            width: '100%',
+            maxWidth: '100%',
+            height: 'auto',
             p: { xs: 2, sm: 3 },
           }}
         >
