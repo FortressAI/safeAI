@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Box, Grid } from '@mui/material';
 import PropTypes from 'prop-types';
-import MetricCard from './MetricCard';
-import SpeedIcon from '@mui/icons-material/Speed';
-import MemoryIcon from '@mui/icons-material/Memory';
-import NetworkIcon from '@mui/icons-material/NetworkCheck';
-import StatusIcon from '@mui/icons-material/Status';
+import { Box, Grid, Typography } from '@mui/material';
+import { Memory, Speed, NetworkCheck, CheckCircle } from '@mui/icons-material';
+import MetricCard from './shared/MetricCard';
 
 const defaultMetrics = {
   cpu: 0,
@@ -16,55 +12,54 @@ const defaultMetrics = {
 };
 
 const AgentBrowser = ({ agent = null }) => {
-  const theme = useTheme();
   const [metrics, setMetrics] = useState(defaultMetrics);
 
   useEffect(() => {
-    // Initialize metrics with default values if agent is null or metrics are undefined
     if (!agent || !agent.metrics) {
       setMetrics(defaultMetrics);
     } else {
-      setMetrics(agent.metrics);
+      setMetrics({
+        cpu: agent.metrics.cpu || 0,
+        memory: agent.metrics.memory || 0,
+        network: agent.metrics.network || 0,
+        status: agent.metrics.status || 'idle'
+      });
     }
   }, [agent]);
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Grid container spacing={3}>
+    <Box sx={{ p: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={3}>
           <MetricCard
             title="CPU Usage"
             value={`${metrics.cpu}%`}
-            icon={<SpeedIcon />}
-            color={theme.palette.primary.main}
-            trend={metrics.cpu > 80 ? 'High' : 'Normal'}
+            icon={<Memory />}
+            color="primary"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <MetricCard
             title="Memory Usage"
             value={`${metrics.memory}%`}
-            icon={<MemoryIcon />}
-            color={theme.palette.secondary.main}
-            trend={metrics.memory > 80 ? 'High' : 'Normal'}
+            icon={<Speed />}
+            color="secondary"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <MetricCard
             title="Network Activity"
             value={`${metrics.network} MB/s`}
-            icon={<NetworkIcon />}
-            color={theme.palette.success.main}
-            trend={metrics.network > 10 ? 'High' : 'Normal'}
+            icon={<NetworkCheck />}
+            color="info"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <MetricCard
             title="Status"
             value={metrics.status}
-            icon={<StatusIcon />}
-            color={theme.palette.info.main}
-            trend="Active"
+            icon={<CheckCircle />}
+            color="success"
           />
         </Grid>
       </Grid>
