@@ -402,37 +402,28 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          width: '100%',
-          maxWidth: '100%',
-          height: '100vh',
-          overflow: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          transition: theme.transitions.create('margin', {
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
-          marginLeft: 0,
-          marginTop: '64px',
-          ...(open && {
-            transition: theme.transitions.create('margin', {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: drawerWidth,
-          }),
+          minHeight: '100vh',
+          bgcolor: 'background.default',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
         }}
       >
         <Box
           sx={{
+            width: '100%',
+            maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
             gap: 3,
-            width: '100%',
-            maxWidth: '100%',
-            height: 'auto',
-            minHeight: '100%',
-            p: { xs: 2, sm: 3 },
+            alignItems: 'flex-start',
           }}
         >
           <Outlet />
