@@ -461,56 +461,38 @@ function Settings() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Box sx={{ p: 3 }}>
-          <PageHeader
-            title="Settings"
-            subtitle="Configure application settings"
-            icon={<SettingsIcon />}
-          />
-          
-          <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start' }}>
-              <Tooltip title="Save all settings">
-                <Button
-                  variant="contained"
-                  startIcon={<SaveIcon />}
-                  onClick={handleSave}
-                  sx={{
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                    '&:hover': {
-                      background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-                    },
-                  }}
-                >
-                  Save Settings
-                </Button>
-              </Tooltip>
-              
-              <Tooltip title="Reset to defaults">
-                <IconButton onClick={handleOpenResetDialog} color="error">
-                  <RestartAltIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
+        <Box sx={{ width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', alignItems: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Settings
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<SaveIcon />}
+                onClick={handleSave}
+              >
+                Save Settings
+              </Button>
+              <IconButton
+                color="error"
+                onClick={handleOpenResetDialog}
+                title="Reset to defaults"
+              >
+                <RestartAltIcon />
+              </IconButton>
+            </Stack>
           </Box>
-          
-          <Card
-            sx={{
-              background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.8)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
-              backdropFilter: 'blur(10px)',
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-              borderRadius: 2,
-              mb: 4,
-              overflow: 'visible'
-            }}
-          >
+
+          <Paper elevation={1} sx={{ width: '100%', maxWidth: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
                 value={tabValue}
                 onChange={handleTabChange}
+                aria-label="settings tabs"
                 variant="scrollable"
                 scrollButtons="auto"
-                aria-label="settings tabs"
                 sx={{
                   '& .MuiTab-root': {
                     minHeight: 64,
@@ -577,869 +559,860 @@ function Settings() {
                 />
               </Tabs>
             </Box>
-            
-            {/* General Settings Tab */}
-            <TabPanel value={tabValue} index={0}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    General Settings
-                  </Typography>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Plugin Name"
-                    value={generalSettings.pluginName}
-                    onChange={(e) => handleGeneralSettingChange('pluginName', e.target.value)}
-                    margin="normal"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Database URL"
-                    value={generalSettings.databaseUrl}
-                    onChange={(e) => handleGeneralSettingChange('databaseUrl', e.target.value)}
-                    margin="normal"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Database Username"
-                    value={generalSettings.databaseUsername}
-                    onChange={(e) => handleGeneralSettingChange('databaseUsername', e.target.value)}
-                    margin="normal"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Database Password"
-                    type={showApiKey ? 'text' : 'password'}
-                    value={generalSettings.databasePassword}
-                    onChange={(e) => handleGeneralSettingChange('databasePassword', e.target.value)}
-                    margin="normal"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowApiKey(!showApiKey)}
-                            edge="end"
-                          >
-                            {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel>Log Level</InputLabel>
-                    <Select
-                      value={generalSettings.logLevel}
-                      onChange={(e) => handleGeneralSettingChange('logLevel', e.target.value)}
-                      label="Log Level"
-                    >
-                      <MenuItem value="DEBUG">DEBUG</MenuItem>
-                      <MenuItem value="INFO">INFO</MenuItem>
-                      <MenuItem value="WARN">WARN</MenuItem>
-                      <MenuItem value="ERROR">ERROR</MenuItem>
-                    </Select>
-                  </FormControl>
-                  
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={generalSettings.debugMode}
-                          onChange={(e) => handleGeneralSettingChange('debugMode', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Debug Mode"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={generalSettings.autoUpdate}
-                          onChange={(e) => handleGeneralSettingChange('autoUpdate', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Auto Update"
-                    />
-                  </FormGroup>
-                  
-                  <Card variant="outlined" sx={{ mt: 2 }}>
-                    <CardContent>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        Plugin Information
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Version:</strong> 1.0.0
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Status:</strong> Active
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Installed:</strong> 2023-10-15
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </TabPanel>
-            
-            {/* API & LLM Settings Tab */}
-            <TabPanel value={tabValue} index={1}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    API & LLM Settings
-                  </Typography>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="OpenAI API Key"
-                    type={showApiKey ? 'text' : 'password'}
-                    value={apiSettings.openaiApiKey}
-                    onChange={(e) => handleApiSettingChange('openaiApiKey', e.target.value)}
-                    margin="normal"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <KeyIcon />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowApiKey(!showApiKey)}
-                            edge="end"
-                          >
-                            {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="SafeAI API Key"
-                    type={showApiKey ? 'text' : 'password'}
-                    value={apiSettings.safeAiApiKey}
-                    onChange={(e) => handleApiSettingChange('safeAiApiKey', e.target.value)}
-                    margin="normal"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <KeyIcon />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowApiKey(!showApiKey)}
-                            edge="end"
-                          >
-                            {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel>LLM Model</InputLabel>
-                    <Select
-                      value={apiSettings.model}
-                      onChange={(e) => handleApiSettingChange('model', e.target.value)}
-                      label="LLM Model"
-                    >
-                      {availableModels.map(model => (
-                        <MenuItem key={model} value={model}>{model}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={apiSettings.useExternalModel}
-                          onChange={(e) => handleApiSettingChange('useExternalModel', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Use External Model"
-                    />
-                  </FormGroup>
-                  
-                  {apiSettings.useExternalModel && (
+
+            <Box sx={{ p: 3 }}>
+              <TabPanel value={tabValue} index={0}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="h6" gutterBottom>
+                      General Settings
+                    </Typography>
                     <TextField
                       fullWidth
-                      label="External Model Endpoint"
-                      value={apiSettings.externalModelEndpoint}
-                      onChange={(e) => handleApiSettingChange('externalModelEndpoint', e.target.value)}
+                      label="Plugin Name"
+                      value={generalSettings.pluginName}
+                      onChange={(e) => handleGeneralSettingChange('pluginName', e.target.value)}
                       margin="normal"
                     />
-                  )}
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Model Parameters
-                  </Typography>
-                  
-                  <TextField
-                    fullWidth
-                    label="Temperature"
-                    type="number"
-                    value={apiSettings.temperature}
-                    onChange={(e) => handleApiSettingChange('temperature', parseFloat(e.target.value))}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 0, max: 1, step: 0.1 },
-                    }}
-                    helperText="Controls randomness: 0 is deterministic, 1 is creative"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Max Tokens"
-                    type="number"
-                    value={apiSettings.maxTokens}
-                    onChange={(e) => handleApiSettingChange('maxTokens', parseInt(e.target.value))}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 100, step: 100 },
-                    }}
-                    helperText="Maximum length of generated responses"
-                  />
-                  
-                  <Divider sx={{ my: 2 }} />
-                  
-                  <Typography variant="subtitle1" gutterBottom>
-                    Test API Connection
-                  </Typography>
-                  
-                  <Button 
-                    variant="outlined" 
-                    startIcon={<ApiIcon />}
-                    sx={{ mr: 1 }}
-                  >
-                    Test Connection
-                  </Button>
-                  
-                  <Button 
-                    variant="outlined" 
-                    color="secondary" 
-                    startIcon={<PsychologyIcon />}
-                  >
-                    Test LLM Integration
-                  </Button>
-                  
-                  <Alert severity="info" sx={{ mt: 2 }}>
-                    API settings are used for agent operations and natural language processing.
-                  </Alert>
-                </Grid>
-              </Grid>
-            </TabPanel>
-            
-            {/* Blockchain Settings Tab */}
-            <TabPanel value={tabValue} index={2}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Blockchain Settings
-                  </Typography>
-                  
-                  <BlockchainStatusIndicator 
-                    status={blockchainConnectionStatus} 
-                    blockchainSettings={blockchainSettings}
-                  />
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Blockchain Endpoint"
-                    value={blockchainSettings.blockchainEndpoint}
-                    onChange={(e) => handleBlockchainSettingChange('blockchainEndpoint', e.target.value)}
-                    margin="normal"
-                    helperText="Provider URL (Infura, Alchemy, or custom RPC endpoint)"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Admin Wallet Key"
-                    type={showWalletKey ? 'text' : 'password'}
-                    value={blockchainSettings.adminWalletKey}
-                    onChange={(e) => handleBlockchainSettingChange('adminWalletKey', e.target.value)}
-                    margin="normal"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowWalletKey(!showWalletKey)}
-                            edge="end"
-                          >
-                            {showWalletKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    helperText="Private key for admin operations (kept secure and never shared)"
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Contract Address"
-                    value={blockchainSettings.contractAddress}
-                    onChange={(e) => handleBlockchainSettingChange('contractAddress', e.target.value)}
-                    margin="normal"
-                    helperText="Main SafeAI contract address on the blockchain"
-                  />
-                  
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel>Network</InputLabel>
-                    <Select
-                      value={blockchainSettings.networkId}
-                      onChange={(e) => handleBlockchainSettingChange('networkId', e.target.value)}
-                      label="Network"
-                    >
-                      {blockchainNetworks.map(network => (
-                        <MenuItem key={network.id} value={network.id}>{network.name}</MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      Select the blockchain network to connect to
-                    </FormHelperText>
-                  </FormControl>
-                  
-                  <TextField
-                    fullWidth
-                    label="Gas Limit"
-                    type="number"
-                    value={blockchainSettings.gasLimit}
-                    onChange={(e) => handleBlockchainSettingChange('gasLimit', parseInt(e.target.value))}
-                    margin="normal"
-                    helperText="Maximum gas for transactions (100,000 recommended)"
-                  />
-                  
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={blockchainSettings.enableBlockchain}
-                          onChange={(e) => handleBlockchainSettingChange('enableBlockchain', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Enable Blockchain Integration"
+                    <TextField
+                      fullWidth
+                      label="Database URL"
+                      value={generalSettings.databaseUrl}
+                      onChange={(e) => handleGeneralSettingChange('databaseUrl', e.target.value)}
+                      margin="normal"
                     />
-                  </FormGroup>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Card variant="outlined" sx={{ mb: 3 }}>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <AccountBalanceIcon color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6">Blockchain Validation</Typography>
-                      </Box>
-                      
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        Test and validate your blockchain connection to ensure proper integration with SafeAI.
-                      </Typography>
-                      
-                      <Button 
-                        variant="contained" 
-                        startIcon={isTestingConnection ? <CircularProgress size={20} color="inherit" /> : <LinkIcon />}
-                        onClick={handleTestBlockchainConnection}
-                        disabled={isTestingConnection || !blockchainSettings.enableBlockchain}
-                        fullWidth
-                        sx={{ mb: 2 }}
+                    <TextField
+                      fullWidth
+                      label="Database Username"
+                      value={generalSettings.databaseUsername}
+                      onChange={(e) => handleGeneralSettingChange('databaseUsername', e.target.value)}
+                      margin="normal"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Database Password"
+                      type={showApiKey ? 'text' : 'password'}
+                      value={generalSettings.databasePassword}
+                      onChange={(e) => handleGeneralSettingChange('databasePassword', e.target.value)}
+                      margin="normal"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowApiKey(!showApiKey)}
+                              edge="end"
+                            >
+                              {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>Log Level</InputLabel>
+                      <Select
+                        value={generalSettings.logLevel}
+                        onChange={(e) => handleGeneralSettingChange('logLevel', e.target.value)}
+                        label="Log Level"
                       >
-                        {isTestingConnection ? 'Testing Connection...' : 'Test Blockchain Connection'}
-                      </Button>
-                      
-                      <Collapse in={showBlockchainValidation}>
-                        <Box sx={{ mt: 2, mb: 1 }}>
-                          <Stepper activeStep={activeValidationStep} orientation="vertical">
-                            {blockchainValidationSteps.map((step, index) => (
-                              <Step key={step.label} completed={step.completed} expanded>
-                                <StepLabel 
-                                  error={step.error}
-                                  StepIconProps={{
-                                    icon: step.completed ? <CheckCircleIcon color="success" /> : index + 1,
-                                  }}
-                                >
-                                  {step.label}
-                                </StepLabel>
-                                <StepContent>
-                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    {index === activeValidationStep && isTestingConnection ? (
-                                      <LinearProgress sx={{ width: '100%', my: 1 }} />
-                                    ) : (
-                                      <Typography variant="body2" color="text.secondary">
-                                        {step.completed ? 'Completed successfully' : 
-                                         step.error ? 'Failed - See details below' : 'Waiting...'}
-                                      </Typography>
-                                    )}
-                                  </Box>
-                                </StepContent>
-                              </Step>
-                            ))}
-                          </Stepper>
+                        <MenuItem value="DEBUG">DEBUG</MenuItem>
+                        <MenuItem value="INFO">INFO</MenuItem>
+                        <MenuItem value="WARN">WARN</MenuItem>
+                        <MenuItem value="ERROR">ERROR</MenuItem>
+                      </Select>
+                    </FormControl>
+                    
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={generalSettings.debugMode}
+                            onChange={(e) => handleGeneralSettingChange('debugMode', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Debug Mode"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={generalSettings.autoUpdate}
+                            onChange={(e) => handleGeneralSettingChange('autoUpdate', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Auto Update"
+                      />
+                    </FormGroup>
+                    
+                    <Card variant="outlined" sx={{ mt: 2 }}>
+                      <CardContent>
+                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                          Plugin Information
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Version:</strong> 1.0.0
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Status:</strong> Active
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Installed:</strong> 2023-10-15
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              
+              <TabPanel value={tabValue} index={1}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" gutterBottom>
+                      API & LLM Settings
+                    </Typography>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="OpenAI API Key"
+                      type={showApiKey ? 'text' : 'password'}
+                      value={apiSettings.openaiApiKey}
+                      onChange={(e) => handleApiSettingChange('openaiApiKey', e.target.value)}
+                      margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <KeyIcon />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowApiKey(!showApiKey)}
+                              edge="end"
+                            >
+                              {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="SafeAI API Key"
+                      type={showApiKey ? 'text' : 'password'}
+                      value={apiSettings.safeAiApiKey}
+                      onChange={(e) => handleApiSettingChange('safeAiApiKey', e.target.value)}
+                      margin="normal"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <KeyIcon />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowApiKey(!showApiKey)}
+                              edge="end"
+                            >
+                              {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>LLM Model</InputLabel>
+                      <Select
+                        value={apiSettings.model}
+                        onChange={(e) => handleApiSettingChange('model', e.target.value)}
+                        label="LLM Model"
+                      >
+                        {availableModels.map(model => (
+                          <MenuItem key={model} value={model}>{model}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={apiSettings.useExternalModel}
+                            onChange={(e) => handleApiSettingChange('useExternalModel', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Use External Model"
+                      />
+                    </FormGroup>
+                    
+                    {apiSettings.useExternalModel && (
+                      <TextField
+                        fullWidth
+                        label="External Model Endpoint"
+                        value={apiSettings.externalModelEndpoint}
+                        onChange={(e) => handleApiSettingChange('externalModelEndpoint', e.target.value)}
+                        margin="normal"
+                      />
+                    )}
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Model Parameters
+                    </Typography>
+                    
+                    <TextField
+                      fullWidth
+                      label="Temperature"
+                      type="number"
+                      value={apiSettings.temperature}
+                      onChange={(e) => handleApiSettingChange('temperature', parseFloat(e.target.value))}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 0, max: 1, step: 0.1 },
+                      }}
+                      helperText="Controls randomness: 0 is deterministic, 1 is creative"
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Max Tokens"
+                      type="number"
+                      value={apiSettings.maxTokens}
+                      onChange={(e) => handleApiSettingChange('maxTokens', parseInt(e.target.value))}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 100, step: 100 },
+                      }}
+                      helperText="Maximum length of generated responses"
+                    />
+                    
+                    <Divider sx={{ my: 2 }} />
+                    
+                    <Typography variant="subtitle1" gutterBottom>
+                      Test API Connection
+                    </Typography>
+                    
+                    <Button 
+                      variant="outlined" 
+                      startIcon={<ApiIcon />}
+                      sx={{ mr: 1 }}
+                    >
+                      Test Connection
+                    </Button>
+                    
+                    <Button 
+                      variant="outlined" 
+                      color="secondary" 
+                      startIcon={<PsychologyIcon />}
+                    >
+                      Test LLM Integration
+                    </Button>
+                    
+                    <Alert severity="info" sx={{ mt: 2 }}>
+                      API settings are used for agent operations and natural language processing.
+                    </Alert>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              
+              <TabPanel value={tabValue} index={2}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" gutterBottom>
+                      Blockchain Settings
+                    </Typography>
+                    
+                    <BlockchainStatusIndicator 
+                      status={blockchainConnectionStatus} 
+                      blockchainSettings={blockchainSettings}
+                    />
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Blockchain Endpoint"
+                      value={blockchainSettings.blockchainEndpoint}
+                      onChange={(e) => handleBlockchainSettingChange('blockchainEndpoint', e.target.value)}
+                      margin="normal"
+                      helperText="Provider URL (Infura, Alchemy, or custom RPC endpoint)"
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Admin Wallet Key"
+                      type={showWalletKey ? 'text' : 'password'}
+                      value={blockchainSettings.adminWalletKey}
+                      onChange={(e) => handleBlockchainSettingChange('adminWalletKey', e.target.value)}
+                      margin="normal"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowWalletKey(!showWalletKey)}
+                              edge="end"
+                            >
+                              {showWalletKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                      helperText="Private key for admin operations (kept secure and never shared)"
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Contract Address"
+                      value={blockchainSettings.contractAddress}
+                      onChange={(e) => handleBlockchainSettingChange('contractAddress', e.target.value)}
+                      margin="normal"
+                      helperText="Main SafeAI contract address on the blockchain"
+                    />
+                    
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>Network</InputLabel>
+                      <Select
+                        value={blockchainSettings.networkId}
+                        onChange={(e) => handleBlockchainSettingChange('networkId', e.target.value)}
+                        label="Network"
+                      >
+                        {blockchainNetworks.map(network => (
+                          <MenuItem key={network.id} value={network.id}>{network.name}</MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>
+                        Select the blockchain network to connect to
+                      </FormHelperText>
+                    </FormControl>
+                    
+                    <TextField
+                      fullWidth
+                      label="Gas Limit"
+                      type="number"
+                      value={blockchainSettings.gasLimit}
+                      onChange={(e) => handleBlockchainSettingChange('gasLimit', parseInt(e.target.value))}
+                      margin="normal"
+                      helperText="Maximum gas for transactions (100,000 recommended)"
+                    />
+                    
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={blockchainSettings.enableBlockchain}
+                            onChange={(e) => handleBlockchainSettingChange('enableBlockchain', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Enable Blockchain Integration"
+                      />
+                    </FormGroup>
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Card variant="outlined" sx={{ mb: 3 }}>
+                      <CardContent>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <AccountBalanceIcon color="primary" sx={{ mr: 1 }} />
+                          <Typography variant="h6">Blockchain Validation</Typography>
                         </Box>
                         
-                        {blockchainTestResults && (
-                          <Card variant="outlined" sx={{ mt: 2, bgcolor: alpha('#43a047', 0.05) }}>
-                            <CardContent>
-                              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                <CheckCircleIcon color="success" sx={{ mr: 1 }} />
-                                <Typography variant="subtitle1" fontWeight={500}>
-                                  Connection Successful
-                                </Typography>
-                              </Box>
-                              
-                              <Grid container spacing={2}>
-                                <Grid item xs={6}>
-                                  <Typography variant="body2" color="text.secondary">Network:</Typography>
-                                  <Typography variant="body2">
-                                    {blockchainNetworks.find(n => n.id === blockchainTestResults.networkId)?.name}
+                        <Typography variant="body2" color="text.secondary" paragraph>
+                          Test and validate your blockchain connection to ensure proper integration with SafeAI.
+                        </Typography>
+                        
+                        <Button 
+                          variant="contained" 
+                          startIcon={isTestingConnection ? <CircularProgress size={20} color="inherit" /> : <LinkIcon />}
+                          onClick={handleTestBlockchainConnection}
+                          disabled={isTestingConnection || !blockchainSettings.enableBlockchain}
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        >
+                          {isTestingConnection ? 'Testing Connection...' : 'Test Blockchain Connection'}
+                        </Button>
+                        
+                        <Collapse in={showBlockchainValidation}>
+                          <Box sx={{ mt: 2, mb: 1 }}>
+                            <Stepper activeStep={activeValidationStep} orientation="vertical">
+                              {blockchainValidationSteps.map((step, index) => (
+                                <Step key={step.label} completed={step.completed} expanded>
+                                  <StepLabel 
+                                    error={step.error}
+                                    StepIconProps={{
+                                      icon: step.completed ? <CheckCircleIcon color="success" /> : index + 1,
+                                    }}
+                                  >
+                                    {step.label}
+                                  </StepLabel>
+                                  <StepContent>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                      {index === activeValidationStep && isTestingConnection ? (
+                                        <LinearProgress sx={{ width: '100%', my: 1 }} />
+                                      ) : (
+                                        <Typography variant="body2" color="text.secondary">
+                                          {step.completed ? 'Completed successfully' : 
+                                           step.error ? 'Failed - See details below' : 'Waiting...'}
+                                        </Typography>
+                                      )}
+                                    </Box>
+                                  </StepContent>
+                                </Step>
+                              ))}
+                            </Stepper>
+                          </Box>
+                          
+                          {blockchainTestResults && (
+                            <Card variant="outlined" sx={{ mt: 2, bgcolor: alpha('#43a047', 0.05) }}>
+                              <CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                  <CheckCircleIcon color="success" sx={{ mr: 1 }} />
+                                  <Typography variant="subtitle1" fontWeight={500}>
+                                    Connection Successful
                                   </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <Typography variant="body2" color="text.secondary">Latency:</Typography>
-                                  <Typography variant="body2">{blockchainTestResults.latency}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <Typography variant="body2" color="text.secondary">Smart Contracts:</Typography>
-                                  <Typography variant="body2">{blockchainTestResults.contracts} verified</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <Typography variant="body2" color="text.secondary">Wallet Balance:</Typography>
-                                  <Typography variant="body2">{blockchainTestResults.balance}</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                  <Typography variant="caption" color="text.secondary">
-                                    Last checked: {blockchainTestResults.timestamp}
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            </CardContent>
-                          </Card>
-                        )}
-                      </Collapse>
-                    </CardContent>
-                  </Card>
-                  
-                  <Accordion variant="outlined">
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                      <DataObjectIcon sx={{ mr: 1, color: 'primary.main' }} />
-                      <Typography variant="subtitle1">Smart Contracts</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <TableContainer sx={{ maxHeight: 240 }}>
-                        <Table size="small" stickyHeader>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Contract</TableCell>
-                              <TableCell>Status</TableCell>
-                              <TableCell align="right">Actions</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {sampleContracts.map((contract) => (
-                              <TableRow key={contract.address} hover>
-                                <TableCell>
-                                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography variant="body2" fontWeight={500}>{contract.name}</Typography>
-                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                                      {contract.address.substring(0, 8)}...{contract.address.substring(36)}
+                                </Box>
+                                
+                                <Grid container spacing={2}>
+                                  <Grid item xs={6}>
+                                    <Typography variant="body2" color="text.secondary">Network:</Typography>
+                                    <Typography variant="body2">
+                                      {blockchainNetworks.find(n => n.id === blockchainTestResults.networkId)?.name}
                                     </Typography>
-                                  </Box>
-                                </TableCell>
-                                <TableCell>
-                                  <Chip 
-                                    icon={contract.verified ? <VerifiedIcon /> : <WarningIcon />} 
-                                    label={contract.verified ? "Verified" : "Unverified"} 
-                                    size="small" 
-                                    color={contract.verified ? "success" : "warning"}
-                                    variant="outlined"
-                                  />
-                                </TableCell>
-                                <TableCell align="right">
-                                  <IconButton 
-                                    size="small" 
-                                    onClick={() => handleOpenContractDialog(contract)}
-                                    title="View Details"
-                                  >
-                                    <InfoIcon fontSize="small" />
-                                  </IconButton>
-                                  <IconButton 
-                                    size="small" 
-                                    onClick={() => copyToClipboard(contract.address)}
-                                    title="Copy Address"
-                                  >
-                                    <ContentCopyIcon fontSize="small" />
-                                  </IconButton>
-                                  <IconButton 
-                                    size="small" 
-                                    href={getBlockExplorerUrl(blockchainSettings.networkId, contract.address)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    title="View on Block Explorer"
-                                  >
-                                    <OpenInNewIcon fontSize="small" />
-                                  </IconButton>
-                                </TableCell>
+                                  </Grid>
+                                  <Grid item xs={6}>
+                                    <Typography variant="body2" color="text.secondary">Latency:</Typography>
+                                    <Typography variant="body2">{blockchainTestResults.latency}</Typography>
+                                  </Grid>
+                                  <Grid item xs={6}>
+                                    <Typography variant="body2" color="text.secondary">Smart Contracts:</Typography>
+                                    <Typography variant="body2">{blockchainTestResults.contracts} verified</Typography>
+                                  </Grid>
+                                  <Grid item xs={6}>
+                                    <Typography variant="body2" color="text.secondary">Wallet Balance:</Typography>
+                                    <Typography variant="body2">{blockchainTestResults.balance}</Typography>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                    <Typography variant="caption" color="text.secondary">
+                                      Last checked: {blockchainTestResults.timestamp}
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                              </CardContent>
+                            </Card>
+                          )}
+                        </Collapse>
+                      </CardContent>
+                    </Card>
+                    
+                    <Accordion variant="outlined">
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <DataObjectIcon sx={{ mr: 1, color: 'primary.main' }} />
+                        <Typography variant="subtitle1">Smart Contracts</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <TableContainer sx={{ maxHeight: 240 }}>
+                          <Table size="small" stickyHeader>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Contract</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell align="right">Actions</TableCell>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                      
-                      <Button
-                        variant="outlined"
-                        startIcon={<IntegrationInstructionsIcon />}
-                        fullWidth
-                        sx={{ mt: 2 }}
-                      >
-                        Deploy Smart Contracts
-                      </Button>
-                    </AccordionDetails>
-                  </Accordion>
-                  
-                  <Accordion variant="outlined" sx={{ mt: 2 }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                      <ReceiptLongIcon sx={{ mr: 1, color: 'primary.main' }} />
-                      <Typography variant="subtitle1">Recent Transactions</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <TableContainer sx={{ maxHeight: 240 }}>
-                        <Table size="small" stickyHeader>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Transaction</TableCell>
-                              <TableCell>Type</TableCell>
-                              <TableCell>Status</TableCell>
-                              <TableCell>Time</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {sampleTransactions.map((tx) => (
-                              <TableRow key={tx.hash} hover>
-                                <TableCell>
-                                  <Typography variant="caption">
-                                    {tx.hash}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell>{tx.type}</TableCell>
-                                <TableCell>
-                                  <Chip 
-                                    size="small" 
-                                    color={tx.status === 'success' ? 'success' : 'error'} 
-                                    label={tx.status === 'success' ? 'Success' : 'Failed'}
-                                    variant="outlined"
-                                  />
-                                </TableCell>
-                                <TableCell>{tx.time}</TableCell>
+                            </TableHead>
+                            <TableBody>
+                              {sampleContracts.map((contract) => (
+                                <TableRow key={contract.address} hover>
+                                  <TableCell>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Typography variant="body2" fontWeight={500}>{contract.name}</Typography>
+                                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                        {contract.address.substring(0, 8)}...{contract.address.substring(36)}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell>
+                                    <Chip 
+                                      icon={contract.verified ? <VerifiedIcon /> : <WarningIcon />} 
+                                      label={contract.verified ? "Verified" : "Unverified"} 
+                                      size="small" 
+                                      color={contract.verified ? "success" : "warning"}
+                                      variant="outlined"
+                                    />
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    <IconButton 
+                                      size="small" 
+                                      onClick={() => handleOpenContractDialog(contract)}
+                                      title="View Details"
+                                    >
+                                      <InfoIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton 
+                                      size="small" 
+                                      onClick={() => copyToClipboard(contract.address)}
+                                      title="Copy Address"
+                                    >
+                                      <ContentCopyIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton 
+                                      size="small" 
+                                      href={getBlockExplorerUrl(blockchainSettings.networkId, contract.address)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      title="View on Block Explorer"
+                                    >
+                                      <OpenInNewIcon fontSize="small" />
+                                    </IconButton>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        
+                        <Button
+                          variant="outlined"
+                          startIcon={<IntegrationInstructionsIcon />}
+                          fullWidth
+                          sx={{ mt: 2 }}
+                        >
+                          Deploy Smart Contracts
+                        </Button>
+                      </AccordionDetails>
+                    </Accordion>
+                    
+                    <Accordion variant="outlined" sx={{ mt: 2 }}>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <ReceiptLongIcon sx={{ mr: 1, color: 'primary.main' }} />
+                        <Typography variant="subtitle1">Recent Transactions</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <TableContainer sx={{ maxHeight: 240 }}>
+                          <Table size="small" stickyHeader>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Transaction</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell>Time</TableCell>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                      
-                      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                        <Button
-                          variant="text"
-                          startIcon={<RefreshIcon />}
-                          size="small"
-                        >
-                          Refresh
-                        </Button>
-                        <Button
-                          variant="text"
-                          endIcon={<OpenInNewIcon />}
-                          size="small"
-                        >
-                          View All
-                        </Button>
-                      </Stack>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
-                
-                <Grid item xs={12}>
-                  <Alert 
-                    severity="info" 
-                    sx={{ mt: 1 }}
-                    action={
-                      <Button color="inherit" size="small">
-                        Learn More
-                      </Button>
-                    }
-                  >
-                    The blockchain integration enables smart contract-based licensing, governance, and audit trails for your SafeAI deployment.
-                  </Alert>
-                </Grid>
-              </Grid>
-            </TabPanel>
-            
-            {/* Security Settings Tab */}
-            <TabPanel value={tabValue} index={3}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Security Settings
-                  </Typography>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={securitySettings.enforceStrictValidation}
-                          onChange={(e) => handleSecuritySettingChange('enforceStrictValidation', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Enforce Strict Validation"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={securitySettings.requireKGVerification}
-                          onChange={(e) => handleSecuritySettingChange('requireKGVerification', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Require Knowledge Graph Verification"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={securitySettings.automaticSecurityUpdates}
-                          onChange={(e) => handleSecuritySettingChange('automaticSecurityUpdates', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Automatic Security Updates"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={securitySettings.allowExternalAgents}
-                          onChange={(e) => handleSecuritySettingChange('allowExternalAgents', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Allow External Agents"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={securitySettings.enableAuditLogs}
-                          onChange={(e) => handleSecuritySettingChange('enableAuditLogs', e.target.checked)}
-                          color="primary"
-                        />
-                      }
-                      label="Enable Audit Logs"
-                    />
-                  </FormGroup>
+                            </TableHead>
+                            <TableBody>
+                              {sampleTransactions.map((tx) => (
+                                <TableRow key={tx.hash} hover>
+                                  <TableCell>
+                                    <Typography variant="caption">
+                                      {tx.hash}
+                                    </Typography>
+                                  </TableCell>
+                                  <TableCell>{tx.type}</TableCell>
+                                  <TableCell>
+                                    <Chip 
+                                      size="small" 
+                                      color={tx.status === 'success' ? 'success' : 'error'} 
+                                      label={tx.status === 'success' ? 'Success' : 'Failed'}
+                                      variant="outlined"
+                                    />
+                                  </TableCell>
+                                  <TableCell>{tx.time}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        
+                        <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                          <Button
+                            variant="text"
+                            startIcon={<RefreshIcon />}
+                            size="small"
+                          >
+                            Refresh
+                          </Button>
+                          <Button
+                            variant="text"
+                            endIcon={<OpenInNewIcon />}
+                            size="small"
+                          >
+                            View All
+                          </Button>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Grid>
                   
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel>Minimum Security Level</InputLabel>
-                    <Select
-                      value={securitySettings.minSecurityLevel}
-                      onChange={(e) => handleSecuritySettingChange('minSecurityLevel', e.target.value)}
-                      label="Minimum Security Level"
+                  <Grid item xs={12}>
+                    <Alert 
+                      severity="info" 
+                      sx={{ mt: 1 }}
+                      action={
+                        <Button color="inherit" size="small">
+                          Learn More
+                        </Button>
+                      }
                     >
-                      <MenuItem value="low">Low</MenuItem>
-                      <MenuItem value="medium">Medium</MenuItem>
-                      <MenuItem value="high">High</MenuItem>
-                    </Select>
-                  </FormControl>
+                      The blockchain integration enables smart contract-based licensing, governance, and audit trails for your SafeAI deployment.
+                    </Alert>
+                  </Grid>
                 </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Security Actions
-                  </Typography>
+              </TabPanel>
+              
+              <TabPanel value={tabValue} index={3}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" gutterBottom>
+                      Security Settings
+                    </Typography>
+                  </Grid>
                   
-                  <Button 
-                    variant="outlined" 
-                    color="primary" 
-                    startIcon={<SecurityIcon />}
-                    sx={{ mr: 1, mb: 1 }}
-                  >
-                    Run Security Validation
-                  </Button>
+                  <Grid item xs={12} md={6}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={securitySettings.enforceStrictValidation}
+                            onChange={(e) => handleSecuritySettingChange('enforceStrictValidation', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Enforce Strict Validation"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={securitySettings.requireKGVerification}
+                            onChange={(e) => handleSecuritySettingChange('requireKGVerification', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Require Knowledge Graph Verification"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={securitySettings.automaticSecurityUpdates}
+                            onChange={(e) => handleSecuritySettingChange('automaticSecurityUpdates', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Automatic Security Updates"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={securitySettings.allowExternalAgents}
+                            onChange={(e) => handleSecuritySettingChange('allowExternalAgents', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Allow External Agents"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={securitySettings.enableAuditLogs}
+                            onChange={(e) => handleSecuritySettingChange('enableAuditLogs', e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Enable Audit Logs"
+                      />
+                    </FormGroup>
+                    
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>Minimum Security Level</InputLabel>
+                      <Select
+                        value={securitySettings.minSecurityLevel}
+                        onChange={(e) => handleSecuritySettingChange('minSecurityLevel', e.target.value)}
+                        label="Minimum Security Level"
+                      >
+                        <MenuItem value="low">Low</MenuItem>
+                        <MenuItem value="medium">Medium</MenuItem>
+                        <MenuItem value="high">High</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
                   
-                  <Button 
-                    variant="outlined" 
-                    color="secondary" 
-                    startIcon={<CodeIcon />}
-                    sx={{ mb: 1 }}
-                  >
-                    Update Security Knowledge Graphs
-                  </Button>
-                  
-                  <Divider sx={{ my: 2 }} />
-                  
-                  <Alert severity="info" sx={{ mb: 2 }}>
-                    <AlertTitle>Security Guidelines</AlertTitle>
-                    Enabling strict security validation ensures all agents and knowledge graphs meet
-                    security requirements before use. We recommend keeping automatic security updates
-                    enabled for production environments.
-                  </Alert>
-                  
-                  <Alert severity="warning">
-                    <AlertTitle>External Agents Warning</AlertTitle>
-                    Allowing external agents introduces additional security risks. Only enable this
-                    option if you have proper security measures in place.
-                  </Alert>
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Security Actions
+                    </Typography>
+                    
+                    <Button 
+                      variant="outlined" 
+                      color="primary" 
+                      startIcon={<SecurityIcon />}
+                      sx={{ mr: 1, mb: 1 }}
+                    >
+                      Run Security Validation
+                    </Button>
+                    
+                    <Button 
+                      variant="outlined" 
+                      color="secondary" 
+                      startIcon={<CodeIcon />}
+                      sx={{ mb: 1 }}
+                    >
+                      Update Security Knowledge Graphs
+                    </Button>
+                    
+                    <Divider sx={{ my: 2 }} />
+                    
+                    <Alert severity="info" sx={{ mb: 2 }}>
+                      <AlertTitle>Security Guidelines</AlertTitle>
+                      Enabling strict security validation ensures all agents and knowledge graphs meet
+                      security requirements before use. We recommend keeping automatic security updates
+                      enabled for production environments.
+                    </Alert>
+                    
+                    <Alert severity="warning">
+                      <AlertTitle>External Agents Warning</AlertTitle>
+                      Allowing external agents introduces additional security risks. Only enable this
+                      option if you have proper security measures in place.
+                    </Alert>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </TabPanel>
-            
-            {/* Advanced Settings Tab */}
-            <TabPanel value={tabValue} index={4}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Advanced Settings
-                  </Typography>
-                  <Alert severity="warning" sx={{ mb: 3 }}>
-                    These settings are for advanced users only. Incorrect configuration may affect system stability.
-                  </Alert>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    System Operations
-                  </Typography>
+              </TabPanel>
+              
+              <TabPanel value={tabValue} index={4}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" gutterBottom>
+                      Advanced Settings
+                    </Typography>
+                    <Alert severity="warning" sx={{ mb: 3 }}>
+                      These settings are for advanced users only. Incorrect configuration may affect system stability.
+                    </Alert>
+                  </Grid>
                   
-                  <Button 
-                    variant="outlined" 
-                    color="primary" 
-                    startIcon={<RestartAltIcon />}
-                    sx={{ mr: 1, mb: 1 }}
-                  >
-                    Restart Plugin
-                  </Button>
-                  
-                  <Button 
-                    variant="outlined" 
-                    color="error" 
-                    startIcon={<ResetIcon />}
-                    onClick={handleOpenResetDialog}
-                    sx={{ mb: 1 }}
-                  >
-                    Reset to Defaults
-                  </Button>
-                  
-                  <Divider sx={{ my: 2 }} />
-                  
-                  <Typography variant="subtitle1" gutterBottom>
-                    Cache Settings
-                  </Typography>
-                  
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Switch defaultChecked color="primary" />}
-                      label="Enable Response Caching"
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      System Operations
+                    </Typography>
+                    
+                    <Button 
+                      variant="outlined" 
+                      color="primary" 
+                      startIcon={<RestartAltIcon />}
+                      sx={{ mr: 1, mb: 1 }}
+                    >
+                      Restart Plugin
+                    </Button>
+                    
+                    <Button 
+                      variant="outlined" 
+                      color="error" 
+                      startIcon={<ResetIcon />}
+                      onClick={handleOpenResetDialog}
+                      sx={{ mb: 1 }}
+                    >
+                      Reset to Defaults
+                    </Button>
+                    
+                    <Divider sx={{ my: 2 }} />
+                    
+                    <Typography variant="subtitle1" gutterBottom>
+                      Cache Settings
+                    </Typography>
+                    
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Switch defaultChecked color="primary" />}
+                        label="Enable Response Caching"
+                      />
+                      <FormControlLabel
+                        control={<Switch defaultChecked color="primary" />}
+                        label="Cache Knowledge Graph Queries"
+                      />
+                    </FormGroup>
+                    
+                    <TextField
+                      fullWidth
+                      label="Cache Time-to-Live (seconds)"
+                      type="number"
+                      defaultValue={3600}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 60 },
+                      }}
                     />
-                    <FormControlLabel
-                      control={<Switch defaultChecked color="primary" />}
-                      label="Cache Knowledge Graph Queries"
+                  </Grid>
+                  
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Advanced Performance Tuning
+                    </Typography>
+                    
+                    <TextField
+                      fullWidth
+                      label="Thread Pool Size"
+                      type="number"
+                      defaultValue={10}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 1 },
+                      }}
                     />
-                  </FormGroup>
-                  
-                  <TextField
-                    fullWidth
-                    label="Cache Time-to-Live (seconds)"
-                    type="number"
-                    defaultValue={3600}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 60 },
-                    }}
-                  />
+                    
+                    <TextField
+                      fullWidth
+                      label="Request Timeout (seconds)"
+                      type="number"
+                      defaultValue={30}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 1 },
+                      }}
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Max Connection Pool Size"
+                      type="number"
+                      defaultValue={50}
+                      margin="normal"
+                      InputProps={{
+                        inputProps: { min: 1 },
+                      }}
+                    />
+                    
+                    <Divider sx={{ my: 2 }} />
+                    
+                    <Card variant="outlined">
+                      <CardContent>
+                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                          System Information
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Java Version:</strong> 17.0.6
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Neo4j Version:</strong> 5.13.0
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Memory Usage:</strong> 1.2GB / 4GB
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Active Connections:</strong> 3
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                 </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Advanced Performance Tuning
-                  </Typography>
-                  
-                  <TextField
-                    fullWidth
-                    label="Thread Pool Size"
-                    type="number"
-                    defaultValue={10}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 1 },
-                    }}
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Request Timeout (seconds)"
-                    type="number"
-                    defaultValue={30}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 1 },
-                    }}
-                  />
-                  
-                  <TextField
-                    fullWidth
-                    label="Max Connection Pool Size"
-                    type="number"
-                    defaultValue={50}
-                    margin="normal"
-                    InputProps={{
-                      inputProps: { min: 1 },
-                    }}
-                  />
-                  
-                  <Divider sx={{ my: 2 }} />
-                  
-                  <Card variant="outlined">
-                    <CardContent>
-                      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                        System Information
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Java Version:</strong> 17.0.6
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Neo4j Version:</strong> 5.13.0
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Memory Usage:</strong> 1.2GB / 4GB
-                      </Typography>
-                      <Typography variant="body2">
-                        <strong>Active Connections:</strong> 3
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </TabPanel>
-          </Card>
+              </TabPanel>
+            </Box>
+          </Paper>
           
           {/* Save Success Snackbar */}
           <Snackbar

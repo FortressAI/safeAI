@@ -8,58 +8,57 @@ const PageHeader = ({
   subtitle, 
   onRefresh, 
   action,
-  gradientColors = ['#4f46e5', '#4338ca']
+  gradientColors = ['#4f46e5', '#4338ca'],
+  icon
 }) => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      mb: 4,
-      width: '100%',
-    }}>
-      <Box sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
+    <Box
+      sx={{
         width: '100%',
-      }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h4" component="h1" sx={{ 
-            fontWeight: 600, 
-            mb: 1,
-            background: `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 100%)`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            {title}
-          </Typography>
-          {subtitle && (
-            <Typography color="text.secondary" variant="subtitle1">
-              {subtitle}
-            </Typography>
-          )}
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2, ml: 2 }}>
-          {action}
-          {onRefresh && (
-            <Tooltip title="Refresh data">
-              <IconButton 
-                onClick={onRefresh}
-                sx={{
-                  background: alpha(theme.palette.primary.main, 0.1),
-                  '&:hover': {
-                    background: alpha(theme.palette.primary.main, 0.2),
-                  }
-                }}
-              >
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
+        maxWidth: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        alignItems: 'flex-start',
+        mb: 4,
+      }}
+    >
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: 2,
+        }}
+      >
+        {icon && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 40,
+              height: 40,
+              borderRadius: 1,
+              bgcolor: 'primary.main',
+              color: 'primary.contrastText',
+            }}
+          >
+            {icon}
+          </Box>
+        )}
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
+          {title}
+        </Typography>
       </Box>
+      {subtitle && (
+        <Typography variant="subtitle1" color="text.secondary">
+          {subtitle}
+        </Typography>
+      )}
     </Box>
   );
 };
@@ -69,7 +68,8 @@ PageHeader.propTypes = {
   subtitle: PropTypes.string,
   onRefresh: PropTypes.func,
   action: PropTypes.node,
-  gradientColors: PropTypes.arrayOf(PropTypes.string)
+  gradientColors: PropTypes.arrayOf(PropTypes.string),
+  icon: PropTypes.node
 };
 
 export default PageHeader; 
