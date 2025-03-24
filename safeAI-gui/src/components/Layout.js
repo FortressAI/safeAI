@@ -320,6 +320,7 @@ function Layout() {
           flexShrink: 0,
           whiteSpace: 'nowrap',
           boxSizing: 'border-box',
+          position: 'fixed',
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
@@ -405,18 +406,16 @@ function Layout() {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
           mt: '64px', // Height of AppBar
           minHeight: 'calc(100vh - 64px)',
           bgcolor: 'background.default',
-          transition: theme.transitions.create(['margin', 'width'], {
+          transition: theme.transitions.create(['width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
           ...(open && {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
-            transition: theme.transitions.create(['margin', 'width'], {
+            transition: theme.transitions.create(['width'], {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
             }),
@@ -432,6 +431,7 @@ function Layout() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
+            width: '100%',
           }}
         >
           <Outlet />
