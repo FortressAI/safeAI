@@ -402,9 +402,9 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          p: { xs: 2, sm: 2 },
+          width: `calc(100% - ${drawerWidth}px)`,
+          ml: `${drawerWidth}px`,
           transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -422,7 +422,7 @@ function Layout() {
             maxWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
-            gap: 3,
+            gap: 2,
             alignItems: 'flex-start',
           }}
         >
