@@ -41,7 +41,6 @@ contract FreePressContract is ERC721, ReentrancyGuard, Ownable {
     mapping(address => uint256[]) public userLicenses;
     
     uint256 public platformFee = 5; // 5% platform fee
-    address public owner;
     
     event PublisherRegistered(address indexed publisher, string name);
     event ArticlePublished(uint256 indexed articleId, address indexed publisher, string ipfsHash);
@@ -49,14 +48,7 @@ contract FreePressContract is ERC721, ReentrancyGuard, Ownable {
     event ArticleUpdated(uint256 indexed articleId, string newIpfsHash);
     event ReputationUpdated(address indexed publisher, uint256 newReputation);
     
-    constructor() ERC721("FreePress", "NEWS") {
-        owner = msg.sender;
-    }
-    
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function");
-        _;
-    }
+    constructor() ERC721("FreePress", "NEWS") Ownable() {}
     
     modifier onlyPublisher() {
         require(publishers[msg.sender].isRegistered, "Only registered publishers can call this function");
@@ -105,7 +97,7 @@ contract FreePressContract is ERC721, ReentrancyGuard, Ownable {
         uint256 publisherAmount = msg.value - platformAmount;
         
         // Transfer platform fee
-        payable(owner).transfer(platformAmount);
+        payable(owner()).transfer(platformAmount);
         
         // Transfer remaining amount to publisher
         payable(article.publisher).transfer(publisherAmount);
@@ -152,6 +144,6 @@ contract FreePressContract is ERC721, ReentrancyGuard, Ownable {
     }
     
     function withdrawPlatformFees() external onlyOwner {
-        payable(owner).transfer(address(this).balance);
+        payable(owner()).transfer(address(this).balance);
     }
 } 

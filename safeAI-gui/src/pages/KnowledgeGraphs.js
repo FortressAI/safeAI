@@ -74,7 +74,7 @@ import {
   Timeline as TimelineIcon,
   Schema as SchemaIcon,
   Link as LinkIcon,
-  Node as NodeIcon,
+  Circle as NodeIcon,
   Hub as HubIcon,
   Psychology as EthicsIcon,
   Functions as MathIcon,

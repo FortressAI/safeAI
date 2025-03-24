@@ -147,7 +147,15 @@ contract KnowledgeGraphBase is Ownable, Pausable {
     /**
      * @dev Get agent details
      * @param agentId The ID of the agent
-     * @return The agent details
+     * @return id The agent's ID
+     * @return name The agent's name
+     * @return category The agent's category
+     * @return agentType The agent's type
+     * @return usageCount The number of times the agent has been used
+     * @return successCount The number of successful uses
+     * @return metadata The agent's metadata
+     * @return creatorWallet The wallet address of the agent creator
+     * @return transactionFee The fee charged for using this agent
      */
     function getAgent(uint256 agentId) external view agentExists(agentId) returns (
         uint256 id,
@@ -226,14 +234,14 @@ contract KnowledgeGraphBase is Ownable, Pausable {
     /**
      * @dev Add a new concept to the knowledge graph
      * @param name The name of the concept
-     * @param description The description of the concept
+     * @param conceptDescription The description of the concept
      * @param tags Array of tags associated with the concept
      * @param metadata Additional metadata for the concept (JSON string)
      * @return The ID of the newly created concept
      */
     function addConcept(
         string memory name,
-        string memory description,
+        string memory conceptDescription,
         string[] memory tags,
         string memory metadata
     ) external onlyOwner whenNotPaused returns (uint256) {
@@ -244,7 +252,7 @@ contract KnowledgeGraphBase is Ownable, Pausable {
         concepts[newConceptId] = Concept({
             id: newConceptId,
             name: name,
-            description: description,
+            description: conceptDescription,
             tags: tags,
             metadata: metadata,
             exists: true
@@ -261,12 +269,17 @@ contract KnowledgeGraphBase is Ownable, Pausable {
     /**
      * @dev Get concept details
      * @param conceptId The ID of the concept
-     * @return The concept details
+     * @return id The concept's ID
+     * @return name The concept's name
+     * @return description The concept's description
+     * @return tags The concept's tags
+     * @return metadata The concept's metadata
      */
     function getConcept(uint256 conceptId) external view conceptExists(conceptId) returns (
         uint256 id,
         string memory name,
         string memory description,
+        string[] memory tags,
         string memory metadata
     ) {
         Concept memory concept = concepts[conceptId];
@@ -274,6 +287,7 @@ contract KnowledgeGraphBase is Ownable, Pausable {
             concept.id,
             concept.name,
             concept.description,
+            concept.tags,
             concept.metadata
         );
     }
@@ -288,16 +302,31 @@ contract KnowledgeGraphBase is Ownable, Pausable {
     }
 
     /**
-     * @dev Update concept metadata
+     * @dev Update concept details
      * @param conceptId The ID of the concept
+     * @param name The new name of the concept
+     * @param conceptDescription The new description of the concept
+     * @param tags The new tags array
      * @param metadata The new metadata
      */
-    function updateConceptMetadata(
+    function updateConcept(
         uint256 conceptId,
+        string memory name,
+        string memory conceptDescription,
+        string[] memory tags,
         string memory metadata
     ) external onlyOwner whenNotPaused conceptExists(conceptId) {
-        concepts[conceptId].metadata = metadata;
-        emit ConceptUpdated(conceptId, concepts[conceptId].name);
+        require(conceptNameToId[name] == 0 || conceptNameToId[name] == conceptId, "Concept with this name already exists");
+        
+        Concept storage concept = concepts[conceptId];
+        conceptNameToId[concept.name] = 0;
+        concept.name = name;
+        concept.description = conceptDescription;
+        concept.tags = tags;
+        concept.metadata = metadata;
+        conceptNameToId[name] = conceptId;
+        
+        emit ConceptUpdated(conceptId, name);
     }
 
     /**
@@ -358,7 +387,12 @@ contract KnowledgeGraphBase is Ownable, Pausable {
     /**
      * @dev Get relationship details
      * @param relationshipId The ID of the relationship
-     * @return The relationship details
+     * @return id The relationship's ID
+     * @return source The source concept's ID
+     * @return target The target concept's ID
+     * @return relationType The type of relationship
+     * @return weight The weight of the relationship
+     * @return metadata The relationship's metadata
      */
     function getRelationship(uint256 relationshipId) external view relationshipExists(relationshipId) returns (
         uint256 id,

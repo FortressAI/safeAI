@@ -124,7 +124,14 @@ contract CyberSecurityKG is KnowledgeGraphBase {
     /**
      * @dev Get vulnerability details
      * @param vulnerabilityId The ID of the vulnerability
-     * @return The vulnerability details
+     * @return id The vulnerability's ID
+     * @return name The vulnerability's name
+     * @return description The vulnerability's description
+     * @return severity The severity level
+     * @return cveId The CVE ID
+     * @return discoveryDate The discovery date
+     * @return remediation The remediation steps
+     * @return metadata The vulnerability's metadata
      */
     function getVulnerability(uint256 vulnerabilityId) external view vulnerabilityExists(vulnerabilityId) returns (
         uint256 id,
@@ -250,7 +257,13 @@ contract CyberSecurityKG is KnowledgeGraphBase {
     /**
      * @dev Get security incident details
      * @param incidentId The ID of the security incident
-     * @return The security incident details
+     * @return id The incident's ID
+     * @return title The incident's title
+     * @return description The incident's description
+     * @return date The incident's date
+     * @return impactLevel The impact level
+     * @return relatedVulnerabilities Array of related vulnerability IDs
+     * @return metadata The incident's metadata
      */
     function getSecurityIncident(uint256 incidentId) external view incidentExists(incidentId) returns (
         uint256 id,
@@ -258,6 +271,7 @@ contract CyberSecurityKG is KnowledgeGraphBase {
         string memory description,
         uint256 date,
         string memory impactLevel,
+        uint256[] memory relatedVulnerabilities,
         string memory metadata
     ) {
         SecurityIncident memory incident = incidents[incidentId];
@@ -267,6 +281,7 @@ contract CyberSecurityKG is KnowledgeGraphBase {
             incident.description,
             incident.date,
             incident.impactLevel,
+            incident.relatedVulnerabilities,
             incident.metadata
         );
     }

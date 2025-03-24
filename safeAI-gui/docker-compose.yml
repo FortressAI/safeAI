@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  safeai-gui:
+    build: .
+    ports:
+      - "3001:3001"
+      - "8545:8545"
+    volumes:
+      - ./src:/app/src
+    networks:
+      - safeai-network
+
+  docs:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docs:/usr/share/nginx/html
+    networks:
+      - safeai-network
+
+  neo4j:
+    image: neo4j:5.15.0
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    environment:
+      - NEO4J_AUTH=neo4j/safeai123
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+      - neo4j-import:/var/lib/neo4j/import
+      - neo4j-plugins:/plugins
+    networks:
+      - safeai-network
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
+  neo4j-import:
+  neo4j-plugins:
+
+networks:
+  safeai-network:
+    driver: bridge 

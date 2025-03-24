@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Paper, TextField, Typography, Button, Box, Chip, Divider, IconButton, Tooltip } from '@mui/material';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
-import { mathematica } from '@replit/codemirror-lang-mathematica';
+import { basicSetup } from 'codemirror';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -34,12 +34,7 @@ const TheoremEditor = ({
   };
 
   const getLanguageExtension = () => {
-    switch (formalLanguage) {
-      case 'mathematica':
-        return mathematica();
-      default:
-        return markdown();
-    }
+    return markdown();
   };
 
   const handleSubmit = () => {
