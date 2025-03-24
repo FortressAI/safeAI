@@ -211,9 +211,21 @@ function SecurityCenter() {
   const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const [settings, setSettings] = useState(securitySettings);
+  
   const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
+  }, []);
+
+  const handleSettingToggle = useCallback((index) => {
+    setSettings(prevSettings => {
+      const newSettings = [...prevSettings];
+      newSettings[index] = {
+        ...newSettings[index],
+        enabled: !newSettings[index].enabled,
+      };
+      return newSettings;
+    });
   }, []);
 
   const handleRefresh = useCallback(async () => {
@@ -227,7 +239,7 @@ function SecurityCenter() {
       setIsRefreshing(false);
     }
   }, []);
-
+  
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box sx={{ width: '100%' }}>
@@ -274,7 +286,7 @@ function SecurityCenter() {
               </Grid>
             ))}
           </Grid>
-
+          
           <Paper
             elevation={0}
             sx={{
@@ -303,10 +315,10 @@ function SecurityCenter() {
                     <TableRow key={index}>
                       <TableCell>{check.name}</TableCell>
                       <TableCell>
-                        <Chip
+                        <Chip 
                           label={check.status}
                           color={check.status === 'passed' ? 'success' : 'error'}
-                          size="small"
+                          size="small" 
                         />
                       </TableCell>
                       <TableCell>{check.details}</TableCell>
@@ -318,7 +330,7 @@ function SecurityCenter() {
             </TableContainer>
           </Paper>
         </TabPanel>
-
+        
         <TabPanel value={tabValue} index={1}>
           <Paper
             elevation={0}
@@ -347,10 +359,10 @@ function SecurityCenter() {
                     <TableRow key={index}>
                       <TableCell>{threat.type}</TableCell>
                       <TableCell>
-                        <Chip
+                        <Chip 
                           label={threat.severity}
                           color={threat.severity === 'high' ? 'error' : threat.severity === 'medium' ? 'warning' : 'success'}
-                          size="small"
+                          size="small" 
                         />
                       </TableCell>
                       <TableCell>{threat.status}</TableCell>
@@ -366,7 +378,7 @@ function SecurityCenter() {
             </TableContainer>
           </Paper>
         </TabPanel>
-
+        
         <TabPanel value={tabValue} index={2}>
           <Paper
             elevation={0}
@@ -421,7 +433,7 @@ function SecurityCenter() {
               Security Settings
             </Typography>
             <List>
-              {securitySettings.map((setting, index) => (
+              {settings.map((setting, index) => (
                 <ListItem
                   key={index}
                   sx={{

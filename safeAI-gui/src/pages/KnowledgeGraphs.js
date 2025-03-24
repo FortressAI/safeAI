@@ -152,72 +152,7 @@ const kgCategories = [
   'Custom',
 ];
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`kg-tabpanel-${index}`}
-      aria-labelledby={`kg-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-const MetricCard = ({ title, value, icon, color, trend }) => {
-  const theme = useTheme();
-  return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-    >
-      <Card
-        sx={{
-          height: '100%',
-          background: `linear-gradient(135deg, ${alpha(color, 0.1)} 0%, ${alpha(color, 0.05)} 100%)`,
-          backdropFilter: 'blur(10px)',
-          border: `1px solid ${alpha(color, 0.2)}`,
-          borderRadius: 2,
-          boxShadow: `0 4px 20px ${alpha(color, 0.1)}`,
-          '&:hover': {
-            boxShadow: `0 8px 30px ${alpha(color, 0.2)}`,
-          },
-        }}
-      >
-        <CardContent>
-          <Box display="flex" alignItems="center" mb={2}>
-            <Box
-              sx={{
-                p: 1,
-                borderRadius: 1,
-                bgcolor: alpha(color, 0.1),
-                mr: 2,
-              }}
-            >
-              {icon}
-            </Box>
-            <Typography variant="h6" color="textPrimary">
-              {title}
-            </Typography>
-          </Box>
-          <Typography variant="h4" color="textPrimary" gutterBottom>
-            {value}
-          </Typography>
-          <Typography
-            variant="body2"
-            color={trend.startsWith('+') ? 'success.main' : 'error.main'}
-          >
-            {trend} from last update
-          </Typography>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
 
 const GraphCard = ({ graph, onAction }) => {
   const theme = useTheme();
