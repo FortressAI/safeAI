@@ -403,8 +403,7 @@ function Layout() {
         sx={{
           flexGrow: 1,
           p: { xs: 2, sm: 2 },
-          width: `calc(100% - ${drawerWidth}px)`,
-          ml: `${drawerWidth}px`,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
           transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
