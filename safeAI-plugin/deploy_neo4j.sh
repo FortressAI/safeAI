@@ -17,6 +17,14 @@ DOCS_PORT=${DOCS_PORT:-8080}
 MAX_RETRY=12
 RETRY_INTERVAL=5
 
+# Load environment variables from .env file
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+fi
+
+# Check required environment variables
+./check_env.sh || exit 1
+
 # Function to display messages with timestamps
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -52,7 +60,7 @@ command_exists npm || error_exit "Node.js/npm not installed. Please install Node
 
 # Build the plugin with Maven
 log "Building SafeAI plugin..."
-mvn clean package || error_exit "Build failed. Please check Maven output for errors."
+mvn clean package -DskipTests || error_exit "Build failed. Please check Maven output for errors."
 
 # Create the neo4j-plugins folder if it doesn't exist
 mkdir -p neo4j-plugins

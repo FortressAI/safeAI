@@ -1,20 +1,35 @@
 package com.safeai.neo4jplugin;
 
-import com.safeai.neo4jplugin.graph_rag.GraphRAG;
-import com.safeai.neo4jplugin.learning.ConversationalAgent;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for ConversationalAgent in the Learning Module.
  */
 public class ConversationalAgentTest {
+    private ConversationalAgent agent;
+    
+    @BeforeEach
+    void setUp() {
+        // Set default value for LLM_MAX_TOKENS if not set
+        if (System.getenv("LLM_MAX_TOKENS") == null) {
+            System.setProperty("LLM_MAX_TOKENS", "2000");
+        }
+        agent = new ConversationalAgent();
+    }
+    
     @Test
-    public void testStartConversation() {
-        GraphRAG graphRag = new GraphRAG("bolt://localhost:7687", "neo4j", "testpassword");
-        ConversationalAgent agent = new ConversationalAgent(graphRag);
-        String response = agent.startConversation("Hello").join();
+    void testStartConversation() {
+        String response = agent.startConversation("Hello, how are you?");
         assertNotNull(response);
-        graphRag.close();
+        assertFalse(response.isEmpty());
+    }
+    
+    @Test
+    void testConversationContext() {
+        agent.startConversation("My name is Alice");
+        String response = agent.continueConversation("What's my name?");
+        assertTrue(response.toLowerCase().contains("alice"));
     }
 }

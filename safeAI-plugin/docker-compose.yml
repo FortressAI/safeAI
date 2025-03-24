@@ -14,10 +14,6 @@ services:
       - NEO4J_dbms_security_procedures_allowlist=apoc.*,gds.*,safeai.*
       - NEO4J_dbms_memory_heap_initial__size=512m
       - NEO4J_dbms_memory_heap_max__size=2G
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ADMIN_API_KEY=${ADMIN_API_KEY}
-      - BLOCKCHAIN_ENDPOINT=${BLOCKCHAIN_ENDPOINT}
-      - ADMIN_WALLET_KEY=${ADMIN_WALLET_KEY}
     volumes:
       - ./neo4j-plugins:/plugins
       - ./config:/conf
@@ -34,9 +30,12 @@ services:
       context: ../safeAI-gui
       dockerfile: Dockerfile
     ports:
-      - "${GUI_PORT:-3000}:3000"
+      - "${GUI_PORT:-3001}:3000"
     environment:
       - REACT_APP_API_URL=http://localhost:${HTTP_PORT:-7474}
+      - REACT_APP_OPENAI_API_KEY=${OPENAI_API_KEY}
+      - REACT_APP_BLOCKCHAIN_ENDPOINT=${BLOCKCHAIN_ENDPOINT}
+      - REACT_APP_ADMIN_WALLET_KEY=${ADMIN_WALLET_KEY}
     depends_on:
       neo4j:
         condition: service_healthy
@@ -49,6 +48,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "${DOCS_PORT:-8080}:8080"
+    volumes:
+      - ../docs:/app
     depends_on:
       neo4j:
         condition: service_healthy
