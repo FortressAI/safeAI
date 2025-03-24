@@ -199,27 +199,23 @@ function Layout() {
     <Box 
       sx={{ 
         display: 'flex',
-        height: '100vh',
-        overflow: 'hidden'  // Prevent double scrollbars
+        height: '100%',
+        overflow: 'hidden',
+        bgcolor: 'background.default'
       }}
     >
       {/* AppBar */}
       <AppBar
         position="fixed"
         sx={{
-          zIndex: theme.zIndex.drawer + 1,  // Ensure AppBar is above drawer
+          zIndex: theme.zIndex.drawer + 1,
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
           ml: open ? `${drawerWidth}px` : 0,
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
           }),
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          background: alpha(theme.palette.background.default, 0.7),
-          borderBottom: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
         }}
-        elevation={0}
       >
         <Toolbar sx={{ 
           minHeight: '64px',
@@ -318,22 +314,24 @@ function Layout() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
+          height: '100%',
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            position: 'relative',  // Change to relative positioning
+            position: 'relative',
             height: '100%',
-            overflow: 'hidden',
-            borderRight: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-            background: alpha(theme.palette.background.default, 0.8),
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
+            overflow: 'hidden'
           },
         }}
         open={open}
       >
-        <Toolbar />  {/* Spacer for AppBar */}
-        <Box sx={{ overflow: 'auto', height: '100%' }}>
+        <Toolbar />
+        <Box sx={{ 
+          overflow: 'auto',
+          height: 'calc(100% - 64px)',  // Subtract AppBar height
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
           <List>
             {navItems.map((item) => (
               <ListItem key={item.name} disablePadding sx={{ mb: 0.5 }}>
@@ -394,15 +392,21 @@ function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-          position: 'relative',  // Enable proper stacking
+          height: '100%',
+          overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column'
         }}
       >
-        <Toolbar />  {/* Spacer for AppBar */}
-        <Box sx={{ p: 3, flexGrow: 1 }}>
+        <Toolbar />
+        <Box 
+          sx={{ 
+            p: 3, 
+            flexGrow: 1,
+            overflow: 'auto',
+            height: 'calc(100% - 64px)'  // Subtract AppBar height
+          }}
+        >
           <Outlet />
         </Box>
       </Box>
