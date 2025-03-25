@@ -1,0 +1,143 @@
+/* Reset and root styles */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #121212;
+  color: #fff;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Typography */
+code {
+  font-family: 'Fira Code', 'Menlo', 'Monaco', 'Courier New', monospace;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* Interactive elements */
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickable:hover {
+  opacity: 0.85;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(33, 150, 243, 0.3);
+  color: white;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  border: 0.125rem solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border: 0.125rem solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Card Hover Effect */
+.MuiCard-root {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.3);
+}
+
+/* Button animation */
+.MuiButton-root {
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiButton-root::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  transform: translateY(-100%);
+  z-index: 1;
+  transition: transform 0.5s ease;
+}
+
+.MuiButton-root:hover::after {
+  transform: translateY(100%);
+}
+
+/* Dashboard card effects */
+.dashboard-stat-card {
+  background: rgba(255,255,255,0.05);
+  border: 0.0625rem solid rgba(255,255,255,0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Glass morphism effect */
+.glass-panel {
+  background: rgba(30, 30, 30, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+}
+
+/* Focus improvements for accessibility */
+:focus {
+  outline: 0.125rem solid rgba(33, 150, 243, 0.5);
+  outline-offset: 0.125rem;
+}
+
+/* Typography adjustments */
+h1, h2, h3, h4, h5, h6, .MuiTypography-h1, .MuiTypography-h2, 
+.MuiTypography-h3, .MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6 {
+  font-weight: 500;
+} 

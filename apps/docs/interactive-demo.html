@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeAI Interactive Demos</title>
+    <!-- Material-UI CDN -->
+    <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX transpiling -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="css/shared-demo.css" />
+    <style>
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .demo-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .demo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .demo-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { 
+            Box, Typography, Card, CardContent, 
+            Icon, Divider
+        } = MaterialUI;
+
+        // Available demos data
+        const demos = [
+            {
+                id: 'knowledge-graphs',
+                title: 'Knowledge Graphs',
+                description: 'Explore the interconnected knowledge graph visualization showing relationships between agents, components, and knowledge bases.',
+                icon: 'share',
+                path: '/interactive-demos/knowledge-graphs.html'
+            },
+            {
+                id: 'agent-browser',
+                title: 'Agent Browser',
+                description: 'Browse and interact with different AI agents, view their capabilities, and monitor their performance metrics.',
+                icon: 'psychology',
+                path: '/interactive-demos/agent-browser.html'
+            },
+            {
+                id: 'dashboard',
+                title: 'System Dashboard',
+                description: 'Monitor system health, security status, and overall performance metrics in real-time.',
+                icon: 'dashboard',
+                path: '/interactive-demos/dashboard.html'
+            },
+            {
+                id: 'security-center',
+                title: 'Security Center',
+                description: 'Explore security features, access controls, and protection mechanisms.',
+                icon: 'security',
+                path: '/interactive-demos/security-center.html'
+            },
+            {
+                id: 'agent-workshop',
+                title: 'Agent Workshop',
+                description: 'Learn how to create and configure new AI agents with different capabilities.',
+                icon: 'build',
+                path: '/interactive-demos/agent-workshop.html'
+            },
+            {
+                id: 'arc-prize',
+                title: 'ARC Challenge',
+                description: 'Interactive demonstration of how SafeAI approaches the Alignment Research Center prize challenges.',
+                icon: 'emoji_events',
+                path: '/interactive-demos/arc-prize.html'
+            },
+            {
+                id: 'mathatp',
+                title: 'Math ATP',
+                description: 'Explore automated theorem proving capabilities in mathematical domains.',
+                icon: 'functions',
+                path: '/interactive-demos/mathatp.html'
+            },
+            {
+                id: 'freepress',
+                title: 'Free Press',
+                description: 'Demonstration of content verification and fact-checking capabilities.',
+                icon: 'newspaper',
+                path: '/interactive-demos/freepress.html'
+            }
+        ];
+
+        function InteractiveDemos() {
+            const handleDemoClick = (path) => {
+                window.location.href = path;
+            };
+
+            return (
+                <Box className="demo-container">
+                    <Typography variant="h3" gutterBottom sx={{ mb: 3 }}>
+                        SafeAI Interactive Demos
+                    </Typography>
+                    
+                    <Typography variant="body1" paragraph>
+                        Welcome to the SafeAI interactive demonstrations. These demos showcase various aspects of the 
+                        SafeAI system, from knowledge graph visualizations to agent interactions. Click on any demo 
+                        to explore its features.
+                    </Typography>
+                    
+                    <Divider sx={{ my: 3 }} />
+                    
+                    <div className="demo-grid">
+                        {demos.map(demo => (
+                            <Card 
+                                key={demo.id} 
+                                className="demo-card"
+                                onClick={() => handleDemoClick(demo.path)}
+                            >
+                                <CardContent>
+                                    <Icon className="demo-icon">{demo.icon}</Icon>
+                                    <Typography variant="h6" gutterBottom>
+                                        {demo.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {demo.description}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </Box>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<InteractiveDemos />, document.getElementById('root'));
+    </script>
+</body>
+</html> 

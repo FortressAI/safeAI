@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Logs - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 2rem;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    .log-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      transition: transform 0.2s ease-in-out;
+    }
+    .log-card:hover {
+      transform: translateY(-2px);
+    }
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 16px 0;
+    }
+    .log-level {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    .level-info { background-color: #2196f3; color: white; }
+    .level-warning { background-color: #ff9800; color: white; }
+    .level-error { background-color: #f44336; color: white; }
+    .level-security { background-color: #4caf50; color: white; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Grid, Chip, Alert, Table, TableBody, TableCell, 
+      TableContainer, TableHead, TableRow
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      CODE: "code",
+      SCHEMA: "schema",
+      INFO: "info",
+      API: "api",
+      LOCK: "lock",
+      SECURITY: "security",
+      DOCS: "description",
+      PLAY: "play_arrow",
+      DOWNLOAD: "download",
+      UPLOAD: "upload",
+      SEARCH: "search",
+      FILTER: "filter_list",
+      SORT: "sort",
+      REFRESH: "refresh",
+      DELETE: "delete",
+      EDIT: "edit",
+      ADD: "add",
+      REMOVE: "remove",
+      SAVE: "save",
+      CANCEL: "cancel",
+      WARNING: "warning",
+      ERROR: "error",
+      SUCCESS: "check_circle",
+      SHIELD: "security",
+      KEY: "key",
+      FINGERPRINT: "fingerprint",
+      ENCRYPTION: "encryption",
+      MONITORING: "monitoring",
+      AUDIT: "audit",
+      HISTORY: "history",
+      TIMELINE: "timeline",
+      EXPORT: "file_download",
+      FILTER_ALT: "filter_alt",
+      SEARCH_OFF: "search_off"
+    };
+
+    function AuditLogs() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="../index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Audit Logs
+              </Typography>
+              <Button color="inherit" href="../index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h4" gutterBottom>
+              SafeAI Audit Logs
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              Comprehensive documentation of SafeAI's audit logging system.
+            </Typography>
+
+            <Alert severity="info" sx={{ mb: 4 }}>
+              <Typography variant="body1">
+                Audit logs provide detailed tracking of all system activities, 
+                helping maintain security and compliance.
+              </Typography>
+            </Alert>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Overview
+              </Typography>
+              
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.AUDIT}</Icon>
+                  Audit Log System
+                </Typography>
+                <Typography paragraph>
+                  SafeAI's audit logging system captures:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="User Actions"
+                      secondary="All user interactions and system changes"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="System Events"
+                      secondary="System-level operations and events"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Events"
+                      secondary="Authentication and authorization activities"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Log Types
+              </Typography>
+              
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.HISTORY}</Icon>
+                  Log Categories
+                </Typography>
+                <Typography paragraph>
+                  Different types of audit logs:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Access Logs"
+                      secondary="User login attempts and session management"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Data Logs"
+                      secondary="Data access and modification events"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Logs"
+                      secondary="Security-related events and alerts"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.TIMELINE}</Icon>
+                  Log Format
+                </Typography>
+                <Typography paragraph>
+                  Standard log entry format:
+                </Typography>
+                <div className="code-block">
+                  {
+                    "timestamp": "2024-03-21T12:00:00Z",
+                    "level": "INFO",
+                    "category": "ACCESS",
+                    "user": "user123",
+                    "action": "LOGIN",
+                    "ip": "192.168.1.1",
+                    "details": {
+                      "success": true,
+                      "method": "password"
+                    }
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Log Management
+              </Typography>
+              
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.FILTER_ALT}</Icon>
+                  Log Filtering
+                </Typography>
+                <Typography paragraph>
+                  Filter logs by various criteria:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Time Range"
+                      secondary="Filter by date and time"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Log Level"
+                      secondary="Filter by severity level"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="User"
+                      secondary="Filter by user ID"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.EXPORT}</Icon>
+                  Log Export
+                </Typography>
+                <Typography paragraph>
+                  Export options for audit logs:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="CSV Format"
+                      secondary="Export as comma-separated values"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="JSON Format"
+                      secondary="Export as structured JSON"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="PDF Reports"
+                      secondary="Generate formatted PDF reports"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Log Retention
+              </Typography>
+              
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.HISTORY}</Icon>
+                  Retention Policies
+                </Typography>
+                <Typography paragraph>
+                  Log retention periods:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Access Logs"
+                      secondary="Retained for 90 days"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Security Logs"
+                      secondary="Retained for 1 year"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Audit Logs"
+                      secondary="Retained for 7 years"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Log Analysis
+              </Typography>
+              
+              <div className="log-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.SEARCH}</Icon>
+                  Analysis Tools
+                </Typography>
+                <Typography paragraph>
+                  Tools for analyzing audit logs:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Search Interface"
+                      secondary="Advanced search capabilities"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Analytics Dashboard"
+                      secondary="Visual analysis of log data"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Alert System"
+                      secondary="Automated alert generation"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="../interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY}</Icon>}
+              >
+                Try Log Analysis Interactive Examples
+              </Button>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<AuditLogs />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

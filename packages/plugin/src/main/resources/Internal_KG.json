@@ -1,0 +1,80 @@
+{
+  "InternalKG": {
+    "ethicsApproval": {
+      "enabled": true,
+      "approvalScript": "def approve(change, context) { \n    try { \n        // Use internal LLM or validation service to evaluate the change\n        def ethicalOutcome = nlQuery('Evaluate ethics for change: ' + change + ' with context: ' + context);\n        println 'Ethical evaluation output: ' + ethicalOutcome;\n        // Check if the outcome includes an explicit approval keyword\n        if (ethicalOutcome != null && ethicalOutcome.toLowerCase().contains('approved')) { \n            println 'Change approved.';\n            return true; \n        } else { \n            println 'Change not approved.';\n            return false; \n        } \n    } catch(Exception e) { \n        println 'Error during ethical approval: ' + e.getMessage(); \n        return false; \n    } \n}"
+    },
+    "users": [
+      {
+        "user_id": "user1",
+        "role": "end_user",
+        "wallet_address": "0xUserWalletAddress",
+        "creation_date": "2025-01-01T00:00:00Z",
+        "contract": {
+          "pricePerQuery": "0.0001 tokens",
+          "minFee": "0.001 tokens",
+          "usageQuota": "1000 queries per month",
+          "smartContractTemplate": "function getCost(uint queryCount) public pure returns (uint) { return queryCount * 100; }"
+        },
+        "notes": "Standard access. Wallet keys are stored securely off-chain."
+      },
+      {
+        "user_id": "expert1",
+        "role": "domain_expert",
+        "wallet_address": "0xExpertWalletAddress",
+        "creation_date": "2025-01-02T00:00:00Z",
+        "notes": "Access to create and modify KG content. Additional permissions required."
+      },
+      {
+        "user_id": "admin1",
+        "role": "admin",
+        "wallet_address": "0xAdminWalletAddress",
+        "creation_date": "2025-01-01T00:00:00Z",
+        "notes": "Full access for managing tokens, keys, and configuration. Keys are kept secret and stored securely."
+      }
+    ],
+    "policies": {
+      "access_token_policy": "Use token 'AUTHORIZED' for internal access. Tokens must be rotated quarterly.",
+      "key_security": "Sensitive keys are stored in an encrypted configuration file separate from the KG. Only admin users have decryption rights.",
+      "post_quantum": "All public-key cryptography is planned for quantum-resistant algorithms in upcoming updates."
+    },
+    "microtransactions": {
+      "contract_address": "0xABCDEF123456789",
+      "pricing": {
+        "base_price": "0.001",
+        "dynamic_pricing": "Based on current supply/demand of KG queries.",
+        "last_updated": "2025-02-27T00:00:00Z"
+      }
+    },
+    "instructions": {
+      "end_user": "Register with your wallet details to gain access. Your access is secured via token-based authentication.",
+      "domain_expert": "Apply with relevant credentials. An admin will review and assign expert status, granting additional permissions.",
+      "admin": "Admins have full rights to validate changes, manage tokens, and update blockchain contracts. They are responsible for maintaining internal KG integrity."
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
+  }
+}

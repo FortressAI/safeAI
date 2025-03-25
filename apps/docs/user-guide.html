@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeAI User Guide - Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: #1e1e1e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    .example-box {
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      border-left: 4px solid #4CAF50;
+    }
+    .guide-card {
+      background-color: #1e1e1e !important;
+      color: #e0e0e0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 16px;
+    }
+    .MuiCard-root {
+      background-color: #1e1e1e !important;
+      color: #e0e0e0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .MuiTypography-root {
+      color: #e0e0e0 !important;
+    }
+    .MuiTypography-colorTextSecondary {
+      color: #a0a0a0 !important;
+    }
+    .MuiListItemIcon-root {
+      color: #4CAF50 !important;
+    }
+    .MuiButton-contained {
+      background-color: #4CAF50 !important;
+      color: #ffffff !important;
+    }
+    .MuiButton-contained:hover {
+      background-color: #45a049 !important;
+    }
+    .MuiButton-text {
+      color: #4CAF50 !important;
+    }
+    .MuiListItemText-secondary {
+      color: #a0a0a0 !important;
+    }
+    .MuiDivider-root {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    .MuiAccordion-root {
+      background-color: #1e1e1e !important;
+      color: #e0e0e0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .MuiAccordionSummary-root {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .MuiAccordionDetails-root {
+      background-color: #2a2a2a;
+    }
+    code {
+      background-color: #2d2d2d;
+      color: #4CAF50;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+    }
+    pre {
+      background-color: #2d2d2d;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .step-card {
+      background-color: #1e1e1e !important;
+      border-left: 4px solid #4CAF50;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Grid
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      CODE: "code",
+      SCHEMA: "schema",
+      INFO: "info",
+      ARCHITECTURE: "architecture",
+      SPEED: "speed",
+      SECURITY: "security",
+      OVERVIEW: "overview",
+      IMPLEMENTATION: "implementation",
+      TOKEN: "token",
+      REWARD: "reward",
+      ETHICS: "ethics",
+      VALUE: "value",
+      SCALE: "scale"
+    };
+
+    function UserGuide() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                SafeAI User Guide
+              </Typography>
+              <Button color="inherit" href="index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h4" gutterBottom>
+              Welcome to SafeAI
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              Learn how to use our intuitive interface to interact with the Agentic Knowledge Graph system.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Main Interface Components
+              </Typography>
+              
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  1. Dashboard
+                </Typography>
+                <Typography paragraph>
+                  Your central command center for:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.OVERVIEW}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="System overview and status" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Performance metrics and analytics" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Blockchain transaction monitoring" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Quick access to common tasks" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  2. Knowledge Explorer
+                </Typography>
+                <Typography paragraph>
+                  Navigate and interact with your knowledge graph:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Search and browse information" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Visualize relationships" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Add and edit knowledge" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Validate information" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  3. Agent Control Panel
+                </Typography>
+                <Typography paragraph>
+                  Manage your AI agents:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Start and stop agents" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Monitor performance" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Configure settings" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CODE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View agent logs" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  4. Results Viewer
+                </Typography>
+                <Typography paragraph>
+                  Understand and work with solutions:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View detailed solutions" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="See reasoning steps" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Export results" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Review ethical considerations" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  5. SafeAIcoin Wallet
+                </Typography>
+                <Typography paragraph>
+                  Manage your SafeAIcoin tokens and participate in the ecosystem:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.TOKEN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Token Management"
+                      secondary="View balance, transaction history, and token analytics"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Earning Opportunities"
+                      secondary="Contribute knowledge, validate content, and earn tokens"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Governance Participation"
+                      secondary="Vote on ethical standards and platform proposals"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Service Payments"
+                      secondary="Pay for platform services and expert consultations"
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Transaction Examples
+                </Typography>
+                <Typography paragraph>
+                  Common SafeAIcoin transactions:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.TOKEN}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Media Fact-Checking"
+                      secondary="Cost: 10 SafeAIcoins per request, 20% platform fee"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Legal Compliance Review"
+                      secondary="Cost: 50 SafeAIcoins per assessment, 25% platform fee"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical AI Validation"
+                      secondary="Minimum 1000 SafeAIcoins for proposal submission"
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Earning SafeAIcoins
+                </Typography>
+                <Typography paragraph>
+                  Ways to earn tokens in the ecosystem:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Contribution"
+                      secondary="Earn 100 SafeAIcoins per validated fact-check entry"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Expert Validation"
+                      secondary="Earn 200 SafeAIcoins per regulatory compliance assessment"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.REWARD}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical Review"
+                      secondary="Earn 50 SafeAIcoins per ethical content validation"
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                  Market Value
+                </Typography>
+                <Typography paragraph>
+                  SafeAIcoin drives significant market value:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.VALUE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Knowledge Graph Value"
+                      secondary="$150M - Value of specialized knowledge"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCALE}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Platform Revenue"
+                      secondary="$100M - Transaction fees and services"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.ETHICS}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Ethical AI Market"
+                      secondary="$50M - Value of ethical validation"
+                    />
+                  </ListItem>
+                </List>
+                <Typography paragraph>
+                  Target market valuation: $300-500 million based on projected growth.
+                </Typography>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Common Tasks
+              </Typography>
+              
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Finding Information
+                </Typography>
+                <Typography paragraph>
+                  Use the Knowledge Explorer to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Enter your search query" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Browse related information" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="View detailed explanations" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Save useful findings" />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="example-box">
+                <Typography variant="h6" gutterBottom>
+                  Solving Problems
+                </Typography>
+                <Typography paragraph>
+                  Work with agents to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Describe your problem" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Select appropriate agents" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SCHEMA}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Monitor the solution process" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SECURITY}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary="Review and validate results" />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Tips for Success
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Start with the Dashboard to understand your system's status" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SEARCH}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Use the Knowledge Explorer's search and browse features" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Monitor agent performance in the Control Panel" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Review blockchain transactions for transparency" />
+                </ListItem>
+              </List>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Need Help?
+              </Typography>
+              <Typography paragraph>
+                For additional support:
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.INFO}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Check the interactive demos" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SCHEMA}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Review the knowledge graph implementation guide" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.SECURITY}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Consult the community forums" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Icon>{ICONS.CHECK}</Icon>
+                  </ListItemIcon>
+                  <ListItemText primary="Contact technical support" />
+                </ListItem>
+              </List>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+              >
+                Try Interactive Demos
+              </Button>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<UserGuide />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

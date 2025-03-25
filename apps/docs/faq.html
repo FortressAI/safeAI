@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="css/shared-demo.css" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+    .question {
+      border-left: 4px solid #2196f3;
+      padding-left: 16px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { 
+      Box, Typography, Container, Card, CardContent, 
+      Grid, AppBar, Toolbar, IconButton, Button, 
+      Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Chip, Alert, Accordion, AccordionSummary,
+      AccordionDetails, useTheme, ThemeProvider, createTheme, CssBaseline
+    } = MaterialUI;
+
+    // Create theme configuration
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#2196f3',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
+        },
+      },
+    });
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      SEARCH: "search",
+      HELP: "help",
+      INFO: "info",
+      SECURITY: "security",
+      SMART_TOY: "smart_toy",
+      PAYMENT: "payment",
+      SCHEMA: "schema",
+      EXPAND: "expand_more"
+    };
+
+    function FAQ() {
+      const [searchTerm, setSearchTerm] = React.useState('');
+      
+      const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value.toLowerCase());
+      };
+      
+      const faqCategories = [
+        { 
+          name: "General",
+          icon: ICONS.INFO,
+          color: "#2196f3",
+          questions: [
+            {
+              question: "What is SafeAI?",
+              answer: "SafeAI is a comprehensive platform for developing, deploying, and managing safe autonomous AI agents. Our platform provides tools for building knowledge-grounded agents with transparent decision-making processes, robust security frameworks, and alignment with human values."
+            },
+            {
+              question: "How is SafeAI different from other AI platforms?",
+              answer: "SafeAI distinguishes itself through its focus on safety, transparency, and ethical AI development. Unlike other platforms that prioritize raw capabilities, SafeAI emphasizes responsible AI through knowledge graphs, safety frameworks, and auditable decision-making processes."
+            },
+            {
+              question: "What kind of problems can SafeAI help solve?",
+              answer: "SafeAI can assist with a wide range of applications, including data analysis, research automation, content creation, decision support, process automation, and more. The platform is particularly well-suited for situations where safety, reliability, and explainability are important."
+            },
+            {
+              question: "Is SafeAI open source?",
+              answer: "SafeAI operates with a hybrid model. Core safety components and reference implementations are open-source, while certain advanced features and enterprise solutions require a commercial license. We believe this approach balances the need for transparency with sustainable development."
+            }
+          ]
+        },
+        { 
+          name: "Technical",
+          icon: ICONS.SCHEMA,
+          color: "#4caf50",
+          questions: [
+            {
+              question: "What are the system requirements for running SafeAI?",
+              answer: "For accessing the platform, you need a modern web browser (Chrome, Firefox, Safari, Edge), MetaMask or another Web3 wallet extension, and an internet connection. For deploying your own instance, requirements depend on your workload but generally include a server with at least 8GB RAM, 4 CPU cores, and 100GB storage for basic deployments."
+            },
+            {
+              question: "Can I integrate SafeAI with my existing systems?",
+              answer: "Yes, SafeAI provides comprehensive APIs and integration tools that allow you to connect with existing databases, applications, and services. We support standard protocols like REST, GraphQL, and WebSockets, as well as specific connectors for common enterprise systems."
+            },
+            {
+              question: "How does the knowledge graph work?",
+              answer: "SafeAI's knowledge graphs are structured representations of information that enable agents to understand relationships between entities. They are built using semantic triples (subject-predicate-object) and can be populated from various data sources. Agents query these graphs to gain context for their decision-making processes, ensuring they operate with accurate and relevant information."
+            },
+            {
+              question: "What programming languages are supported for agent development?",
+              answer: "The primary development languages supported are Python, JavaScript, and Julia. For specialized use cases, we also provide libraries for Rust, Go, and Java. Our platform uses a language-agnostic protocol for agent communication, so you can integrate with most programming languages through our API."
+            },
+            {
+              question: "How do I deploy my agents to production?",
+              answer: "Deploying agents to production involves several steps: testing in a sandbox environment, configuring security parameters, setting up monitoring, and then using our deployment tools to provision the necessary resources. We provide both a user-friendly interface and CLI tools for deployment, as well as integration with CI/CD pipelines."
+            }
+          ]
+        },
+        { 
+          name: "Safety & Security",
+          icon: ICONS.SECURITY,
+          color: "#f44336",
+          questions: [
+            {
+              question: "How does SafeAI ensure agent safety?",
+              answer: "SafeAI employs multiple safety mechanisms: value alignment through explicit ethical guidelines, behavior monitoring to detect anomalies, containment strategies to limit potential harm, intervention protocols for human oversight, and continuous evaluation against safety benchmarks. Additionally, all agents operate within the constraints of their knowledge graphs, which helps prevent hallucinations and false information."
+            },
+            {
+              question: "What security measures does SafeAI implement?",
+              answer: "Our security architecture includes end-to-end encryption, role-based access control, secure authentication (including Web3 wallet integration), audit logging of all system activities, regular security assessments, and compliance with industry standards. Enterprise deployments also include additional security features like VPC isolation and dedicated infrastructure."
+            },
+            {
+              question: "Can agents access sensitive data?",
+              answer: "Agents can be granted access to sensitive data, but this access is strictly controlled through permission frameworks. Data can be encrypted at rest and in transit, and access is governed by policy-based controls. Sensitive operations can require multi-factor authentication or approval workflows for additional security."
+            },
+            {
+              question: "How are agent decisions audited?",
+              answer: "Every agent decision is recorded with its reasoning process, knowledge graph queries, and confidence levels. This audit trail allows you to understand why an agent took specific actions and verify its decision-making process. The audit logs are tamper-evident and can be exported for compliance purposes or further analysis."
+            }
+          ]
+        },
+        { 
+          name: "Pricing & Support",
+          icon: ICONS.PAYMENT,
+          color: "#ff9800",
+          questions: [
+            {
+              question: "What pricing models are available?",
+              answer: "SafeAI offers several pricing tiers: a free Community Edition with limited resources, a Professional tier with expanded capabilities (priced per user/month), and Enterprise plans with custom pricing based on deployment scale, support needs, and specialized features. We also offer academic and non-profit discounts."
+            },
+            {
+              question: "Is there a free trial available?",
+              answer: "Yes, we offer a 30-day free trial of our Professional tier, which includes all core features and moderate resource allocations. This allows you to evaluate the platform before committing to a subscription. No credit card is required for the trial."
+            },
+            {
+              question: "What kind of support is available?",
+              answer: "Support options vary by pricing tier. Community Edition users have access to documentation, community forums, and issue tracking. Professional users receive email support with 24-hour response times. Enterprise customers benefit from dedicated support contacts, phone support, and optional 24/7 coverage with SLAs."
+            },
+            {
+              question: "Do you offer training or onboarding services?",
+              answer: "Yes, we provide various training options: self-paced courses through our Academy, live webinars, and custom training workshops. Enterprise customers receive personalized onboarding sessions. We also have a partner network of certified consultants who can provide additional implementation services."
+            }
+          ]
+        },
+        { 
+          name: "Agent Capabilities",
+          icon: ICONS.SMART_TOY,
+          color: "#9c27b0",
+          questions: [
+            {
+              question: "What can SafeAI agents do?",
+              answer: "SafeAI agents can perform a wide range of tasks including data analysis, content generation, decision support, process automation, research assistance, and more. Their capabilities are determined by their access to knowledge graphs, tools, and permissions. Agents can work autonomously or collaboratively with humans and other agents."
+            },
+            {
+              question: "Can agents learn from their experiences?",
+              answer: "Yes, agents can learn in several ways: through explicit feedback from users, by updating their knowledge graphs based on new information, and by refining their decision models based on outcomes. This learning is always constrained by safety guardrails to prevent unwanted behavior drift."
+            },
+            {
+              question: "How do I create custom agents?",
+              answer: "Custom agents can be created using our Agent Workshop tool, which provides both visual and code-based development options. You can define an agent's goals, knowledge access, tools, permissions, and interaction patterns. Agents can be developed from scratch or by customizing existing templates for common use cases."
+            },
+            {
+              question: "Can agents work together?",
+              answer: "Yes, SafeAI supports multi-agent systems where agents can collaborate to solve complex problems. You can define communication protocols, task delegation rules, and coordination mechanisms. This enables the creation of specialized agent teams that combine different capabilities and knowledge domains."
+            },
+            {
+              question: "What limitations do agents have?",
+              answer: "While powerful, SafeAI agents do have limitations. They are constrained by their knowledge graphs and don't have general internet access unless specifically permitted. They require clear goal definitions and may struggle with highly creative or nuanced human values. Their capabilities are also limited by computational resources and the quality of their underlying models."
+            }
+          ]
+        }
+      ];
+      
+      // Filter questions based on search term
+      const filteredCategories = searchTerm 
+        ? faqCategories.map(category => ({
+            ...category,
+            questions: category.questions.filter(
+              q => q.question.toLowerCase().includes(searchTerm) || 
+                  q.answer.toLowerCase().includes(searchTerm)
+            )
+          })).filter(category => category.questions.length > 0)
+        : faqCategories;
+      
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Frequently Asked Questions
+              </Typography>
+              <Button color="inherit" href="index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Frequently Asked Questions
+            </Typography>
+            
+            <Paper className="content" sx={{ mb: 4 }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Search FAQ..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                sx={{ mb: 4 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon>{ICONS.SEARCH}</Icon>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+                {faqCategories.map((category) => (
+                  <Chip 
+                    key={category.name}
+                    label={category.name} 
+                    icon={<Icon>{category.icon}</Icon>}
+                    sx={{ 
+                      backgroundColor: `${category.color}20`, 
+                      borderColor: category.color,
+                      border: '1px solid',
+                      '& .MuiChip-icon': { color: category.color }
+                    }}
+                    onClick={() => setSearchTerm(category.name.toLowerCase())}
+                  />
+                ))}
+                {searchTerm && (
+                  <Chip 
+                    label="Clear filters" 
+                    onDelete={() => setSearchTerm('')}
+                    variant="outlined"
+                  />
+                )}
+              </Box>
+              
+              {filteredCategories.length === 0 ? (
+                <Box sx={{ textAlign: 'center', py: 4 }}>
+                  <Icon sx={{ fontSize: 48, opacity: 0.5, mb: 2 }}>search_off</Icon>
+                  <Typography variant="h6">No questions found matching your search</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Try different keywords or clear your search
+                  </Typography>
+                </Box>
+              ) : (
+                filteredCategories.map((category) => (
+                  <Box key={category.name} sx={{ mb: 5 }}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      mb: 2,
+                      pb: 1,
+                      borderBottom: `1px solid ${category.color}40`
+                    }}>
+                      <Icon sx={{ mr: 1, color: category.color }}>{category.icon}</Icon>
+                      <Typography variant="h5">{category.name}</Typography>
+                    </Box>
+                    
+                    {category.questions.map((faq, index) => (
+                      <Accordion 
+                        key={index}
+                        sx={{ 
+                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                          mb: 2,
+                          '&:before': { display: 'none' },
+                          borderLeft: `3px solid ${category.color}`
+                        }}
+                      >
+                        <AccordionSummary expandIcon={<Icon>{ICONS.EXPAND}</Icon>}>
+                          <Typography 
+                            variant="subtitle1" 
+                            sx={{ fontWeight: 500 }}
+                          >
+                            {faq.question}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography variant="body1">
+                            {faq.answer}
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </Box>
+                ))
+              )}
+              
+              <Divider sx={{ my: 4 }} />
+              
+              <Typography variant="h6" gutterBottom>Still have questions?</Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Button 
+                  variant="outlined" 
+                  startIcon={<Icon>support_agent</Icon>}
+                  href="support/contact.html"
+                >
+                  Contact Support
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  startIcon={<Icon>forum</Icon>}
+                  href="https://community.safeai.com"
+                >
+                  Community Forum
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  startIcon={<Icon>menu_book</Icon>}
+                  href="user-guide.html"
+                >
+                  User Guide
+                </Button>
+              </Box>
+            </Paper>
+            
+            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                Last updated: {new Date().toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <FAQ />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html> 

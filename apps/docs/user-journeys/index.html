@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Journeys - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 2rem;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    .journey-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      transition: transform 0.2s ease-in-out;
+    }
+    .journey-card:hover {
+      transform: translateY(-2px);
+    }
+    .step {
+      margin: 12px 0;
+      padding: 12px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    .step-number {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Grid, Chip
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      CODE: "code",
+      SCHEMA: "schema",
+      INFO: "info",
+      ARCHITECTURE: "architecture",
+      SPEED: "speed",
+      SECURITY: "security",
+      OVERVIEW: "overview",
+      IMPLEMENTATION: "implementation",
+      SCHOOL: "school",
+      WORK: "work",
+      SCIENCE: "science",
+      BUSINESS: "business",
+      MEDICAL: "medical_services",
+      EDUCATION: "education",
+      RESEARCH: "science",
+      DEVELOPMENT: "code"
+    };
+
+    function UserJourneys() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="../index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                User Journeys
+              </Typography>
+              <Button color="inherit" href="../index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h4" gutterBottom>
+              SafeAI User Journeys
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" paragraph>
+              Explore step-by-step guides for common use cases and workflows with SafeAI.
+            </Typography>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Learning & Education
+              </Typography>
+              
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.SCHOOL}</Icon>
+                  Student Learning Journey
+                </Typography>
+                <Typography paragraph>
+                  Learn how to use SafeAI for academic research and learning.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Understanding basic concepts and interface navigation"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Using interactive demos and guided tutorials"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Applying knowledge to academic projects"
+                    />
+                  </ListItem>
+                </List>
+                <Box sx={{ mt: 2 }}>
+                  <Button 
+                    variant="contained" 
+                    startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+                    href="../interactive-demos/index.html"
+                  >
+                    Try Interactive Demos
+                  </Button>
+                </Box>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.EDUCATION}</Icon>
+                  Teacher Integration Journey
+                </Typography>
+                <Typography paragraph>
+                  Integrate SafeAI into your teaching curriculum.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Reviewing educational use cases and examples"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Creating custom learning materials and exercises"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Implementing SafeAI in classroom activities"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Business Applications
+              </Typography>
+              
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.BUSINESS}</Icon>
+                  Business Integration Journey
+                </Typography>
+                <Typography paragraph>
+                  Implement SafeAI in your business operations.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Identifying business use cases and requirements"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Configuring SafeAI for business needs"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Deploying and monitoring business solutions"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.MEDICAL}</Icon>
+                  Healthcare Implementation Journey
+                </Typography>
+                <Typography paragraph>
+                  Deploy SafeAI in healthcare settings.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Understanding healthcare-specific requirements"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Implementing HIPAA-compliant solutions"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Deploying healthcare applications"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <div className="section">
+              <Typography variant="h5" gutterBottom>
+                Research & Development
+              </Typography>
+              
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.RESEARCH}</Icon>
+                  Research Journey
+                </Typography>
+                <Typography paragraph>
+                  Use SafeAI for academic and industrial research.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Setting up research environment"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Using advanced features for research"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Publishing research findings"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+
+              <div className="journey-card">
+                <Typography variant="h6" gutterBottom>
+                  <Icon sx={{ mr: 1 }}>{ICONS.DEVELOPMENT}</Icon>
+                  Development Journey
+                </Typography>
+                <Typography paragraph>
+                  Build custom applications with SafeAI.
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.CHECK}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Starting Point"
+                      secondary="Understanding the development environment"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.INFO}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Learning Process"
+                      secondary="Building and testing applications"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Icon>{ICONS.SPEED}</Icon>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary="Results"
+                      secondary="Deploying production applications"
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </div>
+
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                href="../interactive-demos/index.html"
+                startIcon={<Icon>{ICONS.PLAY_ARROW}</Icon>}
+              >
+                Try Interactive Demos
+              </Button>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    ReactDOM.render(<UserJourneys />, document.getElementById('root'));
+  </script>
+</body>
+</html> 

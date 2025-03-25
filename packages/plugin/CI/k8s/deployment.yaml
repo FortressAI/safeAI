@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: safeai-plugin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: safeai-plugin
+  template:
+    metadata:
+      labels:
+        app: safeai-plugin
+    spec:
+      containers:
+      - name: safeai-plugin
+        image: fortressai/safeai-plugin:1.0.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: BLOCKCHAIN_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: plugin-config
+              key: blockchain.endpoint
