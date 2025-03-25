@@ -1,4 +1,4 @@
-// Export a single instance of Three.js to prevent multiple instances
+// Centralized Three.js instance to prevent multiple imports
 import * as THREE from 'three';
 
 // Export commonly used components
@@ -10,33 +10,20 @@ export const {
   BoxGeometry,
   MeshBasicMaterial,
   Vector3,
-  Group,
-  Object3D,
-  TextureLoader,
-  Clock,
-  AnimationMixer,
-  SkeletonHelper,
+  Color,
   AmbientLight,
   DirectionalLight,
-  PointLight,
-  SpotLight,
-  LoadingManager,
   BufferGeometry,
   BufferAttribute,
-  Material,
-  Color,
-  Fog,
-  FogExp2,
-  Raycaster,
+  Points,
+  PointsMaterial,
+  Line,
+  LineBasicMaterial,
+  Group,
+  Object3D,
   Matrix4,
   Quaternion,
-  Euler,
-  Box3,
-  Sphere,
-  Plane,
-  Line3,
-  Triangle,
-  MathUtils,
+  Euler
 } = THREE;
 
 // Export the main THREE object for other utilities
