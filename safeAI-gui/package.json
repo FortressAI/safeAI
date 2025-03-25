@@ -29,7 +29,7 @@
     "react-router-dom": "^6.11.2",
     "recharts": "^2.6.2",
     "web3": "^4.16.0",
-    "three": "^0.173.0"
+    "three": "0.173.0"
   },
   "overrides": {
     "nanoid": "^3.3.6",
@@ -55,7 +55,8 @@
     "react-force-graph": "^1.47.6",
     "@mui/material": "$@mui/material",
     "@mui/icons-material": "$@mui/icons-material",
-    "three": "^0.173.0"
+    "three": "0.173.0",
+    "**/three": "0.173.0"
   },
   "resolutions": {
     "cookie": "^0.7.0",
@@ -66,7 +67,8 @@
     "react-force-graph": "^1.47.6",
     "@mui/material": "6.4.8",
     "@mui/icons-material": "6.4.8",
-    "three": "^0.173.0"
+    "three": "0.173.0",
+    "**/three": "0.173.0"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
