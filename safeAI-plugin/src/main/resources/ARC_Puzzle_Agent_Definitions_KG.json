@@ -467,6 +467,45 @@
       "transactionFee": "0.001",
       "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
       "agent_type": "Script"
+    },
+    {
+      "name": "SemanticSymbolInterpreter",
+      "category": "Semantic Analysis",
+      "usageCount": 0,
+      "description": "Interprets symbolic meaning beyond visual patterns",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { def visualFeedback = createVisualFeedback(input); def candidate = nlQuery('SemanticSymbolInterpreter on ' + input.toString()); def cot = 'Analyzed symbolic patterns and extracted semantic meaning'; return [candidate: candidate, metadata: [method: 'SemanticSymbolInterpreter', chain_of_thought: cot, confidence: 0.85], feedback: visualFeedback]; }",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script",
+      "visualFeedback": true
+    },
+    {
+      "name": "RuleCompositionEngine",
+      "category": "Compositional Reasoning",
+      "usageCount": 0,
+      "description": "Handles multiple interacting transformation rules",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { def visualFeedback = createVisualFeedback(input); def candidate = nlQuery('RuleCompositionEngine on ' + input.toString()); def cot = 'Composed and applied multiple interacting rules'; return [candidate: candidate, metadata: [method: 'RuleCompositionEngine', chain_of_thought: cot, confidence: 0.85], feedback: visualFeedback]; }",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script",
+      "visualFeedback": true
+    },
+    {
+      "name": "ContextualRuleManager",
+      "category": "Context Management",
+      "usageCount": 0,
+      "description": "Manages context-dependent rule application",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { def visualFeedback = createVisualFeedback(input); def candidate = nlQuery('ContextualRuleManager on ' + input.toString()); def cot = 'Applied rules based on context analysis'; return [candidate: candidate, metadata: [method: 'ContextualRuleManager', chain_of_thought: cot, confidence: 0.85], feedback: visualFeedback]; }",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script",
+      "visualFeedback": true
     }
   ],
   "scripts": {
@@ -475,7 +514,9 @@
     "evaluationScript": "def processEvaluation(examples, context) { int correct = 0; examples.each { example -> def input = example.input; def expected = example.expectedOutput; def candidate = processTraining([example], context); if(candidate != null && candidate == expected) { correct++; } else { def composite = DynamicCompositeAgent.generateCandidate(input, expected); if(composite.candidate == expected) { correct++; } } }; def score = (correct * 100.0) / examples.size(); println 'Evaluation score: ' + score; return score; }",
     "finalExamScript": "def processFinal(puzzleSet, context) { def results = []; puzzleSet.each { puzzle -> def input = puzzle.input; def expected = puzzle.expectedOutput; def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); def candidateScore = processEvaluation([puzzle], context); results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); }; println 'Final exam processing completed for ' + results.size() + ' puzzles.'; return results; }",
     "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
-    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }",
+    "visualFeedbackScript": "def createVisualFeedback(input, steps) { return { grid: input, highlightedCells: [], annotations: [], transformationSteps: steps, colorMapping: { semantic: '#FF0000', compositional: '#00FF00', contextual: '#0000FF' }, displayMode: 'interactive' }; }",
+    "efficiencyMetricsScript": "def trackEfficiency(operation) { return { computeCost: calculateComputeCost(operation), memoryUsage: getCurrentMemoryUsage(), executionTime: measureExecutionTime(operation), successRate: calculateSuccessRate(operation) }; }"
   },
   "metadata": {
     "version": "1.0",
@@ -492,6 +533,9 @@
   "configuration": {
     "maxAgentChainLength": 3,
     "agentInitializationOrder": [
+      "SemanticSymbolInterpreter",
+      "RuleCompositionEngine",
+      "ContextualRuleManager",
       "ColorComplement",
       "ColorRemap",
       "ColorThreshold",
@@ -524,6 +568,9 @@
       "DynamicCompositeAgent"
     ],
     "agentInstances": [
+      "SemanticSymbolInterpreter",
+      "RuleCompositionEngine",
+      "ContextualRuleManager",
       "ColorComplement",
       "ColorRemap",
       "ColorThreshold",
@@ -589,6 +636,34 @@
       "input_sanitization": true,
       "output_validation": true,
       "resource_monitoring": true
+    },
+    "visualization": {
+      "enabled": true,
+      "modes": ["interactive", "step-by-step", "comparison"],
+      "features": {
+        "highlightChanges": true,
+        "showTransformationSteps": true,
+        "displayChainOfThought": true,
+        "showEfficiencyMetrics": true
+      },
+      "colors": {
+        "semantic": "#FF0000",
+        "compositional": "#00FF00",
+        "contextual": "#0000FF",
+        "highlight": "#FFFF00",
+        "background": "#FFFFFF"
+      }
+    },
+    "efficiency": {
+      "tracking": {
+        "enabled": true,
+        "metrics": ["computeCost", "memoryUsage", "executionTime", "successRate"],
+        "thresholds": {
+          "maxComputeCost": 200,
+          "maxMemoryUsage": "1GB",
+          "maxExecutionTime": "30s"
+        }
+      }
     }
   },
   "security": {
