@@ -1,6 +1,6 @@
-# SafeAI Platform
+# SafeAI Project
 
-SafeAI is a comprehensive platform for secure, transparent, and ethical AI reasoning, built on Neo4j. This repository contains three main components:
+A comprehensive AI safety platform with Neo4j plugin integration, GUI interface, and documentation.
 
 ## Project Structure
 
