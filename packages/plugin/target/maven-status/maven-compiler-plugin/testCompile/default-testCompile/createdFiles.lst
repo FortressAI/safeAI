@@ -1,9 +1,0 @@
-com/safeai/neo4jplugin/LicensingModuleTest.class
-com/safeai/neo4jplugin/ConversationalAgentTest.class
-com/safeai/neo4jplugin/AggregationModuleTest.class
-com/safeai/neo4jplugin/GovernanceModuleTest.class
-com/safeai/neo4jplugin/LearningKGManagerTest.class
-com/safeai/neo4jplugin/BlockchainModuleTest.class
-com/safeai/neo4jplugin/CryptoModuleTest.class
-com/safeai/neo4jplugin/PuzzleSolverTest.class
-com/safeai/neo4jplugin/UsageModuleTest.class
