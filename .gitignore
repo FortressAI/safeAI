@@ -35,4 +35,8 @@ yarn-error.log*
 # Build artifacts
 *.log
 *.tmp
-*.temp 
+*.temp
+
+# macOS temporary files
+.AppleDouble
+.LSOverride 

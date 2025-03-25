@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreePress - SafeAI Interactive Demos</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Emotion for Material-UI -->
+  <script src="https://unpkg.com/@emotion/react@11.11.3/dist/emotion-react.umd.min.js"></script>
+  <script src="https://unpkg.com/@emotion/styled@11.11.0/dist/emotion-styled.umd.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- CodeMirror for code editing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
+  <style>
+    .freepress-container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      height: calc(100vh - 64px);
+    }
+    
+    .sidebar {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .main-content {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .article-card {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 16px;
+    }
+    
+    .article-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .article-card.selected {
+      border: 2px solid #2196f3;
+    }
+    
+    .article-content {
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    
+    .analysis-panel {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .sentiment-chart {
+      height: 200px;
+      margin: 20px 0;
+    }
+    
+    .keyword-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .keyword-chip {
+      background-color: rgba(33, 150, 243, 0.1);
+      color: #2196f3;
+      border: 1px solid rgba(33, 150, 243, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline,
+      Icon, Tabs, Tab
+    } = MaterialUI;
+
+    // Sample articles
+    const articles = [
+      {
+        id: 1,
+        title: 'AI Ethics: The Future of Responsible Technology',
+        author: 'Dr. Sarah Chen',
+        date: '2024-03-22',
+        category: 'Technology',
+        sentiment: 0.8,
+        keywords: ['AI', 'Ethics', 'Technology', 'Future', 'Responsibility'],
+        content: `Artificial Intelligence continues to reshape our world, but with great power comes great responsibility. 
+        As we develop increasingly sophisticated AI systems, the ethical implications become more complex and critical.
+        
+        Key considerations include:
+        • Bias and fairness in AI systems
+        • Privacy and data protection
+        • Transparency and explainability
+        • Accountability and governance
+        
+        The future of AI must be built on a foundation of strong ethical principles and responsible development practices.`
+      },
+      {
+        id: 2,
+        title: 'The Impact of AI on Journalism',
+        author: 'Michael Rodriguez',
+        date: '2024-03-21',
+        category: 'Media',
+        sentiment: 0.6,
+        keywords: ['AI', 'Journalism', 'Media', 'Technology', 'Future'],
+        content: `The journalism landscape is undergoing a significant transformation with the integration of AI technologies.
+        From automated content generation to fact-checking, AI is changing how news is created and consumed.
+        
+        Key developments:
+        • Automated reporting for data-driven stories
+        • AI-powered fact-checking systems
+        • Personalized news delivery
+        • Enhanced content analysis
+        
+        While AI offers exciting possibilities, it also raises important questions about journalistic integrity and human oversight.`
+      },
+      {
+        id: 3,
+        title: 'Building Trust in AI Systems',
+        author: 'Prof. James Wilson',
+        date: '2024-03-20',
+        category: 'Research',
+        sentiment: 0.9,
+        keywords: ['AI', 'Trust', 'Transparency', 'Ethics', 'Systems'],
+        content: `Trust is the cornerstone of successful AI deployment. As AI systems become more integrated into our lives,
+        building and maintaining trust becomes increasingly important.
+        
+        Key factors:
+        • Transparent decision-making processes
+        • Clear communication of AI capabilities
+        • Robust testing and validation
+        • User feedback and iteration
+        
+        The path to trustworthy AI requires collaboration between developers, users, and regulators.`
+      }
+    ];
+
+    function FreePress() {
+      const [selectedArticle, setSelectedArticle] = React.useState(null);
+      const [tabValue, setTabValue] = React.useState(0);
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [sentimentChart, setSentimentChart] = React.useState(null);
+      const chartRef = React.useRef(null);
+
+      React.useEffect(() => {
+        // Initialize sentiment chart
+        if (chartRef.current) {
+          const ctx = chartRef.current.getContext('2d');
+          const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Positive', 'Neutral', 'Negative'],
+              datasets: [{
+                label: 'Sentiment Distribution',
+                data: [60, 30, 10],
+                backgroundColor: [
+                  'rgba(76, 175, 80, 0.5)',
+                  'rgba(158, 158, 158, 0.5)',
+                  'rgba(244, 67, 54, 0.5)'
+                ],
+                borderColor: [
+                  'rgba(76, 175, 80, 1)',
+                  'rgba(158, 158, 158, 1)',
+                  'rgba(244, 67, 54, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                },
+                x: {
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                  },
+                  ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }
+                }
+              }
+            }
+          });
+          setSentimentChart(chart);
+        }
+      }, []);
+
+      const handleArticleSelect = (article) => {
+        setSelectedArticle(article);
+      };
+
+      const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+      };
+
+      const filteredArticles = articles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.content.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">newspaper</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                FreePress
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container maxWidth={false} sx={{ mt: 4 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <Card className="sidebar">
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Articles
+                    </Typography>
+                    
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Search articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      sx={{ mb: 2 }}
+                    />
+                    
+                    <Stack spacing={2}>
+                      {filteredArticles.map((article) => (
+                        <Card
+                          key={article.id}
+                          className={`article-card ${selectedArticle?.id === article.id ? 'selected' : ''}`}
+                          onClick={() => handleArticleSelect(article)}
+                        >
+                          <CardContent>
+                            <Typography variant="subtitle1">
+                              {article.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              By {article.author}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {new Date(article.date).toLocaleDateString()}
+                            </Typography>
+                            <Chip
+                              label={article.category}
+                              size="small"
+                              sx={{ mt: 1 }}
+                            />
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
+              
+              <Grid item xs={12} md={8}>
+                {selectedArticle ? (
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" gutterBottom>
+                        {selectedArticle.title}
+                      </Typography>
+                      
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ mr: 2 }}>
+                          By {selectedArticle.author}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {new Date(selectedArticle.date).toLocaleDateString()}
+                        </Typography>
+                      </Box>
+                      
+                      <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+                        <Tab label="Content" />
+                        <Tab label="Analysis" />
+                        <Tab label="Metrics" />
+                      </Tabs>
+                      
+                      {tabValue === 0 && (
+                        <div className="article-content">
+                          <Typography variant="body1" paragraph>
+                            {selectedArticle.content}
+                          </Typography>
+                        </div>
+                      )}
+                      
+                      {tabValue === 1 && (
+                        <div className="analysis-panel">
+                          <Typography variant="h6" gutterBottom>
+                            Content Analysis
+                          </Typography>
+                          
+                          <Typography variant="subtitle1" gutterBottom>
+                            Sentiment Analysis
+                          </Typography>
+                          <div className="sentiment-chart">
+                            <canvas ref={chartRef} />
+                          </div>
+                          
+                          <Typography variant="subtitle1" gutterBottom>
+                            Key Topics
+                          </Typography>
+                          <div className="keyword-list">
+                            {selectedArticle.keywords.map((keyword, index) => (
+                              <Chip
+                                key={index}
+                                label={keyword}
+                                className="keyword-chip"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {tabValue === 2 && (
+                        <div className="analysis-panel">
+                          <Typography variant="h6" gutterBottom>
+                            Article Metrics
+                          </Typography>
+                          
+                          <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                              <Paper sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="h4">
+                                  {Math.round(selectedArticle.sentiment * 100)}%
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Positive Sentiment
+                                </Typography>
+                              </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Paper sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="h4">
+                                  {selectedArticle.keywords.length}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Key Topics
+                                </Typography>
+                              </Paper>
+                            </Grid>
+                          </Grid>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" color="text.secondary" align="center">
+                        Select an article to view its content and analysis
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                )}
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Create theme configuration
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#2196f3',
+        },
+        secondary: {
+          main: '#f50057',
+        },
+        background: {
+          default: '#121212',
+          paper: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      components: {
+        MuiCard: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: 8,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
+          },
+        },
+        MuiAppBar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+            },
+          },
+        },
+      },
+    });
+
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <FreePress />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html> 

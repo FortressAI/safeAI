@@ -1,0 +1,180 @@
+{
+  "domain": "Cybersecurity",
+  "description": "An Agentic Knowledge Graph (KG) for cybersecurity that proactively implements offensive and defensive actions. This KG is designed to enforce best practices for system users by dynamically executing transformation agents to detect vulnerabilities, simulate attacks, and deploy defensive countermeasures. It integrates blockchain\u2011audited audit trails and decentralized governance to ensure transparency, security, and compliance.",
+  "endpoints": {
+    "security": "https://example.com/cybersecurity/security",
+    "validation": "https://example.com/cybersecurity/validation",
+    "monitoring": "https://example.com/cybersecurity/monitoring"
+  },
+  "agents": [
+    {
+      "name": "BaseCyberAgent",
+      "category": "Foundational",
+      "usageCount": 100000,
+      "description": "Provides core functionalities and metadata extraction for cybersecurity operations.",
+      "successCount": 100000,
+      "agent_code": "def generateCandidate(input) { \n  def cot = 'Base cyber reasoning: Extracted key metadata from input for further processing.'; \n  return [candidate: input, metadata: [method: 'BaseCyberAgent', chain_of_thought: cot, confidence: 1.0]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "ThreatDetectionAgent",
+      "category": "Defensive",
+      "usageCount": 80000,
+      "description": "Monitors network and system inputs to detect potential threats using signature and anomaly-based techniques.",
+      "successCount": 80000,
+      "agent_code": "def generateCandidate(input) { \n  // Analyze input data for known threat patterns and anomalies\n  def candidate = nlQuery('Detect threats in: ' + input.toString()); \n  def cot = 'Applied anomaly detection and signature matching for threat identification.'; \n  return [candidate: candidate, metadata: [method: 'ThreatDetectionAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
+    },
+    {
+      "name": "VulnerabilityExploitationAgent",
+      "category": "Offensive",
+      "usageCount": 50000,
+      "description": "Simulates offensive actions by exploiting detected vulnerabilities to assess system weaknesses.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  // Simulate controlled penetration testing actions\n  def candidate = nlQuery('Simulate vulnerability exploitation on: ' + input.toString()); \n  def cot = 'Performed simulated penetration testing to identify potential exploit paths.'; \n  return [candidate: candidate, metadata: [method: 'VulnerabilityExploitationAgent', chain_of_thought: cot, confidence: 0.90]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
+    },
+    {
+      "name": "DefensiveCountermeasureAgent",
+      "category": "Defensive",
+      "usageCount": 60000,
+      "description": "Deploys defensive countermeasures based on threat detection and vulnerability analysis.",
+      "successCount": 60000,
+      "agent_code": "def generateCandidate(input) { \n  // Based on detected threats, determine and deploy the appropriate countermeasures\n  def candidate = nlQuery('Deploy countermeasures for: ' + input.toString()); \n  def cot = 'Deployed defensive countermeasures, such as patching vulnerabilities or isolating affected nodes.'; \n  return [candidate: candidate, metadata: [method: 'DefensiveCountermeasureAgent', chain_of_thought: cot, confidence: 0.95]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
+    },
+    {
+      "name": "IncidentResponseAgent",
+      "category": "Defensive",
+      "usageCount": 40000,
+      "description": "Automates incident response by correlating events and executing remediation workflows.",
+      "successCount": 40000,
+      "agent_code": "def generateCandidate(input) { \n  def candidate = nlQuery('Execute incident response for: ' + input.toString()); \n  def cot = 'Automated incident response executed to mitigate ongoing threats.'; \n  return [candidate: candidate, metadata: [method: 'IncidentResponseAgent', chain_of_thought: cot, confidence: 0.93]]; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "LLM"
+    },
+    {
+      "name": "DynamicCompositeCyberAgent",
+      "category": "Composite",
+      "usageCount": 0,
+      "description": "Dynamically combines outputs from multiple cybersecurity agents to produce an integrated offensive and defensive action plan.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input, context) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  // Generate combinations of agents to form a composite action plan\n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, context)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeCyberAgent', chain_of_thought: 'No valid composite action found.', confidence: 0.0]]; \n}\n\ndef generateAgentSequences(agentsList, chainLength) { \n    // Implement combination logic here; for now, return an empty list as a placeholder\n    return []; \n}\n\ndef evaluateCandidate(candidate, context) { \n    // Implement evaluation logic based on cybersecurity best practices; for now, assume candidate is valid if non-null\n    return candidate != null; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    }
+  ],
+  "scripts": {
+    "fetchDataScript": "def fetchData(url) { \n  // For cybersecurity KG, external fetching may be used for threat intelligence feeds\n  def response = httpGet(url); \n  if(response.status == 200) { \n    return parseJson(response.body); \n  } else { \n    println 'Failed to fetch data from ' + url; \n    return null; \n  } \n}",
+    "actionScript": "def processAction(input, context) { \n  // Process a cybersecurity action by applying both offensive and defensive agents\n  def offensiveResult = VulnerabilityExploitationAgent.generateCandidate(input).candidate; \n  def defensiveResult = DefensiveCountermeasureAgent.generateCandidate(input).candidate; \n  def incidentResult = IncidentResponseAgent.generateCandidate(input).candidate; \n  // Combine results into an integrated action plan\n  def composite = DynamicCompositeCyberAgent.generateCandidate(input, context).candidate; \n  println 'Composite cybersecurity action generated: ' + composite; \n  return composite != null ? composite : (offensiveResult + ' | ' + defensiveResult + ' | ' + incidentResult);\n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-03-02T00:00:00Z",
+    "notes": "This Cybersecurity Agentic KG is designed to implement proactive offensive and defensive measures based on best practices. It dynamically generates and executes transformation agents to detect threats, exploit vulnerabilities for controlled testing, and deploy countermeasures, ensuring comprehensive cybersecurity management.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
+  },
+  "configuration": {
+    "maxAgentChainLength": 3,
+    "agentInitializationOrder": [
+      "BaseCyberAgent",
+      "ThreatDetectionAgent",
+      "VulnerabilityExploitationAgent",
+      "DefensiveCountermeasureAgent",
+      "IncidentResponseAgent",
+      "DynamicCompositeCyberAgent"
+    ],
+    "agentInstances": [
+      "BaseCyberAgent",
+      "ThreatDetectionAgent",
+      "VulnerabilityExploitationAgent",
+      "DefensiveCountermeasureAgent",
+      "IncidentResponseAgent",
+      "DynamicCompositeCyberAgent"
+    ],
+    "blockchain": {
+      "systemWallet": "0xAdminWalletAddress",
+      "contractAddress": "0xABCDEF123456789",
+      "pricing": {
+        "baseFee": "0.001",
+        "dynamicPricing": "Based on supply/demand and risk level",
+        "minFee": "0.0001",
+        "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
+      }
+    },
+    "fileImportMode": "multi",
+    "initData": "def initializeData() { \n  println 'Cybersecurity KG initialized with dynamic offensive and defensive agents.'; \n  return null; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/cybersecurity/metrics",
+        "alerts": "https://example.com/cybersecurity/alerts",
+        "logs": "https://example.com/cybersecurity/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
+  }
+}

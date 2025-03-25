@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeAI Interactive Demos</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+    }
+    .demo-card {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
+    }
+    .demo-card:hover {
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const MaterialUI = window['MaterialUI'];
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl,
+      useTheme, ThemeProvider, createTheme, CssBaseline,
+      Icon
+    } = MaterialUI;
+
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#90caf9',
+        },
+        secondary: {
+          main: '#f48fb1',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
+
+    function DemoIndex() {
+      const demos = [
+        {
+          id: 'agent-browser',
+          title: 'Agent Browser',
+          description: 'Browse and interact with AI agents',
+          icon: 'smart_toy',
+          link: 'agent-browser.html'
+        },
+        {
+          id: 'arc-prize',
+          title: 'ARC Prize',
+          description: 'Participate in the ARC Prize Challenge',
+          icon: 'emoji_events',
+          link: 'arc-prize.html'
+        },
+        {
+          id: 'knowledge-graphs',
+          title: 'Knowledge Graphs',
+          description: 'Explore and query knowledge graphs',
+          icon: 'account_tree',
+          link: 'knowledge-graphs.html'
+        },
+        {
+          id: 'dashboard',
+          title: 'Dashboard',
+          description: 'View system metrics and analytics',
+          icon: 'dashboard',
+          link: 'dashboard.html'
+        },
+        {
+          id: 'mathatp',
+          title: 'Math ATP',
+          description: 'Mathematical theorem proving',
+          icon: 'functions',
+          link: 'mathatp.html'
+        },
+        {
+          id: 'freepress',
+          title: 'FreePress',
+          description: 'Content moderation and analysis',
+          icon: 'newspaper',
+          link: 'freepress.html'
+        },
+        {
+          id: 'security-center',
+          title: 'Security Center',
+          description: 'Monitor and manage security settings',
+          icon: 'security',
+          link: 'security-center.html'
+        },
+        {
+          id: 'agent-workshop',
+          title: 'Agent Workshop',
+          description: 'Create and customize AI agents',
+          icon: 'code',
+          link: 'agent-workshop.html'
+        }
+      ];
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">apps</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                SafeAI Interactive Demos
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          <Grid container spacing={3}>
+            {demos.map((demo) => (
+              <Grid item xs={12} sm={6} md={4} key={demo.id}>
+                <Card 
+                  className="demo-card"
+                  onClick={() => window.location.href = demo.link}
+                >
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                        <span className="material-icons">{demo.icon}</span>
+                      </Avatar>
+                      <Typography variant="h6">{demo.title}</Typography>
+                    </Box>
+                    <Typography color="text.secondary">
+                      {demo.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      );
+    }
+
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <DemoIndex />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html> 

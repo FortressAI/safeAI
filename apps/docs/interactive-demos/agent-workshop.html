@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Workshop - SafeAI Interactive Demos</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.15.11/umd/material-ui.development.js" crossorigin></script>
+  <!-- CodeMirror for code editing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="../css/shared-demo.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+    }
+    .workshop-card {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .CodeMirror {
+      height: 300px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    .tutorial-card {
+      background: linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(25, 118, 210, 0.05));
+      border-left: 4px solid #1976d2;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { 
+      Box, Typography, Button, Card, CardContent, 
+      Grid, Divider, AppBar, Toolbar, Avatar, 
+      Chip, Paper, IconButton, Tooltip, LinearProgress,
+      TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+      List, ListItem, ListItemText, ListItemIcon, Container,
+      CircularProgress, Alert, Stack, FormControl, InputLabel,
+      Select, MenuItem, Stepper, Step, StepLabel, StepContent,
+      Switch, FormControlLabel, useTheme, ThemeProvider, 
+      createTheme, CssBaseline
+    } = MaterialUI;
+
+    const darkTheme = createTheme({
+      palette: {
+        mode: 'dark',
+        primary: {
+          main: '#90caf9',
+        },
+        secondary: {
+          main: '#f48fb1',
+        },
+        background: {
+          default: '#121212',
+          paper: '#1e1e1e',
+        },
+      },
+    });
+
+    // Constants for agent configuration
+    const agentTypes = [
+      { value: 'llm', label: 'LLM-based Agent' },
+      { value: 'groovy', label: 'Groovy Script Agent' }
+    ];
+
+    const capabilities = [
+      { id: 'data_analysis', name: 'Data Analysis', description: 'Analyze patterns and trends in data' },
+      { id: 'nlp', name: 'Natural Language Processing', description: 'Process and understand human language' },
+      { id: 'vision', name: 'Computer Vision', description: 'Process and analyze visual information' },
+      { id: 'planning', name: 'Task Planning', description: 'Create and execute complex task plans' }
+    ];
+
+    const ethicalConstraints = [
+      { id: 'fairness', name: 'Fairness', description: 'Ensure unbiased decision making' },
+      { id: 'transparency', name: 'Transparency', description: 'Provide clear explanations for actions' },
+      { id: 'safety', name: 'Safety', description: 'Prevent harmful actions and outcomes' },
+      { id: 'privacy', name: 'Privacy', description: 'Protect sensitive information' }
+    ];
+
+    const steps = [
+      {
+        label: 'Basic Information',
+        description: 'Configure the fundamental properties of your agent',
+        tutorial: 'Start by giving your agent a clear, descriptive name and selecting its type. The type determines how your agent will process information and make decisions.'
+      },
+      {
+        label: 'Capabilities',
+        description: 'Define what your agent can do',
+        tutorial: 'Choose the capabilities that your agent needs. Consider the tasks it will perform and select capabilities that align with those requirements.'
+      },
+      {
+        label: 'Safety & Ethics',
+        description: 'Set up safety measures and ethical guidelines',
+        tutorial: 'Safety is paramount in AI systems. Configure ethical constraints and safety measures to ensure responsible AI behavior.'
+      },
+      {
+        label: 'Implementation',
+        description: 'Write the agent\'s core logic',
+        tutorial: 'Implement the agent\'s behavior using either a prompt template (for LLM agents) or Groovy script (for script agents). Follow the provided examples and best practices.'
+      }
+    ];
+
+    function AgentWorkshop() {
+      const theme = useTheme();
+      const [activeStep, setActiveStep] = React.useState(0);
+      const [agent, setAgent] = React.useState({
+        name: '',
+        type: 'llm',
+        description: '',
+        capabilities: [],
+        ethicalConstraints: [],
+        promptTemplate: '',
+        scriptContent: '',
+        blockchainEnabled: true
+      });
+      const [errors, setErrors] = React.useState({});
+      const [editor, setEditor] = React.useState(null);
+      const editorRef = React.useRef(null);
+
+      // Initialize code editor
+      React.useEffect(() => {
+        if (editorRef.current && !editor) {
+          const newEditor = CodeMirror(editorRef.current, {
+            value: agent.type === 'llm' ? agent.promptTemplate : agent.scriptContent,
+            mode: agent.type === 'llm' ? 'text' : 'python',
+            theme: 'material',
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 2,
+            lineWrapping: true,
+          });
+
+          newEditor.on('change', (cm) => {
+            const content = cm.getValue();
+            setAgent(prev => ({
+              ...prev,
+              [prev.type === 'llm' ? 'promptTemplate' : 'scriptContent']: content
+            }));
+          });
+
+          setEditor(newEditor);
+        }
+      }, [editorRef.current, agent.type]);
+
+      // Validate current step
+      const validateStep = (step) => {
+        const newErrors = {};
+        
+        if (step === 0) {
+          if (!agent.name.trim()) newErrors.name = 'Name is required';
+          if (!agent.description.trim()) newErrors.description = 'Description is required';
+        }
+        
+        if (step === 1 && agent.capabilities.length === 0) {
+          newErrors.capabilities = 'Select at least one capability';
+        }
+        
+        if (step === 2 && agent.ethicalConstraints.length === 0) {
+          newErrors.ethicalConstraints = 'Select at least one ethical constraint';
+        }
+        
+        if (step === 3) {
+          const content = agent.type === 'llm' ? agent.promptTemplate : agent.scriptContent;
+          if (!content.trim()) {
+            newErrors.implementation = 'Implementation is required';
+          }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+
+      // Handle next step
+      const handleNext = () => {
+        if (validateStep(activeStep)) {
+          setActiveStep((prev) => prev + 1);
+        }
+      };
+
+      // Handle back step
+      const handleBack = () => {
+        setActiveStep((prev) => prev - 1);
+      };
+
+      // Handle field changes
+      const handleChange = (field) => (event) => {
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+        setAgent(prev => ({ ...prev, [field]: value }));
+        if (errors[field]) {
+          setErrors(prev => ({ ...prev, [field]: undefined }));
+        }
+      };
+
+      // Toggle capability
+      const handleCapabilityToggle = (capabilityId) => {
+        setAgent(prev => {
+          const capabilities = prev.capabilities.includes(capabilityId)
+            ? prev.capabilities.filter(id => id !== capabilityId)
+            : [...prev.capabilities, capabilityId];
+          return { ...prev, capabilities };
+        });
+      };
+
+      // Toggle ethical constraint
+      const handleConstraintToggle = (constraintId) => {
+        setAgent(prev => {
+          const ethicalConstraints = prev.ethicalConstraints.includes(constraintId)
+            ? prev.ethicalConstraints.filter(id => id !== constraintId)
+            : [...prev.ethicalConstraints, constraintId];
+          return { ...prev, ethicalConstraints };
+        });
+      };
+
+      // Render step content
+      const getStepContent = (step) => {
+        switch (step) {
+          case 0:
+            return (
+              <Box>
+                <Card className="tutorial-card" sx={{ mb: 3, p: 2 }}>
+                  <Typography variant="body1" color="primary">
+                    {steps[0].tutorial}
+                  </Typography>
+                </Card>
+                
+                <TextField
+                  fullWidth
+                  label="Agent Name"
+                  value={agent.name}
+                  onChange={handleChange('name')}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  sx={{ mb: 2 }}
+                  required
+                />
+                
+                <TextField
+                  fullWidth
+                  label="Description"
+                  value={agent.description}
+                  onChange={handleChange('description')}
+                  error={!!errors.description}
+                  helperText={errors.description}
+                  multiline
+                  rows={3}
+                  sx={{ mb: 2 }}
+                  required
+                />
+                
+                <FormControl fullWidth>
+                  <InputLabel>Agent Type</InputLabel>
+                  <Select
+                    value={agent.type}
+                    onChange={handleChange('type')}
+                    label="Agent Type"
+                  >
+                    {agentTypes.map((type) => (
+                      <MenuItem key={type.value} value={type.value}>
+                        {type.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            );
+            
+          case 1:
+            return (
+              <Box>
+                <Card className="tutorial-card" sx={{ mb: 3, p: 2 }}>
+                  <Typography variant="body1" color="primary">
+                    {steps[1].tutorial}
+                  </Typography>
+                </Card>
+                
+                <Grid container spacing={2}>
+                  {capabilities.map((capability) => (
+                    <Grid item xs={12} sm={6} key={capability.id}>
+                      <Card 
+                        sx={{ 
+                          cursor: 'pointer',
+                          bgcolor: agent.capabilities.includes(capability.id) 
+                            ? 'primary.dark' 
+                            : 'background.paper'
+                        }}
+                        onClick={() => handleCapabilityToggle(capability.id)}
+                      >
+                        <CardContent>
+                          <Typography variant="h6">{capability.name}</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {capability.description}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                
+                {errors.capabilities && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    {errors.capabilities}
+                  </Alert>
+                )}
+              </Box>
+            );
+            
+          case 2:
+            return (
+              <Box>
+                <Card className="tutorial-card" sx={{ mb: 3, p: 2 }}>
+                  <Typography variant="body1" color="primary">
+                    {steps[2].tutorial}
+                  </Typography>
+                </Card>
+                
+                <Grid container spacing={2}>
+                  {ethicalConstraints.map((constraint) => (
+                    <Grid item xs={12} sm={6} key={constraint.id}>
+                      <Card 
+                        sx={{ 
+                          cursor: 'pointer',
+                          bgcolor: agent.ethicalConstraints.includes(constraint.id) 
+                            ? 'primary.dark' 
+                            : 'background.paper'
+                        }}
+                        onClick={() => handleConstraintToggle(constraint.id)}
+                      >
+                        <CardContent>
+                          <Typography variant="h6">{constraint.name}</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {constraint.description}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                
+                {errors.ethicalConstraints && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    {errors.ethicalConstraints}
+                  </Alert>
+                )}
+                
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={agent.blockchainEnabled}
+                      onChange={handleChange('blockchainEnabled')}
+                    />
+                  }
+                  label="Enable Blockchain Verification"
+                  sx={{ mt: 2 }}
+                />
+              </Box>
+            );
+            
+          case 3:
+            return (
+              <Box>
+                <Card className="tutorial-card" sx={{ mb: 3, p: 2 }}>
+                  <Typography variant="body1" color="primary">
+                    {steps[3].tutorial}
+                  </Typography>
+                </Card>
+                
+                <Typography variant="subtitle1" gutterBottom>
+                  {agent.type === 'llm' ? 'Prompt Template' : 'Script Content'}
+                </Typography>
+                
+                <div ref={editorRef} />
+                
+                {errors.implementation && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    {errors.implementation}
+                  </Alert>
+                )}
+              </Box>
+            );
+            
+          default:
+            return null;
+        }
+      };
+
+      return (
+        <Box sx={{ p: 3 }}>
+          <AppBar position="static" sx={{ backgroundColor: "rgba(0,0,0,0.5)", mb: 3 }}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                <span className="material-icons">code</span>
+              </IconButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Agent Workshop
+              </Typography>
+              <Button 
+                color="inherit" 
+                href="index.html"
+                startIcon={<span className="material-icons">arrow_back</span>}
+              >
+                Back to Demos
+              </Button>
+            </Toolbar>
+          </AppBar>
+
+          <Container maxWidth="lg">
+          <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+              <Typography variant="h5" gutterBottom>
+                  Workshop Steps
+                </Typography>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                  {steps.map((step, index) => (
+                    <Step key={step.label}>
+                      <StepLabel>
+                        <Typography variant="subtitle1">{step.label}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {step.description}
+              </Typography>
+                      </StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+              </Grid>
+
+              <Grid item xs={12} md={8}>
+              <Card className="workshop-card">
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>
+                      {steps[activeStep].label}
+                    </Typography>
+                    
+                    {getStepContent(activeStep)}
+                    
+                    <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
+                    <Button
+                        variant="outlined"
+                        onClick={handleBack}
+                        disabled={activeStep === 0}
+                        startIcon={<span className="material-icons">arrow_back</span>}
+                      >
+                        Back
+                    </Button>
+                      
+                    <Button
+                        variant="contained"
+                        onClick={handleNext}
+                        endIcon={<span className="material-icons">
+                          {activeStep === steps.length - 1 ? 'check' : 'arrow_forward'}
+                        </span>}
+                      >
+                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the app with ThemeProvider
+    ReactDOM.render(
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <AgentWorkshop />
+      </ThemeProvider>,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html> 

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain Expert Journey - SafeAI Documentation</title>
+  <!-- React and ReactDOM -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX transpiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Material-UI CDN -->
+  <script src="https://unpkg.com/@mui/material@5.0.0/umd/material-ui.development.js" crossorigin></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: Roboto, sans-serif; 
+      background-color: #121212;
+      color: #fff;
+    }
+    #root { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+    }
+    .content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Import Material-UI components
+    const { 
+      Box, Typography, Container, Card, CardContent, AppBar, Toolbar, 
+      IconButton, Button, Divider, Paper, List, ListItem, ListItemText,
+      ListItemIcon, Icon, Stepper, Step, StepLabel, StepContent
+    } = MaterialUI;
+
+    // Material icon names
+    const ICONS = {
+      MENU: "menu",
+      HOME: "home",
+      ARROW_BACK: "arrow_back",
+      CHECK: "check",
+      PSYCHOLOGY: "psychology",
+      SCHOOL: "school"
+    };
+
+    function DomainExpertJourney() {
+      return (
+        <Box>
+          <AppBar position="static" sx={{ mb: 4, backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                href="../index.html"
+              >
+                <Icon>{ICONS.ARROW_BACK}</Icon>
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Domain Expert Journey
+              </Typography>
+              <Button color="inherit" href="../index.html">
+                <Icon sx={{ mr: 1 }}>{ICONS.HOME}</Icon>
+                Documentation Home
+              </Button>
+            </Toolbar>
+          </AppBar>
+          
+          <Container>
+            <Typography variant="h3" component="h1" gutterBottom>
+              Domain Expert Journey
+            </Typography>
+            
+            <Paper className="content">
+              <Typography paragraph>
+                This guide outlines the path for domain experts working with the SafeAI platform, focusing on specialized knowledge and advanced usage.
+              </Typography>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Overview</Typography>
+              <Typography paragraph>
+                Welcome to the SafeAI domain expert journey! This guide will help you leverage your expertise to maximize the platform's capabilities in your specific domain.
+              </Typography>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Getting Started</Typography>
+              
+              <Stepper orientation="vertical" sx={{ 
+                mt: 2, 
+                "& .MuiStepLabel-root": { color: "white" },
+                "& .MuiStepIcon-root": { color: "#ff9800" },
+                "& .MuiStepConnector-line": { borderColor: "rgba(255,255,255,0.1)" }
+              }}>
+                <Step active={true}>
+                  <StepLabel>Domain Setup</StepLabel>
+                  <StepContent>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Identify domain requirements" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Configure domain settings" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Set up specialized tools" />
+                      </ListItem>
+                    </List>
+                  </StepContent>
+                </Step>
+                
+                <Step active={true}>
+                  <StepLabel>Platform Access</StepLabel>
+                  <StepContent>
+                    <Typography variant="subtitle1" gutterBottom>Expert Account</Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Register as domain expert" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Set up domain access" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Configure expert settings" />
+                      </ListItem>
+                    </List>
+                    
+                    <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Initial Setup</Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Define domain parameters" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Set up specialized tools" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Configure domain settings" />
+                      </ListItem>
+                    </List>
+                  </StepContent>
+                </Step>
+                
+                <Step active={true}>
+                  <StepLabel>First Expert Steps</StepLabel>
+                  <StepContent>
+                    <Typography variant="subtitle1" gutterBottom>Domain Exploration</Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Review domain features" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Understand capabilities" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Learn expert patterns" />
+                      </ListItem>
+                    </List>
+                    
+                    <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Basic Implementation</Typography>
+                    <List>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Set up domain models" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Configure workflows" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                        <ListItemText primary="Implement best practices" />
+                      </ListItem>
+                    </List>
+                  </StepContent>
+                </Step>
+              </Stepper>
+              
+              <Typography variant="h4" gutterBottom sx={{ mt: 4 }}>Expert Path</Typography>
+              
+              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>Core Expertise</Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Understanding domain models" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Working with specialized features" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Optimizing domain settings" />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+              
+              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>Advanced Domain Work</Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Complex domain modeling" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Advanced data integration" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Domain-specific optimizations" />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+              
+              <Card sx={{ mb: 3, bgcolor: 'rgba(255, 255, 255, 0.03)' }}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>Integration & Collaboration</Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Interdisciplinary collaboration" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Domain knowledge sharing" />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon><Icon>check</Icon></ListItemIcon>
+                      <ListItemText primary="Expert community participation" />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+              
+              <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <Button 
+                  variant="contained" 
+                  startIcon={<Icon>{ICONS.PSYCHOLOGY}</Icon>}
+                  href="../interactive-demos/knowledge-graphs.html"
+                  sx={{ mr: 2 }}
+                >
+                  Explore Knowledge Graphs
+                </Button>
+                <Button 
+                  variant="outlined"
+                  startIcon={<Icon>{ICONS.HOME}</Icon>}
+                  href="../index.html"
+                >
+                  Back to Documentation
+                </Button>
+              </Box>
+            </Paper>
+            
+            <Box sx={{ textAlign: 'center', mt: 4, mb: 2, color: 'text.secondary' }}>
+              <Typography variant="body2">
+                Last updated: {new Date().toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      );
+    }
+
+    // Render the application
+    ReactDOM.render(<DomainExpertJourney />, document.getElementById('root'));
+  </script>
+</body>
+</html> 
