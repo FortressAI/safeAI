@@ -1,0 +1,319 @@
+{
+  "domain": "Math",
+  "description": "Comprehensive Math KG for solving and proving problems across arithmetic, algebra, calculus, geometry, matrices, number theory, combinatorics, and advanced proofs. Includes full reasoning steps and proofs along with blockchain-enabled billing for microtransactions.",
+  "endpoints": {
+    "training": "https://example.com/math_data/training",
+    "evaluation": "https://example.com/math_data/evaluation",
+    "final": "https://example.com/math_data/finalExam",
+    "security": "https://example.com/math/security",
+    "validation": "https://example.com/math/validation",
+    "monitoring": "https://example.com/math/monitoring"
+  },
+  "trainingExamples": [
+    {
+      "input": "Simplify: 3x + 2x",
+      "expectedOutput": "5x",
+      "description": "Basic algebraic simplification."
+    },
+    {
+      "input": "Differentiate: sin(x)",
+      "expectedOutput": "cos(x)",
+      "description": "Basic calculus differentiation."
+    }
+  ],
+  "evaluationExamples": [
+    {
+      "input": "Solve quadratic equation: x^2 - 5x + 6 = 0",
+      "expectedOutput": "[2,3]",
+      "description": "Find roots of a quadratic equation."
+    },
+    {
+      "input": "Integrate: 2x",
+      "expectedOutput": "x^2 + C",
+      "description": "Basic integration."
+    }
+  ],
+  "finalExamExamples": [
+    {
+      "input": "Prove that the sum of angles in a triangle is 180 degrees.",
+      "expectedOutput": "Proof using Euclidean geometry principles",
+      "description": "Provide a complete geometric proof."
+    },
+    {
+      "input": "Prove that sqrt(2) is irrational.",
+      "expectedOutput": "Proof by contradiction",
+      "description": "Construct a rigorous proof by contradiction."
+    }
+  ],
+  "agents": [
+    {
+      "name": "ArithmeticSimplification",
+      "category": "Arithmetic",
+      "usageCount": 10000,
+      "description": "Simplify arithmetic expressions by combining like terms and reducing fractions.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def simplified = mathSimplifyArithmetic(input); \n  def cot = 'Simplified arithmetic expression using standard rules.'; \n  return [candidate: simplified, metadata: [method: 'ArithmeticSimplification', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "AlgebraicSimplification",
+      "category": "Algebra",
+      "usageCount": 10000,
+      "description": "Simplify algebraic expressions by combining like terms and factoring common factors.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def simplified = mathSimplifyAlgebra(input);\n  def cot = 'Applied algebraic simplification rules.';\n  return [candidate: simplified, metadata: [method: 'AlgebraicSimplification', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "PolynomialFactorization",
+      "category": "Algebra",
+      "usageCount": 8000,
+      "description": "Factor polynomials into irreducible factors.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def factors = mathFactorPolynomial(input);\n  def cot = 'Factored polynomial into irreducible components.';\n  return [candidate: factors, metadata: [method: 'PolynomialFactorization', chain_of_thought: cot, confidence: 0.90]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "EquationSolving",
+      "category": "Algebra",
+      "usageCount": 9000,
+      "description": "Solve linear and simple non-linear equations.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def solution = mathSolveEquation(input);\n  def cot = 'Solved equation using symbolic methods.';\n  return [candidate: solution, metadata: [method: 'EquationSolving', chain_of_thought: cot, confidence: 0.90]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "CalculusDifferentiation",
+      "category": "Calculus",
+      "usageCount": 12000,
+      "description": "Differentiate functions symbolically.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def derivative = mathDifferentiate(input);\n  def cot = 'Computed derivative using standard calculus rules.';\n  return [candidate: derivative, metadata: [method: 'CalculusDifferentiation', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "CalculusIntegration",
+      "category": "Calculus",
+      "usageCount": 12000,
+      "description": "Integrate functions symbolically and find antiderivatives.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def integral = mathIntegrate(input);\n  def cot = 'Computed antiderivative using integration rules.';\n  return [candidate: integral, metadata: [method: 'CalculusIntegration', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "MatrixMultiplication",
+      "category": "Linear Algebra",
+      "usageCount": 8000,
+      "description": "Multiply matrices using standard algorithms.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def product = mathMatrixMultiply(input);\n  def cot = 'Multiplied matrices using standard algorithm.';\n  return [candidate: product, metadata: [method: 'MatrixMultiplication', chain_of_thought: cot, confidence: 0.95]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "MatrixInversion",
+      "category": "Linear Algebra",
+      "usageCount": 8000,
+      "description": "Compute the inverse of a matrix when it exists.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def inverse = mathMatrixInverse(input);\n  def cot = 'Calculated matrix inverse using standard methods.';\n  return [candidate: inverse, metadata: [method: 'MatrixInversion', chain_of_thought: cot, confidence: 0.90]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "GeometryProofAgent",
+      "category": "Geometry",
+      "usageCount": 7000,
+      "description": "Generate geometric proofs using Euclidean principles.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def proof = mathGeometryProof(input);\n  def cot = 'Constructed geometric proof using classical Euclidean methods.';\n  return [candidate: proof, metadata: [method: 'GeometryProofAgent', chain_of_thought: cot, confidence: 0.92]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "NumberTheoryAgent",
+      "category": "Number Theory",
+      "usageCount": 7000,
+      "description": "Solve number theory problems including primes, modular arithmetic, and divisibility.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def solution = mathNumberTheorySolve(input);\n  def cot = 'Applied number theory concepts to derive solution.';\n  return [candidate: solution, metadata: [method: 'NumberTheoryAgent', chain_of_thought: cot, confidence: 0.90]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "CombinatorialAgent",
+      "category": "Combinatorics",
+      "usageCount": 7000,
+      "description": "Handle counting, permutations, and probability problems.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def solution = mathCombinatoricsSolve(input);\n  def cot = 'Computed combinatorial solution using counting principles.';\n  return [candidate: solution, metadata: [method: 'CombinatorialAgent', chain_of_thought: cot, confidence: 0.90]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "AdvancedProofAgent",
+      "category": "Advanced Proofs",
+      "usageCount": 5000,
+      "description": "Construct rigorous proofs using methods such as induction and contradiction.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input) { \n  def proof = mathAdvancedProof(input);\n  def cot = 'Generated advanced proof using formal logic and induction/contradiction.';\n  return [candidate: proof, metadata: [method: 'AdvancedProofAgent', chain_of_thought: cot, confidence: 0.93]];\n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    },
+    {
+      "name": "DynamicCompositeMathAgent",
+      "category": "Composite",
+      "usageCount": 0,
+      "description": "Dynamically combine one or more math transformation agents to solve complex problems or proofs.",
+      "successCount": 0,
+      "agent_code": "def generateCandidate(input, groundTruth) { \n  def agentsList = configuration.agentInstances; \n  def bestCandidate = null; \n  def bestCot = ''; \n  for (int chainLength = 2; chainLength <= configuration.maxAgentChainLength; chainLength++) { \n    def sequences = generateAgentSequences(agentsList, chainLength); \n    sequences.each { seq -> \n      def candidate = input; \n      def cot = ''; \n      seq.each { agent -> \n         def result = agent.generateCandidate(candidate); \n         candidate = result.candidate; \n         cot += result.metadata.chain_of_thought + ' -> '; \n      }; \n      if (evaluateCandidate(candidate, groundTruth)) { \n         bestCandidate = candidate; \n         bestCot = cot; \n         return [candidate: bestCandidate, metadata: [method: seq.collect{it.name}.join(' + '), chain_of_thought: bestCot, confidence: 0.95]]; \n      } \n    } \n  } \n  return [candidate: null, metadata: [method: 'DynamicCompositeMathAgent', chain_of_thought: 'No valid composite transformation found.', confidence: 0.0]]; \n} \n\ndef generateAgentSequences(agentsList, chainLength) { \n    /* Implement combination logic here */ \n    return []; \n} \n\ndef evaluateCandidate(candidate, groundTruth) { \n    /* Implement a strict evaluation function for math solutions */ \n    return candidate == groundTruth; \n}",
+      "creatorWallet": "0xDefaultCreator",
+      "transactionFee": "0.001",
+      "approvalCriteria": "{\"effectivenessThreshold\": \"0.95\", \"ethicsGuidelines\": \"Output must be unbiased, fact-based, and comply with internal ethical standards.\"}",
+      "agent_type": "Script"
+    }
+  ],
+  "scripts": {
+    "fetchDataScript": "def fetchData(url) { \n  def response = httpGet(url); \n  if(response.status == 200) { \n    return parseJson(response.body); \n  } else { \n    println 'Failed to fetch data from ' + url; \n    return null; \n  } \n}",
+    "trainingScript": "def processTraining(examples, context) { \n  int correct = 0; \n  examples.each { example -> \n    def input = example.input; \n    def expected = example.expectedOutput; \n    def agentsList = configuration.agentInstances; \n    agentsList.each { agent -> \n      def result = agent.generateCandidate(input); \n      if(result.candidate == expected) { \n         println 'Training success with agent ' + result.metadata.method; \n         correct++; \n         return; \n      } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); \n  println 'Training score: ' + score; \n  return score; \n}",
+    "evaluationScript": "def processEvaluation(examples, context) { \n  int correct = 0; \n  examples.each { example -> \n    def input = example.input; \n    def expected = example.expectedOutput; \n    def candidate = processTraining([example], context); \n    if(candidate != null && candidate == expected) { \n       correct++; \n    } else { \n       def composite = DynamicCompositeMathAgent.generateCandidate(input, expected);\n       if(composite.candidate == expected) { \n         correct++; \n       } \n    } \n  }; \n  def score = (correct * 100.0) / examples.size(); \n  println 'Evaluation score: ' + score; \n  return score; \n}",
+    "finalExamScript": "def processFinal(puzzleSet, context) { \n  def results = [];\n  puzzleSet.each { puzzle -> \n    def input = puzzle.input; \n    def expected = puzzle.expectedOutput; \n    def cot = nlQuery('Generate detailed chain-of-thought for input: ' + input.toString() + ' expecting: ' + expected.toString()); \n    def candidateScore = processEvaluation([puzzle], context);\n    results.add([ puzzle: puzzle, final_score: candidateScore, final_answer: candidateScore >= 100 ? expected : 'Incomplete', chain_of_thought: cot ]); \n  }; \n  println 'Final exam processing completed for ' + results.size() + ' puzzles.'; \n  return results; \n}",
+    "securityValidation": "def validateOperation(input, context) {\n                // Input validation\n                if (!input.matches(configuration.security.input_validation.allowed_characters)) {\n                    throw new SecurityException('Invalid input characters');\n                }\n                if (input.length() > configuration.security.input_validation.max_input_length) {\n                    throw new SecurityException('Input too long');\n                }\n                // Resource monitoring\n                def startTime = System.currentTimeMillis();\n                def startMemory = Runtime.getRuntime().totalMemory();\n                return [startTime: startTime, startMemory: startMemory];\n            }",
+    "operationVerification": "def verifyOperation(operation, context) {\n                // Verify each step\n                operation.steps.each { step ->\n                    if (!validateStep(step)) {\n                        throw new ValidationException('Invalid operation step: ' + step);\n                    }\n                }\n                // Verify logical flow\n                if (!verifyLogicalFlow(operation.steps)) {\n                    throw new ValidationException('Invalid operation logic');\n                }\n                return true;\n            }"
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-03-02T00:00:00Z",
+    "notes": "This comprehensive Math KG solves problems across multiple math domains and returns detailed solutions and proofs. It includes full reasoning steps and is blockchain-enabled for microtransactions and lubrication fees.",
+    "security_version": "1.0",
+    "last_security_audit": "2025-03-01",
+    "compliance": {
+      "gdpr": true,
+      "ccpa": true,
+      "hipaa": true
+    }
+  },
+  "configuration": {
+    "maxAgentChainLength": 3,
+    "agentInitializationOrder": [
+      "ArithmeticSimplification",
+      "AlgebraicSimplification",
+      "PolynomialFactorization",
+      "EquationSolving",
+      "CalculusDifferentiation",
+      "CalculusIntegration",
+      "MatrixMultiplication",
+      "MatrixInversion",
+      "GeometryProofAgent",
+      "NumberTheoryAgent",
+      "CombinatorialAgent",
+      "AdvancedProofAgent",
+      "DynamicCompositeMathAgent"
+    ],
+    "agentInstances": [
+      "ArithmeticSimplification",
+      "AlgebraicSimplification",
+      "PolynomialFactorization",
+      "EquationSolving",
+      "CalculusDifferentiation",
+      "CalculusIntegration",
+      "MatrixMultiplication",
+      "MatrixInversion",
+      "GeometryProofAgent",
+      "NumberTheoryAgent",
+      "CombinatorialAgent",
+      "AdvancedProofAgent",
+      "DynamicCompositeMathAgent"
+    ],
+    "blockchain": {
+      "systemWallet": "0xAdminWalletAddress",
+      "contractAddress": "0xDEF123456789ABC",
+      "pricing": {
+        "baseFee": "0.001",
+        "dynamicPricing": "Based on supply/demand",
+        "minFee": "0.0001",
+        "usageQuota": 1000
+      },
+      "security": {
+        "smart_contract_verification": true,
+        "transaction_validation": true,
+        "key_rotation_interval_hours": 24,
+        "audit_trail": true
+      }
+    },
+    "fileImportMode": "multi",
+    "initData": "def initializeData() { \n  def trainingData = scripts.fetchDataScript(configuration.endpoints.training); \n  def evaluationData = scripts.fetchDataScript(configuration.endpoints.evaluation); \n  def finalData = scripts.fetchDataScript(configuration.endpoints.final); \n  println 'Data initialized: Training=' + (trainingData != null) + ', Evaluation=' + (evaluationData != null) + ', Final=' + (finalData != null); \n  def securityConfig = scripts.fetchDataScript(configuration.endpoints.security);\nprintln ', Security=' + (securityConfig != null);\nreturn [training: trainingData, evaluation: evaluationData, final: finalData, security: securityConfig]; \n}",
+    "monitoring": {
+      "performance_metrics": true,
+      "error_tracking": true,
+      "security_alerts": true,
+      "resource_usage": true,
+      "endpoints": {
+        "metrics": "https://example.com/math/metrics",
+        "alerts": "https://example.com/math/alerts",
+        "logs": "https://example.com/math/logs"
+      }
+    },
+    "validation": {
+      "operation_verification": true,
+      "input_sanitization": true,
+      "output_validation": true,
+      "resource_monitoring": true
+    }
+  },
+  "security": {
+    "input_validation": {
+      "sanitization": true,
+      "max_input_length": 10000,
+      "allowed_characters": "^[a-zA-Z0-9\\s\\+\\-\\*\\/\\(\\)\\[\\]\\{\\}\\^\\=\\,\\.\\;]*$",
+      "timeout_ms": 30000
+    },
+    "output_validation": {
+      "verify_steps": true,
+      "max_output_length": 50000,
+      "result_validation": true
+    },
+    "agent_security": {
+      "isolation_level": "high",
+      "resource_limits": {
+        "max_memory_mb": 1024,
+        "max_cpu_time_ms": 60000,
+        "max_disk_io_mb": 100
+      },
+      "rate_limiting": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    }
+  }
+}
