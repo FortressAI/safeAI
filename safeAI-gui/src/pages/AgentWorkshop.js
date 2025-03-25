@@ -99,52 +99,10 @@ import MetricCard from '../components/shared/MetricCard';
 import AgentConfigCard from '../components/shared/AgentConfigCard';
 
 /**
- * TabPanel component for displaying tab content
- * @param {object} props - Component props
- * @returns {JSX.Element} TabPanel component
- */
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`agent-tabpanel-${index}`}
-      aria-labelledby={`agent-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-/**
  * ErrorFallback component for error boundary
  * @param {object} props - Component props
  * @returns {JSX.Element} ErrorFallback component
  */
-const ErrorFallback = ({ error, resetErrorBoundary }) => (
-  <Alert severity="error" sx={{ m: 2 }}>
-    <AlertTitle>Something went wrong</AlertTitle>
-    <Typography variant="body2">{error.message}</Typography>
-    <Button 
-      onClick={resetErrorBoundary} 
-      sx={{ mt: 2 }}
-      aria-label="Try again"
-    >
-      Try again
-    </Button>
-  </Alert>
-);
-
-ErrorFallback.propTypes = {
   error: PropTypes.shape({
     message: PropTypes.string.isRequired,
   }).isRequired,
@@ -375,7 +333,7 @@ const AgentWorkshop = () => {
     type: '',
     description: '',
   });
-
+  
   // Load agent if editing
   useEffect(() => {
     if (id) {

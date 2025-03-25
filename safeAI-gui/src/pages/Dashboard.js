@@ -32,6 +32,9 @@ import {
   Info as InfoIcon,
   Refresh as RefreshIcon,
   MoreVert as MoreVertIcon,
+  Dashboard as DashboardIcon,
+  Memory as MemoryIcon,
+  NetworkCheck as NetworkIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import PageHeader from '../components/shared/PageHeader';
@@ -212,6 +215,38 @@ const ActivityItem = ({ activity }) => {
 function Dashboard() {
   const theme = useTheme();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Define metrics array
+  const metrics = [
+    {
+      title: 'CPU Usage',
+      value: `${systemHealth.cpu}%`,
+      icon: <SpeedIcon />,
+      color: theme.palette.info.main,
+      trend: '+2.5% from last hour'
+    },
+    {
+      title: 'Memory Usage',
+      value: `${systemHealth.memory}%`,
+      icon: <MemoryIcon />,
+      color: theme.palette.success.main,
+      trend: '-1.2% from last hour'
+    },
+    {
+      title: 'Storage Usage',
+      value: `${systemHealth.storage}%`,
+      icon: <StorageIcon />,
+      color: theme.palette.warning.main,
+      trend: '+5.3% from last week'
+    },
+    {
+      title: 'Network Usage',
+      value: `${systemHealth.network}%`,
+      icon: <NetworkIcon />,
+      color: theme.palette.primary.main,
+      trend: '+8.1% from last hour'
+    }
+  ];
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);

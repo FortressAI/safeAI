@@ -395,7 +395,13 @@ function Layout() {
           height: '100%',
           overflow: 'hidden',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
+          ml: open ? '2px' : 0,
+          transition: theme => theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         }}
       >
         <Toolbar />
