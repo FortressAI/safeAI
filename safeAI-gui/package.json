@@ -54,9 +54,7 @@
     "3d-force-graph-vr": "^1.29.7",
     "react-force-graph": "^1.47.6",
     "@mui/material": "$@mui/material",
-    "@mui/icons-material": "$@mui/icons-material",
-    "three": "0.173.0",
-    "**/three": "0.173.0"
+    "@mui/icons-material": "$@mui/icons-material"
   },
   "resolutions": {
     "cookie": "^0.7.0",
@@ -66,9 +64,7 @@
     "3d-force-graph-vr": "^1.29.7",
     "react-force-graph": "^1.47.6",
     "@mui/material": "6.4.8",
-    "@mui/icons-material": "6.4.8",
-    "three": "0.173.0",
-    "**/three": "0.173.0"
+    "@mui/icons-material": "6.4.8"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
