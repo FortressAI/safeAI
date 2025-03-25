@@ -1,41 +1,39 @@
-# Build stage
-FROM node:20-alpine AS build
+# Build stage for the plugin
+FROM maven:3.8.4-openjdk-19-slim AS build
 
-WORKDIR /app
+WORKDIR /build
+COPY pom.xml .
+COPY src ./src
 
-# Copy package files
-COPY package*.json ./
+# Build the plugin
+RUN mvn clean package
 
-# Install dependencies
-RUN npm install
+# Neo4j stage
+FROM neo4j:4.4.42-enterprise
 
-# Copy source code
-COPY . .
+# Accept the license for enterprise edition
+ENV NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
 
-# Set environment variables
-ENV PUBLIC_URL=/
-ENV NODE_ENV=production
+# Copy plugin JAR
+COPY --from=build /build/target/safeai-plugin-*.jar /var/lib/neo4j/plugins/
 
-# Build the app
-RUN npm run build
+# Copy Neo4j configuration
+COPY neo4j.conf /var/lib/neo4j/conf/
 
-# Explicitly copy manifest.json to build directory
-COPY public/manifest.json build/
+# Set environment variables for plugins
+ENV NEO4J_dbms_security_procedures_unrestricted=apoc.*,safeai.*
+ENV NEO4J_dbms_security_procedures_whitelist=apoc.*,safeai.*
 
-# Production stage
-FROM nginx:stable-alpine
+# Install APOC and GDS plugins
+RUN cd /var/lib/neo4j/plugins && \
+    wget https://github.com/neo4j/apoc/releases/download/4.4.0.13/apoc-4.4.0.13-all.jar && \
+    wget https://graphdatascience.ninja/neo4j-graph-data-science-2.4.1.jar
 
-# Copy built assets from build stage
-COPY --from=build /app/build /usr/share/nginx/html
+# Expose ports for HTTP, HTTPS and Bolt
+EXPOSE 7474 7473 7687
 
-# Verify manifest.json exists in nginx directory
-RUN ls -la /usr/share/nginx/html/manifest.json
+# Set data directory
+VOLUME /data
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"] 
+# Command to run Neo4j
+CMD ["neo4j"] 

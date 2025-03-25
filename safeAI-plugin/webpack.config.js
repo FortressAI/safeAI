@@ -56,6 +56,18 @@ module.exports = {
       template: './public/index.html',
       favicon: './public/favicon.ico',
       filename: 'index.html',
+      minify: {
+        removeComments: false,
+        collapseWhitespace: false,
+        removeRedundantAttributes: false,
+        useShortDoctype: false,
+        removeEmptyAttributes: false,
+        removeStyleLinkTypeAttributes: false,
+        keepClosingSlash: true,
+        minifyJS: false,
+        minifyCSS: false,
+        minifyURLs: false,
+      },
     }),
     new MiniCssExtractPlugin({
       filename: 'static/css/[name].[contenthash:8].css',

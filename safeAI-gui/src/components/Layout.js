@@ -210,7 +210,7 @@ function Layout() {
         sx={{
           zIndex: theme.zIndex.drawer + 1,
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
-          ml: open ? '2px' : 0,
+          ml: 0,
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -397,15 +397,11 @@ function Layout() {
           display: 'flex',
           flexDirection: 'column',
           width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
-          ml: open ? '2px' : 0,
-          transition: theme => theme.transitions.create(['width', 'margin'], {
+          ml: 0,
+          transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
           }),
-          '@media (min-width: 0px)': {
-            width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
-            marginLeft: open ? '2px' : 0,
-          }
         }}
       >
         <Toolbar />

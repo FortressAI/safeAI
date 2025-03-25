@@ -103,6 +103,7 @@ import AgentConfigCard from '../components/shared/AgentConfigCard';
  * @param {object} props - Component props
  * @returns {JSX.Element} ErrorFallback component
  */
+ErrorFallback.propTypes = {
   error: PropTypes.shape({
     message: PropTypes.string.isRequired,
   }).isRequired,
@@ -332,8 +333,11 @@ const AgentWorkshop = () => {
     name: '',
     type: '',
     description: '',
+    config: '',
+    autoStart: false
   });
-  
+  const [agents, setAgents] = useState([]);
+
   // Load agent if editing
   useEffect(() => {
     if (id) {
@@ -343,6 +347,20 @@ const AgentWorkshop = () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [id]);
+
+  // Load agents on component mount
+  useEffect(() => {
+    const loadAgents = async () => {
+      try {
+        const response = await axios.get('/api/agents');
+        setAgents(response.data);
+      } catch (error) {
+        console.error('Failed to load agents:', error);
+        enqueueSnackbar('Failed to load agents', { variant: 'error' });
+      }
+    };
+    loadAgents();
+  }, [enqueueSnackbar]);
 
   // Memoized values
   const isEditMode = useMemo(() => Boolean(id), [id]);
@@ -513,39 +531,18 @@ const AgentWorkshop = () => {
   }, []);
 
   // Handle next step with validation
-  const handleNext = useCallback(() => {
-    if (activeStep === steps.length - 1) {
-      saveAgent();
+  const handleNext = () => {
+    if (activeStep === 2) {
+      handleSubmit();
     } else {
-      if (activeStep === 0) {
-        // Validate basic info before proceeding
-        const basicInfoErrors = {
-          name: !agent.name.trim() ? 'Name is required' : undefined,
-          description: !agent.description.trim() ? 'Description is required' : undefined,
-          type: !agent.type ? 'Type is required' : undefined
-        };
-        
-        const hasErrors = Object.values(basicInfoErrors).some(error => error !== undefined);
-        
-        if (hasErrors) {
-          setErrors(prev => ({
-            ...prev,
-            ...basicInfoErrors
-          }));
-          setValidationEnabled(true);
-          enqueueSnackbar('Please fill in required fields', { variant: 'error' });
-          return;
-        }
-      }
-      
-      setActiveStep(prev => prev + 1);
+      setActiveStep((prevStep) => prevStep + 1);
     }
-  }, [activeStep, agent, saveAgent, enqueueSnackbar]);
+  };
 
   // Handle back step
-  const handleBack = useCallback(() => {
-    setActiveStep(prev => prev - 1);
-  }, []);
+  const handleBack = () => {
+    setActiveStep((prevStep) => prevStep - 1);
+  };
 
   // Handle reset
   const handleReset = useCallback(() => {
@@ -566,31 +563,52 @@ const AgentWorkshop = () => {
     setShowPreview(prev => !prev);
   }, []);
 
-  const handleTabChange = useCallback((event, newValue) => {
+  const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-  }, []);
+  };
 
-  const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    try {
-      // TODO: Implement actual refresh logic
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error('Failed to refresh agents:', error);
-    } finally {
-      setIsRefreshing(false);
+  const handleAgentAction = (action, agent) => {
+    switch (action) {
+      case 'start':
+        // Implement start logic
+        break;
+      case 'stop':
+        // Implement stop logic
+        break;
+      case 'edit':
+        // Implement edit logic
+        break;
+      case 'delete':
+        // Implement delete logic
+        break;
+      default:
+        break;
     }
-  }, []);
+  };
 
-  const handleCreateDialogOpen = useCallback(() => {
+  const handleCreate = () => {
     setIsCreateDialogOpen(true);
-  }, []);
+  };
 
-  const handleCreateDialogClose = useCallback(() => {
-    setIsCreateDialogOpen(false);
-    setActiveStep(0);
-    setNewAgent({ name: '', type: '', description: '' });
-  }, []);
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post('/api/agents', newAgent);
+      setAgents(prev => [...prev, response.data]);
+      setIsCreateDialogOpen(false);
+      setActiveStep(0);
+      setNewAgent({
+        name: '',
+        type: '',
+        description: '',
+        config: '',
+        autoStart: false
+      });
+      enqueueSnackbar('Agent created successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Failed to create agent:', error);
+      enqueueSnackbar('Failed to create agent', { variant: 'error' });
+    }
+  };
 
   // Render step content with improved separation of concerns
   const renderStepContent = useCallback((step) => {
@@ -932,10 +950,6 @@ const AgentWorkshop = () => {
     },
   ];
 
-  const handleSubmit = () => {
-    console.log('Submitting agent configuration');
-  };
-
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box sx={{ width: '100%' }}>
@@ -1018,7 +1032,7 @@ const AgentWorkshop = () => {
         {/* Create Agent Dialog */}
         <Dialog
           open={isCreateDialogOpen}
-          onClose={handleCreateDialogClose}
+          onClose={() => setIsCreateDialogOpen(false)}
           maxWidth="md"
           fullWidth
         >

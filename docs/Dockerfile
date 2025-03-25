@@ -1,21 +1,13 @@
-FROM python:3.9-slim
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy requirements file first for better caching
-COPY requirements.txt .
-
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application
-COPY . .
-
-# Create necessary directories
-RUN mkdir -p /app/docs
+# Copy static files
+COPY . /usr/share/nginx/html/
 
 # Expose port
 EXPOSE 8080
 
-# Start MkDocs server
-CMD ["mkdocs", "serve", "-a", "0.0.0.0:8080"] 
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"] 
